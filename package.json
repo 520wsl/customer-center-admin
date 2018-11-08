@@ -9,7 +9,6 @@
 	},
 	"dependencies": {
 		"axios": "^0.18.0",
-		"log4js": "^3.0.6",
 		"mint-ui": "^2.2.13",
 		"moment": "^2.22.2",
 		"vue": "^2.5.17",
