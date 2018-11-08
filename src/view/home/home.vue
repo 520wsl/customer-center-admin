@@ -1,7 +1,7 @@
 <template>
     <div class="hello">
         <a @click="setUser" href="javascript:;">button</a>
-        <h1>{{ userName }}</h1>
+        <h1 class="title">{{ userName }}</h1>
         <p>
             For guide and recipes on how to configure / customize this project,
             <br>check out the
@@ -100,6 +100,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.title{
+    height: 750px;
+    width: 748px;
+    font-size:24px; 
+    border: 1px solid red;
+}
 h3 {
 	margin: 40px 0 0;
 }
