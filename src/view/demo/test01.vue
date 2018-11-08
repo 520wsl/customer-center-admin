@@ -83,6 +83,7 @@
 import { createNamespacedHelpers } from "vuex";
 import { getCalssChildData } from "@/api/class";
 import { MessageBox } from "mint-ui";
+import { formatTime } from "@/libs/util/time";
 const { mapState, mapActions } = createNamespacedHelpers("User");
 export default {
 	computed: {
@@ -105,6 +106,8 @@ export default {
 		// 调用 API 接口
 		let result = await getCalssChildData();
 		console.log(result);
+		// time 工具类调用 demo 其他 cookie 、session 等 相同
+		console.log(formatTime());
 		console.log("-----------------*****************------------");
 	}
 };
