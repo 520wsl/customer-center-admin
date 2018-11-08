@@ -102,51 +102,51 @@ export default {
 }
 .company {
   background: url("../../assets/my_company_bg.png");
-  background-size: 100% 2.4rem;
-  height: 2.4rem;
-  padding: 0 0.3rem;
+  background-size: 100% 240px;
+  height: 240px;
+  padding: 0 30px;
   position: relative;
   overflow: hidden;
   display: flex;
 }
 .company-image {
-  margin: 0.34rem 0.22rem 0 0;
-  width: 1.32rem;
-  height: 1.32rem;
+  margin: 34px 22px 0 0;
+  width: 132px;
+  height: 132px;
   background: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   flex: none;
 }
 .company-image .img {
   display: block;
-  width: 1.2rem;
-  height: 1.2rem;
-  margin: 0.06rem;
+  width: 12px;
+  height: 120px;
+  margin: 6px;
   border-radius: 50%;
 }
 .default-img {
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  margin: 0.06rem;
+  margin: 6px;
   background: #fff;
 }
 .company-info {
-  margin-top: 0.5rem;
-  font-size: 0.3rem;
+  margin-top: 50px;
+  font-size: 3px;
   color: #fff;
 }
 .company-change {
   position: absolute;
-  bottom: 0.15rem;
-  right: 0.2rem;
-  font-size: 0.24rem;
+  bottom: 15px;
+  right: 20px;
+  font-size: 24px;
   border: 1px solid #fff;
   border-radius: 4px;
   color: #fff;
-  width: 1.2rem;
-  height: 0.48rem;
-  line-height: 0.48rem;
+  width: 120px;
+  height: 48px;
+  line-height: 48px;
   text-align: center;
 }
 .now-sales {
