@@ -1,12 +1,12 @@
 <template>
   <div class="title">
-    <mt-header fixed title="" :style="background?'background:'+background:'background:#fff;color:#000;'">
+    <mt-header fixed title="" :style="background?'background:'+background:'background:#fff;'">
       <div slot="left">
         <slot name="headleft">
-          <span v-if="isBack" style="font-size:0.34rem;">{{title}}</span>
-          <a v-else @click="routerBack()" href="javascript:void(0);" class="left">
+          <span v-if="isBack" :class="background?'white':'black'">{{title}}</span>
+          <a v-else @click="routerBack()" href="javascript:void(0);" :class="background?'white left':'black left'">
             <mt-button icon="back"></mt-button>
-            <span style="font-size:0.34rem;">&nbsp;{{title}}</span>
+            <span :class="background?'white':'black'">&nbsp;{{title}}</span>
           </a>
         </slot>
       </div>
@@ -36,11 +36,19 @@ export default {
 
 <style scoped>
 .title {
-  height: 0.75rem;
+  height: 88px;
+  color: #fff;
 }
-
+.white {
+  color: white;
+  font-size: 34px;
+}
+.balck {
+  color: black;
+  font-size: 34px;
+}
 .title .mint-header {
-  height: 0.88rem;
+  height: 88px;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -50,22 +58,25 @@ export default {
   align-items: flex-end;
 }
 .img {
-  height: 0.4rem;
+  height: 40px;
 }
 .left {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  font-size: 34px;
+  line-height: 34px;
+  height: 34px;
 }
 </style>
 
 <style>
 .title .mint-header .mint-header-title {
-  font-size: 0.35rem;
+  font-size: 35px;
 }
 
 .title .mintui {
-  font-size: 0.35rem;
+  font-size: 35px;
 }
 </style>
 

@@ -42,52 +42,54 @@ export default {
 </script>
 <style scoped>
 .h5-form {
-  padding: 0 0.3rem;
-  margin-top: 0.2rem;
+  padding: 0 30px;
+  margin-top: 20px;
 }
 .h5-form .h5-input {
   border-bottom: 2px solid #ececec;
   position: relative;
-  margin-top: 0.16rem;
+  margin-top: 16px;
 }
 .h5-form .h5-input input {
   display: block;
-  height: 0.84rem;
+  height: 84px;
   width: 100%;
   border: 0 none;
-  font-size: 0.32rem;
+  font-size: 32px;
 }
 .h5-form .h5-input .code-pic {
   position: absolute;
-  font-size: 0.28rem;
-  width: 1.64rem;
-  height: 0.56rem;
-  line-height: 0.56rem;
+  font-size: 28px;
+  width: 164px;
+  height: 56px;
+  line-height: 56px;
   text-align: center;
   border: 2px solid #a5b2ff;
   border-radius: 2px;
-  bottom: 0.1rem;
+  bottom: 10px;
   right: 0;
   color: #a6b2fa;
 }
 .login-btn {
-  padding: 0 0.3rem;
-  margin-top: 0.4rem;
+  padding: 0 30px;
+  margin-top: 40px;
 }
 .login {
-  margin-bottom: 0.3rem;
+  margin-bottom: 30px;
   display: block;
   width: 100%;
+  height: 88px;
+  font-size: 32px;
 }
 .login-title {
-  margin-top: 0.28rem;
-  padding: 0 0.3rem;
+  margin-top: 28px;
+  padding: 0 30px;
 }
 .login-title div img {
   display: block;
-  height: 1.04rem;
+  height: 104px;
 }
 .login-title h1 {
-  font-size: 0.36rem;
+  font-size: 36px;
 }
 </style>
