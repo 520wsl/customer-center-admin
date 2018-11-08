@@ -100,6 +100,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.hello{
+    width: 750px;
+}
 .title{
     height: 750px;
     width: 748px;
