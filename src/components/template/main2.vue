@@ -6,15 +6,15 @@
  * @explanatory:  模板页 带底部按钮
  */
 <template>
-    <div id="app">Main 2
-        <router-view></router-view>
-    </div>
+  <div id="app">
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
 export default {
-	name: "app",
-	components: {}
+  name: "app",
+  components: {}
 };
 </script>
 
