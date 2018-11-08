@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-08 11:13:38
+ * @Last Modified time: 2018-11-08 16:41:22
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -23,6 +23,12 @@
 const Main1 = r =>
   require.ensure([], () => r(require("_c/template/main1")), "main"); //模板页 不带底部导航
 export default [
+  {
+    path: "/demo/test01",
+    name: "demoTest01",
+    component: r =>
+      require.ensure([], () => r(require("@/view/demo/test01")), "demo") //demo
+  },
   {
     path: "/login",
     name: "login",
