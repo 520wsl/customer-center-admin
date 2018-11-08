@@ -1,5 +1,7 @@
 <template>
     <div class="hello">
+        <a @click="showMessage" href="javascript:;">MintUI</a>
+        <br>
         <a @click="setUser" href="javascript:;">button</a>
         <h1 class="title">{{ userName }}</h1>
         <p>
@@ -77,8 +79,9 @@
 </template>
 
 <script>
-import { getCalssChildData } from "@/api/class";
 import { createNamespacedHelpers } from "vuex";
+import { getCalssChildData } from "@/api/class";
+import { MessageBox } from "mint-ui";
 const { mapState, mapActions } = createNamespacedHelpers("User");
 export default {
 	computed: {
@@ -87,7 +90,15 @@ export default {
 		})
 	},
 	methods: {
-		...mapActions(["setUser"])
+		...mapActions(["setUser"]),
+		showMessage() {
+			// Mint UI demo
+			MessageBox({
+				title: "提示",
+				message: "确定执行此操作?",
+				showCancelButton: true
+			});
+		}
 	},
 	async mounted() {
 		// 调用 API 接口
@@ -100,14 +111,14 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.hello{
-    width: 750px;
+.hello {
+	width: 750px;
 }
-.title{
-    height: 750px;
-    width: 748px;
-    font-size:24px; 
-    border: 1px solid red;
+.title {
+	height: 750px;
+	width: 748px;
+	font-size: 24px;
+	border: 1px solid red;
 }
 h3 {
 	margin: 40px 0 0;
