@@ -3,7 +3,9 @@
     <mt-header fixed title="" :style="background?'background:'+background:'background:#fff;'">
       <div slot="left">
         <slot name="headleft">
-          <span v-if="isBack" :class="background?'white':'black'">{{title}}</span>
+          <div v-if="!isBack">
+            <span :class="background?'white':'black'">{{title}}</span>
+          </div>
           <a v-else @click="routerBack()" href="javascript:void(0);" :class="background?'white left':'black left'">
             <mt-button icon="back"></mt-button>
             <span :class="background?'white':'black'">&nbsp;{{title}}</span>
@@ -37,13 +39,12 @@ export default {
 <style scoped>
 .title {
   height: 88px;
-  color: #fff;
 }
 .white {
   color: white;
   font-size: 34px;
 }
-.balck {
+.black {
   color: black;
   font-size: 34px;
 }

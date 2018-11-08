@@ -27,18 +27,18 @@ export default {
 </script>
 <style scoped>
 .complany-list {
-  margin-top: 0.23rem;
+  margin-top: 10px;
 }
 .company-item {
-  font-size: 0.26rem;
-  padding: 0 0.3rem;
+  font-size: 26px;
+  padding: 0 30px;
   color: #6e7790;
   display: flex;
   justify-content: space-between;
   margin-bottom: 2px;
   background: #fff;
-  line-height: 1rem;
-  height: 1rem;
+  line-height: 100px;
+  height: 100px;
 }
 </style>
 <style>

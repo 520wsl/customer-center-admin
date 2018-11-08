@@ -86,6 +86,32 @@ export default [
             () => r(require("@/view/contract/info")),
             "contract"
           )
+      },
+      {
+        path: "/contract/pay",
+        name: "contractPay",
+        meta: {
+          title: "支付"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/view/contract/pay")),
+            "contract"
+          )
+      },
+      {
+        path: "/contract/paySuccess",
+        name: "contractPaySuccess",
+        meta: {
+          title: "支付成功"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/view/contract/paySuccess")),
+            "contract"
+          )
       }
     ]
   },
