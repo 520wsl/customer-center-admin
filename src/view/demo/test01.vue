@@ -1,5 +1,6 @@
 <template>
     <div class="hello">
+        <div class="body">项目月考核</div>
         <a @click="showMessage" href="javascript:;">MintUI</a>
         <br>
         <a @click="setUser" href="javascript:;">button</a>
@@ -110,6 +111,21 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="less">
+@body-color: blue;
+
+.pad {
+	padding: 30px;
+	margin: 30px;
+	text-align: center;
+	border: 1px solid @body-color;
+}
+
+.body {
+	color: @body-color;
+	.pad;
+}
+</style>
 <style scoped>
 .hello {
 	width: 750px;
