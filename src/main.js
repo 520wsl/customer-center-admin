@@ -6,6 +6,7 @@ import "@/libs/flexible";
 
 import Mint from "mint-ui";
 import "mint-ui/lib/style.css";
+import "@/assets/style/base.css";
 Vue.use(Mint);
 
 Vue.config.productionTip = false;
