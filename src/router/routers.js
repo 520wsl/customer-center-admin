@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com 
  * @Date: 2018-11-07 22:22:23 
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-07 22:53:34
+ * @Last Modified time: 2018-11-08 11:13:38
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -20,8 +20,8 @@
  *  beforeCloseName: (-) 设置该字段，则在关闭当前tab页时会去'@/router/before-close.js'里寻找该字段名对应的方法，作为关闭前的钩子函数
  * }
  */
-const Login = r =>
-	require.ensure([], () => r(require("@/view/login/login")), "login"); //登录页面
+const Main1 = r =>
+	require.ensure([], () => r(require("_c/template/main1")), "main"); //模板页 不带底部导航
 export default [
 	{
 		path: "/login",
@@ -29,6 +29,28 @@ export default [
 		meta: {
 			title: "Login-登录"
 		},
-		component: Login
+		component: r =>
+			require.ensure([], () => r(require("@/view/login/login")), "login") //登录页面
+	},
+	{
+		path: "/",
+		name: "_home",
+		redirect: "/home",
+		component: Main1,
+		children: [
+			{
+				path: "/home",
+				name: "home",
+				meta: {
+					title: "首页"
+				},
+				component: r =>
+					require.ensure(
+						[],
+						() => r(require("@/view/home/home")),
+						"login"
+					) //首页
+			}
+		]
 	}
 ];
