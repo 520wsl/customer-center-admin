@@ -1,6 +1,6 @@
 /*
- * @Author: Mad Dragon 395548460@qq.com 
- * @Date: 2018-11-07 22:22:23 
+ * @Author: Mad Dragon 395548460@qq.com
+ * @Date: 2018-11-07 22:22:23
  * @Last Modified by: Mad Dragon
  * @Last Modified time: 2018-11-08 16:41:22
  * @explanatory: Routers Config   路由 路径 配置
@@ -21,42 +21,186 @@
  * }
  */
 const Main1 = r =>
-	require.ensure([], () => r(require("_c/template/main1")), "main"); //模板页 不带底部导航
+  require.ensure([], () => r(require("_c/template/main1")), "main"); //模板页 不带底部导航
 export default [
-	{
-		path: "/demo/test01",
-		name: "demoTest01",
-		component: r =>
-			require.ensure([], () => r(require("@/view/demo/test01")), "demo") //demo
-	},
-	{
-		path: "/login",
-		name: "login",
-		meta: {
-			title: "Login-登录"
-		},
-		component: r =>
-			require.ensure([], () => r(require("@/view/login/login")), "login") //登录页面
-	},
-	{
-		path: "/",
-		name: "_home",
-		redirect: "/home",
-		component: Main1,
-		children: [
-			{
-				path: "/home",
-				name: "home",
-				meta: {
-					title: "首页"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/view/home/home")),
-						"login"
-					) //首页
-			}
-		]
-	}
+  {
+    path: "/demo/test01",
+    name: "demoTest01",
+    component: r =>
+      require.ensure([], () => r(require("@/view/demo/test01")), "demo") //demo
+  },
+  {
+    path: "/login",
+    name: "login",
+    meta: {
+      title: "Login-登录"
+    },
+    component: r =>
+      require.ensure([], () => r(require("@/view/login/login")), "login") //登录页面
+  },
+  {
+    path: "/",
+    name: "_home",
+    redirect: "/home",
+    component: Main1,
+    children: [
+      {
+        path: "/home",
+        name: "home",
+        meta: {
+          title: "首页"
+        },
+        component: r =>
+          require.ensure([], () => r(require("@/view/home/home")), "login") //首页
+      }
+    ]
+  },
+  {
+    path: "/contract",
+    name: "contract",
+    meta: {
+      title: "我的合同"
+    },
+    component: r =>
+      require.ensure([], () => r(require("@/view/contract/index")), "contract"),
+    children: [
+      {
+        path: "/info",
+        name: "contractInfo",
+        meta: {
+          title: "合同详情"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/view/contract/info")),
+            "contract"
+          )
+      }
+    ]
+  },
+  {
+    path: "/log",
+    name: "log",
+    meta: {
+      title: "记录"
+    },
+    component: r =>
+      require.ensure([], () => r(require("@/view/log/sale")), "log")
+  },
+  {
+    path: "/personal",
+    name: "personal",
+    meta: {
+      title: "我的"
+    },
+    component: r =>
+      require.ensure([], () => r(require("@/view/personal/index")), "personal")
+  },
+  {
+    path: "/question",
+    name: "question",
+    meta: {
+      title: "常见问题"
+    },
+    component: r =>
+      require.ensure([], () => r(require("@/view/question/index")), "question"),
+    children: [
+      {
+        path: "/info",
+        name: "questionInfo",
+        meta: {
+          title: "常见问题详情"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/view/question/info")),
+            "question"
+          )
+      }
+    ]
+  },
+  {
+    path: "/serviceBill",
+    name: "serviceBill",
+    meta: {
+      title: "服务工单"
+    },
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("@/view/serviceBill/index")),
+        "serviceBill"
+      ),
+    children: [
+      {
+        path: "/info",
+        name: "serviceBillInfo",
+        meta: {
+          title: "服务工单-详情记录"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/view/serviceBill/info")),
+            "serviceBill"
+          )
+      },
+      {
+        path: "/preview",
+        name: "serviceBillBreview",
+        meta: {
+          title: "服务工单-详情记录"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/view/serviceBill/preview")),
+            "serviceBill"
+          )
+      }
+    ]
+  },
+  {
+    path: "/serviceEvaluation",
+    name: "serviceEvaluation",
+    meta: {
+      title: "服务评价"
+    },
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("@/view/serviceEvaluation/index")),
+        "serviceEvaluation"
+      ),
+    children: [
+      {
+        path: "/info",
+        name: "serviceEvaluationInfo",
+        meta: {
+          title: "服务评价反馈"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/view/serviceEvaluation/feedback")),
+            "serviceEvaluation"
+          )
+      },
+      {
+        path: "/preview",
+        name: "serviceEvaluationBreview",
+        meta: {
+          title: "服务评价列表"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/view/serviceEvaluation/list")),
+            "serviceEvaluation"
+          )
+      }
+    ]
+  }
 ];
