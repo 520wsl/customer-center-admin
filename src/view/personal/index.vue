@@ -32,7 +32,7 @@
         <i>{{sales.offlineNum}}笔</i>
       </div>
     </div>
-    <div style="padding:0 0.3rem;background:#fff;margin-bottom:0.2rem;">
+    <div class="personal-sale">
       <a class="item" href="#">
         <div>
           <img src="../../assets/sale_record_logo.png">
@@ -133,7 +133,7 @@ export default {
 }
 .company-info {
   margin-top: 50px;
-  font-size: 3px;
+  font-size: 30px;
   color: #fff;
 }
 .company-change {
@@ -150,20 +150,20 @@ export default {
   text-align: center;
 }
 .now-sales {
-  margin-top: 0.2rem;
-  padding: 0 0.3rem;
+  margin-top: 20px;
+  padding: 0 30px;
   background: #fff;
   overflow: hidden;
 }
 .now-sales-title {
-  font-size: 0.28rem;
+  font-size: 28px;
   color: #333;
-  border-left: 4px solid #7994ff;
-  height: 0.4rem;
-  margin: 0.22rem 0;
+  border-left: 6px solid #7994ff;
+  height: 40px;
+  margin: 22px 0;
 }
 .now-sales-title span {
-  padding-left: 0.24rem;
+  padding-left: 24px;
 }
 .sales-category {
   margin: 1px 0;
@@ -179,37 +179,42 @@ export default {
 }
 .sales-category .online span,
 .sales-category .offline span {
-  font-size: 0.26rem;
+  font-size: 26px;
   display: block;
-  padding-top: 0.22rem;
+  padding-top: 22px;
 }
 .sales-category .online b,
 .sales-category .offline b {
-  font-size: 0.3rem;
+  font-size: 30px;
   color: #fc7946;
   font-weight: normal;
   display: block;
-  padding-top: 0.18rem;
+  padding-top: 18px;
 }
 .sales-category .online i,
 .sales-category .offline i {
-  font-size: 0.24rem;
+  font-size: 24px;
   color: #999999;
   display: block;
   font-style: normal;
-  padding: 0.18rem 0 0.22rem;
+  padding: 18px 0 22px;
 }
 .sales-category .line {
   width: 2px;
-  height: 1.2rem;
+  height: 120px;
   background: #f4f4f4;
+}
+.personal-sale {
+  padding: 0 30px;
+  background: #fff;
+  margin-bottom: 20px;
 }
 .item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.28rem;
-  height: 0.96rem;
+  font-size: 28px;
+  height: 96px;
 }
 .item div {
   display: flex;
@@ -217,27 +222,37 @@ export default {
   justify-content: center;
 }
 .item div img {
-  height: 0.28rem;
+  height: 28px;
 }
 .item div span {
-  padding-left: 0.2rem;
+  padding-left: 20px;
 }
 .border {
   border-bottom: 2px solid #f7f7f7;
 }
 .personal-other {
-  padding: 0 0.3rem;
+  padding: 0 30px;
   background: #fff;
 }
 .login-out {
-  margin-top: 0.44rem;
-  padding: 0 1.08rem 0.24rem;
+  margin-top: 44px;
+  padding: 0 108px 24px;
 }
 .login-out .btn {
   color: #fff;
-  font-size: 0.32rem;
+  font-size: 32px;
   display: block;
   width: 100%;
   background: #fc7946;
+  height: 76px;
+}
+</style>
+<style>
+body,
+html,
+.main,
+.personal {
+  height: 100%;
+  background: #fff;
 }
 </style>

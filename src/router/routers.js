@@ -57,15 +57,25 @@ export default [
   },
   {
     path: "/contract",
-    name: "contract",
-    meta: {
-      title: "我的合同"
-    },
-    component: r =>
-      require.ensure([], () => r(require("@/view/contract/index")), "contract"),
+    name: "_contract",
+    redirect: "/contract",
+    component: Main1,
     children: [
       {
-        path: "/info",
+        path: "/contract",
+        name: "contract",
+        meta: {
+          title: "我的合同"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/view/contract/index")),
+            "contract"
+          )
+      },
+      {
+        path: "/contract/info",
         name: "contractInfo",
         meta: {
           title: "合同详情"
@@ -81,33 +91,76 @@ export default [
   },
   {
     path: "/log",
-    name: "log",
-    meta: {
-      title: "记录"
-    },
-    component: r =>
-      require.ensure([], () => r(require("@/view/log/sale")), "log")
+    name: "_log",
+    redirect: "/log",
+    component: Main1,
+    children: [
+      {
+        path: "/log",
+        name: "_log",
+        meta: {
+          title: "记录"
+        },
+        component: r =>
+          require.ensure([], () => r(require("@/view/log/sale")), "log")
+      }
+    ]
   },
   {
     path: "/personal",
-    name: "personal",
-    meta: {
-      title: "我的"
-    },
-    component: r =>
-      require.ensure([], () => r(require("@/view/personal/index")), "personal")
+    name: "_personal",
+    redirect: "/personal",
+    component: Main1,
+    children: [
+      {
+        path: "/personal",
+        name: "personal",
+        meta: {
+          title: "我的"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/view/personal/index")),
+            "personal"
+          )
+      },
+      {
+        path: "/personal/company",
+        name: "personalCompany",
+        meta: {
+          title: "我的公司"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/view/personal/company")),
+            "personal"
+          )
+      }
+    ]
   },
   {
     path: "/question",
-    name: "question",
-    meta: {
-      title: "常见问题"
-    },
-    component: r =>
-      require.ensure([], () => r(require("@/view/question/index")), "question"),
+    name: "_question",
+    redirect: "/question",
+    component: Main1,
     children: [
       {
-        path: "/info",
+        path: "/question",
+        name: "question",
+        meta: {
+          title: "常见问题"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/view/question/index")),
+            "question"
+          )
+      },
+      {
+        path: "/question/info",
         name: "questionInfo",
         meta: {
           title: "常见问题详情"
@@ -123,19 +176,25 @@ export default [
   },
   {
     path: "/serviceBill",
-    name: "serviceBill",
-    meta: {
-      title: "服务工单"
-    },
-    component: r =>
-      require.ensure(
-        [],
-        () => r(require("@/view/serviceBill/index")),
-        "serviceBill"
-      ),
+    name: "_serviceBill",
+    redirect: "serviceBill",
+    component: Main1,
     children: [
       {
-        path: "/info",
+        path: "/serviceBill",
+        name: "serviceBill",
+        meta: {
+          title: "服务工单"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/view/serviceBill/index")),
+            "serviceBill"
+          )
+      },
+      {
+        path: "/serviceBill/info",
         name: "serviceBillInfo",
         meta: {
           title: "服务工单-详情记录"
@@ -148,7 +207,7 @@ export default [
           )
       },
       {
-        path: "/preview",
+        path: "/serviceBill/preview",
         name: "serviceBillBreview",
         meta: {
           title: "服务工单-详情记录"
@@ -164,19 +223,25 @@ export default [
   },
   {
     path: "/serviceEvaluation",
-    name: "serviceEvaluation",
-    meta: {
-      title: "服务评价"
-    },
-    component: r =>
-      require.ensure(
-        [],
-        () => r(require("@/view/serviceEvaluation/index")),
-        "serviceEvaluation"
-      ),
+    name: "_serviceEvaluation",
+    redirect: "/serviceEvaluation",
+    component: Main1,
     children: [
       {
-        path: "/info",
+        path: "/serviceEvaluation",
+        name: "serviceEvaluation",
+        meta: {
+          title: "服务评价"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/view/serviceEvaluation/index")),
+            "serviceEvaluation"
+          )
+      },
+      {
+        path: "/serviceEvaluation/info",
         name: "serviceEvaluationInfo",
         meta: {
           title: "服务评价反馈"
@@ -189,7 +254,7 @@ export default [
           )
       },
       {
-        path: "/preview",
+        path: "/serviceEvaluation/preview",
         name: "serviceEvaluationBreview",
         meta: {
           title: "服务评价列表"
