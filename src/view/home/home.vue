@@ -1,5 +1,6 @@
 <template>
     <div class="hello">
+        <a @click="setUser" href="javascript:;">button</a>
         <h1>{{ userName }}</h1>
         <p>
             For guide and recipes on how to configure / customize this project,
@@ -77,12 +78,16 @@
 
 <script>
 import { getCalssChildData } from "@/api/class";
-import { mapState } from "vuex";
+import { createNamespacedHelpers } from "vuex";
+const { mapState, mapActions } = createNamespacedHelpers("User");
 export default {
 	computed: {
 		...mapState({
-			userName: state => state.User.userName
+			userName: state => state.userName
 		})
+	},
+	methods: {
+		...mapActions(["setUser"])
 	},
 	async mounted() {
 		// 调用 API 接口
