@@ -1,8 +1,8 @@
 /*
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
- * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-08 16:41:22
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2018-11-08 20:05:50
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -22,8 +22,7 @@
  */
 const Main1 = r =>
   require.ensure([], () => r(require("_c/template/main1")), "main"); //模板页 不带底部导航
-export default [
-  {
+export default [{
     path: "/demo/test01",
     name: "demoTest01",
     component: r =>
@@ -43,25 +42,22 @@ export default [
     name: "_home",
     redirect: "/home",
     component: Main1,
-    children: [
-      {
-        path: "/home",
-        name: "home",
-        meta: {
-          title: "首页"
-        },
-        component: r =>
-          require.ensure([], () => r(require("@/view/home/home")), "login") //首页
-      }
-    ]
+    children: [{
+      path: "/home",
+      name: "home",
+      meta: {
+        title: "首页"
+      },
+      component: r =>
+        require.ensure([], () => r(require("@/view/home/home")), "login") //首页
+    }]
   },
   {
     path: "/contract",
     name: "_contract",
     redirect: "/contract",
     component: Main1,
-    children: [
-      {
+    children: [{
         path: "/contract",
         name: "contract",
         meta: {
@@ -137,8 +133,7 @@ export default [
     name: "_personal",
     redirect: "/personal",
     component: Main1,
-    children: [
-      {
+    children: [{
         path: "/personal",
         name: "personal",
         meta: {
@@ -171,8 +166,7 @@ export default [
     name: "_question",
     redirect: "/question",
     component: Main1,
-    children: [
-      {
+    children: [{
         path: "/question",
         name: "question",
         meta: {
@@ -205,8 +199,7 @@ export default [
     name: "_serviceBill",
     redirect: "serviceBill",
     component: Main1,
-    children: [
-      {
+    children: [{
         path: "/serviceBill",
         name: "serviceBill",
         meta: {
@@ -252,8 +245,7 @@ export default [
     name: "_serviceEvaluation",
     redirect: "/serviceEvaluation",
     component: Main1,
-    children: [
-      {
+    children: [{
         path: "/serviceEvaluation",
         name: "serviceEvaluation",
         meta: {
