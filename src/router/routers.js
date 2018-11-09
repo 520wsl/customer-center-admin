@@ -259,7 +259,7 @@ export default [{
           )
       },
       {
-        path: "/serviceEvaluation/info",
+        path: "/serviceEvaluation/feedback",
         name: "serviceEvaluationInfo",
         meta: {
           title: "服务评价反馈"
@@ -272,7 +272,7 @@ export default [{
           )
       },
       {
-        path: "/serviceEvaluation/preview",
+        path: "/serviceEvaluation/info",
         name: "serviceEvaluationBreview",
         meta: {
           title: "服务评价详情"

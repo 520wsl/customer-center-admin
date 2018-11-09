@@ -1,32 +1,47 @@
 <template>
   <div>
-    <ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10">
-      <li v-for="(item,index) in list" :key="index">{{ item }}</li>
-    </ul>
+    <sixiheader :title="title"></sixiheader>
+    <div class="evaluation">请你为{{severType==1?"美工":"运营"}}
+      <span>{{name}}</span>，本次拟服务做个评价</div>
+    <editEvaluation></editEvaluation>
   </div>
 </template>
 <script>
+import sixiheader from "@/components/header";
+import editEvaluation from "@/components/editEvaluation";
 export default {
   data() {
     return {
-      list: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      list: [],
+      title: "美工服务评价",
+      severType: 1,
+      name: "张momo"
     };
   },
-  components: {},
-  methods: {
-    loadMore() {
-      this.loading = true;
-      setTimeout(() => {
-        let last = this.list[this.list.length - 1];
-        for (let i = 1; i <= 10; i++) {
-          this.list.push(last + i);
-        }
-        this.loading = false;
-      }, 2500);
-    }
-  }
+  components: { sixiheader, editEvaluation },
+  created() {},
+  methods: {}
 };
 </script>
 <style scoped>
+.evaluation {
+  height: 40px;
+  line-height: 40px;
+  padding: 40px 30px 30px;
+  margin: 10px 0 20px;
+  color: #444;
+  font-size: 28px;
+  background: #fff;
+}
+.evaluation span {
+  color: #697eff;
+}
+</style>
+<style>
+body,
+html {
+  height: 100%;
+  background: #f4f4f4;
+}
 </style>
 
