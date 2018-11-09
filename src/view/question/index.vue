@@ -1,5 +1,5 @@
 <template>
-  <div class="bg">
+  <div>
     <sixiheader title="常见问题"></sixiheader>
     <div class="navBar">
       <div v-for="el in navBarList" :key="el.id" :class="activeBar === el.id?'is-selected':''" @click="getNavBarActive(el.id)">{{el.name}}
@@ -78,7 +78,7 @@ export default {
   padding-left: 30px;
   background: #fff;
   text-align: center;
-  /* overflow-y: hidden;  */
+  overflow-y: hidden;
   white-space: nowrap; /* 不换行 */
   overflow-x: scroll;
 }
