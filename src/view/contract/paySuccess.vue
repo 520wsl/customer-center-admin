@@ -1,6 +1,6 @@
 <template>
   <div>
-    <sixiheader title='支付结果' :isBack='false'></sixiheader>
+    <sixiheader title='支付结果' :isBack='true'></sixiheader>
     <div class="line"></div>
     <div class="success-body">
       <img src="../../assets/success_icon.png">

@@ -122,13 +122,13 @@ export default [
     component: Main1,
     children: [
       {
-        path: "/log",
-        name: "_log",
+        path: "/saleRecord",
+        name: "saleRecord",
         meta: {
           title: "记录"
         },
         component: r =>
-          require.ensure([], () => r(require("@/view/log/sale")), "log")
+          require.ensure([], () => r(require("@/view/log/saleRecord")), "log")
       }
     ]
   },
@@ -283,12 +283,12 @@ export default [
         path: "/serviceEvaluation/preview",
         name: "serviceEvaluationBreview",
         meta: {
-          title: "服务评价列表"
+          title: "服务评价详情"
         },
         component: r =>
           require.ensure(
             [],
-            () => r(require("@/view/serviceEvaluation/list")),
+            () => r(require("@/view/serviceEvaluation/info")),
             "serviceEvaluation"
           )
       }
