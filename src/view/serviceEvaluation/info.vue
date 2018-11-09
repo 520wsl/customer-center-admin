@@ -3,7 +3,7 @@
     <sixiheader :title="title"></sixiheader>
     <div class="evaluation">请你为{{severType==1?"美工":"运营"}}
       <span>{{name}}</span>，本次拟服务做个评价</div>
-    <editEvaluation></editEvaluation>
+    <editEvaluation :list='list'></editEvaluation>
   </div>
 </template>
 <script>

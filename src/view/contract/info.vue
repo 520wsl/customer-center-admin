@@ -23,7 +23,7 @@
     <div class="contract-evaluate">
       <div class="evaluate-item">
         <div class="item-left">
-          <img src="../../assets/operation_service_logo.png">
+          <img src="../../assets/image/operation_service_logo.png">
           <span>运营服务评价</span>
         </div>
         <div class="item-right">
@@ -33,7 +33,7 @@
       </div>
       <div class="evaluate-item">
         <div class="item-left">
-          <img src="../../assets/aesthetic_service_logo.png">
+          <img src="../../assets/image/aesthetic_service_logo.png">
           <span>美工服务评价</span>
         </div>
         <div class="item-right">

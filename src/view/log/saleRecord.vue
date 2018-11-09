@@ -21,7 +21,7 @@
         <div class="record-list-item" v-for="(item,index) in recordList" :key='index'>
           <div class="time">
             <span>{{item.time}}&nbsp;&nbsp;{{item.weekday}}&nbsp;&nbsp;({{item.isToday}})</span>
-            <img src="../../assets/edit_logo.png">
+            <img src="../../assets/image/edit_logo.png">
           </div>
           <div class="footer">
             <div>单量：
@@ -144,7 +144,7 @@ export default {
   bottom: 0;
   left: 0;
   position: absolute;
-  background-image: url("../../assets/moda_bottom_line.png");
+  background-image: url("../../assets/image/moda_bottom_line.png");
   background-size: 100 6px;
   width: 100%;
   height: 6px;

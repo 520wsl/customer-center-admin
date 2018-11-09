@@ -4,7 +4,7 @@
     <ul class="evaluation-list" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10">
       <li v-for="(item,index) in list" :key="index">
         <div class="company">
-          <img src="../../assets/service_evaluation_logo.png">
+          <img src="../../assets/image/service_evaluation_logo.png">
           <span>{{item.companyName}}</span>
         </div>
         <span class="time">{{item.completeTime}}&nbsp;&nbsp;({{item.isEvaluate=0?'已评价':'待评价'}})&nbsp;&nbsp;&gt;</span>

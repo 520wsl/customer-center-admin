@@ -14,8 +14,8 @@
       </div>
       <div slot="right">
         <slot name="headright" class="right">
-          <img v-if="background" src="../assets/header_white_logo.png" class="img">
-          <img v-else src="../assets/header_black_logo.png" class="img">
+          <img v-if="background" src="../assets/image/header_white_logo.png" class="img">
+          <img v-else src="../assets/image/header_black_logo.png" class="img">
         </slot>
       </div>
     </mt-header>
