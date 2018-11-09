@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-11-08 20:05:50
+ * @Last Modified time: 2018-11-09 17:52:17
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -163,80 +163,60 @@ export default [{
   },
   {
     path: "/question",
-    name: "_question",
-    redirect: "/question",
+    name: "question",
+    redirect: "question/index",
     component: Main1,
     children: [{
-        path: "/question",
+        path: "index",
         name: "question",
         meta: {
           title: "常见问题"
         },
         component: r =>
-          require.ensure(
-            [],
-            () => r(require("@/view/question/index")),
-            "question"
-          )
+          require.ensure([], () => r(require("@/view/question/index")), "question")
       },
       {
-        path: "/question/info",
+        path: "info",
         name: "questionInfo",
         meta: {
           title: "常见问题详情"
         },
         component: r =>
-          require.ensure(
-            [],
-            () => r(require("@/view/question/info")),
-            "question"
-          )
+          require.ensure([], () => r(require("@/view/question/info")), "questionInfo")
       }
     ]
   },
   {
     path: "/serviceBill",
-    name: "_serviceBill",
-    redirect: "serviceBill",
+    name: "serviceBill",
+    redirect: "serviceBill/index",
     component: Main1,
     children: [{
-        path: "/serviceBill",
+        path: "index",
         name: "serviceBill",
         meta: {
           title: "服务工单"
         },
         component: r =>
-          require.ensure(
-            [],
-            () => r(require("@/view/serviceBill/index")),
-            "serviceBill"
-          )
+          require.ensure([], () => r(require("@/view/serviceBill/index")), "serviceBill")
       },
       {
-        path: "/serviceBill/info",
+        path: "info",
         name: "serviceBillInfo",
         meta: {
           title: "服务工单-详情记录"
         },
         component: r =>
-          require.ensure(
-            [],
-            () => r(require("@/view/serviceBill/info")),
-            "serviceBill"
-          )
+          require.ensure([], () => r(require("@/view/serviceBill/info")), "serviceBillInfo")
       },
       {
-        path: "/serviceBill/preview",
+        path: "preview",
         name: "serviceBillBreview",
         meta: {
           title: "服务工单-详情记录"
         },
         component: r =>
-          require.ensure(
-            [],
-            () => r(require("@/view/serviceBill/preview")),
-            "serviceBill"
-          )
+          require.ensure([], () => r(require("@/view/serviceBill/preview")), "serviceBillPreview")
       }
     ]
   },
