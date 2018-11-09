@@ -168,7 +168,7 @@ export default [
   },
   {
     path: "/question",
-    name: "question",
+    name: "_question",
     redirect: { name: "question" },
     component: Main1,
     children: [
@@ -202,7 +202,7 @@ export default [
   },
   {
     path: "/serviceBill",
-    name: "serviceBill",
+    name: "_serviceBill",
     redirect: { name: "serviceBill" },
     component: Main1,
     children: [
