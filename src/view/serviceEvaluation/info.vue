@@ -12,7 +12,13 @@ import editEvaluation from "@/components/editEvaluation";
 export default {
   data() {
     return {
-      list: [],
+      list: [
+        {
+          title: "服务态度",
+          maxNum: 5,
+          chooseNum: 3
+        }
+      ],
       title: "美工服务评价",
       severType: 1,
       name: "张momo"
@@ -44,4 +50,3 @@ html {
   background: #f4f4f4;
 }
 </style>
-
