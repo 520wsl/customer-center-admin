@@ -33,14 +33,14 @@ module.exports = {
 		viewPage: {
 			entry: "src/viewPage/main.js",
 			template: "public/viewPage.html",
-			filename: "index.html",
+			filename: "viewPage.html",
 			title: "viewPage",
 			chunks: ["chunk-vendors", "chunk-common", "viewPage"]
 		},
 		viewApp: {
 			entry: "src/viewApp/main.js",
 			template: "public/viewApp.html",
-			filename: "viewApp.html",
+			filename: "index.html",
 			title: "viewApp",
 			chunks: ["chunk-vendors", "chunk-common", "viewApp"]
 		}
