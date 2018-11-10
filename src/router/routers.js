@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-11-09 17:52:17
+ * @Last Modified time: 2018-11-10 09:55:54
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -22,8 +22,7 @@
  */
 const Main1 = r =>
   require.ensure([], () => r(require("_c/template/main1")), "main"); //模板页 不带底部导航
-export default [
-  {
+export default [{
     path: "/demo/test01",
     name: "demoTest01",
     component: r =>
@@ -43,25 +42,24 @@ export default [
     name: "_home",
     redirect: "/home",
     component: Main1,
-    children: [
-      {
-        path: "/home",
-        name: "home",
-        meta: {
-          title: "首页"
-        },
-        component: r =>
-          require.ensure([], () => r(require("@/view/home/home")), "login") //首页
-      }
-    ]
+    children: [{
+      path: "/home",
+      name: "home",
+      meta: {
+        title: "首页"
+      },
+      component: r =>
+        require.ensure([], () => r(require("@/view/home/home")), "login") //首页
+    }]
   },
   {
     path: "/contract",
     name: "_contract",
-    redirect: { name: "contract" },
+    redirect: {
+      name: "contract"
+    },
     component: Main1,
-    children: [
-      {
+    children: [{
         path: "index",
         name: "contract",
         meta: {
@@ -118,27 +116,28 @@ export default [
   {
     path: "/log",
     name: "_log",
-    redirect: { name: "saleRecord" },
+    redirect: {
+      name: "saleRecord"
+    },
     component: Main1,
-    children: [
-      {
-        path: "saleRecord",
-        name: "saleRecord",
-        meta: {
-          title: "记录"
-        },
-        component: r =>
-          require.ensure([], () => r(require("@/view/log/saleRecord")), "log")
-      }
-    ]
+    children: [{
+      path: "saleRecord",
+      name: "saleRecord",
+      meta: {
+        title: "记录"
+      },
+      component: r =>
+        require.ensure([], () => r(require("@/view/log/saleRecord")), "log")
+    }]
   },
   {
     path: "/personal",
     name: "_personal",
-    redirect: { name: "personal" },
+    redirect: {
+      name: "personal"
+    },
     component: Main1,
-    children: [
-      {
+    children: [{
         path: "index",
         name: "personal",
         meta: {
@@ -163,16 +162,30 @@ export default [
             () => r(require("@/view/personal/company")),
             "personal"
           )
+      },
+      {
+        path: "storeData",
+        name: "storeData",
+        meta: {
+          title: "店铺运营数据"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/view/personal/storeData")),
+            "storeData"
+          )
       }
     ]
   },
   {
     path: "/question",
     name: "_question",
-    redirect: { name: "question" },
+    redirect: {
+      name: "question"
+    },
     component: Main1,
-    children: [
-      {
+    children: [{
         path: "index",
         name: "question",
         meta: {
@@ -203,10 +216,11 @@ export default [
   {
     path: "/serviceBill",
     name: "_serviceBill",
-    redirect: { name: "serviceBill" },
+    redirect: {
+      name: "serviceBill"
+    },
     component: Main1,
-    children: [
-      {
+    children: [{
         path: "index",
         name: "serviceBill",
         meta: {
@@ -250,10 +264,11 @@ export default [
   {
     path: "/serviceEvaluation",
     name: "_serviceEvaluation",
-    redirect: { name: "serviceEvaluation" },
+    redirect: {
+      name: "serviceEvaluation"
+    },
     component: Main1,
-    children: [
-      {
+    children: [{
         path: "index",
         name: "serviceEvaluation",
         meta: {
