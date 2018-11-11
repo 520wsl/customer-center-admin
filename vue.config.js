@@ -30,19 +30,19 @@ module.exports = {
   // 打包时不生成.map文件
   productionSourceMap: false,
   pages: {
-    viewPage: {
-      entry: "src/viewPage/main.js",
-      template: "public/viewPage.html",
-      filename: "viewPage.html",
-      title: "viewPage",
-      chunks: ["chunk-vendors", "chunk-common", "viewPage"]
+    admin: {
+      entry: "src/admin/main.js",
+      template: "public/admin.html",
+      filename: "admin.html",
+      title: "admin",
+      chunks: ["chunk-vendors", "chunk-common", "admin"]
     },
-    viewApp: {
-      entry: "src/viewApp/main.js",
-      template: "public/viewApp.html",
-      filename: "index.html",
-      title: "viewApp",
-      chunks: ["chunk-vendors", "chunk-common", "viewApp"]
+    app: {
+      entry: "src/app/main.js",
+      template: "public/app.html",
+      filename: "app.html",
+      title: "app",
+      chunks: ["chunk-vendors", "chunk-common", "app"]
     }
   }
 };

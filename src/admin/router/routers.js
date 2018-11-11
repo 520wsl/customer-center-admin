@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-10 17:49:13
+ * @Last Modified time: 2018-11-10 17:49:35
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -23,11 +23,23 @@
 const Main1 = r =>
   require.ensure([], () => r(require("_c/template/main1")), "main"); //模板页 不带底部导航
 export default [
+  // {
+  // 	path: "/app",
+  // 	beforeEnter: () => {
+  // 		window.location = "/app.html";
+  // 	}
+  // },
+  // {
+  // 	path: "/admin",
+  // 	beforeEnter: () => {
+  // 		window.location = "/admin.html";
+  // 	}
+  // },
   {
     path: "/demo/test01",
     name: "demoTest01",
     component: r =>
-      require.ensure([], () => r(require("@/viewApp/view/demo/test01")), "demo") //demo
+      require.ensure([], () => r(require("@/admin/view/demo/test01")), "demo") //demo
   },
   {
     path: "/login",
@@ -36,11 +48,7 @@ export default [
       title: "Login-登录"
     },
     component: r =>
-      require.ensure(
-        [],
-        () => r(require("@/viewApp/view/login/login")),
-        "login"
-      ) //登录页面
+      require.ensure([], () => r(require("@/admin/view/login/login")), "login") //登录页面
   },
   {
     path: "/",
@@ -57,7 +65,7 @@ export default [
         component: r =>
           require.ensure(
             [],
-            () => r(require("@/viewApp/view/home/home")),
+            () => r(require("@/admin/view/home/home")),
             "login"
           ) //首页
       }
@@ -78,7 +86,7 @@ export default [
         component: r =>
           require.ensure(
             [],
-            () => r(require("@/viewApp/view/contract/index")),
+            () => r(require("@/admin/view/contract/index")),
             "contract"
           )
       },
@@ -91,7 +99,7 @@ export default [
         component: r =>
           require.ensure(
             [],
-            () => r(require("@/viewApp/view/contract/info")),
+            () => r(require("@/admin/view/contract/info")),
             "contract"
           )
       },
@@ -104,7 +112,7 @@ export default [
         component: r =>
           require.ensure(
             [],
-            () => r(require("@/viewApp/view/contract/pay")),
+            () => r(require("@/admin/view/contract/pay")),
             "contract"
           )
       },
@@ -117,7 +125,7 @@ export default [
         component: r =>
           require.ensure(
             [],
-            () => r(require("@/viewApp/view/contract/paySuccess")),
+            () => r(require("@/admin/view/contract/paySuccess")),
             "contract"
           )
       }
@@ -138,7 +146,7 @@ export default [
         component: r =>
           require.ensure(
             [],
-            () => r(require("@/viewApp/view/log/saleRecord")),
+            () => r(require("@/admin/view/log/saleRecord")),
             "log"
           )
       }
@@ -159,7 +167,7 @@ export default [
         component: r =>
           require.ensure(
             [],
-            () => r(require("@/viewApp/view/personal/index")),
+            () => r(require("@/admin/view/personal/index")),
             "personal"
           )
       },
@@ -172,7 +180,7 @@ export default [
         component: r =>
           require.ensure(
             [],
-            () => r(require("@/viewApp/view/personal/company")),
+            () => r(require("@/admin/view/personal/company")),
             "personal"
           )
       }
@@ -193,7 +201,7 @@ export default [
         component: r =>
           require.ensure(
             [],
-            () => r(require("@/viewApp/view/question/index")),
+            () => r(require("@/admin/view/question/index")),
             "question"
           )
       },
@@ -206,7 +214,7 @@ export default [
         component: r =>
           require.ensure(
             [],
-            () => r(require("@/viewApp/view/question/info")),
+            () => r(require("@/admin/view/question/info")),
             "questionInfo"
           )
       }
@@ -227,7 +235,7 @@ export default [
         component: r =>
           require.ensure(
             [],
-            () => r(require("@/viewApp/view/serviceBill/index")),
+            () => r(require("@/admin/view/serviceBill/index")),
             "serviceBill"
           )
       },
@@ -240,7 +248,7 @@ export default [
         component: r =>
           require.ensure(
             [],
-            () => r(require("@/viewApp/view/serviceBill/info")),
+            () => r(require("@/admin/view/serviceBill/info")),
             "serviceBillInfo"
           )
       },
@@ -253,7 +261,7 @@ export default [
         component: r =>
           require.ensure(
             [],
-            () => r(require("@/viewApp/view/serviceBill/preview")),
+            () => r(require("@/admin/view/serviceBill/preview")),
             "serviceBillPreview"
           )
       }
@@ -274,7 +282,7 @@ export default [
         component: r =>
           require.ensure(
             [],
-            () => r(require("@/viewApp/view/serviceEvaluation/index")),
+            () => r(require("@/admin/view/serviceEvaluation/index")),
             "serviceEvaluation"
           )
       },
@@ -287,7 +295,7 @@ export default [
         component: r =>
           require.ensure(
             [],
-            () => r(require("@/viewApp/view/serviceEvaluation/feedback")),
+            () => r(require("@/admin/view/serviceEvaluation/feedback")),
             "serviceEvaluation"
           )
       },
@@ -300,7 +308,7 @@ export default [
         component: r =>
           require.ensure(
             [],
-            () => r(require("@/viewApp/view/serviceEvaluation/info")),
+            () => r(require("@/admin/view/serviceEvaluation/info")),
             "serviceEvaluation"
           )
       }

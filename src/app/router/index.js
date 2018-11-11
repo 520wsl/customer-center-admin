@@ -7,7 +7,7 @@
  */
 import Vue from "vue";
 import Router from "vue-router";
-import routes from "@/viewApp/router/routers";
+import routes from "@/app/router/routers";
 
 Vue.use(Router);
 const router = new Router({

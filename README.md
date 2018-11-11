@@ -40,7 +40,7 @@ http {
 		server_name	172.30.34.114;
 		location / {
 			root	F:/GIT/SiXiCustomerCenter/customer-center-app/dist;
-			try_files $uri $uri/ /viewPage.html;
+			try_files $uri $uri/ /admin.html;
 		}
 		error_page   500 502 503 504  /50x.html;
 		location = /50x.html {
@@ -55,7 +55,7 @@ http {
 		server_name	172.30.34.114;
 		location / {
 			root	F:/GIT/SiXiCustomerCenter/customer-center-app/dist;
-			try_files $uri $uri/ /viewApp.html;
+			try_files $uri $uri/ /app.html;
 		}
 		error_page   500 502 503 504  /50x.html;
 		location = /50x.html {

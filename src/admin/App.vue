@@ -1,7 +1,8 @@
 <template>
   <div id="app" class="main">
+	
     <router-view></router-view>
-		<h1>viewApp</h1>
+			<h1>admin</h1>
   </div>
 </template>
 

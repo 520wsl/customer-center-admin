@@ -7,11 +7,11 @@
  */
 import Vue from "vue";
 import Router from "vue-router";
-import routes from "@/viewPage/router/routers";
+import routes from "@/admin/router/routers";
 
 Vue.use(Router);
 const router = new Router({
-	// base:"/viewPage/",
+	// base:"/admin/",
 	routes,
 	mode: "history"
 });
