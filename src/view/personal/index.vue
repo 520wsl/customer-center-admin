@@ -1,7 +1,7 @@
 <template>
   <div class="personal">
-    <sixiheader title='我的' background=""></sixiheader>
-    <div class="company">
+    <sixiheader title="我的" background=""></sixiheader>
+    <div class="company" :style="'background-image: url('+$CDN+'/my_company_bg.png'+')'">
       <div class="company-image">
         <img v-if="companyUrl" :src="companyUrl" class="img">
         <div v-else class="default-img"></div>
@@ -10,9 +10,7 @@
         <div>{{companyName}}</div>
         <div>{{phone}}</div>
       </div>
-      <div class="company-change">
-        切换
-      </div>
+      <div class="company-change">切换</div>
     </div>
     <div class="now-sales">
       <div class="now-sales-title">
@@ -35,7 +33,7 @@
     <div class="personal-sale">
       <a class="item" href="#">
         <div>
-          <img src="../../assets/image/sale_record_logo.png">
+          <img :src="$CDN+'/sale_record_logo.png'">
           <span>线下销售记录</span>
         </div>
         <span>&gt;</span>
@@ -44,28 +42,28 @@
     <div class="personal-other">
       <a class="item border" href="#">
         <div>
-          <img src="../../assets/image/contract_logo.png">
+          <img :src="$CDN+'/contract_logo.png'">
           <span>我的合同</span>
         </div>
         <span>&gt;</span>
       </a>
       <a class="item border" href="#">
         <div>
-          <img src="../../assets/image/service_valuation_logo.png">
+          <img :src="$CDN+'/service_valuation_logo.png'">
           <span>服务评价</span>
         </div>
         <span>&gt;</span>
       </a>
       <a class="item border" href="#">
         <div>
-          <img src="../../assets/image/work_list_logo.png">
+          <img :src="$CDN+'/work_list_logo.png'">
           <span>服务工单</span>
         </div>
         <span>&gt;</span>
       </a>
       <a class="item" href="#">
         <div>
-          <img src="../../assets/image/qustion_logo.png">
+          <img :src="$CDN+'/qustion_logo.png'">
           <span>常见问题</span>
         </div>
         <span>&gt;</span>
@@ -101,7 +99,7 @@ export default {
   background: #f4f4f4;
 }
 .company {
-  background: url("../../assets/image/my_company_bg.png");
+  /*background: url("../../assets/image/my_company_bg.png");*/
   background-size: 100% 240px;
   height: 240px;
   padding: 0 30px;

@@ -6,7 +6,12 @@
           <div v-if="isBack">
             <span :class="background?'white':'black'">{{title}}</span>
           </div>
-          <a v-else @click="routerBack()" href="javascript:void(0);" :class="background?'white left':'black left'">
+          <a
+            v-else
+            @click="routerBack()"
+            href="javascript:void(0);"
+            :class="background?'white left':'black left'"
+          >
             <mt-button icon="back"></mt-button>
             <span :class="background?'white':'black'">&nbsp;{{title}}</span>
           </a>
@@ -14,8 +19,8 @@
       </div>
       <div slot="right">
         <slot name="headright" class="right">
-          <img v-if="background" src="../assets/image/header_white_logo.png" class="img">
-          <img v-else src="../assets/image/header_black_logo.png" class="img">
+          <img v-if="background" :src="$CDN+'/header_white_logo.png'" class="img">
+          <img v-else :src="$CDN+'/header_black_logo.png'" class="img">
         </slot>
       </div>
     </mt-header>

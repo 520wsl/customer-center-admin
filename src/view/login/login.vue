@@ -1,8 +1,10 @@
 <template>
   <div>
-    <sixiheader title='登录' background="#2E2E2E"></sixiheader>
+    <sixiheader title="登录" background="#2E2E2E"></sixiheader>
     <div class="login-title">
-      <div><img src="../../assets/image/sixi_logo.png"></div>
+      <div>
+        <img :src="$CDN+'/sixi_logo.png'">
+      </div>
       <h1>欢迎登录四喜服务</h1>
     </div>
     <div class="h5-form">
@@ -18,7 +20,6 @@
       <mt-button type="danger" class="login" style="background:#FC7946">登录</mt-button>
       <mt-button type="primary" class="login" style="background:#697EFF">本机号码一键登录</mt-button>
     </div>
-
   </div>
 </template>
 <script>

@@ -50,11 +50,11 @@
       <div class="btnGroup">
         <mt-button class="btn">
           <span>没用&ensp;</span>
-          <img src="@/assets/image/crying.png">
+          <img :src="$CDN+'/crying.png'">
         </mt-button>
         <mt-button class="btn">
           有用&ensp;
-          <img src="@/assets/image/smlie.png">
+          <img :src="$CDN+'/smlie.png'">
         </mt-button>
       </div>
     </div>
@@ -64,12 +64,12 @@
       <span>
         <mt-button class="btn">
           <span>没用&emsp;
-            <img src="@/assets/image/crying.png">
+            <img :src="$CDN+'/crying.png'">
           </span>
         </mt-button>
         <mt-button class="btn">
           <span>有用&emsp;
-            <img src="@/assets/image/smlie.png">
+            <img :src="$CDN+'/smlie.png'">
           </span>
         </mt-button>
       </span>

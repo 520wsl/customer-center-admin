@@ -66,7 +66,7 @@
       </div>
     </div>
     <div class="assess">
-      <img src="@/assets/image/work_list_logo.png" alt="">
+      <img :src="$CDN+'/work_list_logo.png'" alt="">
       <span class="assessTime">
         <strong>工作评价</strong>（2018-10-10 10:23)
       </span>

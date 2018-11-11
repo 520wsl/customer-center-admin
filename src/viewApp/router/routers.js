@@ -23,18 +23,6 @@
 const Main1 = r =>
   require.ensure([], () => r(require("_c/template/main1")), "main"); //模板页 不带底部导航
 export default [
-  // {
-  //   path:'/ViewApp',
-  //   beforeEnter: () => {
-  //     window.location = '/viewApp.html'
-  //   }
-  // },
-  // {
-  //   path:'/viewPage',
-  //   beforeEnter: () => {
-  //     window.location = '/viewPage.html'
-  //   }
-  // },
   {
     path: "/demo/test01",
     name: "demoTest01",
@@ -53,7 +41,7 @@ export default [
   {
     path: "/",
     name: "_home",
-    redirect: {name:"home"},
+    redirect: { name: "home" },
     component: Main1,
     children: [
       {

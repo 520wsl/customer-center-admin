@@ -1,9 +1,7 @@
 <template>
   <div>
-    <sixiheader title='我的合同'></sixiheader>
-    <div class="contract-number">
-      合同编号:{{info.contractNumber}}
-    </div>
+    <sixiheader title="我的合同"></sixiheader>
+    <div class="contract-number">合同编号:{{info.contractNumber}}</div>
     <div class="contract-info">
       <h3>合同信息</h3>
       <span>合同类型：</span>
@@ -23,7 +21,7 @@
     <div class="contract-evaluate">
       <div class="evaluate-item">
         <div class="item-left">
-          <img src="../../assets/image/operation_service_logo.png">
+          <img :src="$CDN+'/operation_service_logo.png'">
           <span>运营服务评价</span>
         </div>
         <div class="item-right">
@@ -33,7 +31,7 @@
       </div>
       <div class="evaluate-item">
         <div class="item-left">
-          <img src="../../assets/image/aesthetic_service_logo.png">
+          <img :src="$CDN+'/aesthetic_service_logo.png'">
           <span>美工服务评价</span>
         </div>
         <div class="item-right">

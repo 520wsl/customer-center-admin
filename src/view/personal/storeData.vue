@@ -1,29 +1,38 @@
 <template>
   <div>
     <sixiheader title="店铺运营数据"></sixiheader>
-    <div class="b-title">
+    <div class="b-title" :style="'background-image: url('+$CDN+'/moda_bottom_line.png'+')'">
       <span>苏州市嘉华聚氨酯制品有限公司</span>
-      <mt-button class="btn" @click="openPicker">
-        {{month}}
-      </mt-button>
+      <mt-button class="btn" @click="openPicker">{{month}}</mt-button>
     </div>
-    <mt-datetime-picker ref="picker" type="date" v-model="pickerValue" @confirm="handleConfirm" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" class="style "></mt-datetime-picker>
+    <mt-datetime-picker
+      ref="picker"
+      type="date"
+      v-model="pickerValue"
+      @confirm="handleConfirm"
+      year-format="{value} 年"
+      month-format="{value} 月"
+      date-format="{value} 日"
+      class="style"
+    ></mt-datetime-picker>
     <div class="data">
       <h3 class="s-title">月销量</h3>
       <div class="monthData">
         <div>
           <div class="onlineAndoffline">线上</div>
-          <div class="money">￥66.11
+          <div class="money">
+            ￥66.11
             <span>万元</span>
-            <img src="@/assets/image/decline.png" alt="">
+            <img :src="$CDN+'/decline.png'" alt="">
           </div>
           <div class="num">206笔</div>
         </div>
         <div>
           <div class="onlineAndoffline">线下</div>
-          <div class="money">￥66.11
+          <div class="money">
+            ￥66.11
             <span>万元</span>
-            <img src="@/assets/image/rise.png" alt="">
+            <img :src="$CDN+'/rise.png'" alt="">
           </div>
           <div class="num">206笔</div>
         </div>
@@ -34,15 +43,17 @@
       <div class="info">
         <ul>
           <li class="item1">询盘总量</li>
-          <li class="item2">￥690.11
-            <img src="@/assets/image/decline.png" alt="">
+          <li class="item2">
+            ￥690.11
+            <img :src="$CDN+'/decline.png'" alt="">
           </li>
           <li class="item2">56笔</li>
         </ul>
         <ul>
           <li class="item1">询盘总量</li>
-          <li class="item2">￥690.11
-            <img src="@/assets/image/rise.png" alt="">
+          <li class="item2">
+            ￥690.11
+            <img :src="$CDN+'/rise.png'" alt="">
           </li>
           <li class="item2">56笔</li>
         </ul>
@@ -123,8 +134,8 @@ export default {
 @sTitleColor: #353a42;
 @labelColor: #929eaa;
 
-@risePng: "./../../assets/image/rise.png";
-@declinePng: "./../../assets/image/declin.png";
+// @risePng: "./../../assets/image/rise.png";
+// @declinePng: "./../../assets/image/declin.png";
 
 @sTitleFontSize: 28px;
 
@@ -136,8 +147,9 @@ export default {
   height: 100px;
   color: @titleColor;
   font-size: 28px;
-  background: #fff url("./../../assets/image/moda_bottom_line.png") repeat-x
-    bottom;
+  background: #fff repeat-x bottom;
+  /*background: #fff url("./../../assets/image/moda_bottom_line.png") repeat-x
+    bottom;*/
   background-size: 100% 4px;
   span {
     flex: 1;

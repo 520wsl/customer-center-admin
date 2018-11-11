@@ -2,7 +2,8 @@
   <div>
     <sixiheader title="线下销售记录"></sixiheader>
     <div class="sale-record">
-      <div class="record-company">{{companyName}}
+      <div class="record-company">
+        {{companyName}}
         <span>&gt;</span>
       </div>
       <div class="record-month">
@@ -10,24 +11,24 @@
         <span class="month">{{month}}月</span>
         <span class="timeBtn">&gt;</span>
       </div>
-      <div class="record-year">
-        {{year}}年
-      </div>
+      <div class="record-year">{{year}}年</div>
       <div class="record-list-title">
         <span>单量：{{sum}}笔</span>
         <span>金额：¥{{money}}元</span>
       </div>
       <div class="record-list">
-        <div class="record-list-item" v-for="(item,index) in recordList" :key='index'>
+        <div class="record-list-item" v-for="(item,index) in recordList" :key="index">
           <div class="time">
             <span>{{item.time}}&nbsp;&nbsp;{{item.weekday}}&nbsp;&nbsp;({{item.isToday}})</span>
-            <img src="../../assets/image/edit_logo.png">
+            <img :src="$CDN+'/edit_logo.png'">
           </div>
           <div class="footer">
-            <div>单量：
+            <div>
+              单量：
               <span>{{item.sum}}笔</span>
             </div>
-            <div>金额：
+            <div>
+              金额：
               <span>¥{{item.money}}元</span>
             </div>
           </div>
@@ -53,7 +54,10 @@
           <mt-button class="default btn" @click="centerClick">取消</mt-button>
           <mt-button class="primary btn" @click="successClick">确定</mt-button>
         </div>
-        <div class="modal-footer-line"></div>
+        <div
+          class="modal-footer-line"
+          :style="'background-image: url('+$CDN+'/moda_bottom_line.png'+')'"
+        ></div>
       </div>
     </div>
   </div>
@@ -144,7 +148,7 @@ export default {
   bottom: 0;
   left: 0;
   position: absolute;
-  background-image: url("../../assets/image/moda_bottom_line.png");
+  /*background-image: url("../../assets/image/moda_bottom_line.png");*/
   background-size: 100 6px;
   width: 100%;
   height: 6px;
