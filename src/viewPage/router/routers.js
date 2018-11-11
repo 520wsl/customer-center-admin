@@ -21,297 +21,305 @@
  * }
  */
 const Main1 = r =>
-	require.ensure([], () => r(require("_c/template/main1")), "main"); //模板页 不带底部导航
+  require.ensure([], () => r(require("_c/template/main1")), "main"); //模板页 不带底部导航
 export default [
-	// {
-	// 	path: "/ViewApp",
-	// 	beforeEnter: () => {
-	// 		window.location = "/viewApp.html";
-	// 	}
-	// },
-	// {
-	// 	path: "/viewPage",
-	// 	beforeEnter: () => {
-	// 		window.location = "/viewPage.html";
-	// 	}
-	// },
-	{
-		path: "/demo/test01",
-		name: "demoTest01",
-		component: r =>
-			require.ensure([], () => r(require("@/view/demo/test01")), "demo") //demo
-	},
-	{
-		path: "/login",
-		name: "login",
-		meta: {
-			title: "Login-登录"
-		},
-		component: r =>
-			require.ensure([], () => r(require("@/view/login/login")), "login") //登录页面
-	},
-	{
-		path: "/",
-		name: "_home",
-		redirect: { name: "home" },
-		component: Main1,
-		children: [
-			{
-				path: "home",
-				name: "home",
-				meta: {
-					title: "首页"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/view/home/home")),
-						"login"
-					) //首页
-			}
-		]
-	},
-	{
-		path: "/contract",
-		name: "_contract",
-		redirect: { name: "contract" },
-		component: Main1,
-		children: [
-			{
-				path: "index",
-				name: "contract",
-				meta: {
-					title: "我的合同"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/view/contract/index")),
-						"contract"
-					)
-			},
-			{
-				path: "info",
-				name: "contractInfo",
-				meta: {
-					title: "合同详情"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/view/contract/info")),
-						"contract"
-					)
-			},
-			{
-				path: "pay",
-				name: "contractPay",
-				meta: {
-					title: "支付"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/view/contract/pay")),
-						"contract"
-					)
-			},
-			{
-				path: "paySuccess",
-				name: "contractPaySuccess",
-				meta: {
-					title: "支付成功"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/view/contract/paySuccess")),
-						"contract"
-					)
-			}
-		]
-	},
-	{
-		path: "/log",
-		name: "_log",
-		redirect: { name: "saleRecord" },
-		component: Main1,
-		children: [
-			{
-				path: "saleRecord",
-				name: "saleRecord",
-				meta: {
-					title: "记录"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/view/log/saleRecord")),
-						"log"
-					)
-			}
-		]
-	},
-	{
-		path: "/personal",
-		name: "_personal",
-		redirect: { name: "personal" },
-		component: Main1,
-		children: [
-			{
-				path: "index",
-				name: "personal",
-				meta: {
-					title: "我的"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/view/personal/index")),
-						"personal"
-					)
-			},
-			{
-				path: "company",
-				name: "personalCompany",
-				meta: {
-					title: "我的公司"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/view/personal/company")),
-						"personal"
-					)
-			}
-		]
-	},
-	{
-		path: "/question",
-		name: "_question",
-		redirect: { name: "question" },
-		component: Main1,
-		children: [
-			{
-				path: "index",
-				name: "question",
-				meta: {
-					title: "常见问题"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/view/question/index")),
-						"question"
-					)
-			},
-			{
-				path: "info",
-				name: "questionInfo",
-				meta: {
-					title: "常见问题详情"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/view/question/info")),
-						"questionInfo"
-					)
-			}
-		]
-	},
-	{
-		path: "/serviceBill",
-		name: "_serviceBill",
-		redirect: { name: "serviceBill" },
-		component: Main1,
-		children: [
-			{
-				path: "index",
-				name: "serviceBill",
-				meta: {
-					title: "服务工单"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/view/serviceBill/index")),
-						"serviceBill"
-					)
-			},
-			{
-				path: "info",
-				name: "serviceBillInfo",
-				meta: {
-					title: "服务工单-详情记录"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/view/serviceBill/info")),
-						"serviceBillInfo"
-					)
-			},
-			{
-				path: "preview",
-				name: "serviceBillBreview",
-				meta: {
-					title: "服务工单-详情记录"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/view/serviceBill/preview")),
-						"serviceBillPreview"
-					)
-			}
-		]
-	},
-	{
-		path: "/serviceEvaluation",
-		name: "_serviceEvaluation",
-		redirect: { name: "serviceEvaluation" },
-		component: Main1,
-		children: [
-			{
-				path: "index",
-				name: "serviceEvaluation",
-				meta: {
-					title: "服务评价"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/view/serviceEvaluation/index")),
-						"serviceEvaluation"
-					)
-			},
-			{
-				path: "feedback",
-				name: "serviceEvaluationBreview",
-				meta: {
-					title: "服务评价反馈"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/view/serviceEvaluation/feedback")),
-						"serviceEvaluation"
-					)
-			},
-			{
-				path: "info",
-				name: "serviceEvaluationInfo",
-				meta: {
-					title: "服务评价详情"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/view/serviceEvaluation/info")),
-						"serviceEvaluation"
-					)
-			}
-		]
-	}
+  // {
+  // 	path: "/ViewApp",
+  // 	beforeEnter: () => {
+  // 		window.location = "/viewApp.html";
+  // 	}
+  // },
+  // {
+  // 	path: "/viewPage",
+  // 	beforeEnter: () => {
+  // 		window.location = "/viewPage.html";
+  // 	}
+  // },
+  {
+    path: "/demo/test01",
+    name: "demoTest01",
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("@/viewPage/view/demo/test01")),
+        "demo"
+      ) //demo
+  },
+  {
+    path: "/login",
+    name: "login",
+    meta: {
+      title: "Login-登录"
+    },
+    component: r =>
+      require.ensure(
+        [],
+        () => r(require("@/viewPage/view/login/login")),
+        "login"
+      ) //登录页面
+  },
+  {
+    path: "/",
+    name: "_home",
+    redirect: { name: "home" },
+    component: Main1,
+    children: [
+      {
+        path: "home",
+        name: "home",
+        meta: {
+          title: "首页"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/viewPage/view/home/home")),
+            "login"
+          ) //首页
+      }
+    ]
+  },
+  {
+    path: "/contract",
+    name: "_contract",
+    redirect: { name: "contract" },
+    component: Main1,
+    children: [
+      {
+        path: "index",
+        name: "contract",
+        meta: {
+          title: "我的合同"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/viewPage/view/contract/index")),
+            "contract"
+          )
+      },
+      {
+        path: "info",
+        name: "contractInfo",
+        meta: {
+          title: "合同详情"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/viewPage/view/contract/info")),
+            "contract"
+          )
+      },
+      {
+        path: "pay",
+        name: "contractPay",
+        meta: {
+          title: "支付"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/viewPage/view/contract/pay")),
+            "contract"
+          )
+      },
+      {
+        path: "paySuccess",
+        name: "contractPaySuccess",
+        meta: {
+          title: "支付成功"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/viewPage/view/contract/paySuccess")),
+            "contract"
+          )
+      }
+    ]
+  },
+  {
+    path: "/log",
+    name: "_log",
+    redirect: { name: "saleRecord" },
+    component: Main1,
+    children: [
+      {
+        path: "saleRecord",
+        name: "saleRecord",
+        meta: {
+          title: "记录"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/viewPage/view/log/saleRecord")),
+            "log"
+          )
+      }
+    ]
+  },
+  {
+    path: "/personal",
+    name: "_personal",
+    redirect: { name: "personal" },
+    component: Main1,
+    children: [
+      {
+        path: "index",
+        name: "personal",
+        meta: {
+          title: "我的"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/viewPage/view/personal/index")),
+            "personal"
+          )
+      },
+      {
+        path: "company",
+        name: "personalCompany",
+        meta: {
+          title: "我的公司"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/viewPage/view/personal/company")),
+            "personal"
+          )
+      }
+    ]
+  },
+  {
+    path: "/question",
+    name: "_question",
+    redirect: { name: "question" },
+    component: Main1,
+    children: [
+      {
+        path: "index",
+        name: "question",
+        meta: {
+          title: "常见问题"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/viewPage/view/question/index")),
+            "question"
+          )
+      },
+      {
+        path: "info",
+        name: "questionInfo",
+        meta: {
+          title: "常见问题详情"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/viewPage/view/question/info")),
+            "questionInfo"
+          )
+      }
+    ]
+  },
+  {
+    path: "/serviceBill",
+    name: "_serviceBill",
+    redirect: { name: "serviceBill" },
+    component: Main1,
+    children: [
+      {
+        path: "index",
+        name: "serviceBill",
+        meta: {
+          title: "服务工单"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/viewPage/view/serviceBill/index")),
+            "serviceBill"
+          )
+      },
+      {
+        path: "info",
+        name: "serviceBillInfo",
+        meta: {
+          title: "服务工单-详情记录"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/viewPage/view/serviceBill/info")),
+            "serviceBillInfo"
+          )
+      },
+      {
+        path: "preview",
+        name: "serviceBillBreview",
+        meta: {
+          title: "服务工单-详情记录"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/viewPage/view/serviceBill/preview")),
+            "serviceBillPreview"
+          )
+      }
+    ]
+  },
+  {
+    path: "/serviceEvaluation",
+    name: "_serviceEvaluation",
+    redirect: { name: "serviceEvaluation" },
+    component: Main1,
+    children: [
+      {
+        path: "index",
+        name: "serviceEvaluation",
+        meta: {
+          title: "服务评价"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/viewPage/view/serviceEvaluation/index")),
+            "serviceEvaluation"
+          )
+      },
+      {
+        path: "feedback",
+        name: "serviceEvaluationBreview",
+        meta: {
+          title: "服务评价反馈"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/viewPage/view/serviceEvaluation/feedback")),
+            "serviceEvaluation"
+          )
+      },
+      {
+        path: "info",
+        name: "serviceEvaluationInfo",
+        meta: {
+          title: "服务评价详情"
+        },
+        component: r =>
+          require.ensure(
+            [],
+            () => r(require("@/viewPage/view/serviceEvaluation/info")),
+            "serviceEvaluation"
+          )
+      }
+    ]
+  }
 ];
