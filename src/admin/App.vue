@@ -1,8 +1,6 @@
 <template>
   <div id="app" class="main">
-	
     <router-view></router-view>
-			<h1>admin</h1>
   </div>
 </template>
 
