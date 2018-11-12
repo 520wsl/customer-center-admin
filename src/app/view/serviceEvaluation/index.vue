@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import sixiheader from "@/components/header";
+import sixiheader from "@/components/app/header";
 import { formatTime } from "@/libs/util/time";
 export default {
   data() {

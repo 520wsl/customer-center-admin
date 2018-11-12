@@ -23,7 +23,7 @@
   </div>
 </template>
 <script>
-import sixiheader from "@/components/header";
+import sixiheader from "@/components/app/header";
 export default {
   data() {
     return {

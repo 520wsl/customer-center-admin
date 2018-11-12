@@ -43,7 +43,7 @@
   </div>
 </template>
 <script>
-import sixiheader from "@/components/header";
+import sixiheader from "@/components/app/header";
 import { randomPath } from "@/libs/tools";
 export default {
 	data() {

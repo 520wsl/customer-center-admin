@@ -75,7 +75,7 @@
   </div>
 </template>
 <script>
-import sixiheader from "@/components/header.vue";
+import sixiheader from "@/components/app/header.vue";
 export default {
   components: { sixiheader },
   data() {
