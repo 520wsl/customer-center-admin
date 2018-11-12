@@ -1,7 +1,7 @@
 <template>
   <div>
     <sixiheader title="店铺运营数据"></sixiheader>
-    <div class="b-title" :style="'background-image: url('+$CDN+'/moda_bottom_line.png'+')'">
+    <div class="b-title" :style="'background-image: url('+$CDN('/moda_bottom_line.png')+')'">
       <span>苏州市嘉华聚氨酯制品有限公司</span>
       <mt-button class="btn" @click="openPicker">{{month}}</mt-button>
     </div>
@@ -23,7 +23,7 @@
           <div class="money">
             ￥66.11
             <span>万元</span>
-            <img :src="$CDN+'/decline.png'" alt="">
+            <img :src="$CDN('/decline.png')" alt="">
           </div>
           <div class="num">206笔</div>
         </div>
@@ -32,7 +32,7 @@
           <div class="money">
             ￥66.11
             <span>万元</span>
-            <img :src="$CDN+'/rise.png'" alt="">
+            <img :src="$CDN('/rise.png')" alt="">
           </div>
           <div class="num">206笔</div>
         </div>
@@ -45,7 +45,7 @@
           <li class="item1">询盘总量</li>
           <li class="item2">
             ￥690.11
-            <img :src="$CDN+'/decline.png'" alt="">
+            <img :src="$CDN('/decline.png')" alt="">
           </li>
           <li class="item2">56笔</li>
         </ul>
@@ -53,7 +53,7 @@
           <li class="item1">询盘总量</li>
           <li class="item2">
             ￥690.11
-            <img :src="$CDN+'/rise.png'" alt="">
+            <img :src="$CDN('/rise.png')" alt="">
           </li>
           <li class="item2">56笔</li>
         </ul>

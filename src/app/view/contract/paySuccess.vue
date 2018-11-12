@@ -3,7 +3,7 @@
     <sixiheader title="支付结果" :isBack="true"></sixiheader>
     <div class="line"></div>
     <div class="success-body">
-      <img :src="$CDN+'/success_icon.png'">
+      <img :src="$CDN('/success_icon.png')">
       <span>支付成功</span>
       <mt-button class="btn" type="primary">查看合同</mt-button>
     </div>

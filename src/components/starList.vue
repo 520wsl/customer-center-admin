@@ -1,8 +1,8 @@
 <template>
   <div class="star-list">
     <div v-for="(item,index) in list" :key="index" class="star-item" @click="changeChoose(index)">
-      <img v-if="index<chooseNum" :src="$CDN+'/star_choose.png'">
-      <img v-else :src="$CDN+'/star_default.png'">
+      <img v-if="index<chooseNum" :src="$CDN('/star_choose.png')">
+      <img v-else :src="$CDN('/star_default.png')">
     </div>
   </div>
 </template>

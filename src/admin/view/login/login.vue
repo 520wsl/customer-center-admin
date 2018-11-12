@@ -3,7 +3,7 @@
     <sixiheader title="登录" background="#2E2E2E"></sixiheader>
     <div class="login-title">
       <div>
-        <img :src="$CDN+'/sixi_logo.png'">
+        <img :src="$CDN('/sixi_logo.png')">
       </div>
       <h1>欢迎登录四喜服务</h1>
     </div>

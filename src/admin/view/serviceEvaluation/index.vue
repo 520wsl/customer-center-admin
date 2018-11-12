@@ -9,7 +9,7 @@
     >
       <li v-for="(item,index) in list" :key="index">
         <div class="company">
-          <img :src="$CDN+'/service_evaluation_logo.png'">
+          <img :src="$CDN('/service_evaluation_logo.png')">
           <span>{{item.companyName}}</span>
         </div>
         <span

@@ -7,15 +7,15 @@ import "@/libs/flexible";
 import Mint from "mint-ui";
 import "mint-ui/lib/style.css";
 import "@/assets/style/base.css";
-import config from "@/config";
+import { CDN } from "@/libs/tools";
 Vue.use(Mint);
 
-Vue.prototype.$CDN = config.CDN;
+Vue.prototype.$CDN = CDN;
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+	router,
+	store,
+	render: h => h(App)
 }).$mount("#app");

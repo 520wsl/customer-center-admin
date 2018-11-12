@@ -20,7 +20,7 @@
         <div class="record-list-item" v-for="(item,index) in recordList" :key="index">
           <div class="time">
             <span>{{item.time}}&nbsp;&nbsp;{{item.weekday}}&nbsp;&nbsp;({{item.isToday}})</span>
-            <img :src="$CDN+'/edit_logo.png'">
+            <img :src="$CDN('/edit_logo.png')">
           </div>
           <div class="footer">
             <div>
@@ -56,7 +56,7 @@
         </div>
         <div
           class="modal-footer-line"
-          :style="'background-image: url('+$CDN+'/moda_bottom_line.png'+')'"
+          :style="'background-image: url('+$CDN('/moda_bottom_line.png')+')'"
         ></div>
       </div>
     </div>

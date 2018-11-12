@@ -1,8 +1,8 @@
 /*
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:13:25
- * @Last Modified by:   Mad Dragon
- * @Last Modified time: 2018-11-07 22:13:25
+ * @Last Modified by: Mad Dragon
+ * @Last Modified time: 2018-11-12 09:38:57
  * @explanatory:  config
  */
 export default {
@@ -10,5 +10,5 @@ export default {
     dev: "/api",
     pro: "/api"
   },
-  CDN: "http://3.img.dianjiangla.com/assets"
+  CDN: "http://custom-center.oss-cn-hangzhou.aliyuncs.com/customerCenter/image"
 };

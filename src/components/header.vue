@@ -19,8 +19,8 @@
       </div>
       <div slot="right">
         <slot name="headright" class="right">
-          <img v-if="background" :src="$CDN+'/header_white_logo.png'" class="img">
-          <img v-else :src="$CDN+'/header_black_logo.png'" class="img">
+          <img v-if="background" :src="$CDN('/header_white_logo.png')" class="img">
+          <img v-else :src="$CDN('/header_black_logo.png')" class="img">
         </slot>
       </div>
     </mt-header>
