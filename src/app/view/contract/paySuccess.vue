@@ -1,6 +1,6 @@
 <template>
   <div>
-    <sixiheader title="支付结果" :isBack="true"></sixiheader>
+    <!-- <sixiheader title="支付结果" :isBack="true"></sixiheader> -->
     <div class="line"></div>
     <div class="success-body">
       <img :src="$CDN('/success_icon.png')">
@@ -10,12 +10,15 @@
   </div>
 </template>
 <script>
-import sixiheader from "@/components/app/header";
+// import sixiheader from "@/components/app/header";
 export default {
   data() {
     return {};
   },
-  components: { sixiheader },
+  created() {
+    this.$parent.$parent.setTitle("支付结果", false);
+  },
+  // components: { sixiheader },
   methods: {}
 };
 </script>

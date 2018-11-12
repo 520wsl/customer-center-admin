@@ -1,6 +1,6 @@
 <template>
   <div>
-    <sixiheader title="登录" background="#2E2E2E"></sixiheader>
+    <!-- <sixiheader title="登录" background="#2E2E2E"></sixiheader> -->
     <div class="login-title">
       <div>
         <img :src="$CDN('/sixi_logo.png')">
@@ -23,7 +23,7 @@
   </div>
 </template>
 <script>
-import sixiheader from "@/components/app/header";
+// import sixiheader from "@/components/app/header";
 export default {
   data() {
     return {
@@ -32,7 +32,10 @@ export default {
     };
   },
   components: {
-    sixiheader
+    // sixiheader
+  },
+  created() {
+    this.$parent.setTitle("首页");
   },
   methods: {
     getVerifycode() {
@@ -57,6 +60,8 @@ export default {
   width: 100%;
   border: 0 none;
   font-size: 32px;
+  padding: 0 30px;
+  box-sizing: border-box;
 }
 .h5-form .h5-input .code-pic {
   position: absolute;

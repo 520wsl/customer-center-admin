@@ -1,6 +1,6 @@
 <template>
   <div>
-    <sixiheader title='我的公司'></sixiheader>
+    <!-- <sixiheader title='我的公司'></sixiheader> -->
     <div class="complany-list">
       <div v-for="(item,index) in companyList" :key="index" class="company-item">
         <span>{{item.companyName}}</span>
@@ -10,7 +10,7 @@
   </div>
 </template>
 <script>
-import sixiheader from "@/components/app/header";
+// import sixiheader from "@/components/app/header";
 export default {
   data() {
     return {
@@ -21,7 +21,10 @@ export default {
       ]
     };
   },
-  components: { sixiheader },
+  created() {
+    this.$parent.$parent.setTitle("我的公司");
+  },
+  components: {},
   methods: {}
 };
 </script>

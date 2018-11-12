@@ -1,6 +1,6 @@
 <template>
   <div>
-    <sixiheader title="常见问题"></sixiheader>
+    <!-- <sixiheader title="常见问题"></sixiheader> -->
     <div class="s-title">
       <span>如何报名参加阿里的活动？</span>
     </div>
@@ -77,9 +77,12 @@
   </div>
 </template>
 <script>
-import sixiheader from "@/components/app/header.vue";
+// import sixiheader from "@/components/app/header.vue";
 export default {
-  components: { sixiheader },
+  components: {},
+  created() {
+    this.$parent.$parent.setTitle("常见问题");
+  },
   data() {
     return {};
   }

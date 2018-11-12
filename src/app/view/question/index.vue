@@ -1,6 +1,6 @@
 <template>
   <div>
-    <sixiheader title="常见问题"></sixiheader>
+    <!-- <sixiheader title="常见问题"></sixiheader> -->
     <div class="navBar">
       <div v-for="el in navBarList" :key="el.id" :class="activeBar === el.id?'is-selected':''" @click="getNavBarActive(el.id)">{{el.name}}
         <i></i>
@@ -25,9 +25,9 @@
 </template>
 
 <script>
-import sixiheader from "@/components/app/header.vue";
+// import sixiheader from "@/components/app/header.vue";
 export default {
-  components: { sixiheader },
+  components: {},
   data() {
     return {
       navBar: "1",
@@ -59,6 +59,9 @@ export default {
         }
       ]
     };
+  },
+  created() {
+    this.$parent.$parent.setTitle("常见问题");
   },
   methods: {
     getNavBarActive(id) {

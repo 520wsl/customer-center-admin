@@ -1,13 +1,13 @@
 <template>
   <div>
-    <sixiheader :title="title"></sixiheader>
+    <!-- <sixiheader :title="title"></sixiheader> -->
     <div class="evaluation">请你为{{severType==1?"美工":"运营"}}
       <span>{{name}}</span>，本次拟服务做个评价</div>
     <editEvaluation :list='list'></editEvaluation>
   </div>
 </template>
 <script>
-import sixiheader from "@/components/app/header";
+// import sixiheader from "@/components/app/header";
 import editEvaluation from "@/components/app/editEvaluation";
 export default {
   data() {
@@ -24,8 +24,10 @@ export default {
       name: "张momo"
     };
   },
-  components: { sixiheader, editEvaluation },
-  created() {},
+  components: { editEvaluation },
+  created() {
+    this.$parent.$parent.setTitle(this.title);
+  },
   methods: {}
 };
 </script>
