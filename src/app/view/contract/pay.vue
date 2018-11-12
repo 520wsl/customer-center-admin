@@ -14,26 +14,26 @@
       <h3>剩余金额：</h3>
       <div @click="setPaytype(1)" class="pay-item space-between">
         <div class="icon-big">
-          <img :src="randomPath+'h5/icon-pay-wx.png'" alt="微信支付">
+          <img :src="$CDN('/icon-pay-wx.png')" alt="微信支付">
         </div>
         <div :class="payType == 1? 'fontcolor':''" style="flex: 1;text-indent:30px;">微信支付</div>
         <div v-show="payType==1" class="icon-min">
-          <img :src="randomPath+'h5/icon-pay-active.png'">
+          <img :src="$CDN('/icon-pay-active.png')">
         </div>
         <div v-show="payType!=1" class="icon-min">
-          <img :src="randomPath+'h5/icon-pay-default.png'">
+          <img :src="$CDN('/icon-pay-default.png')">
         </div>
       </div>
       <div @click="setPaytype(2)" class="pay-item space-between">
         <div class="icon-big">
-          <img :src="randomPath+'h5/icon-pay-zf.png'" alt="支付宝支付">
+          <img :src="$CDN('/icon-pay-zf.png')" alt="支付宝支付">
         </div>
         <div :class="payType == 2? 'fontcolor':''" style="flex: 1;text-indent:30px;">支付宝支付</div>
         <div v-show="payType==2" class="icon-min">
-          <img :src="randomPath+'h5/icon-pay-active.png'">
+          <img :src="$CDN('/icon-pay-active.png')">
         </div>
         <div v-show="payType!=2" class="icon-min">
-          <img :src="randomPath+'h5/icon-pay-default.png'">
+          <img :src="$CDN('/icon-pay-default.png')">
         </div>
       </div>
     </div>

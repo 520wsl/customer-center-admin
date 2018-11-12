@@ -16,7 +16,42 @@ export default {
         {
           title: "服务态度",
           maxNum: 5,
-          chooseNum: 3
+          chooseNum: 4,
+          isHalf: 0,
+          type: "star"
+        },
+        {
+          title: "服务态度",
+          maxNum: 5,
+          chooseNum: 3,
+          isHalf: 1,
+          type: "star"
+        },
+        {
+          title: "其他反馈",
+          maxNum: 5,
+          chooseNum: 3,
+          isHalf: 1,
+          list: [
+            {
+              name: "选项1",
+              id: 1
+            },
+            {
+              name: "选项2",
+              id: 2
+            },
+            {
+              name: "选项3",
+              id: 3
+            },
+            {
+              name: "选项3",
+              id: 4
+            }
+          ],
+          value: [1, 2],
+          type: "checkBox"
         }
       ],
       title: "美工服务评价",
@@ -28,7 +63,8 @@ export default {
   created() {
     this.$parent.$parent.setTitle(this.title);
   },
-  methods: {}
+  methods: {
+  }
 };
 </script>
 <style scoped>
