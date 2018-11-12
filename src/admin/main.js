@@ -7,8 +7,10 @@ import "@/libs/flexible";
 import Mint from "mint-ui";
 import "mint-ui/lib/style.css";
 import "@/assets/style/base.css";
+import { CDN } from "@/libs/tools";
 Vue.use(Mint);
 
+Vue.prototype.$CDN = CDN;
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
