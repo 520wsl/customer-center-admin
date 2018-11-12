@@ -7,8 +7,8 @@
   </div>
 </template>
 <script>
-import sixiheader from "@/components/header";
-import editEvaluation from "@/components/editEvaluation";
+import sixiheader from "@/components/app/header";
+import editEvaluation from "@/components/app/editEvaluation";
 export default {
   data() {
     return {
