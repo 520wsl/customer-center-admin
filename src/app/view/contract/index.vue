@@ -1,6 +1,6 @@
 <template>
   <div>
-    <sixiheader title='我的合同'></sixiheader>
+    <!-- <sixiheader title='我的合同'></sixiheader> -->
     <div class="contract-list">
       <div class="contract-item" v-for="(item,index) in contractList" :key="index">
         <div class="contract-title">
@@ -23,7 +23,7 @@
   </div>
 </template>
 <script>
-import sixiheader from "@/components/app/header";
+// import sixiheader from "@/components/app/header";
 export default {
   data() {
     return {
@@ -47,7 +47,11 @@ export default {
       ]
     };
   },
-  components: { sixiheader },
+  created() {
+    console.log(this.$parent);
+    this.$parent.$parent.setTitle("我的合同");
+  },
+  components: {},
   methods: {}
 };
 </script>

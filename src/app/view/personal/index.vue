@@ -1,6 +1,6 @@
 <template>
   <div class="personal">
-    <sixiheader title="我的" background=""></sixiheader>
+    <!-- <sixiheader title="我的" background=""></sixiheader> -->
     <div class="company" :style="'background-image: url('+$CDN('/my_company_bg.png')+')'">
       <div class="company-image">
         <img v-if="companyUrl" :src="companyUrl" class="img">
@@ -75,7 +75,7 @@
   </div>
 </template>
 <script>
-import sixiheader from "@/components/app/header";
+// import sixiheader from "@/components/app/header";
 export default {
   data() {
     return {
@@ -90,7 +90,10 @@ export default {
       }
     };
   },
-  components: { sixiheader },
+  created() {
+    this.$parent.$parent.setTitle("我的");
+  },
+  // components: { sixiheader },
   methods: {}
 };
 </script>

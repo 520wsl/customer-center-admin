@@ -50,6 +50,10 @@
       "postcss-pxtorem": {
         "rootValue": 750,
         "unitPrecision": 5,
+        "selectorBlackList": [
+          "ivu",
+          "mint"
+        ],
         "propList": [
           "*"
         ]

@@ -27,7 +27,7 @@ export default [
     path: "/demo/test01",
     name: "demoTest01",
     component: r =>
-      require.ensure([], () => r(require("@/app/view/demo/test01")), "demo") //demo
+      require.ensure([], () => r(require("@/app/view/demo/test01")), "appDemo") //demo
   },
   {
     path: "/login",
@@ -36,11 +36,7 @@ export default [
       title: "Login-登录"
     },
     component: r =>
-      require.ensure(
-        [],
-        () => r(require("@/app/view/login/login")),
-        "login"
-      ) //登录页面
+      require.ensure([], () => r(require("@/app/view/login/login")), "appLogin") //登录页面
   },
   {
     path: "/",
@@ -58,7 +54,7 @@ export default [
           require.ensure(
             [],
             () => r(require("@/app/view/home/home")),
-            "login"
+            "appLogin"
           ) //首页
       }
     ]
@@ -79,7 +75,7 @@ export default [
           require.ensure(
             [],
             () => r(require("@/app/view/contract/index")),
-            "contract"
+            "appLontract"
           )
       },
       {
@@ -92,7 +88,7 @@ export default [
           require.ensure(
             [],
             () => r(require("@/app/view/contract/info")),
-            "contract"
+            "appContract"
           )
       },
       {
@@ -105,7 +101,7 @@ export default [
           require.ensure(
             [],
             () => r(require("@/app/view/contract/pay")),
-            "contract"
+            "appContract"
           )
       },
       {
@@ -118,7 +114,7 @@ export default [
           require.ensure(
             [],
             () => r(require("@/app/view/contract/paySuccess")),
-            "contract"
+            "appContract"
           )
       }
     ]
@@ -139,7 +135,7 @@ export default [
           require.ensure(
             [],
             () => r(require("@/app/view/log/saleRecord")),
-            "log"
+            "appLog"
           )
       }
     ]
@@ -160,7 +156,7 @@ export default [
           require.ensure(
             [],
             () => r(require("@/app/view/personal/index")),
-            "personal"
+            "appPersonal"
           )
       },
       {
@@ -173,7 +169,7 @@ export default [
           require.ensure(
             [],
             () => r(require("@/app/view/personal/company")),
-            "personal"
+            "appPersonal"
           )
       }
     ]
@@ -194,7 +190,7 @@ export default [
           require.ensure(
             [],
             () => r(require("@/app/view/question/index")),
-            "question"
+            "appQuestion"
           )
       },
       {
@@ -207,7 +203,7 @@ export default [
           require.ensure(
             [],
             () => r(require("@/app/view/question/info")),
-            "questionInfo"
+            "appQuestion"
           )
       }
     ]
@@ -228,7 +224,7 @@ export default [
           require.ensure(
             [],
             () => r(require("@/app/view/serviceBill/index")),
-            "serviceBill"
+            "appServiceBill"
           )
       },
       {
@@ -241,7 +237,7 @@ export default [
           require.ensure(
             [],
             () => r(require("@/app/view/serviceBill/info")),
-            "serviceBillInfo"
+            "appServiceBill"
           )
       },
       {
@@ -254,7 +250,7 @@ export default [
           require.ensure(
             [],
             () => r(require("@/app/view/serviceBill/preview")),
-            "serviceBillPreview"
+            "appServiceBill"
           )
       }
     ]
@@ -275,7 +271,7 @@ export default [
           require.ensure(
             [],
             () => r(require("@/app/view/serviceEvaluation/index")),
-            "serviceEvaluation"
+            "appServiceEvaluation"
           )
       },
       {
@@ -288,7 +284,7 @@ export default [
           require.ensure(
             [],
             () => r(require("@/app/view/serviceEvaluation/feedback")),
-            "serviceEvaluation"
+            "appServiceEvaluation"
           )
       },
       {
@@ -301,7 +297,7 @@ export default [
           require.ensure(
             [],
             () => r(require("@/app/view/serviceEvaluation/info")),
-            "serviceEvaluation"
+            "appServiceEvaluation"
           )
       }
     ]

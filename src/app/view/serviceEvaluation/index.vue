@@ -1,27 +1,20 @@
 <template>
   <div>
-    <sixiheader title="服务评价"></sixiheader>
-    <ul
-      class="evaluation-list"
-      v-infinite-scroll="loadMore"
-      infinite-scroll-disabled="loading"
-      infinite-scroll-distance="10"
-    >
+    <!-- <sixiheader title="服务评价"></sixiheader> -->
+    <ul class="evaluation-list" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10">
       <li v-for="(item,index) in list" :key="index">
         <div class="company">
           <img :src="$CDN('/service_evaluation_logo.png')">
           <span>{{item.companyName}}</span>
         </div>
-        <span
-          class="time"
-        >{{item.completeTime}}&nbsp;&nbsp;({{item.isEvaluate=0?'已评价':'待评价'}})&nbsp;&nbsp;&gt;</span>
+        <span class="time">{{item.completeTime}}&nbsp;&nbsp;({{item.isEvaluate=0?'已评价':'待评价'}})&nbsp;&nbsp;&gt;</span>
       </li>
     </ul>
     <div v-if="loading" class="loading">加载中...</div>
   </div>
 </template>
 <script>
-import sixiheader from "@/components/app/header";
+// import sixiheader from "@/components/app/header";
 import { formatTime } from "@/libs/util/time";
 export default {
   data() {
@@ -40,7 +33,10 @@ export default {
       }
     };
   },
-  components: { sixiheader },
+  created() {
+    this.$parent.$parent.setTitle("服务评价");
+  },
+  components: {},
   methods: {
     loadMore() {
       // this.loading = true;

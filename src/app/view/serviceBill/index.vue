@@ -1,6 +1,6 @@
 <template>
   <div>
-    <sixiheader title="服务工单" class="top"></sixiheader>
+    <!-- <sixiheader title="服务工单" class="top"></sixiheader> -->
     <div class="servicebill">
       <h3>显示工单类型如店铺美化问题</h3>
       <p class="BillId">工单编号：
@@ -35,9 +35,12 @@
   </div>
 </template>
 <script>
-import sixiheader from "@/components/app/header.vue";
+// import sixiheader from "@/components/app/header.vue";
 export default {
-  components: { sixiheader },
+  components: {  },
+   created() {
+    this.$parent.$parent.setTitle("服务工单");
+  },
   data() {
     return {};
   }

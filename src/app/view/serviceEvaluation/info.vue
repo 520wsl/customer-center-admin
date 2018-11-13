@@ -1,13 +1,13 @@
 <template>
   <div>
-    <sixiheader :title="title"></sixiheader>
+    <!-- <sixiheader :title="title"></sixiheader> -->
     <div class="evaluation">请你为{{severType==1?"美工":"运营"}}
       <span>{{name}}</span>，本次拟服务做个评价</div>
     <editEvaluation :list='list'></editEvaluation>
   </div>
 </template>
 <script>
-import sixiheader from "@/components/app/header";
+// import sixiheader from "@/components/app/header";
 import editEvaluation from "@/components/app/editEvaluation";
 export default {
   data() {
@@ -16,7 +16,45 @@ export default {
         {
           title: "服务态度",
           maxNum: 5,
-          chooseNum: 3
+          chooseNum: 4,
+          isHalf: 0,
+          type: "star"
+        },
+        {
+          title: "服务态度",
+          maxNum: 5,
+          chooseNum: 3,
+          isHalf: 1,
+          type: "star"
+        },
+        {
+          title: "其他反馈",
+          maxNum: 5,
+          chooseNum: 3,
+          isHalf: 1,
+          list: [
+            {
+              name: "选项1",
+              id: 1
+            },
+            {
+              name: "选项2",
+              id: 2
+            },
+            {
+              name: "选项3",
+              id: 3
+            },
+            {
+              name: "选项3",
+              id: 4
+            }
+          ],
+          value: [1, 2],
+          type: "checkBox"
+        },
+        {
+          title: "单选"
         }
       ],
       title: "美工服务评价",
@@ -24,8 +62,10 @@ export default {
       name: "张momo"
     };
   },
-  components: { sixiheader, editEvaluation },
-  created() {},
+  components: { editEvaluation },
+  created() {
+    this.$parent.$parent.setTitle(this.title);
+  },
   methods: {}
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <sixiheader title="服务工单" class="top"></sixiheader>
+    <!-- <sixiheader title="服务工单" class="top"></sixiheader> -->
     <p class="BillId">工单编号：
       <b>TBDYY201806231001</b>
     </p>
@@ -75,9 +75,12 @@
   </div>
 </template>
 <script>
-import sixiheader from "@/components/app/header.vue";
+// import sixiheader from "@/components/app/header.vue";
 export default {
-  components: { sixiheader },
+  components: {},
+  created() {
+    this.$parent.$parent.setTitle("服务工单");
+  },
   data() {
     return {};
   }

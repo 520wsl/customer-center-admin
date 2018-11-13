@@ -1,6 +1,6 @@
 <template>
   <div>
-    <sixiheader title="线下销售记录"></sixiheader>
+    <!-- <sixiheader title="线下销售记录"></sixiheader> -->
     <div class="sale-record">
       <div class="record-company">
         {{companyName}}
@@ -54,16 +54,13 @@
           <mt-button class="default btn" @click="centerClick">取消</mt-button>
           <mt-button class="primary btn" @click="successClick">确定</mt-button>
         </div>
-        <div
-          class="modal-footer-line"
-          :style="'background-image: url('+$CDN('/moda_bottom_line.png')+')'"
-        ></div>
+        <div class="modal-footer-line" :style="'background-image: url('+$CDN('/moda_bottom_line.png')+')'"></div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import sixiheader from "@/components/app/header";
+// import sixiheader from "@/components/app/header";
 export default {
   data() {
     return {
@@ -88,7 +85,10 @@ export default {
       ]
     };
   },
-  components: { sixiheader },
+  created() {
+    this.$parent.$parent.setTitle("线下销售记录");
+  },
+  components: {},
   methods: {
     addRecord() {
       this.modal.bool = true;

@@ -1,20 +1,11 @@
 <template>
   <div>
-    <sixiheader title="店铺运营数据"></sixiheader>
+    <!-- <sixiheader title="店铺运营数据"></sixiheader> -->
     <div class="b-title" :style="'background-image: url('+$CDN('/moda_bottom_line.png')+')'">
       <span>苏州市嘉华聚氨酯制品有限公司</span>
       <mt-button class="btn" @click="openPicker">{{month}}</mt-button>
     </div>
-    <mt-datetime-picker
-      ref="picker"
-      type="date"
-      v-model="pickerValue"
-      @confirm="handleConfirm"
-      year-format="{value} 年"
-      month-format="{value} 月"
-      date-format="{value} 日"
-      class="style"
-    ></mt-datetime-picker>
+    <mt-datetime-picker ref="picker" type="date" v-model="pickerValue" @confirm="handleConfirm" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" class="style"></mt-datetime-picker>
     <div class="data">
       <h3 class="s-title">月销量</h3>
       <div class="monthData">
@@ -105,15 +96,18 @@
 
 <script>
 import { formatTime } from "@/libs/util/time";
-import sixiheader from "@/components/app/header.vue";
+// import sixiheader from "@/components/app/header.vue";
 
 export default {
-  components: { sixiheader },
+  components: {},
   data() {
     return {
       pickerValue: null,
       month: "2018年1月"
     };
+  },
+  created() {
+    this.$parent.$parent.setTitle("店铺运营数据");
   },
   mounted() {
     this.month = formatTime(new Date(), "YYYY年MM月");

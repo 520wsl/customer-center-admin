@@ -1,6 +1,6 @@
 <template>
   <div>
-    <sixiheader title="我的合同"></sixiheader>
+    <!-- <sixiheader title="我的合同"></sixiheader> -->
     <div class="contract-number">合同编号:{{info.contractNumber}}</div>
     <div class="contract-info">
       <h3>合同信息</h3>
@@ -47,7 +47,7 @@
   </div>
 </template>
 <script>
-import sixiheader from "@/components/app/header";
+// import sixiheader from "@/components/app/header";
 export default {
   data() {
     return {
@@ -56,7 +56,10 @@ export default {
       }
     };
   },
-  components: { sixiheader },
+  created() {
+    this.$parent.$parent.setTitle("我的合同");
+  },
+  components: {},
   methods: {}
 };
 </script>
