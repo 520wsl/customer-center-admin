@@ -1,12 +1,17 @@
 import {
 	getBreadCrumbList,
+	setTagNavListInLocalstorage,
 	getMenuByRouter,
 	getTagNavListFromLocalstorage,
-	setTagNavListInLocalstorage,
+	getHomeRoute,
+	getNextRoute,
 	routeHasExist,
+	routeEqual,
 	getRouteTitleHandled,
-	getHomeRoute
+	localSave,
+	localRead
 } from "@/libs/util";
+import beforeClose from "@/admin/router/before-close";
 import router from "@/admin/router";
 import routers from "@/admin/router/routers";
 import config from "@/config";

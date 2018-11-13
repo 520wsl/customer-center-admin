@@ -36,13 +36,6 @@ module.exports = {
       filename: "index.html",
       title: "admin",
       chunks: ["chunk-vendors", "chunk-common", "admin"]
-    },
-    app: {
-      entry: "src/app/main.js",
-      template: "public/app.html",
-      filename: "app.html",
-      title: "app",
-      chunks: ["chunk-vendors", "chunk-common", "app"]
     }
   }
 };
