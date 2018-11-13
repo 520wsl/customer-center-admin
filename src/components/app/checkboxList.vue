@@ -13,22 +13,22 @@ export default {
   },
   components: {},
   computed: {
-    // list: function() {
-    //   let arr = [];
-    //   for (let i = 0; i < this.maxNum; i++) {
-    //     arr.push(i);
-    //   }
-    //   return arr;
-    // }
     showList: function() {
       let arr = [];
       this.list.forEach(item => {
         this.value.forEach(item2 => {
           if (item.id == item2) {
-            item.isChoose = true;
+            // 不可编辑状态
+            if (!this.isEdit) {
+              arr.push(item);
+            }
+            item.isChoose = true;  
           }
         });
-        arr.push(item);
+        // 可编辑状态
+        if (this.isEdit) {
+          arr.push(item);
+        }
       });
       return arr;
     }

@@ -125,8 +125,7 @@ export default {
 }
 .pay-btn {
   width: 100%;
-  position: fixed;
-  bottom: 0;
+  margin-top: 100px;
   padding: 0 30px 0 30px;
   box-sizing: border-box;
   -moz-box-sizing: border-box;

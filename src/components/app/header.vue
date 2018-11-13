@@ -1,6 +1,6 @@
 <template>
   <div class="title">
-    <mt-header fixed title="" :style="background?'background:'+background:'background:#fff;'">
+    <mt-header fixed title="" :style="background?'background:'+background:'background:#fff;'" class="header">
       <div slot="left">
         <slot name="headleft">
           <div v-if="!isBack">
@@ -48,7 +48,7 @@ export default {
   color: black;
   font-size: 34px;
 }
-.title .mint-header {
+.title .header {
   height: 88px;
   display: flex;
   align-items: center;

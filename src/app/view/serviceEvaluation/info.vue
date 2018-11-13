@@ -52,6 +52,9 @@ export default {
           ],
           value: [1, 2],
           type: "checkBox"
+        },
+        {
+          title: "单选"
         }
       ],
       title: "美工服务评价",
@@ -63,8 +66,7 @@ export default {
   created() {
     this.$parent.$parent.setTitle(this.title);
   },
-  methods: {
-  }
+  methods: {}
 };
 </script>
 <style scoped>
