@@ -4,20 +4,25 @@ import { setToken, getToken } from "@/libs/util";
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-13 15:31:48
+ * @Last Modified time: 2018-11-13 22:53:08
  * @explanatory:  store demo
  */
 export default {
 	namespaced: true,
 	state: {
+		userName: "",
+		userId: "",
+		avatorImgPath: "http://1.img.dianjiangla.com/assets/user.png",
+		token: getToken(),
 		access: "",
-		token: "",
-		userName: "Mad Dragon",
-		avatorImgPath: "http://1.img.dianjiangla.com/assets/user.png"
+		hasGetInfo: false
 	},
 	mutations: {
 		setAvator(state, avatorPath) {
 			state.avatorImgPath = avatorPath;
+		},
+		setUserId(state, id) {
+			state.userId = id;
 		},
 		setUserName(state, name) {
 			state.userName = name;
@@ -28,11 +33,37 @@ export default {
 		setToken(state, token) {
 			state.token = token;
 			setToken(token);
+		},
+		setHasGetInfo(state, status) {
+			state.hasGetInfo = status;
 		}
 	},
 	actions: {
 		setUser({ commit }) {
 			commit("setUserName", { a: 1, b: 2 });
+		},
+		// 登录
+		handleLogin({ commit }, { userName, password, type }) {
+			userName = userName.trim();
+			return new Promise((resolve, reject) => {
+				login({
+					userName,
+					password,
+					type
+				})
+					.then(res => {
+						if (!res.status) {
+							console.error("[debug]:setToken", userName);
+							console.error("[debug]:handleLogin", res);
+							return;
+						}
+						commit("setToken", userName);
+						resolve();
+					})
+					.catch(err => {
+						reject(err);
+					});
+			});
 		},
 		// 退出登录
 		handleLogOut({ state, commit }) {
@@ -56,14 +87,22 @@ export default {
 		getUserInfo({ state, commit }) {
 			return new Promise((resolve, reject) => {
 				try {
-					getUserInfo(state.token)
+					getUserInfo()
 						.then(res => {
+							if (!res.status) {
+								console.error("[debug]:getUserInfo", res);
+								return;
+							}
 							const data = res.data;
-							commit("setAvator", data.avator);
-							// commit("setUserName", data.name);
-							// commit("setUserId", data.user_id);
-							// commit("setAccess", data.access);
-							// commit("setHasGetInfo", true);
+							console.log("getUserInfo", res.data);
+							commit("setAvator", data.image_url);
+							commit(
+								"setUserName",
+								data.nickname || data.username || data.phone
+							);
+							commit("setUserId", data.id);
+							commit("setAccess", data.permissions);
+							commit("setHasGetInfo", true);
 							resolve(data);
 						})
 						.catch(err => {

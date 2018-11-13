@@ -145,6 +145,7 @@ export default {
 			});
 			this.setBreadCrumb(newRoute);
 			this.setTagNavList(getNewTagList(this.tagNavList, newRoute));
+			this.$refs.sideMenu.updateOpenName(newRoute.name);
 		}
 	},
 	mounted() {
@@ -157,6 +158,12 @@ export default {
 			route: this.$store.state.app.homeRoute
 		});
 		this.setBreadCrumb(this.$route);
+		// 如果当前打开页面不在标签栏中，跳到homeName页
+		if (!this.tagNavList.find(item => item.name === this.$route.name)) {
+			this.$router.push({
+				name: this.$config.homeName
+			});
+		}
 	}
 };
 </script>

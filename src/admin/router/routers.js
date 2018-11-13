@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-13 17:29:11
+ * @Last Modified time: 2018-11-13 21:49:50
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -22,6 +22,8 @@
  */
 const Main1 = r =>
 	require.ensure([], () => r(require("_c/admin/main")), "main"); //模板页 不带底部导航
+const parentView = r =>
+	require.ensure([], () => r(require("_c/admin/parent-view")), "main"); //模板页 不带底部导航
 export default [
 	{
 		path: "/demo",

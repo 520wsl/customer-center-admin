@@ -1,13 +1,14 @@
 /*
- * @Author: Mad Dragon 395548460@qq.com 
- * @Date: 2018-11-07 22:19:44 
+ * @Author: Mad Dragon 395548460@qq.com
+ * @Date: 2018-11-07 22:19:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-13 13:56:31
+ * @Last Modified time: 2018-11-13 21:47:51
  * @explanatory:  路由 配置
  */
 import Vue from "vue";
 import Router from "vue-router";
 import routes from "@/admin/router/routers";
+import iView from "iview";
 
 Vue.use(Router);
 const router = new Router({
@@ -17,6 +18,7 @@ const router = new Router({
 });
 // 全局守卫
 router.beforeEach((to, from, next) => {
+	iView.LoadingBar.start();
 	// console.log("router.beforeEach:from=>", from);
 	// console.log("router.beforeEach:to=>", to);
 	next();
@@ -30,6 +32,7 @@ router.beforeResolve((to, from, next) => {
 // 全局后置钩子
 router.afterEach(to => {
 	// console.log("router.afterEach:to=>", to);
+	iView.LoadingBar.finish();
 	window.scrollTo(0, 0);
 });
 
