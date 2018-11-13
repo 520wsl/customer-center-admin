@@ -33,7 +33,7 @@ module.exports = {
     admin: {
       entry: "src/admin/main.js",
       template: "public/admin.html",
-      filename: "admin.html",
+      filename: "index.html",
       title: "admin",
       chunks: ["chunk-vendors", "chunk-common", "admin"]
     },

@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-12 13:43:50
+ * @Last Modified time: 2018-11-13 17:29:11
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -21,23 +21,77 @@
  * }
  */
 const Main1 = r =>
-	require.ensure([], () => r(require("_c/admin/template/main1")), "main"); //模板页 不带底部导航
+	require.ensure([], () => r(require("_c/admin/main")), "main"); //模板页 不带底部导航
 export default [
 	{
-		path: "/demo/test01",
-		name: "demoTest01",
-		component: r =>
-			require.ensure(
-				[],
-				() => r(require("@/admin/view/demo/test01")),
-				"demo"
-			) //demo
+		path: "/demo",
+		name: "demo",
+		component: Main1,
+		meta: {
+			icon: "logo-buffer",
+			title: "组件"
+		},
+		children: [
+			{
+				path: "test01",
+				meta: {
+					icon: "_qq",
+					title: "test01"
+				},
+				name: "test01",
+				component: r =>
+					require.ensure(
+						[],
+						() => r(require("@/admin/view/demo/test01")),
+						"demo"
+					) //demo
+			},
+			{
+				path: "test02",
+				meta: {
+					icon: "_qq",
+					title: "test02"
+				},
+				name: "test02",
+				component: r =>
+					require.ensure(
+						[],
+						() => r(require("@/admin/view/demo/test01")),
+						"demo"
+					) //demo
+			}
+		]
+	},
+	{
+		path: "/log",
+		name: "log",
+		component: Main1,
+		meta: {
+			hideInBread: true
+		},
+		children: [
+			{
+				path: "saleRecord",
+				meta: {
+					icon: "logo-buffer",
+					title: "saleRecord"
+				},
+				name: "saleRecord",
+				component: r =>
+					require.ensure(
+						[],
+						() => r(require("@/admin/view/log/saleRecord")),
+						"demo"
+					) //demo
+			}
+		]
 	},
 	{
 		path: "/login",
 		name: "login",
 		meta: {
-			title: "Login-登录"
+			title: "Login-登录",
+			hideInMenu: true
 		},
 		component: r =>
 			require.ensure(
@@ -49,14 +103,21 @@ export default [
 	{
 		path: "/",
 		name: "_home",
-		redirect: { name: "home" },
+		redirect: "/home",
 		component: Main1,
+		meta: {
+			hideInMenu: true,
+			notCache: true
+		},
 		children: [
 			{
-				path: "home",
+				path: "/home",
 				name: "home",
 				meta: {
-					title: "首页"
+					hideInMenu: true,
+					title: "首页",
+					notCache: true,
+					icon: "md-home"
 				},
 				component: r =>
 					require.ensure(
@@ -64,253 +125,6 @@ export default [
 						() => r(require("@/admin/view/home/home")),
 						"login"
 					) //首页
-			}
-		]
-	},
-	{
-		path: "/contract",
-		name: "_contract",
-		redirect: { name: "contract" },
-		component: Main1,
-		children: [
-			{
-				path: "index",
-				name: "contract",
-				meta: {
-					title: "我的合同"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/admin/view/contract/index")),
-						"contract"
-					)
-			},
-			{
-				path: "info",
-				name: "contractInfo",
-				meta: {
-					title: "合同详情"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/admin/view/contract/info")),
-						"contract"
-					)
-			},
-			{
-				path: "pay",
-				name: "contractPay",
-				meta: {
-					title: "支付"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/admin/view/contract/pay")),
-						"contract"
-					)
-			},
-			{
-				path: "paySuccess",
-				name: "contractPaySuccess",
-				meta: {
-					title: "支付成功"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/admin/view/contract/paySuccess")),
-						"contract"
-					)
-			}
-		]
-	},
-	{
-		path: "/log",
-		name: "_log",
-		redirect: { name: "saleRecord" },
-		component: Main1,
-		children: [
-			{
-				path: "saleRecord",
-				name: "saleRecord",
-				meta: {
-					title: "记录"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/admin/view/log/saleRecord")),
-						"log"
-					)
-			}
-		]
-	},
-	{
-		path: "/personal",
-		name: "_personal",
-		redirect: { name: "personal" },
-		component: Main1,
-		children: [
-			{
-				path: "index",
-				name: "personal",
-				meta: {
-					title: "我的"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/admin/view/personal/index")),
-						"personal"
-					)
-			},
-			{
-				path: "company",
-				name: "personalCompany",
-				meta: {
-					title: "我的公司"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/admin/view/personal/company")),
-						"personal"
-					)
-			}
-		]
-	},
-	{
-		path: "/question",
-		name: "_question",
-		redirect: { name: "question" },
-		component: Main1,
-		children: [
-			{
-				path: "index",
-				name: "question",
-				meta: {
-					title: "常见问题"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/admin/view/question/index")),
-						"question"
-					)
-			},
-			{
-				path: "info",
-				name: "questionInfo",
-				meta: {
-					title: "常见问题详情"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/admin/view/question/info")),
-						"questionInfo"
-					)
-			}
-		]
-	},
-	{
-		path: "/serviceBill",
-		name: "_serviceBill",
-		redirect: { name: "serviceBill" },
-		component: Main1,
-		children: [
-			{
-				path: "index",
-				name: "serviceBill",
-				meta: {
-					title: "服务工单"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/admin/view/serviceBill/index")),
-						"serviceBill"
-					)
-			},
-			{
-				path: "info",
-				name: "serviceBillInfo",
-				meta: {
-					title: "服务工单-详情记录"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/admin/view/serviceBill/info")),
-						"serviceBillInfo"
-					)
-			},
-			{
-				path: "preview",
-				name: "serviceBillBreview",
-				meta: {
-					title: "服务工单-详情记录"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/admin/view/serviceBill/preview")),
-						"serviceBillPreview"
-					)
-			}
-		]
-	},
-	{
-		path: "/serviceEvaluation",
-		name: "_serviceEvaluation",
-		redirect: { name: "serviceEvaluation" },
-		component: Main1,
-		children: [
-			{
-				path: "index",
-				name: "serviceEvaluation",
-				meta: {
-					title: "服务评价"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() =>
-							r(require("@/admin/view/serviceEvaluation/index")),
-						"serviceEvaluation"
-					)
-			},
-			{
-				path: "feedback",
-				name: "serviceEvaluationBreview",
-				meta: {
-					title: "服务评价反馈"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() =>
-							r(
-								require("@/admin/view/serviceEvaluation/feedback")
-							),
-						"serviceEvaluation"
-					)
-			},
-			{
-				path: "info",
-				name: "serviceEvaluationInfo",
-				meta: {
-					title: "服务评价详情"
-				},
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/admin/view/serviceEvaluation/info")),
-						"serviceEvaluation"
-					)
 			}
 		]
 	}
