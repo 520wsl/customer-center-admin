@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-13 21:49:50
+ * @Last Modified time: 2018-11-14 09:33:10
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -31,7 +31,7 @@ export default [
 		component: Main1,
 		meta: {
 			icon: "logo-buffer",
-			title: "组件"
+			title: "案例"
 		},
 		children: [
 			{
@@ -127,6 +127,25 @@ export default [
 						() => r(require("@/admin/view/home/home")),
 						"login"
 					) //首页
+			}
+		]
+	},
+	{
+		path: "/evaluate",
+		name: "evaluate",
+		meta: {
+			icon: "ios-stats",
+			title: "评价"
+		},
+		component: Main1,
+		children: [
+			{
+				path: "list",
+				name: "evaluate-list",
+				meta: {
+					icon: "ios-stats",
+					title: "评价模板"
+				}
 			}
 		]
 	}
