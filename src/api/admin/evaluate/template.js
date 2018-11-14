@@ -1,0 +1,17 @@
+import api from "@/libs/api.request";
+const baseUrl = "/evaluate-service";
+function post(url, params) {
+	return api.post(baseUrl + url, params);
+}
+function get(url, params) {
+	return api.get(baseUrl + url, params);
+}
+
+export const getTemplateListData = ({ pageNum, pageSize, select, keyword }) => {
+	return post("/template/list", {
+		pageNum,
+		pageSize,
+		select,
+		keyword
+	});
+};

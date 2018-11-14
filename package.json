@@ -40,7 +40,15 @@
 		"rules": {
 			"no-console": "off",
 			"no-debugger": "off",
-			"no-unused-vars": "off"
+			"no-unused-vars": "off",
+			"generator-star-spacing": "off",
+			"vue/no-parsing-error": [
+				2,
+				{
+					"x-invalid-end-tag": false
+				}
+			],
+			"no-undef": "off"
 		},
 		"parserOptions": {
 			"parser": "babel-eslint"

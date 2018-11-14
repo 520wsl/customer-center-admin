@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:13:04
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-13 22:30:59
+ * @Last Modified time: 2018-11-14 15:32:04
  * @explanatory:  api 接口 封装
  */
 import qs from "qs";
@@ -34,7 +34,8 @@ likePost.forEach(method => {
 	api[method] = function(url, data) {
 		return axios.request({
 			url,
-			data: qs.stringify(data),
+			// data: qs.stringify(data), from 标点传参
+			data,
 			method: "post"
 		});
 	};

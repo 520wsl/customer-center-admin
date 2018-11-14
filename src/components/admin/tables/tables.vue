@@ -9,7 +9,7 @@
           :key="`search-col-${item.key}`"
         >{{ item.title }}</Option>
       </Select>
-      <i-input
+      <Input
         @on-change="handleClear"
         clearable
         placeholder="输入关键字搜索"
@@ -58,14 +58,14 @@
               :value="item.key"
               :key="`search-col-${item.key}`">{{ item.title }}</Option>
           </Select>
-          <i-input placeholder="输入关键字搜索" class="search-input" v-model="searchValue">
+          <Input placeholder="输入关键字搜索" class="search-input" v-model="searchValue">
             <Button class="search-btn" type="primary">
               <Icon type="search"/>&nbsp;&nbsp;搜索
             </Button>
             <a id="hrefToExportTable" style="display: none;width: 0px;height: 0px;"></a>
-          </i-input>
+          </Input>
         </div>
-      </i-input>
+      </Input>
     </div>
   </div>
 </template>
