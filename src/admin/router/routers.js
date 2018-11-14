@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-14 09:33:10
+ * @Last Modified time: 2018-11-14 09:38:27
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -21,9 +21,9 @@
  * }
  */
 const Main1 = r =>
-	require.ensure([], () => r(require("_c/admin/main")), "main"); //模板页 不带底部导航
+	require.ensure([], () => r(require("_c/admin/main")), "main"); //模板页
 const parentView = r =>
-	require.ensure([], () => r(require("_c/admin/parent-view")), "main"); //模板页 不带底部导航
+	require.ensure([], () => r(require("_c/admin/parent-view")), "main"); //模板页
 export default [
 	{
 		path: "/demo",
@@ -145,7 +145,11 @@ export default [
 				meta: {
 					icon: "ios-stats",
 					title: "评价模板"
-				}
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/evaluate/list")
+					)
 			}
 		]
 	}
