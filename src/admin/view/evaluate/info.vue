@@ -1,30 +1,100 @@
 <template>
-    <div>
-        <Card class="md-card">
-            <p slot="title">模板详细</p>
-            <Table :columns="templateColumns" :data="templateInfo"></Table>
-        </Card>
-        <Card class="md-card">
-            <p slot="title">
-                <span>评价维度</span>
-            </p>
-            <a href="#" slot="extra" class="md-card-btn-info" @click.prevent="addDimension">
-                <Icon type="md-add"></Icon>添加维度
-            </a>
-            <Table :columns="dimensionColumns" :data="dimensionContent"></Table>
-        </Card>
-    </div>
+	<div>
+		<Card class="md-card">
+			<p slot="title">模板详细</p>
+			<Table :columns="templateColumns" :data="templateInfo"></Table>
+		</Card>
+		<Card class="md-card">
+			<p slot="title">
+				<span>评价维度</span>
+			</p>
+			<a href="#" slot="extra" class="md-card-btn-info" @click.prevent="addDimensionAction">
+				<Icon type="md-add"></Icon>添加维度
+			</a>
+			<Table :columns="dimensionColumns" :data="dimensionContent"></Table>
+		</Card>
+		<Modal
+			v-model="addModelStatu"
+			title="编辑评价维度"
+			@on-ok="addDimensionOk"
+			@on-cancel="addDimensionCancel"
+		>
+			<Card>
+				<Form :model="itemDimension" :label-width="120">
+					<FormItem label="维度名称 ：">
+						<Input v-model="itemDimension.evaluateName" placeholder="请填写">
+							<span></span>
+						</Input>
+					</FormItem>
+					<FormItem label="类型 ：">
+						<Select v-model="itemDimension.type" placeholder="请选择">
+							<Option
+								v-for="item in dimensionListData"
+								:key="item.id"
+								value="item.type"
+							>{{item.evaluateType}}</Option>
+						</Select>
+					</FormItem>
+					<FormItem label="满分数 ：">
+						<InputNumber
+							placeholder="请填写"
+							:max="10"
+							:min="1"
+							:step="0.5"
+							v-model="itemDimension.otherAttribute.maxNum"
+						>
+							<span></span>
+						</InputNumber>
+					</FormItem>
+					<FormItem label="是否允许0.5分">
+						<RadioGroup v-model="itemDimension.isRequired">
+							<Radio label="male">Male</Radio>
+							<Radio label="female">Female</Radio>
+						</RadioGroup>
+					</FormItem>
+					<FormItem label="是否必选">
+						<RadioGroup v-model="itemDimension.isRequired">
+							<Radio label="male">Male</Radio>
+							<Radio label="female">Female</Radio>
+						</RadioGroup>
+					</FormItem>
+				</Form>
+			</Card>
+		</Modal>
+	</div>
 </template>
 <script>
 import {
 	setTemplateStatusType,
 	getTemplateInfoData
 } from "@/api/admin/evaluate/template";
+import { createNamespacedHelpers } from "vuex";
+const { mapState, mapActions } = createNamespacedHelpers("dimension");
 import "./index.less";
 export default {
+	computed: {
+		dimensionListData() {
+			return this.$store.state.dimension.dimensionListData;
+		}
+	},
 	data() {
 		return {
 			addModelStatu: false,
+			itemDimension: {
+				index: 0,
+				tagList: [],
+				evaluateType: "评分",
+				isRequired: 1,
+				otherAttribute: {
+					showType: "score",
+					maxNum: 5,
+					isHalf: 1
+				},
+				id: 1,
+				evaluateName: "服务态度",
+				type: "number",
+				value: ""
+			},
 			templateColumns: [
 				{
 					title: "模板ID",
@@ -73,36 +143,60 @@ export default {
 			dimensionColumns: [
 				{
 					title: "维度名称",
-					align: "evaluateName",
-					key: "id"
+					align: "center",
+					key: "evaluateName"
 				},
 				{
 					title: "类型",
-					align: "evaluateType",
-					key: "id"
+					align: "center",
+					key: "evaluateType"
 				},
 				{
 					title: "满分",
-					align: "maxNum",
-					key: "templateTitle"
+					align: "center",
+					key: "maxNum",
+					render: (h, params) => {
+						let btnGroup = [];
+						let maxNum = params.row.otherAttribute.maxNum;
+
+						btnGroup.push(
+							h("span", {}, maxNum > 0 ? maxNum : "--")
+						);
+						return h("div", btnGroup);
+					}
 				},
 				{
 					title: "是否允许0.5分",
 					align: "center",
-					key: "isHalf"
+					key: "isHalf",
+					render: (h, params) => {
+						let btnGroup = [];
+						let isHalf = params.row.otherAttribute.isHalf;
+
+						btnGroup.push(h("span", {}, isHalf == 0 ? "否" : "是"));
+						return h("div", btnGroup);
+					}
 				},
 				{
 					title: "是否必填",
-					align: "isRequired",
-					key: "templateTitle"
+					align: "center",
+					key: "isRequired",
+					render: (h, params) => {
+						let btnGroup = [];
+						let isRequired = params.row.otherAttribute.isRequired;
+
+						btnGroup.push(
+							h("span", {}, isRequired == 0 ? "否" : "是")
+						);
+						return h("div", btnGroup);
+					}
 				},
 				{
 					title: "操作",
 					key: "handle",
 					render: (h, params) => {
 						let btnGroup = [];
-						let id = params.row.id;
-						let status = params.row.status == 1 ? false : true;
+						let index = params.index;
 						btnGroup.push(
 							h(
 								"Button",
@@ -116,54 +210,46 @@ export default {
 										margin: "5px"
 									},
 									on: {
-										click: () => {
-											// this.$router.push({
-											// 	name: "evaluate-info",
-											// 	query: { id }
-											// });
-										}
+										click: () => {}
 									}
 								},
 								"编辑"
 							)
 						);
-						if (!status) {
-							btnGroup.push(
-								h(
-									"Poptip",
-									{
-										props: {
-											confirm: true,
-											title: "你确定要删除吗?"
-										},
 
-										on: {
-											"on-ok": () => {
-												// this.delTemplate({
-												// 	id
-												// });
-											}
-										}
+						btnGroup.push(
+							h(
+								"Poptip",
+								{
+									props: {
+										confirm: true,
+										title: "你确定要删除吗?"
 									},
-									[
-										h(
-											"Button",
-											{
-												props: {
-													type: "error",
-													size: "small",
-													ghost: true
-												},
-												style: {
-													margin: "5px"
-												}
+
+									on: {
+										"on-ok": () => {
+											this.delDimension(index);
+										}
+									}
+								},
+								[
+									h(
+										"Button",
+										{
+											props: {
+												type: "error",
+												size: "small",
+												ghost: true
 											},
-											"删除"
-										)
-									]
-								)
-							);
-						}
+											style: {
+												margin: "5px"
+											}
+										},
+										"删除"
+									)
+								]
+							)
+						);
 						return h("div", btnGroup);
 					}
 				}
@@ -172,6 +258,7 @@ export default {
 		};
 	},
 	methods: {
+		...mapActions(["getDimensionList"]),
 		// 设置模板状态
 		async setTemplateStatus(id) {
 			let res = await setTemplateStatusType(id);
@@ -204,14 +291,26 @@ export default {
 			}
 
 			this.templateInfo = res.data || [];
-			this.dimensionContent = res.data.content || [];
+			this.dimensionContent = res.data[0].content || [];
 		},
-		addDimension() {
+		addDimensionAction() {
 			this.addModelStatu = true;
+		},
+		addDimensionOk() {
+			console.log("addDimensionOk");
+		},
+		addDimensionCancel() {
+			console.log("addDimensionCancel");
+		},
+		delDimension(index) {
+			let dimensionContent = [...this.dimensionContent];
+			dimensionContent.splice(index, 1);
+			this.dimensionContent = dimensionContent;
 		}
 	},
 	created() {
 		this.getTemplateInfo();
+		this.getDimensionList();
 	},
 	mounted() {}
 };

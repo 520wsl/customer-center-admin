@@ -4,11 +4,11 @@ import { setToken, getToken } from "@/libs/util";
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-13 22:53:08
+ * @Last Modified time: 2018-11-15 11:12:49
  * @explanatory:  store demo
  */
 export default {
-	namespaced: true,
+	namespaced: true,	
 	state: {
 		userName: "",
 		userId: "",

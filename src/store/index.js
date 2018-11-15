@@ -1,8 +1,8 @@
 /*
- * @Author: Mad Dragon 395548460@qq.com 
- * @Date: 2018-11-08 09:15:59 
+ * @Author: Mad Dragon 395548460@qq.com
+ * @Date: 2018-11-08 09:15:59
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-13 11:17:32
+ * @Last Modified time: 2018-11-15 11:12:35
  * @explanatory:  # 我们组装模块并导出 store 的地方
  */
 import Vue from "vue";
@@ -13,6 +13,8 @@ import mutations from "./mutations";
 
 import user from "./modules/user";
 import app from "./modules/app";
+import dimension from "./modules/dimension";
+
 Vue.use(Vuex);
 // 在严格模式下，无论何时发生了状态变更且不是由 mutation 函数引起的，将会抛出错误。
 const debug = process.env.NODE_ENV !== "production";
@@ -20,7 +22,8 @@ const debug = process.env.NODE_ENV !== "production";
 const Store = new Vuex.Store({
 	modules: {
 		user,
-		app
+		app,
+		dimension
 	},
 	// plugins: debug ? [createLogger()] : [],
 	strict: debug,
