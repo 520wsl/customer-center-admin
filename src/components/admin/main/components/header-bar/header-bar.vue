@@ -1,11 +1,11 @@
 <template>
-  <div class="header-bar">
-    <sider-trigger :collapsed="collapsed" icon="md-menu" @on-change="handleCollpasedChange"></sider-trigger>
-    <custom-bread-crumb show-icon style="margin-left: 30px;" :list="breadCrumbList"></custom-bread-crumb>
-    <div class="custom-content-con">
-      <slot></slot>
-    </div>
-  </div>
+	<div class="header-bar">
+		<sider-trigger :collapsed="collapsed" icon="md-menu" @on-change="handleCollpasedChange"></sider-trigger>
+		<custom-bread-crumb show-icon style="margin-left: 30px;" :list="breadCrumbList"></custom-bread-crumb>
+		<div class="custom-content-con">
+			<slot></slot>
+		</div>
+	</div>
 </template>
 <script>
 import siderTrigger from "./sider-trigger";
@@ -24,6 +24,10 @@ export default {
 	},
 	computed: {
 		breadCrumbList() {
+			console.log(
+				"this.$store.state.app.breadCrumbList",
+				this.$store.state.app.breadCrumbList
+			);
 			return this.$store.state.app.breadCrumbList;
 		}
 	},

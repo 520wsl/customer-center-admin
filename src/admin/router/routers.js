@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-14 09:38:27
+ * @Last Modified time: 2018-11-15 09:26:29
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -134,6 +134,7 @@ export default [
 		path: "/evaluate",
 		name: "evaluate",
 		meta: {
+			// showAlways: true,
 			icon: "ios-stats",
 			title: "评价"
 		},
@@ -149,6 +150,98 @@ export default [
 				component: r =>
 					require.ensure([], () =>
 						require("@/admin/view/evaluate/list")
+					)
+			},
+			{
+				path: "info",
+				name: "evaluate-info",
+				meta: {
+					hideInMenu: true,
+					icon: "ios-stats",
+					title: route => `评价模板【${route.query.id}】编辑`,
+					notCache: true,
+					beforeCloseName: 'before_close_normal'
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/evaluate/info")
+					)
+			}
+		]
+	},
+	{
+		path: "/custom",
+		name: "custom",
+		meta: {
+			// showAlways: true,
+			icon: "ios-stats",
+			title: "客户"
+		},
+		component: Main1,
+		children: [
+			{
+				path: "list",
+				name: "custom-list",
+				meta: {
+					icon: "ios-stats",
+					title: "客户列表"
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/custom/list")
+					)
+			},
+			{
+				path: "info",
+				name: "custom-info",
+				meta: {
+					hideInMenu: true,
+					icon: "ios-stats",
+					title: route => `客户【${route.query.userName}】的详情`,
+					notCache: true,
+					beforeCloseName: 'before_close_normal'
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/custom/info")
+					)
+			}
+		]
+	},
+	{
+		path: "/workOrder",
+		name: "workOrder",
+		meta: {
+			// showAlways: true,
+			icon: "ios-stats",
+			title: "工单"
+		},
+		component: Main1,
+		children: [
+			{
+				path: "list",
+				name: "workOrder-list",
+				meta: {
+					icon: "ios-stats",
+					title: "工单列表"
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/workOrder/list")
+					)
+			},
+			{
+				path: "info",
+				name: "workOrder-info",
+				meta: {
+					hideInMenu: true,
+					icon: "ios-stats",
+					title: route => `工单【${route.query.userName}】的详情`,
+					notCache: true
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/workOrder/info")
 					)
 			}
 		]

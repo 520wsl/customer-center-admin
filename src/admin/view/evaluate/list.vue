@@ -1,10 +1,10 @@
 <template>
 	<div>
-		<Card>
+		<Card class="md-card">
 			<div class="search-con search-con-top">
 				<Select v-model="params.select" class="search-col">
 					<Option
-						v-for="item in getColumns"
+						v-for="item in keyWordTypeData"
 						:key="`search-col-${item.key}`"
 						:value="item.key"
 					>{{ item.title }}</Option>
@@ -12,7 +12,7 @@
 				<Input v-model="params.keyword" placeholder="输入关键字搜索" class="search-input">
 					<span></span>
 				</Input>
-				<Button class="search-btn" type="primary">
+				<Button @click="sleectTemplateList(1)" class="search-btn" type="primary">
 					<Icon type="search"/>&nbsp;&nbsp;搜索
 				</Button>
 				<Button class="search-btn" type="success">
@@ -20,20 +20,37 @@
 				</Button>
 			</div>
 			<div>
-				<Table :columns="columns" :data="templateList"></Table>
+				<Table border="" :loading="loading" :columns="columns" :data="templateList"></Table>
 			</div>
-			<Page :total="params.count"></Page>
+		</Card>
+		<Card class="md-card">
+			<page
+				:pageNum="params.pageNum"
+				:pageSize="params.pageSize"
+				:count="params.count"
+				@pageCurrentChange="pageCurrentChange"
+				@pageSizeChange="pageSizeChange"
+			></page>
 		</Card>
 	</div>
 </template>
 
 <script>
-import { getTemplateListData } from "@/api/admin/evaluate/template";
-import "./list.less";
+import Page from "_c/admin/page";
+import {
+	getTemplateListData,
+	setTemplateStatusType,
+	delTemplateData
+} from "@/api/admin/evaluate/template";
+import "./index.less";
 export default {
-	mounted() {
-		this.getTemplateList();
+	components: {
+		Page
 	},
+	created() {
+		this.sleectTemplateList();
+	},
+	mounted() {},
 	computed: {
 		getColumns() {
 			let arr = [];
@@ -47,52 +64,135 @@ export default {
 	},
 	data() {
 		return {
+			loading: false,
 			params: {
 				pageNum: 1,
-				pageSize: 2,
+				pageSize: 10,
 				select: 1,
 				keyword: "",
 				count: 0
 			},
+			keyWordTypeData: [
+				{
+					key: 1,
+					title: "模板标题"
+				},
+				{
+					key: 2,
+					title: "模板ID"
+				}
+			],
 			columns: [
 				{
 					title: "模板标题",
 					keyWord: true,
+					align: "center",
 					key: "templateTitle"
 				},
-				{ title: "模板ID", key: "id" },
-				{ title: "状态", keyWord: true, key: "status" },
+				{ title: "模板ID", key: "id", align: "center" },
 				{
-					title: "操作",
-					key: "handle",
-					options: ["delete"],
-					button: [
-						(h, params, vm) => {
-							return h(
-								"Poptip",
+					title: "状态",
+					keyWord: true,
+					key: "status",
+					align: "center",
+					render: (h, params) => {
+						let btnGroup = [];
+						let id = params.row.id;
+						let status = params.row.status == 1 ? false : true;
+						btnGroup.push(
+							h(
+								"i-switch",
 								{
 									props: {
-										confirm: true,
-										title: "你确定要删除吗?"
+										size: "large",
+										value: status
 									},
 									on: {
-										"on-ok": () => {
-											vm.$emit("on-delete", params);
-											vm.$emit(
-												"input",
-												params.tableData.filter(
-													(item, index) =>
-														index !==
-														params.row.initRowIndex
-												)
-											);
+										// 0启用，1停用
+										"on-change": status => {
+											this.setTemplateStatus({ id });
 										}
 									}
 								},
-								[h("Button", "自定义删除")]
+								[
+									h("span", { slot: "open" }, "启用"),
+									h("span", { slot: "close" }, "停用")
+								]
+							)
+						);
+						return h("div", btnGroup);
+					}
+				},
+				{
+					title: "操作",
+					key: "handle",
+					render: (h, params) => {
+						let btnGroup = [];
+						let id = params.row.id;
+						let status = params.row.status == 1 ? false : true;
+						btnGroup.push(
+							h(
+								"Button",
+								{
+									props: {
+										type: "primary",
+										size: "small",
+										ghost: true
+									},
+									style: {
+										margin: "5px"
+									},
+									on: {
+										click: () => {
+											this.$router.push({
+												name: "evaluate-info",
+												query: { id }
+											});
+										}
+									}
+								},
+								"编辑"
+							)
+						);
+						if (!status) {
+							btnGroup.push(
+								h(
+									"Poptip",
+									{
+										props: {
+											confirm: true,
+											title: "你确定要删除吗?"
+										},
+
+										on: {
+											"on-ok": () => {
+												this.delTemplate({
+													id
+												});
+											}
+										}
+									},
+									[
+										h(
+											"Button",
+											{
+												props: {
+													type: "error",
+													size: "small",
+													ghost: true
+												},
+												style: {
+													margin: "5px"
+												}
+											},
+											"删除"
+										)
+									]
+								)
 							);
 						}
-					]
+						return h("div", btnGroup);
+					}
 				}
 			],
 			templateList: []
@@ -100,15 +200,74 @@ export default {
 	},
 	methods: {
 		async getTemplateList() {
+			this.loading = true;
 			let res = await getTemplateListData({ ...this.params });
 			console.log("getTemplateList", res);
+			this.loading = false;
 			if (res.status !== 200) {
 				console.error("getTemplateList", res.msg);
+
+				this.$Modal.error({
+					title: "评价列表查询",
+					content: res.msg
+				});
 				return;
 			}
 
 			this.params.count = res.data.count || 0;
 			this.templateList = res.data.list;
+		},
+		// 查询数据 分页页码重置
+		sleectTemplateList(pageNum) {
+			this.params.pageNum = pageNum;
+			this.getTemplateList();
+		},
+		// 设置分页页码
+		pageCurrentChange(pageNum) {
+			this.sleectTemplateList(pageNum);
+		},
+		// 设置分页大小
+		pageSizeChange(pageSize) {
+			this.params.pageSize = pageSize;
+			this.sleectTemplateList(1);
+		},
+		// 设置模板状态
+		async setTemplateStatus(id) {
+			let res = await setTemplateStatusType(id);
+			console.log("setTemplateStatus", res);
+			if (res.status !== 200) {
+				console.error("setTemplateStatus", res.msg);
+				this.$Modal.error({
+					title: "设置模板状态",
+					content: res.msg
+				});
+				return;
+			}
+
+			this.$Modal.success({
+				title: "设置模板状态",
+				content: res.msg
+			});
+			this.getTemplateList();
+		},
+		async delTemplate(id) {
+			let res = await delTemplateData(id);
+			console.log("delTemplate", res);
+			if (res.status !== 200) {
+				console.error("delTemplate", res.msg);
+				this.$Modal.error({
+					title: "删除模板状态",
+					content: res.msg
+				});
+				return;
+			}
+
+			this.$Modal.success({
+				title: "删除模板状态",
+				content: res.msg
+			});
+
+			this.getTemplateList();
 		}
 	}
 };
