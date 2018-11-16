@@ -8,6 +8,30 @@ export const CDN = name => {
 	return config.CDN + name;
 };
 
+/**
+ * 获取指定数组指定key对应的值比较，若相等则返回该value值
+ * @param arr Array       需要遍历的数组
+ * @param key string       需要对比值的
+ * @param find String     等待对比的值,默认对比id
+ * @param result String   等待对比成功后返回的值,默认value
+ */
+export const getArrValue = (
+	arr = [],
+	key = "",
+	find = "key",
+	result = "value"
+) => {
+	let value = "";
+	if (!arr.length || !key) return;
+
+	arr.map(function(item) {
+		if (item[find] === key) {
+			value = item[result];
+		}
+	});
+	return value;
+};
+
 /*
  * 获得时间差,时间格式为 年-月-日 小时:分钟:秒 或者 年/月/日 小时：分钟：秒
  * 其中，年月日为全格式，例如 ： 2010-10-12 01:00:00

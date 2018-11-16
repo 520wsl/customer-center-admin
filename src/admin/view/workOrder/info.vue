@@ -11,7 +11,7 @@
             </Steps>
         </Card>
         <Card class="md-card">
-            <div slot="title">当前工单状态： 处理中</div>
+            <div slot="title">当前工单状态：</div>
             <div slot="extra">
                 <div>
                     <a href="#" class="md-card-btn-warning">
@@ -27,26 +27,63 @@
             </div>
             <div class="btn-group">
                 <ButtonGroup>
-                    <Button type="info" ghost>基本信息</Button>
-                    <Button type="info">服务信息</Button>
+                    <Button @click="toPage('workOrder-info-base')" type="info" :ghost="isBase">基本信息</Button>
+                    <Button
+                        @click="toPage('workOrder-info-service')"
+                        type="info"
+                        :ghost="!isBase"
+                    >服务信息</Button>
                 </ButtonGroup>
             </div>
         </Card>
-
-            <router-view></router-view>
+        <router-view></router-view>
     </div>
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+import { getArrValue } from "@/libs/tools";
+import { getWorkSheetInfoData } from "@/api/admin/workSheet/workSheet";
 import "./index.less";
 export default {
 	computed: {
 		isShowStatus() {
 			return this.status.list.length > 0;
+		},
+		isBase() {
+			return this.$route.name != "workOrder-info-base";
+		}
+	},
+	methods: {
+		...mapMutations(["setWorkSheetBaseInfo"]),
+		toPage(name) {
+			console.log(this.$route);
+			let route = this.$route;
+			this.$router.push({
+				name: name,
+				params: route.params,
+				query: route.query
+			});
+		},
+		async getWorkSheetInfo() {
+			let res = await getWorkSheetInfoData({ workSheetId: 8 });
+			console.log("getWorkSheetInfo", res);
+			if (res.status !== 200) {
+				console.error("getWorkSheetInfo", res.msg);
+				this.$Modal.error({
+					title: "工单详情",
+					content: res.msg
+				});
+				return;
+			}
+
+			this.info = res.data;
+			this.setWorkSheetBaseInfo();
 		}
 	},
 	data() {
 		return {
+			info: {},
 			status: {
 				list: [
 					{
@@ -68,6 +105,9 @@ export default {
 				]
 			}
 		};
+	},
+	mounted() {
+		this.getWorkSheetInfo();
 	}
 };
 </script>
