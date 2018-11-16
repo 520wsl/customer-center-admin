@@ -22,7 +22,14 @@ module.exports = {
         target: "http://172.30.34.13:8080/",
         changeOrigin: true,
         pathRewrite: {
-          "^/api/customer": "/customer/"
+          "^/api/customer": "/customer"
+        }
+      },
+      "/api/qr": {
+        target: "https://qmr.n.yumc.pw/",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/api/qr": "/qr"
         }
       },
       "/api": {
