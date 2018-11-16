@@ -13,8 +13,8 @@
 
 <script>
 import LoginForm from "_c/admin/login-form";
-import { createNamespacedHelpers } from "vuex";
-const { mapActions } = createNamespacedHelpers("user");
+import { mapActions } from "vuex";
+// const { mapActions } = createNamespacedHelpers("user");
 export default {
 	components: {
 		LoginForm

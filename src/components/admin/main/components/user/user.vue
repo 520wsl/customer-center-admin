@@ -12,8 +12,8 @@
 
 <script>
 import "./user.less";
-import { createNamespacedHelpers } from "vuex";
-const {  mapActions } = createNamespacedHelpers("user");
+import { mapActions } from "vuex";
+// const {  mapActions } = createNamespacedHelpers("user");
 export default {
 	name: "User",
 	props: {

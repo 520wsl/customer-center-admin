@@ -83,12 +83,11 @@
 import { getCalssChildData } from "@/api/class";
 import { MessageBox } from "mint-ui";
 import { formatTime } from "@/libs/util/time";
-import { createNamespacedHelpers } from "vuex";
-const { mapState, mapActions } = createNamespacedHelpers("user");
+import { mapState, mapActions } from "vuex";
 export default {
 	computed: {
 		...mapState({
-			userName: state => state.userName
+			userName: state => state.user.userName
 		})
 	},
 	methods: {

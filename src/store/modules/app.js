@@ -57,6 +57,9 @@ export default {
 		},
 		closeTag(state, route) {
 			let tag = state.tagNavList.filter(item => routeEqual(item, route));
+			console.log("state.tagNavList", state.tagNavList);
+			console.log("route", route);
+			console.log("tag", tag);
 			route = tag[0] ? tag[0] : null;
 			if (!route) return;
 			if (

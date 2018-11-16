@@ -117,15 +117,11 @@ import {
 import beforeClose from "@/admin/router/before-close";
 import { mapState, mapActions, mapMutations } from "vuex";
 import { getNextRoute } from "@/libs/util";
-// const { mapState, mapActions } = createNamespacedHelpers("dimension");
-// const { mapMutations } = createNamespacedHelpers("app");
 
 import "./index.less";
 export default {
+	name: "evaluate-info",
 	computed: {
-		tagNavList() {
-			return this.$store.state.app.tagNavList;
-		},
 		dimensionListData() {
 			return this.$store.state.dimension.dimensionListData;
 		}
@@ -385,13 +381,12 @@ export default {
 		...mapMutations(["closeTag"]),
 		...mapActions(["getDimensionList"]),
 		clostPage() {
-			this.closeTag({
-				name: "evaluate-info"
-			});
+			console.log("clostPage");
+			this.closeTag(this.$route);
 		},
 		setTemplateTitleValue(templateTitle, index) {
 			this.templateInfo[index]["templateTitle"] = templateTitle;
-			this.getTemplateInfo();
+
 		},
 		async addItemTemplate() {
 			let templateInfo = { ...this.templateInfo[0] };
@@ -399,6 +394,20 @@ export default {
 			let dimensionContent = [...this.dimensionContent];
 			templateInfo.content = dimensionContent;
 			let res = await addItemTemplateData({ ...templateInfo });
+			if (res.status !== 200) {
+				console.error("setTemplateStatus", res.msg);
+				this.$Modal.error({
+					title: "保存模板",
+					content: res.msg
+				});
+				return;
+			}
+
+			this.$Modal.success({
+				title: "保存模板",
+				content: res.msg
+			});
+			this.getTemplateInfo();
 		},
 		handleSubmit(name) {
 			this.$refs[name].validate(valid => {

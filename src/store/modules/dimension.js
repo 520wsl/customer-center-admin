@@ -3,7 +3,6 @@ import { getDimensionListData } from "@/api/admin/evaluate/dimension";
 const storeKey = "dimensionList";
 
 export default {
-	namespaced: true,
 	state: {
 		dimensionListData: []
 	},
