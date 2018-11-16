@@ -1,5 +1,5 @@
 import api from "@/libs/api.request";
-const baseUrl = "/evaluate-service";
+const baseUrl = "/evaluate";
 function post(url, params) {
 	return api.post(baseUrl + url, params);
 }
