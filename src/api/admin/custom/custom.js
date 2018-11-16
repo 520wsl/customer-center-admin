@@ -28,3 +28,9 @@ export const getCompanyInfo = ({ sixiId }) => {
     sixiId
   });
 };
+// 微信解绑
+export const setWechatUntied = ({ openId }) => {
+  return post("/wechat/untied", {
+    openId
+  });
+};

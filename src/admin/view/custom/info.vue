@@ -59,8 +59,7 @@
 </template>
 <script>
 import "./index.less";
-import { getCompanyInfo } from "@/api/admin/custom/data";
-import { setWechatUntied } from "@/api/admin/custom/operation";
+import { getCompanyInfo, setWechatUntied } from "@/api/admin/custom/custom";
 import { getQrCode } from "@/api/admin/custom/qrCode";
 export default {
 	data() {

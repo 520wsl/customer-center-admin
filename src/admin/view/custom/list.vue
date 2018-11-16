@@ -25,7 +25,7 @@
 
 <script>
 import Page from "_c/admin/page";
-import { getCompanyList } from "@/api/admin/custom/data";
+import { getCompanyList } from "@/api/admin/custom/custom";
 import "./index.less";
 export default {
   data() {
