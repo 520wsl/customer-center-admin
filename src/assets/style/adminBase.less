@@ -26,13 +26,42 @@ html {
 		}
 	}
 }
+.btn() {
+	padding: 5px 5px;
+	margin: 5px;
+	border-radius: 3px;
+}
+.btn-color(@color:#2d8cf0) {
+	color: @color;
+	border: 1px solid @color;
+}
 .md-card {
 	margin-bottom: 18px;
-	&-btn-info {
-		color: rgb(45, 140, 240);
-		border: 1px solid rgb(45, 140, 240);
-		padding: 5px 5px;
-		margin: 5px;
-		border-radius: 3px;
+	&-btn {
+		&-primary {
+			.btn();
+			.btn-color(#2d8cf0);
+		}
+		&-info {
+			.btn();
+			.btn-color(#2db7f5);
+		}
+		&-success {
+			.btn();
+			.btn-color(#19be6b);
+		}
+		&-warning {
+			.btn();
+			.btn-color(#ff9900);
+		}
+		&-error {
+			.btn();
+			.btn-color(#ed4014);
+		}
+		&-default {
+			.btn();
+			.btn-color(#dcdee2);
+		}
+		
 	}
 }
