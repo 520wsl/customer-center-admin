@@ -7,7 +7,7 @@ function get(url, params) {
   return api.get(baseUrl + url, params);
 }
 // 客户列表
-export const getCompanyList = ({
+export const getCustomerListDate = ({
   pageSize,
   pageNum,
   mobile,
@@ -23,7 +23,7 @@ export const getCompanyList = ({
   });
 };
 // 客户详情
-export const getCompanyInfo = ({ sixiId }) => {
+export const getCustomerInfoData = ({ sixiId }) => {
   return post("/company/detail", {
     sixiId
   });

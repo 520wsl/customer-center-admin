@@ -25,7 +25,7 @@
 
 <script>
 import Page from "_c/admin/page";
-import { getCompanyList } from "@/api/admin/custom/custom";
+import { getCustomerListDate } from "@/api/admin/custom/custom";
 import "./index.less";
 export default {
   data() {
@@ -149,7 +149,7 @@ export default {
       } else if (this.params.select == 3) {
         params.mobile = this.params.keyword;
       }
-      getCompanyList(params).then(res => {
+      getCustomerListDate(params).then(res => {
         if (res.status != 200) {
           return this.$Notice.error({ title: res.msg });
         }
