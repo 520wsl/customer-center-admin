@@ -30,3 +30,14 @@ export const delTemplateData = ({ id }) => {
 export const getTemplateInfoData = ({ id }) => {
 	return post("/template/info", { id });
 };
+
+// 模板添加
+export const addItemTemplateData = ({ id, templateTitle, status, content }) => {
+	console.log(id,templateTitle,status,content)
+	return post("/template/add", {
+		id,
+		templateTitle,
+		status,
+		content
+	});
+};

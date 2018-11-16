@@ -122,11 +122,15 @@ export default {
 			this.collapsed = state;
 		},
 		handleCloseTag(res, type, route) {
+			console.log()
 			if (type === "all") {
 				this.turnToPage(this.$config.homeName);
 			} else if (routeEqual(this.$route, route)) {
 				if (type !== "others") {
 					const nextRoute = getNextRoute(this.tagNavList, route);
+					console.log("tagNavList",this.tagNavList)
+					console.log("route",route)
+					console.log("nextRoute",nextRoute)
 					this.$router.push(nextRoute);
 				}
 			}

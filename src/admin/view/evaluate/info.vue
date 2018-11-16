@@ -12,88 +12,171 @@
 				<Icon type="md-add"></Icon>添加维度
 			</a>
 			<Table :columns="dimensionColumns" :data="dimensionContent"></Table>
+			<Card class="md-card">
+				<div class="btn-broup">
+					<Button class="btn" @click="clostPage" style="margin-right: 80px">返回</Button>
+					<Button class="btn" @click="addItemTemplate" ghost type="primary">保存</Button>
+				</div>
+			</Card>
 		</Card>
 		<Modal
+			:loading="modalLoding"
+			:closable="false"
+			:mask-closable="false"
 			v-model="addModelStatu"
 			title="编辑评价维度"
-			@on-ok="addDimensionOk"
-			@on-cancel="addDimensionCancel"
 		>
 			<Card>
-				<Form :model="itemDimension" :label-width="120">
-					<FormItem label="维度名称 ：">
+				<Form :model="itemDimension" ref="itemDimension" :rules="ruleInline" :label-width="120">
+					<FormItem label="维度名称 ：" prop="evaluateName">
 						<Input v-model="itemDimension.evaluateName" placeholder="请填写">
 							<span></span>
 						</Input>
 					</FormItem>
-					<FormItem label="类型 ：">
-						<Select v-model="itemDimension.type" placeholder="请选择">
+					<FormItem label="类型 ：" prop="type">
+						<Select v-model="itemDimension.type" placeholder="请选择" @on-change="selectOnChange">
 							<Option
 								v-for="item in dimensionListData"
 								:key="item.id"
-								value="item.type"
+								:value="item.type"
 							>{{item.evaluateType}}</Option>
 						</Select>
 					</FormItem>
-					<FormItem label="满分数 ：">
+					<FormItem v-if="itemDimension.type =='number'" label="满分数 ：" prop="maxNum">
 						<InputNumber
 							placeholder="请填写"
-							:max="10"
+							:max="100"
 							:min="1"
-							:step="0.5"
-							v-model="itemDimension.otherAttribute.maxNum"
+							:step="10"
+							:precision="0"
+							v-model="itemDimension.maxNum"
 						>
 							<span></span>
 						</InputNumber>
 					</FormItem>
-					<FormItem label="是否允许0.5分">
-						<RadioGroup v-model="itemDimension.isRequired">
-							<Radio label="male">Male</Radio>
-							<Radio label="female">Female</Radio>
+					<FormItem v-if="itemDimension.type =='number'" label="是否允许0.5分 ：" prop="isHalf">
+						<RadioGroup v-model="itemDimension.isHalf">
+							<Radio label="1">是</Radio>
+							<Radio label="0">否</Radio>
 						</RadioGroup>
 					</FormItem>
-					<FormItem label="是否必选">
+					<FormItem
+						v-if="itemDimension.type =='redio' || itemDimension.type =='checkbox'"
+						label="是否必选 ： "
+						prop="isRequired"
+					>
 						<RadioGroup v-model="itemDimension.isRequired">
-							<Radio label="male">Male</Radio>
-							<Radio label="female">Female</Radio>
+							<Radio label="1">是</Radio>
+							<Radio label="0">否</Radio>
 						</RadioGroup>
+					</FormItem>
+					<FormItem v-if="itemDimension.type =='text'" label="是否必填 ： " prop="isRequired">
+						<RadioGroup v-model="itemDimension.isRequired">
+							<Radio label="1">是</Radio>
+							<Radio label="0">否</Radio>
+						</RadioGroup>
+					</FormItem>
+					<FormItem v-if="itemDimension.type =='checkbox'" label="多选选项 ：" prop="value">
+						<Input v-model="itemDimension.value" placeholder="请填写">
+							<span></span>
+						</Input>
+						<span class="red">每个选项用 | 号隔开，如：非常专业|非常细心</span>
+					</FormItem>
+					<FormItem v-if="itemDimension.type =='redio'" label="单选选项 ：" prop="value">
+						<Input v-model="itemDimension.value" placeholder="请填写">
+							<span></span>
+						</Input>
+						<span class="red">每个选项用 | 号隔开，如：非常专业|非常细心</span>
+					</FormItem>
+					<FormItem v-if="itemDimension.type =='text'" label="文本长度 ：" prop="maxNum">
+						<InputNumber
+							placeholder="请填写"
+							:max="500"
+							:min="1"
+							:step="10"
+							:precision="0"
+							v-model="itemDimension.maxNum"
+						></InputNumber>
+						<span>个字</span>
 					</FormItem>
 				</Form>
 			</Card>
+			<div slot="footer">
+				<Button @click="addDimensionCancel" style="margin-left: 8px">取消</Button>
+				<Button @click="addDimensionOk" type="primary">保存</Button>
+			</div>
 		</Modal>
 	</div>
 </template>
 <script>
 import {
 	setTemplateStatusType,
-	getTemplateInfoData
+	getTemplateInfoData,
+	addItemTemplateData
 } from "@/api/admin/evaluate/template";
-import { createNamespacedHelpers } from "vuex";
-const { mapState, mapActions } = createNamespacedHelpers("dimension");
+import beforeClose from "@/admin/router/before-close";
+import { mapState, mapActions, mapMutations } from "vuex";
+import { getNextRoute } from "@/libs/util";
+// const { mapState, mapActions } = createNamespacedHelpers("dimension");
+// const { mapMutations } = createNamespacedHelpers("app");
+
 import "./index.less";
 export default {
 	computed: {
+		tagNavList() {
+			return this.$store.state.app.tagNavList;
+		},
 		dimensionListData() {
 			return this.$store.state.dimension.dimensionListData;
 		}
 	},
 	data() {
 		return {
+			modalLoding: true,
 			addModelStatu: false,
 			itemDimension: {
-				index: 0,
+				index: -1,
 				tagList: [],
+				isRequired: "1",
+				showType: "",
+				maxNum: 10,
+				isHalf: "1",
+				id: 0,
 				evaluateType: "评分",
-				isRequired: 1,
-				otherAttribute: {
-					showType: "score",
-					maxNum: 5,
-					isHalf: 1
-				},
-				id: 1,
-				evaluateName: "服务态度",
+				evaluateName: "",
 				type: "number",
 				value: ""
+			},
+			ruleInline: {
+				maxNum: [
+					{
+						required: true,
+						message: "请填写",
+						trigger: "blur"
+					}
+				],
+				evaluateName: [
+					{
+						required: true,
+						message: "请填写",
+						trigger: "blur"
+					}
+				],
+				type: [
+					{
+						required: true,
+						message: "请选择",
+						trigger: "change",
+						type: "string"
+					}
+				],
+				value: [
+					{
+						required: true,
+						message: "请填写",
+						trigger: "blur"
+					}
+				]
 			},
 			templateColumns: [
 				{
@@ -104,7 +187,28 @@ export default {
 				{
 					title: "模板标题",
 					align: "center",
-					key: "templateTitle"
+					key: "templateTitle",
+					render: (h, params) => {
+						let _this = this;
+						let templateTitle = params.row.templateTitle;
+						let btnGroup = [];
+						btnGroup.push(
+							h("Input", {
+								props: {
+									value: templateTitle
+								},
+								on: {
+									"on-blur": e => {
+										_this.setTemplateTitleValue(
+											e.target.value,
+											params.index
+										);
+									}
+								}
+							})
+						);
+						return h("div", btnGroup);
+					}
 				},
 				{
 					title: "状态",
@@ -124,7 +228,7 @@ export default {
 									},
 									on: {
 										// 0启用，1停用
-										"on-change": status => {
+										"on-change": id => {
 											this.setTemplateStatus({ id });
 										}
 									}
@@ -157,11 +261,19 @@ export default {
 					key: "maxNum",
 					render: (h, params) => {
 						let btnGroup = [];
-						let maxNum = params.row.otherAttribute.maxNum;
-
-						btnGroup.push(
-							h("span", {}, maxNum > 0 ? maxNum : "--")
+						let maxNum = parseFloat(
+							params.row.otherAttribute.maxNum
 						);
+						let type = params.row.type;
+						let showType = params.row.otherAttribute.showType;
+
+						if (type == "number" && showType == "score") {
+							btnGroup.push(
+								h("span", {}, maxNum > 0 ? maxNum : "--")
+							);
+						} else {
+							btnGroup.push(h("span", {}, "--"));
+						}
 						return h("div", btnGroup);
 					}
 				},
@@ -172,8 +284,15 @@ export default {
 					render: (h, params) => {
 						let btnGroup = [];
 						let isHalf = params.row.otherAttribute.isHalf;
-
-						btnGroup.push(h("span", {}, isHalf == 0 ? "否" : "是"));
+						let type = params.row.type;
+						let showType = params.row.otherAttribute.showType;
+						if (type == "number" && showType == "score") {
+							btnGroup.push(
+								h("span", {}, isHalf == "0" ? "否" : "是")
+							);
+						} else {
+							btnGroup.push(h("span", {}, "--"));
+						}
 						return h("div", btnGroup);
 					}
 				},
@@ -183,10 +302,10 @@ export default {
 					key: "isRequired",
 					render: (h, params) => {
 						let btnGroup = [];
-						let isRequired = params.row.otherAttribute.isRequired;
+						let isRequired = params.row.isRequired;
 
 						btnGroup.push(
-							h("span", {}, isRequired == 0 ? "否" : "是")
+							h("span", {}, isRequired == "0" ? "否" : "是")
 						);
 						return h("div", btnGroup);
 					}
@@ -210,7 +329,12 @@ export default {
 										margin: "5px"
 									},
 									on: {
-										click: () => {}
+										click: () => {
+											this.editItemDimensionData(
+												params.row,
+												params.index
+											);
+										}
 									}
 								},
 								"编辑"
@@ -258,11 +382,74 @@ export default {
 		};
 	},
 	methods: {
+		...mapMutations(["closeTag"]),
 		...mapActions(["getDimensionList"]),
+		clostPage() {
+			this.closeTag({
+				name: "evaluate-info"
+			});
+		},
+		setTemplateTitleValue(templateTitle, index) {
+			this.templateInfo[index]["templateTitle"] = templateTitle;
+			this.getTemplateInfo();
+		},
+		async addItemTemplate() {
+			let templateInfo = { ...this.templateInfo[0] };
+			console.log(templateInfo);
+			let dimensionContent = [...this.dimensionContent];
+			templateInfo.content = dimensionContent;
+			let res = await addItemTemplateData({ ...templateInfo });
+		},
+		handleSubmit(name) {
+			this.$refs[name].validate(valid => {
+				if (valid) {
+					this.assembleData(this.itemDimension);
+				}
+			});
+		},
+		editItemDimensionData(data, index) {
+			let itemDimension = {};
+			let params = { ...data };
+			params.isRequired = params.isRequired.toString();
+			params.otherAttribute.maxNum = parseInt(
+				params.otherAttribute.maxNum
+			);
+
+			if (params.otherAttribute.isHalf == null) {
+				params.otherAttribute.isHalf = "0";
+			} else {
+				params.otherAttribute.isHalf = parseInt(
+					params.otherAttribute.isHalf
+				);
+				params.otherAttribute.isHalf = params.otherAttribute.isHalf.toString();
+			}
+
+			if (params.type == "checkbox" || params.type == "redio") {
+				params.value = params.tagList.join("|");
+			}
+			// console.log("params", params);
+			itemDimension = {
+				index: index,
+				tagList: [],
+				isRequired: params.isRequired,
+				showType: params.otherAttribute.showType,
+				maxNum: params.otherAttribute.maxNum,
+				isHalf: params.otherAttribute.isHalf,
+				id: params.id,
+				evaluateType: params.evaluateType,
+				evaluateName: params.evaluateName,
+				type: params.type,
+				value: params.value
+			};
+			this.itemDimension = { ...itemDimension };
+			this.addModelStatu = true;
+			this.handleReset("itemDimension");
+			// console.log("params", itemDimension, index);
+		},
 		// 设置模板状态
 		async setTemplateStatus(id) {
 			let res = await setTemplateStatusType(id);
-			console.log("setTemplateStatus", res);
+			// console.log("setTemplateStatus", res);
 			if (res.status !== 200) {
 				console.error("setTemplateStatus", res.msg);
 				this.$Modal.error({
@@ -295,22 +482,274 @@ export default {
 		},
 		addDimensionAction() {
 			this.addModelStatu = true;
+			this.handleReset("itemDimension");
+
+			// console.log(this.itemDimension);
+			// this.handleReset("itemDimension");
+			this.initItemDimensionData();
+			this.handleReset("itemDimension");
 		},
 		addDimensionOk() {
-			console.log("addDimensionOk");
+			this.handleSubmit("itemDimension");
 		},
 		addDimensionCancel() {
-			console.log("addDimensionCancel");
+			// console.log("addDimensionCancel");
+			// console.error("itemDimension", this.itemDimension);
+			this.addModelStatu = false;
+			// this.handleReset("itemDimension");
+			this.initItemDimensionData();
+		},
+		assembleData(data) {
+			// console.log("assembleData");
+			let itemDimensionData = {};
+			let dimensionData = { ...data };
+			let dimensionContent = [...this.dimensionContent];
+			// console.log(dimensionContent);
+
+			switch (dimensionData.type) {
+				case "number":
+					dimensionData.showType = "score";
+					dimensionData.evaluateType = "评价";
+					dimensionData.tagList = [];
+					dimensionData.value = "";
+					break;
+				case "redio":
+					if (typeof dimensionData.value == "string") {
+						dimensionData.tagList = dimensionData.value.split("|");
+					}
+					dimensionData.evaluateType = "单选";
+					dimensionData.value = "";
+					break;
+				case "checkbox":
+					if (typeof dimensionData.value == "string") {
+						dimensionData.tagList = dimensionData.value.split("|");
+					}
+					dimensionData.evaluateType = "多选";
+					dimensionData.value = "";
+					break;
+				case "text":
+					dimensionData.evaluateType = "文本";
+					dimensionData.tagList = [];
+					dimensionData.value = "";
+					break;
+			}
+			dimensionData.maxNum = parseInt(dimensionData.maxNum);
+
+			itemDimensionData = {
+				tagList: dimensionData.tagList,
+				evaluateType: dimensionData.evaluateType,
+				isRequired: dimensionData.isRequired,
+				otherAttribute: {
+					showType: dimensionData.showType,
+					maxNum: dimensionData.maxNum,
+					isHalf: dimensionData.isHalf
+				},
+				id: dimensionData.id,
+				evaluateName: dimensionData.evaluateName,
+				type: dimensionData.type,
+				value: dimensionData.value
+			};
+			this.addModelStatu = false;
+
+			if (dimensionData.index >= 0) {
+				dimensionContent.splice(dimensionData.index, 1, {
+					...itemDimensionData
+				});
+			} else {
+				dimensionContent.push({ ...itemDimensionData });
+			}
+			// console.log(dimensionContent);
+			this.dimensionContent = dimensionContent;
+			this.initItemDimensionData();
+		},
+		initItemDimensionData() {
+			let itemDimension = {
+				index: -1,
+				tagList: [],
+				isRequired: "1",
+				showType: "",
+				maxNum: 10,
+				isHalf: "1",
+				id: 0,
+				evaluateType: "评分",
+				evaluateName: "",
+				type: "number",
+				value: ""
+			};
+			// console.log(itemDimension)
+			this.itemDimension = { ...itemDimension };
+			// console.log(this.itemDimension)
+			this.selectOnChange("number");
 		},
 		delDimension(index) {
 			let dimensionContent = [...this.dimensionContent];
 			dimensionContent.splice(index, 1);
 			this.dimensionContent = dimensionContent;
+		},
+		selectOnChange(type) {
+			this.setDimensionTypeStatus(type);
+			this.handleReset("itemDimension");
+		},
+		setDimensionTypeStatus(type) {
+			let itemDimension = { ...this.itemDimension };
+			itemDimension.type = type;
+			this.itemDimension = itemDimension;
+			this.setRuleInline(type);
+			console.log("setDimensionTypeStatus", this.itemDimension);
+		},
+		handleReset(name) {
+			this.$refs[name].resetFields();
+		},
+		setRuleInline(type) {
+			switch (type) {
+				case "number":
+					this.ruleInline = {
+						maxNum: [
+							{
+								required: true,
+								message: "请填写",
+								trigger: "blur",
+								type: "number"
+							}
+						],
+						// isHalf: [
+						// 	{
+						// 		required: true,
+						// 		message: "请选择",
+						// 		trigger: "change"
+						// 	}
+						// ],
+						evaluateName: [
+							{
+								required: true,
+								message: "请填写",
+								trigger: "blur"
+							}
+						],
+						type: [
+							{
+								required: true,
+								message: "请选择",
+								trigger: "change",
+								type: "string"
+							}
+						]
+					};
+					break;
+				case "redio":
+					this.ruleInline = {
+						// isRequired: [
+						// 	{
+						// 		required: true,
+						// 		message: "请选择",
+						// 		trigger: "change"
+						// 	}
+						// ],
+						evaluateName: [
+							{
+								required: true,
+								message: "请填写",
+								trigger: "blur"
+							}
+						],
+						type: [
+							{
+								required: true,
+								message: "请选择",
+								trigger: "change",
+								type: "string"
+							}
+						],
+						value: [
+							{
+								required: true,
+								message: "请填写",
+								trigger: "blur"
+							}
+						]
+					};
+					break;
+				case "checkbox":
+					this.ruleInline = {
+						// isRequired: [
+						// 	{
+						// 		required: true,
+						// 		message: "请选择",
+						// 		trigger: "change"
+						// 	}
+						// ],
+						evaluateName: [
+							{
+								required: true,
+								message: "请填写",
+								trigger: "blur"
+							}
+						],
+						type: [
+							{
+								required: true,
+								message: "请选择",
+								trigger: "change",
+								type: "string"
+							}
+						],
+						value: [
+							{
+								required: true,
+								message: "请填写",
+								trigger: "blur"
+							}
+						]
+					};
+					break;
+				case "text":
+					this.ruleInline = {
+						maxNum: [
+							{
+								required: true,
+								message: "请填写",
+								trigger: "blur",
+								type: "number"
+							}
+						],
+						// isRequired: [
+						// 	{
+						// 		required: true,
+						// 		message: "请选择",
+						// 		trigger: "change"
+						// 	}
+						// ],
+						evaluateName: [
+							{
+								required: true,
+								message: "请填写",
+								trigger: "blur"
+							}
+						],
+						type: [
+							{
+								required: true,
+								message: "请选择",
+								trigger: "change",
+								type: "string"
+							}
+						],
+						value: [
+							{
+								required: true,
+								message: "请填写",
+								trigger: "blur"
+							}
+						]
+					};
+					break;
+			}
 		}
 	},
 	created() {
 		this.getTemplateInfo();
 		this.getDimensionList();
+		this.setDimensionTypeStatus("text");
 	},
 	mounted() {}
 };
