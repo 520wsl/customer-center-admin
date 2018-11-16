@@ -18,10 +18,7 @@
             <td>{{info.account}}</td>
             <td rowspan="3" class="title">所属：</td>
             <td rowspan="3">
-              <div
-                v-for="(item,index) in info.staffVos"
-                :key="index"
-              >{{item.staffTag+"："+item.staffName+"("+item.department+")"}}</div>
+              <div v-for="(item,index) in info.staffVos" :key="index">{{item.staffTag+"："+item.staffName+"("+item.department+")"}}</div>
             </td>
           </tr>
           <tr>
@@ -50,7 +47,7 @@
         </div>
         <div class="qr-code-btn">
           <Button>
-            <Icon type="md-sync"/>刷新二维码
+            <Icon type="md-sync" />刷新二维码
           </Button>
         </div>
       </Card>
@@ -59,125 +56,128 @@
 </template>
 <script>
 import "./index.less";
-import { getCompanyInfo, setWechatUntied } from "@/api/admin/custom/custom";
-import { getQrCode } from "@/api/admin/custom/qrCode";
+import {
+  getCustomerInfoData,
+  setWechatUntied
+} from "@/api/admin/custom/custom";
+import { getQRCodeUrl } from "@/api/admin/qrCode/qrCode";
 export default {
-	data() {
-		return {
-			bindModal: false,
-			columns: [
-				{
-					title: "微信号",
-					keyWord: true,
-					key: "wechatNickName"
-				},
-				{
-					title: "手机号",
-					keyWord: true,
-					key: "mobile"
-				},
-				{
-					title: "操作",
-					keyWord: true,
-					render: (h, params) => {
-						return h(
-							"Poptip",
-							{
-								attrs: {
-									confirm: true,
-									title: `解绑不可撤销，请谨慎操作！是否确认解绑？`
-								},
-								on: {
-									"on-ok": () => {
-										this.unBind();
-									},
-									"on-cancel": () => {}
-								}
-							},
-							[
-								h(
-									"Button",
-									{
-										attrs: {
-											type: "primary"
-										}
-									},
-									"解绑"
-								)
-							]
-						);
-					}
-				}
-			],
-			customList: [],
-			info: {
-				name: "",
-				account: "",
-				industry: "",
-				provinceName: "",
-				cityName: "",
-				url: ""
-			},
-			params: {
-				sixiId: "",
-				type: "BINDING_PHONE"
-			},
-			qrData: {}
-		};
-	},
-	methods: {
-		bindAccount() {
-			if (this.customList.length != 0) {
-				return this.$Message.warning({
-					content: "已有绑定的，需要解绑才能重新绑定!"
-				});
-			}
-			this.bindModal = true;
-			this.getQrcode();
-		},
-		getQrcode() {
-			getQrCode(this.params).then(res => {
-				if (res.status != 200) {
-					return this.$Message.error({
-						content: "二维码获取失败，请稍后再试！"
-					});
-				}
-				this.qrData = res.data;
-			});
-		},
-		getInfo() {
-			getCompanyInfo(this.params).then(res => {
-				if (res.status != 200) {
-					return this.$Notice.error({ title: res.msg });
-				}
-				let obj = {
-					wechatNickName: res.data.wechatNickName,
-					mobile: res.data.mobile
-				};
-				if (res.data.wechatNickName == "" && res.data.openId == "") {
-					this.customList = [];
-				} else {
-					this.customList = [obj];
-				}
-				this.info = res.data;
-			});
-		},
-		unBind() {
-			setWechatUntied(this.info.openId).then(res => {
-				if (res.status != 200) {
-					return this.$Message.error({
-						content: res.msg
-					});
-				}
-				this.getInfo();
-			});
-		}
-	},
-	created() {
-		if (this.$route.query.sixiId) {
-			this.params.sixiId = this.$route.query.sixiId;
-			this.getInfo();
-		}
-	}
+  data() {
+    return {
+      bindModal: false,
+      columns: [
+        {
+          title: "微信号",
+          keyWord: true,
+          key: "wechatNickName"
+        },
+        {
+          title: "手机号",
+          keyWord: true,
+          key: "mobile"
+        },
+        {
+          title: "操作",
+          keyWord: true,
+          render: (h, params) => {
+            return h(
+              "Poptip",
+              {
+                attrs: {
+                  confirm: true,
+                  title: `解绑不可撤销，请谨慎操作！是否确认解绑？`
+                },
+                on: {
+                  "on-ok": () => {
+                    this.unBind();
+                  },
+                  "on-cancel": () => {}
+                }
+              },
+              [
+                h(
+                  "Button",
+                  {
+                    attrs: {
+                      type: "primary"
+                    }
+                  },
+                  "解绑"
+                )
+              ]
+            );
+          }
+        }
+      ],
+      customList: [],
+      info: {
+        name: "",
+        account: "",
+        industry: "",
+        provinceName: "",
+        cityName: "",
+        url: ""
+      },
+      params: {
+        sixiId: "",
+        type: "BINDING_PHONE"
+      },
+      qrData: {}
+    };
+  },
+  methods: {
+    bindAccount() {
+      if (this.customList.length != 0) {
+        return this.$Message.warning({
+          content: "已有绑定的，需要解绑才能重新绑定!"
+        });
+      }
+      this.bindModal = true;
+      this.getQrcode();
+    },
+    getQrcode() {
+      getQRCodeUrl(this.params).then(res => {
+        if (res.status != 200) {
+          return this.$Message.error({
+            content: "二维码获取失败，请稍后再试！"
+          });
+        }
+        this.qrData = res.data;
+      });
+    },
+    getInfo() {
+      getCustomerInfoData(this.params).then(res => {
+        if (res.status != 200) {
+          return this.$Notice.error({ title: res.msg });
+        }
+        let obj = {
+          wechatNickName: res.data.wechatNickName,
+          mobile: res.data.mobile
+        };
+        if (res.data.wechatNickName == "" && res.data.openId == "") {
+          this.customList = [];
+        } else {
+          this.customList = [obj];
+        }
+        this.info = res.data;
+      });
+    },
+    unBind() {
+      setWechatUntied(this.info.openId).then(res => {
+        if (res.status != 200) {
+          return this.$Message.error({
+            content: res.msg
+          });
+        }
+        this.getInfo();
+      });
+    }
+  },
+  created() {
+    if (this.$route.query.sixiId) {
+      this.params.sixiId = this.$route.query.sixiId;
+      this.getInfo();
+    }
+  }
 };
 </script>
