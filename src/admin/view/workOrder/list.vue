@@ -2,7 +2,7 @@
   <div>
     <Card class="md-card">
       <p slot="title">工单后台</p>
-      <div class="search-con" style="overflow:hidden;">
+      <div class="search-con flex">
         <div class="search-input-item">
           <span>工单编号：</span>
           <Input class="search-input" placeholder="请输入搜索关键词"></Input>
@@ -30,7 +30,7 @@
           <Checkbox v-model="params.isNew">新消息</Checkbox>
           <Checkbox v-model="params.isMe">我执行的</Checkbox>
         </div>
-        <div class="search-btn search-btn-item">
+        <div class="search-btn flex-right">
           <Button type="primary">搜索</Button>
         </div>
       </div>
