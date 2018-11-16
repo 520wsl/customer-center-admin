@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-16 08:55:53
+ * @Last Modified time: 2018-11-16 10:18:48
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -160,7 +160,7 @@ export default [
 					icon: "ios-stats",
 					title: route => `评价模板【${route.query.id}】编辑`,
 					notCache: true,
-					beforeCloseName: 'before_close_normal'
+					beforeCloseName: "before_close_normal"
 				},
 				component: r =>
 					require.ensure([], () =>
@@ -199,7 +199,7 @@ export default [
 					icon: "ios-stats",
 					title: route => `客户【${route.query.userName}】的详情`,
 					notCache: true,
-					beforeCloseName: 'before_close_normal'
+					beforeCloseName: "before_close_normal"
 				},
 				component: r =>
 					require.ensure([], () =>
@@ -234,7 +234,7 @@ export default [
 				path: "info",
 				name: "workOrder-info",
 				meta: {
-					hideInMenu: true,
+					// hideInMenu: true,
 					icon: "ios-stats",
 					title: route => `工单【${route.query.userName}】的详情`,
 					notCache: true
@@ -242,7 +242,39 @@ export default [
 				component: r =>
 					require.ensure([], () =>
 						require("@/admin/view/workOrder/info")
-					)
+					),
+				children: [
+					{
+						path: "base",
+						name: "workOrder-info-base",
+						meta: {
+							// hideInMenu: true,
+							icon: "ios-stats",
+							title: route =>
+								`基本信息`,
+							notCache: true
+						},
+						component: r =>
+							require.ensure([], () =>
+								require("@/admin/view/workOrder/baseMessage")
+							)
+					},
+					{
+						path: "service",
+						name: "workOrder-info-service",
+						meta: {
+							// hideInMenu: true,
+							icon: "ios-stats",
+							title: route =>
+								`服务信息`,
+							notCache: true
+						},
+						component: r =>
+							require.ensure([], () =>
+								require("@/admin/view/workOrder/serviceMessage")
+							)
+					}
+				]
 			}
 		]
 	}
