@@ -6,7 +6,7 @@ import config from "@/config";
 import iView from "iview";
 import "iview/dist/styles/iview.css";
 import "@/assets/style/common.css";
-import "@/assets/style/adminBase.css";
+import "@/assets/style/adminBase.less";
 import "@/assets/icons/iconfont.css";
 import { CDN } from "@/libs/tools";
 import "./index.less";
