@@ -30,42 +30,72 @@
         </tr>
       </table>
       <Button type="primary" class="md-card-btn-bind" @click="bindAccount">绑定账号</Button>
-      <Table :columns="columns" :data="customList" border></Table>
+      <Table :columns="columns" :data="customList" border style="width:500px;"></Table>
     </Card>
+    <Modal v-model="bindModal" title="绑定微信账号" :footer-hide="true" width="400px;">
+      <Card>
+        <p>请客户用微信扫该二维码绑定，二维码有效期2分钟</p>
+        <div class="qr-code">
+          <img v-if="qrData.codeUrl" :src="qrData.codeUrl" alt="微信二维码" title="微信二维码">
+          <p v-else>二维码</p>
+        </div>
+        <div class="qr-code-btn">
+          <Button>
+            <Icon type="md-sync" />刷新二维码</Button>
+        </div>
+      </Card>
+    </Modal>
   </div>
 </template>
 <script>
 import "./index.less";
 import { getCompanyInfo } from "@/api/admin/custom/data";
+import { setWechatUntied } from "@/api/admin/custom/operation";
+import { getQrCode } from "@/api/admin/custom/qrCode";
 export default {
   data() {
     return {
+      bindModal: false,
       columns: [
         {
           title: "微信号",
           keyWord: true,
-          align: "center",
           key: "wechatNickName"
         },
         {
           title: "手机号",
           keyWord: true,
-          align: "center",
           key: "mobile"
         },
         {
           title: "操作",
           keyWord: true,
-          align: "center",
           render: (h, params) => {
             return h(
-              "Button",
+              "Poptip",
               {
                 attrs: {
-                  type: "primary"
+                  confirm: true,
+                  title: `解绑不可撤销，请谨慎操作！是否确认解绑？`
+                },
+                on: {
+                  "on-ok": () => {
+                    this.unBind();
+                  },
+                  "on-cancel": () => {}
                 }
               },
-              "解绑"
+              [
+                h(
+                  "Button",
+                  {
+                    attrs: {
+                      type: "primary"
+                    }
+                  },
+                  "解绑"
+                )
+              ]
             );
           }
         }
@@ -80,8 +110,10 @@ export default {
         url: ""
       },
       params: {
-        sixiId: ""
-      }
+        sixiId: "",
+        type: "BINDING_PHONE"
+      },
+      qrData: {}
     };
   },
   methods: {
@@ -91,6 +123,18 @@ export default {
           content: "已有绑定的，需要解绑才能重新绑定!"
         });
       }
+      this.bindModal = true;
+      this.getQrcode();
+    },
+    getQrcode() {
+      getQrCode(this.params).then(res => {
+        if (res.status != 200) {
+          return this.$Message.error({
+            content: "二维码获取失败，请稍后再试！"
+          });
+        }
+        this.qrData = res.data;
+      });
     },
     getInfo() {
       getCompanyInfo(this.params).then(res => {
@@ -101,12 +145,22 @@ export default {
           wechatNickName: res.data.wechatNickName,
           mobile: res.data.mobile
         };
-        if (obj.wechatNickName == "" && obj.mobile == "") {
+        if (res.data.wechatNickName == "" && res.data.openId == "") {
           this.customList = [];
         } else {
           this.customList = [obj];
         }
         this.info = res.data;
+      });
+    },
+    unBind() {
+      setWechatUntied(this.info.openId).then(res => {
+        if (res.status != 200) {
+          return this.$Message.error({
+            content: res.msg
+          });
+        }
+        this.getInfo();
       });
     }
   },
