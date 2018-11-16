@@ -34,6 +34,11 @@ html {
 .btn-color(@color:#2d8cf0) {
 	color: @color;
 	border: 1px solid @color;
+	&:hover {
+		color: @color;
+		border: 1px solid @color;
+		background-color: #f2f2f2;
+	}
 }
 .md-card {
 	margin-bottom: 18px;
@@ -62,6 +67,32 @@ html {
 			.btn();
 			.btn-color(#dcdee2);
 		}
-		
+	}
+	.tab {
+		width: 100%;
+		border-spacing: 0;
+		table-layout: fixed;
+		border-right: 1px solid #e8eaec;
+		td {
+			border: 1px solid #e8eaec;
+			border-right-color: transparent;
+			height: 40px;
+			padding: 10px;
+			word-wrap: break-word;
+		}
+		.title {
+			width: 12%;
+			background-color: #f8f8f9;
+			color: #515a6e;
+			text-align: right;
+			.col {
+				&-large {
+					width: 20%;
+				}
+				&-small {
+					width: 6%;
+				}
+			}
+		}
 	}
 }

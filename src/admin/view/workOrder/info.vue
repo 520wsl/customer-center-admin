@@ -14,19 +14,23 @@
             <div slot="title">当前工单状态： 处理中</div>
             <div slot="extra">
                 <div>
-                    <a href="#" class="md-card-btn-info" @click.prevent="addDimensionAction">
-                        <Icon type="md-add"></Icon>工单确认
+                    <a href="#" class="md-card-btn-warning">
+                        <Icon type="md-hammer"></Icon>工单确认
                     </a>
-                    <a href="#" class="md-card-btn-info" @click.prevent="addDimensionAction">
-                        <Icon type="md-add"></Icon>指派
+                    <a href="#" class="md-card-btn-info">
+                        <Icon type="md-create"></Icon>指派
                     </a>
-                    <a href="#" class="md-card-btn-info" @click.prevent="addDimensionAction">
-                        <Icon type="md-add"></Icon>设为完结
+                    <a href="#" class="md-card-btn-success">
+                        <Icon type="md-checkmark"></Icon>设为完结
                     </a>
                 </div>
             </div>
-        </Card>
-        <Card class="md-card">
+            <div class="btn-group">
+                <ButtonGroup>
+                    <Button type="info" ghost>基本信息</Button>
+                    <Button type="info">服务信息</Button>
+                </ButtonGroup>
+            </div>
             <router-view></router-view>
         </Card>
     </div>
