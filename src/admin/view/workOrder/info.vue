@@ -13,17 +13,17 @@
         <Card class="md-card">
             <div slot="title">当前工单状态： 处理中</div>
             <div slot="extra">
-               <div>
+                <div>
                     <a href="#" class="md-card-btn-info" @click.prevent="addDimensionAction">
-                    <Icon type="md-add"></Icon>添加维度
-                </a>
-                <a href="#" class="md-card-btn-info" @click.prevent="addDimensionAction">
-                    <Icon type="md-add"></Icon>添加维度
-                </a>
-                <a href="#" class="md-card-btn-info" @click.prevent="addDimensionAction">
-                    <Icon type="md-add"></Icon>添加维度
-                </a>
-               </div>
+                        <Icon type="md-add"></Icon>工单确认
+                    </a>
+                    <a href="#" class="md-card-btn-info" @click.prevent="addDimensionAction">
+                        <Icon type="md-add"></Icon>指派
+                    </a>
+                    <a href="#" class="md-card-btn-info" @click.prevent="addDimensionAction">
+                        <Icon type="md-add"></Icon>设为完结
+                    </a>
+                </div>
             </div>
         </Card>
         <Card class="md-card">
