@@ -1,123 +1,131 @@
 <template>
-  <div>
-    <Card class="md-card">
-      <p slot="title">工单后台</p>
-      <Row>
-        <Col span="6">
-        <div class="search-item">
-          <span>工单编号：</span>
-          <Input class="input" placeholder="请输入搜索关键词"></Input>
-        </div>
-        </Col>
-        <Col span="6">
-        <Select class="select-item" placeholder='工单类型' v-model="params.type">
-          <Option v-for="(item,index) in typeList" :key="index" :value="item.id">{{item.name}}</Option>
-        </Select>
-        <Select class="select-item" placeholder='工单状态' v-model="params.status">
-          <Option v-for="(item,index) in statusList" :key="index" :value="item.id">{{item.name}}</Option>
-        </Select>
-        </Col>
-        <Col span="12">
-        <span style="padding-left:10px;">工单创建时间：</span>
-        <DatePicker class="date-item" v-model="params.startTime" format='yyyy-MM-dd' type="date"></DatePicker>
-        <DatePicker class="date-item" v-model="params.endTime" format='yyyy-MM-dd' type="date"></DatePicker>
-        </Col>
-      </Row>
-      <Row style="margin-top:10px;">
-        <Col span="6">
-        <div class="search-item">
-          <span>用户手机号码：</span>
-          <Input class="input" placeholder="请输入搜索关键词"></Input>
-        </div>
-        </Col>
-        <Col span="10">
-        <div class="radio-item">
-          <Radio v-model="params.isNew">新消息</Radio>
-          <Radio v-model="params.isMe">我执行的</Radio>
-        </div>
-        </Col>
-        <Col span="8" class="search-btn">
-        <Button type="primary">搜索</Button>
-        </Col>
-      </Row>
-    </Card>
-    <Card class="md-card">
-      <page :pageNum="params.pageNum" :pageSize="params.pageSize" :count="params.count" @pageCurrentChange="pageCurrentChange" @pageSizeChange="pageSizeChange"></page>
-    </Card>
-  </div>
+	<div>
+		<Card class="md-card">
+			<div slot="title">消息记录</div>
+			<div class="btn-group flex">
+				<div class="flex-left">
+					<Button class="btn" icon="ios-call" type="success" ghost>拨号</Button>
+					<Button class="btn" icon="md-settings" type="info" ghost>电话号码采集</Button>
+					<Button class="btn" icon="md-settings" type="info" ghost>账号密码采集</Button>
+				</div>
+				<div class="flex-right">
+					<Button class="btn" icon="md-refresh" type="warning" ghost>刷新</Button>
+				</div>
+			</div>
+		</Card>
+		<Card class="md-card message">
+			<Form>
+				<FormItem label="">
+					<Input
+						v-model="replyMessage"
+						type="textarea"
+						:autosize="{minRows: 5,maxRows: 30}"
+						placeholder="请填写回复信息。。。"
+					>
+						<span></span>
+					</Input>
+				</FormItem>
+			</Form>
+			<div class="btn-group flex message-bottom">
+				<div class="flex-left flex">
+					<div class="flex-left flex message-group">
+						<div class="flex-left img">
+							<img
+								src="https://axhub.im/pro/c5ced834fc13a32b/images/%E5%B7%A5%E5%8D%95%E8%AF%A6%E6%83%85/u101.png"
+								alt=""
+							>
+						</div>
+						<div class="flex-left img">
+							<img
+								src="https://axhub.im/pro/c5ced834fc13a32b/images/%E5%B7%A5%E5%8D%95%E8%AF%A6%E6%83%85/u102.png"
+								alt=""
+							>
+						</div>
+					</div>
+					<div class="flex-left btn" style="padding-top:6px;">
+						<Upload multiple action="//jsonplaceholder.typicode.com/posts/">
+							<Button class="btn" type="primary" ghost icon="ios-cloud-upload">上传附件</Button>
+						</Upload>
+					</div>
+				</div>
+				<div class="flex-right move-down">
+					<span style="margin-right:30px;">倒计时: 16点47分</span>
+					<Button class="btn" type="success" ghost>回复</Button>
+				</div>
+			</div>
+		</Card>
+		<Card class="md-card message">
+			<Card class="md-card">
+				<div class="flex message-top">
+					<div class="flex-left">
+						<span>项婷（新少林）：</span>
+					</div>
+					<div class="flex-right">2018-01-02 13:20</div>
+				</div>
+				<div
+					class="message-counter"
+				>客户要求美工的图做的再精细一点再精细一点再精细一点，但实际上我们的图已经做的很靖西很精细了，所以我反馈给客户说我们会努力的把图做的更精细一点</div>
+				<div class="flex message-bottom">
+					<div class="flex-left flex message-group">
+						<div class="flex-left img">
+							<img
+								src="https://axhub.im/pro/c5ced834fc13a32b/images/%E5%B7%A5%E5%8D%95%E8%AF%A6%E6%83%85/u101.png"
+								alt=""
+							>
+						</div>
+						<div class="flex-left img">
+							<img
+								src="https://axhub.im/pro/c5ced834fc13a32b/images/%E5%B7%A5%E5%8D%95%E8%AF%A6%E6%83%85/u102.png"
+								alt=""
+							>
+						</div>
+					</div>
+					<div class="flex-right btn-group move-down">
+						<Button type="primary" class="btn" icon="ios-cloud-download" ghost>下载附件</Button>
+					</div>
+				</div>
+			</Card>
+			<Card class="md-card message">
+				<div class="flex message-bottom">
+					<div class="flex-left">
+						<span>客户：</span>
+					</div>
+					<div class="flex-right">2018-01-02 13:20</div>
+				</div>
+				<div
+					class="message-counter"
+				>客户要求美工的图做的再精细一点再精细一点再精细一点，但实际上我们的图已经做的很靖西很精细了，所以我反馈给客户说我们会努力的把图做的更精细一点</div>
+				<div class="flex message-bottom">
+					<div class="flex-left flex message-group">
+						<div class="flex-left img">
+							<img
+								src="https://axhub.im/pro/c5ced834fc13a32b/images/%E5%B7%A5%E5%8D%95%E8%AF%A6%E6%83%85/u101.png"
+								alt=""
+							>
+						</div>
+						<div class="flex-left img">
+							<img
+								src="https://axhub.im/pro/c5ced834fc13a32b/images/%E5%B7%A5%E5%8D%95%E8%AF%A6%E6%83%85/u102.png"
+								alt=""
+							>
+						</div>
+					</div>
+					<div class="flex-right btn-group move-down">
+						<Button type="primary" class="btn" icon="ios-cloud-download" ghost>下载附件</Button>
+						<Button type="warning" class="btn" icon="ios-brush" ghost>编辑摘要</Button>
+					</div>
+				</div>
+			</Card>
+		</Card>
+	</div>
 </template>
 
 <script>
-import Page from "_c/admin/page";
-import "./index.less";
 export default {
-  data() {
-    return {
-      params: {
-        type: "",
-        status: "",
-        startTime: "",
-        endTime: "",
-        isNew: false,
-        isMe: false,
-        pageNum: 1,
-        pageSize: 10,
-        count: 0
-      },
-      typeList: [
-        {
-          id: "1",
-          name: "店铺美化"
-        },
-        {
-          id: "2",
-          name: "运营效果"
-        },
-        {
-          id: "3",
-          name: "续费问题"
-        },
-        {
-          id: "4",
-          name: "小程序问题"
-        },
-        {
-          id: "5",
-          name: "产品问题"
-        },
-        {
-          id: "6",
-          name: "其他"
-        }
-      ],
-      statusList: [
-        {
-          id: "1",
-          name: "待处理"
-        },
-        {
-          id: "2",
-          name: "已超时"
-        },
-        {
-          id: "3",
-          name: "处理中"
-        },
-        {
-          id: "4",
-          name: "已完结"
-        },
-        {
-          id: "5",
-          name: "已评价"
-        }
-      ]
-    };
-  },
-  components: { Page },
-  methods: {
-    pageCurrentChange() {},
-    pageSizeChange() {}
-  }
+	data() {
+		return {
+			replyMessage: "22"
+		};
+	}
 };
 </script>

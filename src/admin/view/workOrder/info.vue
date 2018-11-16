@@ -31,8 +31,9 @@
                     <Button type="info">服务信息</Button>
                 </ButtonGroup>
             </div>
-            <router-view></router-view>
         </Card>
+
+            <router-view></router-view>
     </div>
 </template>
 
