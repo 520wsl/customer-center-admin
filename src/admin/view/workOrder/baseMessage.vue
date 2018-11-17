@@ -98,7 +98,7 @@
 
 <script>
 import tables from "_c/admin/md-tables";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import { getArrValue } from "@/libs/tools";
 import { getWorkSheetInfoData } from "@/api/admin/workSheet/workSheet";
 export default {
@@ -107,21 +107,26 @@ export default {
 	},
 	computed: {},
 	methods: {
+		...mapMutations(["setWorkSheetBaseInfo"]),
 		getWorkSheetTypeValue(key) {
 			return getArrValue(this.$store.state.workSheet.workSheetType, key);
 		},
 		async getWorkSheetInfo() {
+			let workSheetBaseInfo = this.$store.state.workSheet
+				.workSheetBaseInfo;
+			// console.log("workSheetBaseInfo.length", workSheetBaseInfo);
+
 			let res = await getWorkSheetInfoData({ workSheetId: 8 });
-			console.log("getWorkSheetInfo", res);
+			// console.log("getWorkSheetInfo", res);
 			if (res.status !== 200) {
-				console.error("getWorkSheetInfo", res.msg);
+				// console.error("getWorkSheetInfo", res.msg);
 				this.$Modal.error({
 					title: "工单详情",
 					content: res.msg
 				});
 				return;
 			}
-
+			// this.setWorkSheetBaseInfo(res.data);
 			this.info = res.data;
 
 			this.assembleMessage();

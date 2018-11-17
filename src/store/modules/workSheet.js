@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-16 18:48:22
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-16 20:42:56
+ * @Last Modified time: 2018-11-16 22:38:09
  * @explanatory:  工单模块
  */
 import { getWorkSheetInfoData } from "@/api/admin/workSheet/workSheet";
@@ -30,6 +30,28 @@ export default {
 				key: 5,
 				value: "(yy)找运营"
 			}
+		],
+		workSheetHandleType: [
+			{
+				key: 0,
+				value: "待处理"
+			},
+			{
+				key: 1,
+				value: "已超时"
+			},  
+			{
+				key: 2,
+				value: "处理中"
+			},
+			{
+				key: 3,
+				value: "已完结"
+			},
+			{
+				key: 4,
+				value: "已评价"
+			}
 		]
 	},
 	mutations: {
@@ -37,18 +59,5 @@ export default {
 			state.workSheetBaseInfo = workSheetBaseInfo;
 		}
 	},
-	actions: {
-		async getWorkSheetInfo() {
-			let res = await getWorkSheetInfoData({ workSheetId: 8 });
-			console.log("getWorkSheetInfo", res);
-			if (res.status !== 200) {
-				console.error("getWorkSheetInfo", res.msg);
-				this.$Modal.error({
-					title: "工单详情",
-					content: res.msg
-				});
-				return;
-			}
-		}
-	}
+	actions: {}
 };

@@ -1,7 +1,7 @@
 <template>
     <div>
         <Card class="md-card" v-if="isShowStatus">
-            <Steps :current="1" status="error">
+            <Steps :current="current">
                 <Step
                     v-for="(item,index) in status.list"
                     :key="index"
@@ -11,7 +11,7 @@
             </Steps>
         </Card>
         <Card class="md-card">
-            <div slot="title">当前工单状态：</div>
+            <div slot="title">当前工单状态：{{getWorkSheetTypeValue(showWorkSheetType)}}</div>
             <div slot="extra">
                 <div>
                     <a href="#" class="md-card-btn-warning">
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations, mapState, mapActions } from "vuex";
 import { getArrValue } from "@/libs/tools";
 import { getWorkSheetInfoData } from "@/api/admin/workSheet/workSheet";
 import "./index.less";
@@ -52,10 +52,22 @@ export default {
 		},
 		isBase() {
 			return this.$route.name != "workOrder-info-base";
+		},
+		showWorkSheetType() {
+			return this.$store.state.workSheet.workSheetBaseInfo.handleType;
 		}
 	},
 	methods: {
 		...mapMutations(["setWorkSheetBaseInfo"]),
+		isError(handleType) {
+			return handleType == 1 ? "error" : "";
+		},
+		getWorkSheetTypeValue(key) {
+			return getArrValue(
+				this.$store.state.workSheet.workSheetHandleType,
+				key
+			);
+		},
 		toPage(name) {
 			console.log(this.$route);
 			let route = this.$route;
@@ -76,33 +88,59 @@ export default {
 				});
 				return;
 			}
-
+			this.setWorkSheetBaseInfo(res.data);
 			this.info = res.data;
-			this.setWorkSheetBaseInfo();
+			this.stepsType(res.data);
+		},
+		stepsType(data) {
+			// let handleType = this.$store.state.workSheet.workSheetBaseInfo
+			// 	.handleType;
+
+			let type = 0;
+			switch (data.handleType) {
+				case 0:
+					type = 0;
+					break;
+				case 1:
+					type = 0;
+					break;
+				case 2:
+					type = 1;
+					break;
+				case 3:
+					type = 2;
+					break;
+				case 4:
+					type = 3;
+					break;
+			}
+			this.current = type;
+			this.status.list = [
+				{
+					title: "待处理",
+					component: data.createAt
+				},
+				{
+					title: "处理中",
+					component: "暂时没有"
+				},
+				{
+					title: "已完结",
+					component: data.evaluateTime
+				},
+				{
+					title: "已评价",
+					component: data.finishTime
+				}
+			];
 		}
 	},
 	data() {
 		return {
+			current: 0,
 			info: {},
 			status: {
-				list: [
-					{
-						title: "待处理",
-						component: ""
-					},
-					{
-						title: "处理中",
-						component: ""
-					},
-					{
-						title: "已完结",
-						component: ""
-					},
-					{
-						title: "已评价",
-						component: ""
-					}
-				]
+				list: []
 			}
 		};
 	},
