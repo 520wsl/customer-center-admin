@@ -25,7 +25,7 @@ export default {
 			type: Object,
 			default: () => {
 				return {
-					src: "//pic.ibaotu.com/00/27/84/32Y888piC7Re.mp4",
+					src: null,
 					type: "video/mp4"
 				};
 			}
