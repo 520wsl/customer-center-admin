@@ -1,8 +1,8 @@
 <template>
-	<Modal class="video-model" v-model="visible" :width="width+'px'" footer-hide @on-cancel="cancel">
+	<Modal class="video-model" v-model="visible" width="800px" footer-hide @on-cancel="cancel">
 		<div>
-			<video id="sixivideo" class="video-js" :width="width">
-				<source :src="videoParams.src+'?'+Math.random()" :type="videoParams.type">
+			<video v-if="src" id="sixivideo" class="video-js" style="width:800px;height:auto;">
+				<source :src="src" :type="type">
 			</video>
 		</div>
 	</Modal>
@@ -24,10 +24,7 @@ export default {
 		videoParams: {
 			type: Object,
 			default: () => {
-				return {
-					src: null,
-					type: "video/mp4"
-				};
+				return {};
 			}
 		},
 		endPlay: {
@@ -40,9 +37,12 @@ export default {
 	data() {
 		return {
 			visible: this.value,
+			src: "",
+			type: "video/mp4",
 			options: {
 				// 自动播放
 				autoplay: false,
+
 				// 大按钮
 				bigPlayButton: false,
 				controls: true,
@@ -90,37 +90,45 @@ export default {
 	},
 	mounted() {
 		if (this.videoParams.src) {
+			this.src = this.videoParams.src + "?" + Math.random();
+			this.type = this.videoParams.type || "video/mp4";
 			this.$nextTick(function() {
-				this.loadvideo();
+				this.loadvideo(1);
 			});
 		}
 	},
-	created() {
-		// this.loadvideo();
-	},
+	created() {},
 	methods: {
 		cancel() {
 			this.visible = false;
+			this.src = "";
 			this.$emit("input", this.visible);
 		},
-		loadvideo() {
-			var player = videojs("sixivideo", this.options, () => {
-				videojs.log("视频加载完成");
-				player.on("ended", () => {
-					videojs.log("视频播放完成啦");
-					this.endPlay();
+		loadvideo(num) {
+			if (num) {
+				let player = videojs("sixivideo", this.options, () => {
+					videojs.log("视频加载完成");
+					player.on("ended", () => {
+						videojs.log("视频播放完成啦");
+						this.endPlay();
+					});
 				});
-			});
+			}
 		}
 	},
 	watch: {
-		value(val) {
-			this.visible = val;
+		value: {
+			deep: true,
+			handler(val) {
+				this.visible = val;
+			}
 		},
 		videoParams: {
 			deep: true,
 			handler(val) {
 				if (this.videoParams.src) {
+					this.src = this.videoParams.src;
+					this.type = this.videoParams.type || "video/mp4";
 					this.$nextTick(function() {
 						this.loadvideo();
 					});
