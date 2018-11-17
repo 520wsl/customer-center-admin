@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:13:25
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-17 11:42:13
+ * @Last Modified time: 2018-11-17 19:09:38
  * @explanatory:  config
  */
 export default {
@@ -23,5 +23,7 @@ export default {
 	/**
 	 * 客户端调起 路径配置
 	 */
-	callPhonePath: "http://172.30.34.107:3366/callout"
+	callPhonePath: "http://172.30.34.107:3366",
+	attachmentPath:"http://wechat-base-images.oss-cn-hangzhou.aliyuncs.com/"
+
 };
