@@ -1,6 +1,6 @@
 <template>
 	<Modal class="audio-model" v-model="visible" :width="width+'px'" footer-hide @on-cancel="cancel">
-		<audio width="300" controls id="sixiaudio" :src="src+'?'+Math.random()"/>
+		<audio :width="width" controls id="sixiaudio" :src="src+'?'+Math.random()"/>
 	</Modal>
 </template>
 <script>
@@ -24,8 +24,8 @@ export default {
 		},
 		src: {
 			type: String,
-			default: 'https://miniketchup.gitee.io/static/music/%E6%84%9F%E8%B0%A2%E4%BD%A0%E6%9B%BE%E6%9D%A5%E8%BF%87.mp3'
-		},
+			default: null
+		}
 	},
 	data() {
 		return {
@@ -46,21 +46,26 @@ export default {
 		loadaudio() {
 			var player = new audiojs(sixiaudio);
 			console.log(player);
-			player.load(()=>{
+			player.load(() => {
 				// player.play()
-				console.log('加载完成')
-			})
+				console.log("加载完成");
+			});
 		}
 	},
 	watch: {
 		value(val) {
 			this.visible = val;
+		},
+		src(val) {
+			this.$nextTick(function() {
+				this.loadaudio();
+			});
 		}
 	}
 };
 </script>
 <style scoped>
-#sixiaudio{
+#sixiaudio {
 	display: inline-block;
 }
 </style>
@@ -75,11 +80,11 @@ export default {
 .audio-model .ivu-modal-header-inner {
 	font-size: 20px;
 }
-.audio-model .ivu-modal-content{
+.audio-model .ivu-modal-content {
 	background: transparent;
-	box-shadow:none;
+	box-shadow: none;
 }
-.audio-model .ivu-modal-close{
+.audio-model .ivu-modal-close {
 	display: none;
 }
 </style>

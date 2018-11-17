@@ -25,7 +25,7 @@ export default {
 			type: Object,
 			default: () => {
 				return {
-					src: "//pic.ibaotu.com/00/27/84/32Y888piC7Re.mp4",
+					src: null,
 					type: "video/mp4"
 				};
 			}
@@ -89,9 +89,11 @@ export default {
 		};
 	},
 	mounted() {
-		this.$nextTick(function() {
-			this.loadvideo();
-		});
+		if (this.videoParams.src) {
+			this.$nextTick(function() {
+				this.loadvideo();
+			});
+		}
 	},
 	created() {
 		// this.loadvideo();
@@ -114,6 +116,16 @@ export default {
 	watch: {
 		value(val) {
 			this.visible = val;
+		},
+		videoParams: {
+			deep: true,
+			handler(val) {
+				if (this.videoParams.src) {
+					this.$nextTick(function() {
+						this.loadvideo();
+					});
+				}
+			}
 		}
 	}
 };
