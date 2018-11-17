@@ -112,23 +112,16 @@ export default {
 			return getArrValue(this.$store.state.workSheet.workSheetType, key);
 		},
 		async getWorkSheetInfo() {
-			let workSheetBaseInfo = this.$store.state.workSheet
-				.workSheetBaseInfo;
-			// console.log("workSheetBaseInfo.length", workSheetBaseInfo);
-
 			let res = await getWorkSheetInfoData({ workSheetId: 8 });
-			// console.log("getWorkSheetInfo", res);
 			if (res.status !== 200) {
-				// console.error("getWorkSheetInfo", res.msg);
 				this.$Modal.error({
 					title: "工单详情",
 					content: res.msg
 				});
 				return;
 			}
-			// this.setWorkSheetBaseInfo(res.data);
+			this.setWorkSheetBaseInfo(res.data);
 			this.info = res.data;
-
 			this.assembleMessage();
 		},
 		assembleMessage() {
@@ -191,15 +184,15 @@ export default {
 				[
 					{
 						title: "用户手机号码：",
-						value: this.info.cellphone
+						value: this.info.workerOrderDetailVo.customerVo.mobile
 					},
 					{
 						title: "用户openID：",
-						value: "暂时没有"
+						value: this.info.workerOrderDetailVo.wechatVo.openId
 					},
 					{
 						title: "微信昵称：",
-						value: "暂时没有"
+						value:this.info.workerOrderDetailVo.wechatVo.wechatNickname
 					}
 				]
 			];

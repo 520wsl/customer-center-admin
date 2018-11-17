@@ -1,49 +1,49 @@
 <template>
-    <div>
-        <Card class="md-card" v-if="isShowStatus">
-            <Steps :current="current">
-                <Step
-                    v-for="(item,index) in status.list"
-                    :key="index"
-                    :title="item.title"
-                    :content="item.component"
-                ></Step>
-            </Steps>
-        </Card>
-        <Card class="md-card">
-            <div slot="title">当前工单状态：{{getWorkSheetTypeValue(showWorkSheetType)}}</div>
-            <div slot="extra">
-                <div>
-                    <a href="#" class="md-card-btn-warning">
-                        <Icon type="md-hammer"></Icon>工单确认
-                    </a>
-                    <a href="#" class="md-card-btn-info">
-                        <Icon type="md-create"></Icon>指派
-                    </a>
-                    <a href="#" class="md-card-btn-success">
-                        <Icon type="md-checkmark"></Icon>设为完结
-                    </a>
-                </div>
-            </div>
-            <div class="btn-group">
-                <ButtonGroup>
-                    <Button @click="toPage('workOrder-info-base')" type="info" :ghost="isBase">基本信息</Button>
-                    <Button
-                        @click="toPage('workOrder-info-service')"
-                        type="info"
-                        :ghost="!isBase"
-                    >服务信息</Button>
-                </ButtonGroup>
-            </div>
-        </Card>
-        <router-view></router-view>
-    </div>
+	<div>
+		<Card class="md-card" v-if="isShowStatus">
+			<Steps :current="current">
+				<Step
+					v-for="(item,index) in status.list"
+					:key="index"
+					:title="item.title"
+					:content="item.component"
+				></Step>
+			</Steps>
+		</Card>
+		<Card class="md-card">
+			<div slot="title">当前工单状态：{{getWorkSheetTypeValue(showWorkSheetType)}}</div>
+			<div slot="extra">
+				<div>
+					<a @click="setWorkSheetProcessing(2)" href="javascript:;" class="md-card-btn-warning">
+						<Icon type="md-hammer"></Icon>工单确认
+					</a>
+					<a href="#" class="md-card-btn-info">
+						<Icon type="md-create"></Icon>指派
+					</a>
+					<a @click="setWorkSheetProcessing(3)" href="javascript:;" class="md-card-btn-success">
+						<Icon type="md-checkmark"></Icon>设为完结
+					</a>
+				</div>
+			</div>
+			<div class="btn-group">
+				<ButtonGroup>
+					<Button @click="toPage('workOrder-info-base')" type="info" :ghost="isBase">基本信息</Button>
+					<Button @click="toPage('workOrder-info-service')" type="info" :ghost="!isBase">服务信息</Button>
+				</ButtonGroup>
+			</div>
+		</Card>
+		<router-view></router-view>
+	</div>
 </template>
 
 <script>
 import { mapMutations, mapState, mapActions } from "vuex";
 import { getArrValue } from "@/libs/tools";
-import { getWorkSheetInfoData } from "@/api/admin/workSheet/workSheet";
+import {
+	getWorkSheetInfoData,
+	setWorkSheetProcessingState
+} from "@/api/admin/workSheet/workSheet";
+import { formatTime } from "@/libs/util/time";
 import "./index.less";
 export default {
 	computed: {
@@ -76,6 +76,34 @@ export default {
 				params: route.params,
 				query: route.query
 			});
+		},
+		async setWorkSheetProcessing(handleType) {
+			let params = {
+				workSheetId: this.info.id,
+				handleType
+			};
+			let message = "修改成功";
+			switch (handleType) {
+				case 2:
+					message = "工单确认成功";
+					break;
+				case 3:
+					message = "工单已完结";
+					break;
+			}
+			let res = await setWorkSheetProcessingState({ ...params });
+			if (res.status !== 200) {
+				this.$Modal.error({
+					title: "工单状态修改",
+					content: res.msg
+				});
+				return;
+			}
+			this.$Modal.success({
+				title: "工单状态修改",
+				content: message
+			});
+			this.getWorkSheetInfo();
 		},
 		async getWorkSheetInfo() {
 			let res = await getWorkSheetInfoData({ workSheetId: 8 });
@@ -118,19 +146,28 @@ export default {
 			this.status.list = [
 				{
 					title: "待处理",
-					component: data.createAt
+					component: formatTime(data.createAt, "YYYY-MM-DD hh:mm:ss")
 				},
 				{
 					title: "处理中",
-					component: "暂时没有"
+					component: formatTime(
+						data.confirmTime,
+						"YYYY-MM-DD hh:mm:ss"
+					)
 				},
 				{
 					title: "已完结",
-					component: data.evaluateTime
+					component: formatTime(
+						data.evaluateTime,
+						"YYYY-MM-DD hh:mm:ss"
+					)
 				},
 				{
 					title: "已评价",
-					component: data.finishTime
+					component: formatTime(
+						data.finishTime,
+						"YYYY-MM-DD hh:mm:ss"
+					)
 				}
 			];
 		}
