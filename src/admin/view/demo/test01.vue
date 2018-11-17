@@ -76,6 +76,8 @@
                 >awesome-vue</a>
             </li>
         </ul>
+        <Button @click="openvideo">打开视频</Button>
+        <myvideo :videoParams="videoParams" v-model="videoModel"></myvideo>
     </div>
 </template>
 
@@ -84,11 +86,24 @@ import { getCalssChildData } from "@/api/class";
 import { MessageBox } from "mint-ui";
 import { formatTime } from "@/libs/util/time";
 import { mapState, mapActions } from "vuex";
+import myvideo from "_c/public/video";
 export default {
+	data() {
+		return {
+			videoModel: false,
+			videoParams: {
+				src: "",
+				type: "video/mp4"
+			}
+		};
+	},
 	computed: {
 		...mapState({
 			userName: state => state.user.userName
 		})
+	},
+	components: {
+		myvideo
 	},
 	methods: {
 		...mapActions(["setUser"]),
@@ -99,6 +114,14 @@ export default {
 				message: "确定执行此操作?",
 				showCancelButton: true
 			});
+		},
+		openvideo() {
+			this.videoParams = {
+				src:
+					"http://video.pearvideo.com/mp4/adshort/20181115/cont-1476862-13242020_adpkg-ad_hd.mp4",
+				type: "video/mp4"
+			};
+			this.videoModel = true;
 		}
 	},
 	async mounted() {

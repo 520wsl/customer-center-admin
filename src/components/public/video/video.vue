@@ -89,9 +89,11 @@ export default {
 		};
 	},
 	mounted() {
-		this.$nextTick(function() {
-			this.loadvideo();
-		});
+		if (this.videoParams.src) {
+			this.$nextTick(function() {
+				this.loadvideo();
+			});
+		}
 	},
 	created() {
 		// this.loadvideo();
@@ -114,6 +116,16 @@ export default {
 	watch: {
 		value(val) {
 			this.visible = val;
+		},
+		videoParams: {
+			deep: true,
+			handler(val) {
+				if (this.videoParams.src) {
+					this.$nextTick(function() {
+						this.loadvideo();
+					});
+				}
+			}
 		}
 	}
 };
