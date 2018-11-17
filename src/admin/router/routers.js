@@ -236,7 +236,7 @@ export default [
 				meta: {
 					// hideInMenu: true,
 					icon: "ios-stats",
-					title: route => `工单【】的详情`,
+					title: route => `工单【${route.query.identifier}】的详情`,
 					notCache: true
 				},
 				component: r =>
