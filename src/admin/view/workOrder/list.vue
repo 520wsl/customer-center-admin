@@ -41,7 +41,6 @@
     <Card class="md-card">
       <page :pageNum="params.pageNum" :pageSize="params.pageSize" :count="params.count" @pageCurrentChange="pageCurrentChange" @pageSizeChange="pageSizeChange"></page>
     </Card>
-    <sixiaudio v-model="videoModel"></sixiaudio>
   </div>
 </template>
 
@@ -49,15 +48,13 @@
 import { mapState } from "vuex";
 import { formatInitTime,startTime,endTime } from "@/libs/util/time";
 import Page from "_c/admin/page";
-import sixiaudio from "_c/public/audio";
 import {
 	getWorkSheetListData
 } from "@/api/admin/workSheet/workSheet";
 import "./index.less";
 export default {
   components: {
-    Page,
-    sixiaudio 
+    Page
   },
   computed:{
     ...mapState({
@@ -118,7 +115,7 @@ export default {
         {
           title: "用户手机",
           align: "center",
-          key: "callPhone"
+          key: "cellphone"
         },
         {
           title: "客户昵称",
@@ -160,6 +157,9 @@ export default {
               return item.key==params.row.type
             })
             if(statusList.length>0){
+              if(params.row.type==1){
+                return h('span',{style:{color:"red"}},statusList[0]['value'])
+              }
               return h('span',statusList[0]['value'])
             }else{
               return h('span','')
@@ -182,7 +182,7 @@ export default {
           align: "center",
           render: (h, params) => {
             const user = params.row.userVo || {};
-            return h('span',user.userName+user.departmentName)
+            return h('span',user.userName+'('+user.departmentName+')')
           }
         },
         {
@@ -190,6 +190,9 @@ export default {
           align: "center",
           render:(h,params)=>{
             return h('a',{
+              style:{
+                color:'#2d8cf0'
+              },
               on:{
                 click:()=>{
                   console.log(this.$route)
