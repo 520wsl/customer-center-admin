@@ -8,6 +8,10 @@ export const CDN = name => {
 	return config.CDN + name;
 };
 
+export const FILE = path => {
+	return config.attachmentPath + path;
+};
+
 /**
  * 获取指定数组指定key对应的值比较，若相等则返回该value值
  * @param arr Array       需要遍历的数组

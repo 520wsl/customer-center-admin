@@ -60,27 +60,41 @@
 					<div class="flex-left">
 						<span>{{getMessageTitle(item.sign,item.userVo)}}</span>
 					</div>
-					<div class="flex-right">{{item.createAt}}</div>
+					<div class="flex-right">{{formatTimeData(item.createAt)}}</div>
 				</div>
-				<div class="message-counter">{{item.record}}</div>
+				<!-- 普通消息 -->
+				<div class="message-counter" v-if="item.record">
+					<span v-if="item.eventType != 0">【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span>
+					{{item.record}}
+				</div>
+				<div class="message-counter" v-if="item.eventType == 1 && item.remark">【 {{item.remark}} 】</div>
 				<div class="flex message-bottom">
+					<!-- <a
+						href="http://video.pearvideo.com/mp4/adshort/20181115/cont-1476862-13242020_adpkg-ad_hd.mp4"
+					>点击此处来播放 the Beatles || {{item.enclosure}}</a>-->
 					<div class="flex-left flex message-group">
-						<div class="flex-left img">
-							<img
-								src="https://axhub.im/pro/c5ced834fc13a32b/images/%E5%B7%A5%E5%8D%95%E8%AF%A6%E6%83%85/u101.png"
-								alt=""
-							>
-						</div>
-						<div class="flex-left img">
-							<img
-								src="https://axhub.im/pro/c5ced834fc13a32b/images/%E5%B7%A5%E5%8D%95%E8%AF%A6%E6%83%85/u102.png"
-								alt=""
-							>
-						</div>
+						<!-- 图片 -->
+						<template v-if="item.type == 2">
+							<div class="flex-left item img pic">
+								<a class="link" target="_blank" :href="$FILE(item.enclosure)">
+									<img :src="$FILE(item.enclosure)">
+								</a>
+							</div>
+						</template>
+						<!-- 音乐 -->
+						<template v-if="item.type == 3">
+							<div class="flex-left item img pic">
+								<a class="link" target="_blank" :href="$FILE(item.enclosure)">
+									<img
+										src="https://axhub.im/pro/c5ced834fc13a32b/images/%E5%B7%A5%E5%8D%95%E8%AF%A6%E6%83%85/u102.png"
+									>
+								</a>
+							</div>
+						</template>
 					</div>
 					<div class="flex-right btn-group move-down">
 						<Button type="primary" class="btn" icon="ios-cloud-download" ghost>下载附件</Button>
-						<Button type="warning" class="btn" icon="ios-brush" ghost>编辑摘要</Button>
+						<Button v-if="item.eventType == 1" type="warning" class="btn" icon="ios-brush" ghost>编辑摘要</Button>
 					</div>
 				</div>
 			</Card>
@@ -106,7 +120,7 @@
 						</div>
 						<div class="flex-left img">
 							<img
-								src="https://axhub.im/pro/c5ced834fc13a32b/images/%E5%B7%A5%E5%8D%95%E8%AF%A6%E6%83%85/u102.png"
+								src=" "
 								alt=""
 							>
 						</div>
@@ -128,12 +142,23 @@ import {
 import { callPhoneAction } from "@/api/admin/callPhone/callPhone";
 import { mapState, mapMutations } from "vuex";
 import { formatTime } from "@/libs/util/time";
-
+import { getArrValue } from "@/libs/tools";
 export default {
 	methods: {
 		...mapMutations(["setWorkSheetBaseInfo"]),
-		getMessageTitle(type,userVo) {
-			return type == 1 ?userVo.userName +"("+userVo.departmentName+") ：" : "客户 ：" ;
+		getWorkSheetEventTypeValue(key) {
+			return getArrValue(
+				this.$store.state.workSheet.workSheetEventType,
+				key
+			);
+		},
+		getMessageTitle(type, userVo) {
+			return type == 1
+				? userVo.userName + "(" + userVo.departmentName + ") ："
+				: "客户 ：";
+		},
+		formatTimeData(time) {
+			return formatTime(time, "YYYY-MM-DD hh:mm:ss");
 		},
 		async getTalkNewsList() {
 			let params = { ...params };
@@ -260,9 +285,510 @@ export default {
 	},
 	mounted() {
 		this.getWorkSheetInfo();
-		// this.getTalkNewsList();
+		this.getTalkNewsList();
 
-		this.talkNewsList = [{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":2,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":2,"userSixiId":"1","workSheetId":8,"userVo":{"departmentName":"aaaa","userName":"asfdsa ","department":"","userId":""},"sign":1},{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":2,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":4,"userSixiId":"11","workSheetId":8,"userVo":{"departmentName":"","userName":"","department":"","userId":""},"sign":""},{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":2,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":0,"userSixiId":"11","workSheetId":8,"userVo":{"departmentName":"","userName":"","department":"","userId":""},"sign":""},{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":1,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":2,"userSixiId":"11","workSheetId":8,"userVo":{"departmentName":"","userName":"","department":"","userId":""},"sign":""},{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":2,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":1,"userSixiId":"1","workSheetId":8,"userVo":{"departmentName":"","userName":"","department":"","userId":""},"sign":""},{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":3,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":3,"userSixiId":"1","workSheetId":8,"userVo":{"departmentName":"","userName":"","department":"","userId":""},"sign":""},{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":2,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":0,"userSixiId":"11","workSheetId":8,"userVo":{"departmentName":"","userName":"","department":"","userId":""},"sign":""},{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":2,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":2,"userSixiId":"1","workSheetId":8,"userVo":{"departmentName":"","userName":"","department":"","userId":""},"sign":""},{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":1,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":4,"userSixiId":"11","workSheetId":8,"userVo":{"departmentName":"","userName":"","department":"","userId":""},"sign":""},{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":1,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":4,"userSixiId":"11","workSheetId":8,"userVo":{"departmentName":"","userName":"","department":"","userId":""},"sign":""},{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":0,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":2,"userSixiId":"1","workSheetId":8,"userVo":{"departmentName":"","userName":"","department":"","userId":""},"sign":""},{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":0,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":1,"userSixiId":"1","workSheetId":8,"userVo":{"departmentName":"","userName":"","department":"","userId":""},"sign":""},{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":3,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":0,"userSixiId":"11","workSheetId":8,"userVo":{"departmentName":"","userName":"","department":"","userId":""},"sign":""},{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":2,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":1,"userSixiId":"11","workSheetId":8,"userVo":{"departmentName":"","userName":"","department":"","userId":""},"sign":""},{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":2,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":1,"userSixiId":"1","workSheetId":8,"userVo":{"departmentName":"","userName":"","department":"","userId":""},"sign":""},{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":0,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":2,"userSixiId":"11","workSheetId":8,"userVo":{"departmentName":"","userName":"","department":"","userId":""},"sign":""},{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":1,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":1,"userSixiId":"1","workSheetId":8,"userVo":{"departmentName":"","userName":"","department":"","userId":""},"sign":""},{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":1,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":0,"userSixiId":"11","workSheetId":8,"userVo":{"departmentName":"","userName":"","department":"","userId":""},"sign":""},{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":0,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":5,"userSixiId":"1","workSheetId":8,"userVo":{"departmentName":"","userName":"","department":"","userId":""},"sign":""},{"createAt":1542283789000,"customerName":"","enclosure":"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ","eventType":0,"id":40,"isRead":1,"record":"王前程","recorderId":null,"remark":"","status":null,"type":2,"userSixiId":"1","workSheetId":8,"userVo":{"departmentName":"","userName":"","department":"","userId":""},"sign":0}]
+		this.talkNewsList = [
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ",
+				eventType: 1,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于post2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 3,
+				userSixiId: "1",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "aaaa",
+					userName: "asfdsa ",
+					department: "",
+					userId: ""
+				},
+				sign: 1
+			},
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ",
+				eventType: 2,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 4,
+				userSixiId: "11",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "",
+					userName: "",
+					department: "",
+					userId: ""
+				},
+				sign: ""
+			},
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ",
+				eventType: 2,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 0,
+				userSixiId: "11",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "",
+					userName: "",
+					department: "",
+					userId: ""
+				},
+				sign: ""
+			},
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"http://img0.imgtn.bdimg.com/it/u=3215737653,2135007301&fm=26&gp=0.jpg",
+				eventType: 1,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 2,
+				userSixiId: "11",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "",
+					userName: "",
+					department: "",
+					userId: ""
+				},
+				sign: ""
+			},
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ",
+				eventType: 2,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 1,
+				userSixiId: "1",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "",
+					userName: "",
+					department: "",
+					userId: ""
+				},
+				sign: ""
+			},
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ",
+				eventType: 3,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 3,
+				userSixiId: "1",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "",
+					userName: "",
+					department: "",
+					userId: ""
+				},
+				sign: ""
+			},
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ",
+				eventType: 2,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 0,
+				userSixiId: "11",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "",
+					userName: "",
+					department: "",
+					userId: ""
+				},
+				sign: ""
+			},
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ",
+				eventType: 2,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 2,
+				userSixiId: "1",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "",
+					userName: "",
+					department: "",
+					userId: ""
+				},
+				sign: ""
+			},
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ",
+				eventType: 1,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 4,
+				userSixiId: "11",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "",
+					userName: "",
+					department: "",
+					userId: ""
+				},
+				sign: ""
+			},
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ",
+				eventType: 1,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 4,
+				userSixiId: "11",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "",
+					userName: "",
+					department: "",
+					userId: ""
+				},
+				sign: ""
+			},
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ",
+				eventType: 0,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 2,
+				userSixiId: "1",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "",
+					userName: "",
+					department: "",
+					userId: ""
+				},
+				sign: ""
+			},
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ",
+				eventType: 0,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 1,
+				userSixiId: "1",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "",
+					userName: "",
+					department: "",
+					userId: ""
+				},
+				sign: ""
+			},
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ",
+				eventType: 3,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 0,
+				userSixiId: "11",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "",
+					userName: "",
+					department: "",
+					userId: ""
+				},
+				sign: ""
+			},
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ",
+				eventType: 2,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 1,
+				userSixiId: "11",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "",
+					userName: "",
+					department: "",
+					userId: ""
+				},
+				sign: ""
+			},
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ",
+				eventType: 2,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 1,
+				userSixiId: "1",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "",
+					userName: "",
+					department: "",
+					userId: ""
+				},
+				sign: ""
+			},
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1738619928,790381057&fm=26&gp=0.jpg",
+				eventType: 2,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 2,
+				userSixiId: "11",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "",
+					userName: "",
+					department: "",
+					userId: ""
+				},
+				sign: ""
+			},
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ",
+				eventType: 1,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 1,
+				userSixiId: "1",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "",
+					userName: "",
+					department: "",
+					userId: ""
+				},
+				sign: ""
+			},
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ",
+				eventType: 1,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 3,
+				userSixiId: "11",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "",
+					userName: "",
+					department: "",
+					userId: ""
+				},
+				sign: ""
+			},
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ",
+				eventType: 0,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 4,
+				userSixiId: "1",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "",
+					userName: "",
+					department: "",
+					userId: ""
+				},
+				sign: ""
+			},
+			{
+				createAt: 1542283789000,
+				customerName: "",
+				enclosure:
+					"wechat/GDBsjTunG_ZXFXBATGLe6pZA8vMaSaAVJqUeKmjwQZz3Ocx8ZWhIrN5OCmJZ2ChZ",
+				eventType: 0,
+				id: 40,
+				isRead: 1,
+				record:
+					"因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				recorderId: null,
+				remark:
+					"写到这里我又陷入了沉思，因为有个问题不明白了。根据postcss.config.js配置cssnano是在最后面，pxtorem是在其前面，那么如何做到对此段样式转换的顺序。因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理因为之前关于postcss-px2rem使用方法和可能存在的问题说的太多了，这次主要介绍postcss-pxtorem（截至2017年8月30日，我试过查找关于该插件的中文资料，完全没有）的基本功能和个人使用一些感受、首先，我们用这个插件为了就是要rem统治世界。然而，有些场景并不合适，比如1px边框问题，我们希望并不转换这个边框。（以前都说文字大小不建议转换rem，我实在找不到有力证据在当前前端开发环境下保留字体大小的px值，因此此处不做处理",
+				status: null,
+				type: 2,
+				userSixiId: "1",
+				workSheetId: 8,
+				userVo: {
+					departmentName: "",
+					userName: "",
+					department: "",
+					userId: ""
+				},
+				sign: 0
+			}
+		];
 	}
 };
 </script>
