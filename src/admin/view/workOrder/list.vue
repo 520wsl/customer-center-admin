@@ -199,7 +199,7 @@ export default {
                   this.$router.push({
                     name:'workOrder-info',
                     query:{
-                    id:params.row.id,
+                    workSheetId:params.row.id,
                     identifier:params.row.identifier
                   }})
                 }
