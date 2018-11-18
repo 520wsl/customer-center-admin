@@ -38,7 +38,7 @@
         </div>
       </Card>
     </Card>
-    <Card class="md-card">
+    <Card class="md-card" v-if="evaluateList.length != 0">
       <div slot="title">客户评价</div>
       <div class="flex">
         <div class="flex-left" style="width:49%">
