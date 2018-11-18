@@ -202,19 +202,19 @@ export default {
       this.status.list = [
         {
           title: "待处理",
-          component: formatTime(data.createAt, "YYYY-MM-DD hh:mm:ss")
+          component: formatTime(data.createAt, "YYYY-MM-DD HH:mm:ss")
         },
         {
           title: "处理中",
-          component: formatTime(data.confirmTime, "YYYY-MM-DD hh:mm:ss")
+          component: formatTime(data.confirmTime, "YYYY-MM-DD HH:mm:ss")
         },
         {
           title: "已完结",
-          component: formatTime(data.finishTime, "YYYY-MM-DD hh:mm:ss")
+          component: formatTime(data.finishTime, "YYYY-MM-DD HH:mm:ss")
         },
         {
           title: "已评价",
-          component: formatTime(data.evaluateTime, "YYYY-MM-DD hh:mm:ss")
+          component: formatTime(data.evaluateTime, "YYYY-MM-DD HH:mm:ss")
         }
       ];
     }
@@ -223,7 +223,7 @@ export default {
     return {
       current: 0,
       info: {},
-      workSheetId: 1,
+      workSheetId: 0,
       status: {
         list: []
       },
@@ -234,6 +234,9 @@ export default {
       }
     };
   },
+  created() {
+		this.workSheetId = this.$route.query.workSheetId;
+	},
   mounted() {
     this.getWorkSheetInfo();
   }

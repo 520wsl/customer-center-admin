@@ -66,7 +66,8 @@
                         </template>
                     </div>
                     <div class="flex-right btn-group move-down">
-                        <Button v-if="item.enclosure"
+                        <Button
+                            v-if="item.enclosure"
                             @click="downloadFiles(item.enclosure)"
                             type="primary"
                             class="btn"
@@ -85,9 +86,26 @@
                 </div>
             </Card>
         </template>
+        <Modal
+            v-model="isShowRemarkModal"
+            width="900"
+            :closable="false"
+            :mask-closable="false"
+            title="通话摘要："
+        >
+            <Card class="md-card">
+                <div>
+                    <textarea v-model="remarkParams.remark" id="remarkModal" cols="115" rows="10"></textarea>
+                </div>
+            </Card>
+            <div slot="footer">
+                <Button type="primary" @click="updateItemTalkNews">提交</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 <script>
+import { updateItemTalkNewsData } from "@/api/admin/workSheet/talkNews";
 import { formatTime } from "@/libs/util/time";
 import { getArrValue } from "@/libs/tools";
 import myaudio from "_c/public/audio";
@@ -106,13 +124,45 @@ export default {
 		myvideo
 	},
 	methods: {
+		// 更新对话记录
+		async updateItemTalkNews() {
+			let params = { ...this.remarkParams };
+			let res = await updateItemTalkNewsData(params);
+			if (res.status !== 200) {
+				setTimeout(() => {
+					this.$Modal.error({
+						title: "通话摘要",
+						content: res.msg
+					});
+				}, 1000);
+				this.isShowRemarkModal = false;
+				return;
+			}
+			setTimeout(() => {
+				this.$Modal.success({
+					title: "通话摘要",
+					content: "添加成功"
+				});
+			}, 1000);
+            this.isShowRemarkModal = false;
+           this.$emit("updateItemTalkNews");
+		},
+		editRemarkModal(item) {
+			console.log(item);
+			this.isShowRemarkModal = true;
+			this.remarkParams.record = item.record;
+			this.remarkParams.workSheetId = item.workSheetId;
+			this.remarkParams.identifier = item.identifier;
+			this.remarkParams.remark = item.remark;
+			this.remarkParams.id = item.id;
+		},
 		getMessageTitle(type, userVo) {
 			return type == 1
 				? userVo.userName + "(" + userVo.departmentName + ") ："
 				: "客户 ：";
 		},
 		formatTimeData(time) {
-			return formatTime(time, "YYYY-MM-DD hh:mm:ss");
+			return formatTime(time, "YYYY-MM-DD HH:mm:ss");
 		},
 		getWorkSheetEventTypeValue(key) {
 			return getArrValue(
@@ -135,12 +185,22 @@ export default {
 	},
 	data() {
 		return {
+			isShowRemarkModal: false,
 			isShowAudioModel: false,
 			audioModelPath: "",
 			isShowVideoModel: false,
 			videoParams: {
 				src: "",
 				type: "video/mp4"
+			},
+			remarkParams: {
+				talkTime: "",
+				creationTime: "",
+				id: 0,
+				workOrderId: 0,
+				identifier: "",
+				record: "",
+				remark: ""
 			}
 		};
 	}

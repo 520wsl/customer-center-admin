@@ -8,7 +8,7 @@ function get(url, params) {
 }
 // 微信二维码获取
 export const getQRCodeUrl = ({ sixiId, type }) => {
-  return post("/code/create", {
+  return post("/qr/code/create", {
     scene_str: JSON.stringify({
       sixiId,
       type

@@ -88,7 +88,7 @@
 				</div>
 			</div>
 		</Card>
-		<message-list v-if="talkNewsList.length" :data="talkNewsList"></message-list>
+		<message-list v-if="talkNewsList.length" :data="talkNewsList" @updateItemTalkNews="getTalkNewsList"></message-list>
 		<Card v-if="talkNewsList.length" class="md-card">
 			<page
 				:pageNum="params.pageNum"
@@ -112,7 +112,7 @@ import {
 } from "@/api/admin/workSheet/talkNews";
 import { callPhoneAction } from "@/api/admin/callPhone/callPhone";
 import { mapState, mapMutations } from "vuex";
-import { formatTime } from "@/libs/util/time";
+import { formatTime,formatAddTime } from "@/libs/util/time";
 import { getRelativeTime, getDateDiff } from "@/libs/tools";
 import messageList from "_c/admin/message-list";
 import Page from "_c/admin/page";
@@ -123,6 +123,15 @@ export default {
 	},
 	computed: {
 		getTalkNewsCountdownTimeFormat() {
+
+			console.log(formatTime(new Date(),"x"))
+			console.log(formatAddTime(this.countDownTime,"x"))
+			console.log(formatTime(this.countDownTime))
+
+			if(formatTime(new Date(),"x") > formatAddTime(this.countDownTime,"x")){
+				return ""
+			}
+			
 			if (!this.countDownTime) {
 				return "";
 			}
@@ -135,7 +144,7 @@ export default {
 		getTalkTime() {
 			this.remarkParams.talkTime = getDateDiff(
 				this.remarkParams.creationTime,
-				formatTime(new Date(), "YYYY-MM-DD hh:mm:ss"),
+				formatTime(new Date(), "YYYY-MM-DD HH:mm:ss"),
 				"month"
 			);
 		},
@@ -223,11 +232,11 @@ export default {
 			this.remarkParams.id = recordId;
 			this.remarkParams.creationTime = formatTime(
 				new Date(),
-				"YYYY-MM-DD hh:mm:ss"
+				"YYYY-MM-DD HH:mm:ss"
 			);
 		},
 		formatTimeData(time) {
-			return formatTime(time, "YYYY-MM-DD hh:mm:ss");
+			return formatTime(time, "YYYY-MM-DD HH:mm:ss");
 		},
 		async getTalkNewsList() {
 			let params = { ...this.params };
