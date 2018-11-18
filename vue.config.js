@@ -43,7 +43,7 @@ module.exports = {
 				}
 			},
 			"/api": {
-				target: "http://www.dianjiangla.com/api/",
+				target: "http://192.168.2.230:8090",
 				changeOrigin: true,
 				pathRewrite: {
 					"^/api": ""

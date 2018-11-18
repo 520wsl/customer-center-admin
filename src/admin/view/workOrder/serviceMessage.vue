@@ -32,7 +32,7 @@
 				<Button type="primary" @click="updateItemTalkNews">提交</Button>
 			</div>
 		</Modal>
-		<Card class="md-card message">
+		<Card v-if="getTalkNewsCountdownTimeFormat" class="md-card message">
 			<Form>
 				<FormItem label="">
 					<Input
@@ -88,8 +88,8 @@
 				</div>
 			</div>
 		</Card>
-		<message-list :data="talkNewsList"></message-list>
-		<Card class="md-card">
+		<message-list v-if="talkNewsList.length" :data="talkNewsList"></message-list>
+		<Card v-if="talkNewsList.length" class="md-card">
 			<page
 				:pageNum="params.pageNum"
 				:pageSize="params.pageSize"
@@ -123,6 +123,10 @@ export default {
 	},
 	computed: {
 		getTalkNewsCountdownTimeFormat() {
+			if (!this.countDownTime) {
+				return "";
+			}
+			let res = getRelativeTime(formatTime(this.countDownTime, "x"));
 			return getRelativeTime(formatTime(this.countDownTime, "x"));
 		}
 	},
@@ -345,7 +349,7 @@ export default {
 				talkTime: "",
 				creationTime: "",
 				id: 1,
-				workOrderId: 1,
+				workOrderId: 0,
 				identifier: "",
 				record: "",
 				remark: ""
@@ -364,6 +368,9 @@ export default {
 			talkNewsList: [],
 			info: {}
 		};
+	},
+	created() {
+		this.params.workSheetId = this.$route.query.workSheetId;
 	},
 	mounted() {
 		this.getWorkSheetInfo();

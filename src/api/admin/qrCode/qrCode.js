@@ -1,5 +1,5 @@
 import api from "@/libs/api.request";
-const baseUrl = "/qr";
+const baseUrl = "/wechat-proxy";
 function post(url, params) {
   return api.post(baseUrl + url, params);
 }

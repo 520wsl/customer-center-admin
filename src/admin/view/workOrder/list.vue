@@ -197,7 +197,7 @@ export default {
                 click:()=>{
                   console.log(this.$route)
                   this.$router.push({
-                    name:'workOrder-info',
+                    name:'workOrder-info-base',
                     query:{
                     workSheetId:params.row.id,
                     identifier:params.row.identifier
