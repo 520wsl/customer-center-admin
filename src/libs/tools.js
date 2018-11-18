@@ -70,9 +70,57 @@ export const getDateDiff = (startTime, endTime, diffType) => {
 		default:
 			break;
 	}
-	return (
-		parseInt((eTime.getTime() - sTime.getTime()) / parseInt(divNum)) || 1
-	);
+	return parseInt((eTime.getTime() - sTime.getTime()) / parseInt(divNum)) || 1;
+};
+
+/*
+ * 获得时间差,时间格式为 年-月-日 小时:分钟:秒 或者 年/月/日 小时：分钟：秒
+ * 其中，年月日为全格式，例如 ： 2010-10-12 01:00:00
+ * 返回精度为：天 小时：分：秒
+ */
+
+ 
+export const getIntervalTime = (startTime, endTime, diffType = "hour") => {
+    //将xxxx-xx-xx的时间格式，转换为 xxxx/xx/xx的格式
+    startTime = startTime.replace(/-/g, "/");
+    endTime = endTime.replace(/-/g, "/");
+    //将计算间隔类性字符转换为小写
+    diffType = diffType.toLowerCase();
+    var leftTimeNum = new Date(endTime) - new Date(startTime);
+    var sentTimeNum = "";
+    //作为除数的数字
+    switch (diffType) {
+        case "second":
+            sentTimeNum = Math.floor(leftTimeNum / 1000);
+            break;
+        case "minute":
+            sentTimeNum =
+                Math.floor(leftTimeNum / (60 * 1000)) +
+                ":" +
+                Math.floor((leftTimeNum % (60 * 1000)) / 1000);
+            break;
+        case "hour":
+            sentTimeNum =
+                Math.floor(leftTimeNum / (60 * 60 * 1000)) +
+                ":" +
+                Math.floor((leftTimeNum % (60 * 60 * 1000)) / (60 * 1000)) +
+                ":" +
+                Math.floor((leftTimeNum % (60 * 1000)) / 1000);
+            break;
+        case "day":
+            sentTimeNum =
+                Math.floor(leftTimeNum / (24 * 360 * 1000)) +
+                "天 " +
+                Math.floor((leftTimeNum % (24 * 360 * 1000)) / (60 * 60 * 1000)) +
+                ":" +
+                Math.floor((leftTimeNum % (360 * 1000)) / (60 * 1000)) +
+                ":" +
+                Math.floor((leftTimeNum % (60 * 1000)) / 1000);
+            break;
+        default:
+            break;
+        }
+    return sentTimeNum;
 };
 
 export const forEach = (arr, fn) => {
