@@ -116,7 +116,7 @@ export default {
       return getArrValue(this.$store.state.workSheet.workSheetType, key);
     },
     async getWorkSheetInfo() {
-      let res = await getWorkSheetInfoData({ workSheetId: 1 });
+      let res = await getWorkSheetInfoData({ workSheetId: this.workSheetId });
       if (res.status !== 200) {
         this.$Modal.error({
           title: "工单详情",
@@ -290,7 +290,8 @@ export default {
         if (res.status != 200) {
           return;
         }
-        this.evaluateList = res.data[0].evaluateContent || [];
+        console.log(res);
+        this.evaluateList = res.data[0] ? res.data[0].evaluateContent : [];
       });
     }
   },
@@ -300,6 +301,7 @@ export default {
       cunstomInfo: [],
       workOrderInfo: [],
       evaluateList: [],
+      workSheetId: 1,
       info: {
         cellphone: "",
         companyVoList: [],
