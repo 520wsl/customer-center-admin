@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-16 18:48:22
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-17 16:16:23
+ * @Last Modified time: 2018-11-18 14:10:47
  * @explanatory:  工单模块
  */
 import { getWorkSheetInfoData } from "@/api/admin/workSheet/workSheet";
@@ -69,6 +69,10 @@ export default {
 			{
 				key: 3,
 				value: "账号密码采集"
+			},
+			{
+				key: 4,
+				value: "其他类型"
 			}
 		]
 	},

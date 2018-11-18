@@ -12,7 +12,9 @@ module.exports = {
 	devServer: {
 		proxy: {
 			"/api/work-order": {
+				// 卢坤鹏
 				// target: "http://172.30.34.241:8202/",
+				// 刘英楠
 				target: "http://172.30.34.109:8202/",
 				changeOrigin: true,
 				pathRewrite: {
@@ -41,7 +43,7 @@ module.exports = {
 				}
 			},
 			"/api": {
-				target: "http://www.dianjiangla.com/api/",
+				target: "http://192.168.2.230:8090",
 				changeOrigin: true,
 				pathRewrite: {
 					"^/api": ""
