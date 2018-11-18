@@ -16,7 +16,7 @@
       <div slot="title">客服记录</div>
       <message-list :data="talkNewsList"></message-list>
     </Card>
-    <Card class="md-card">
+    <Card class="md-card" v-if="evaluateList.length != 0">
       <div slot="title">客户评价</div>
       <div class="flex">
         <div class="flex-left" style="width:49%">
@@ -115,6 +115,10 @@ export default {
     },
     // 设置 工单信息
     setWorkOrderInfo() {
+      let joinStr = "";
+      this.info.userVos.forEach(item => {
+        joinStr += item.userName + "(" + item.departmentName + ")，";
+      });
       let workOrderInfo = [
         [
           {
@@ -147,15 +151,15 @@ export default {
         [
           {
             title: "执行人：",
-            value: this.info.executorName
+            value: this.info.executorUser.userName || ""
           },
           {
             title: "参与者：",
-            value: "暂时没有"
+            value: joinStr
           },
           {
             title: "负责人：",
-            value: "暂时没有"
+            value: this.info.leadingUser.userName || ""
           }
         ]
       ];
