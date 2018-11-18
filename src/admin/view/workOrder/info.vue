@@ -12,7 +12,7 @@
           <a @click="setWorkSheetProcessing(2)" href="javascript:;" class="md-card-btn-warning">
             <Icon type="md-hammer"></Icon>工单确认
           </a>
-          <a  @click="modal.bool = true" href="javascript:;" class="md-card-btn-info">
+          <a @click="modal.bool = true" href="javascript:;" class="md-card-btn-info">
             <Icon type="md-create"></Icon>指派
           </a>
           <a @click="setWorkSheetProcessing(3)" href="javascript:;" class="md-card-btn-success">
@@ -28,9 +28,28 @@
       </div>
     </Card>
     <router-view></router-view>
-    <Modal v-model="modal.bool" footer-hide>
+    <Modal v-model="modal.bool" footer-hide title='工单指派' mask-closable>
       <Card class="md-card">
-
+        <RadioGroup v-model="modal.executorSixiId">
+          <table class="tab">
+            <tr v-for="(item,index) in modal.personList" :key="index">
+              <td class="title2">
+                <Radio :value="item.staffSixiId" :label="index"></Radio>
+              </td>
+              <td>{{item.staffTag+' : '}}</td>
+              <td>{{item.staffName+"("+item.department+")"}}</td>
+            </tr>
+          </table>
+        </RadioGroup>
+        <!-- 本期不做 -->
+        <div v-if="false">
+          <h3>客服记录</h3>
+          <Input type="textarea" />
+        </div>
+        <div class="modal-btn">
+          <Button class="btn" type="primary" @click="subAssign">提交</Button>
+          <Button class="btn" type="default" @click="modal.bool = false">取消</Button>
+        </div>
       </Card>
     </Modal>
   </div>
@@ -41,8 +60,10 @@ import { mapMutations, mapState, mapActions } from "vuex";
 import { getArrValue } from "@/libs/tools";
 import {
   getWorkSheetInfoData,
-  setWorkSheetProcessingState
+  setWorkSheetProcessingState,
+  assignWorksheet
 } from "@/api/admin/workSheet/workSheet";
+import { getstaffListData } from "@/api/admin/custom/custom";
 import { formatTime } from "@/libs/util/time";
 import "./index.less";
 export default {
@@ -59,6 +80,25 @@ export default {
   },
   methods: {
     ...mapMutations(["setWorkSheetBaseInfo"]),
+    subAssign() {
+      let params = {
+        workSheetId: this.info.id,
+        executorSixiId: this.modal.executorSixiId
+      };
+      console.log(params);
+      assignWorksheet(params).then(res => {
+        console.log(res);
+        if (res.status != 200) {
+          this.$Modal.error({
+            title: "人员指派",
+            content: res.msg
+          });
+          return;
+        }
+        this.modal.bool = false;
+        this.getWorkSheetInfo();
+      });
+    },
     isError(handleType) {
       return handleType == 1 ? "error" : "";
     },
@@ -103,7 +143,7 @@ export default {
       this.getWorkSheetInfo();
     },
     async getWorkSheetInfo() {
-      let res = await getWorkSheetInfoData({ workSheetId: 1 });
+      let res = await getWorkSheetInfoData({ workSheetId: this.workSheetId });
       console.log("getWorkSheetInfo", res);
       if (res.status !== 200) {
         console.error("getWorkSheetInfo", res.msg);
@@ -113,9 +153,23 @@ export default {
         });
         return;
       }
+      this.getPersonalList(res.data.userId);
       this.setWorkSheetBaseInfo(res.data);
       this.info = res.data;
       this.stepsType(res.data);
+    },
+    getPersonalList(customerSixiId) {
+      getstaffListData(customerSixiId).then(res => {
+        console.log(res);
+        if (res.status != 200) {
+          this.$Modal.error({
+            title: "指派人员列表",
+            content: res.msg
+          });
+          return;
+        }
+        this.modal.personList = res.data || [];
+      });
     },
     stepsType(data) {
       // let handleType = this.$store.state.workSheet.workSheetBaseInfo
@@ -164,12 +218,14 @@ export default {
     return {
       current: 0,
       info: {},
+      workSheetId: 1,
       status: {
         list: []
       },
       modal: {
         bool: false,
-        personList: []
+        personList: [],
+        executorSixiId: ""
       }
     };
   },

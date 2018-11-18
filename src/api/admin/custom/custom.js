@@ -34,3 +34,9 @@ export const setWechatUntied = openId => {
     openId
   });
 };
+// 客户指派人员列表
+export const getstaffListData = customerSixiId => {
+  return post("/staff/list", {
+    customerSixiId
+  });
+};
