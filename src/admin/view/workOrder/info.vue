@@ -2,7 +2,12 @@
   <div>
     <Card class="md-card" v-if="isShowStatus">
       <Steps :current="current">
-        <Step v-for="(item,index) in status.list" :key="index" :title="item.title" :content="item.component"></Step>
+        <Step
+          v-for="(item,index) in status.list"
+          :key="index"
+          :title="item.title"
+          :content="item.component"
+        ></Step>
       </Steps>
     </Card>
     <Card class="md-card">

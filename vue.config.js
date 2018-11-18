@@ -12,7 +12,9 @@ module.exports = {
 	devServer: {
 		proxy: {
 			"/api/work-order": {
+				// 卢坤鹏
 				// target: "http://172.30.34.241:8202/",
+				// 刘英楠
 				target: "http://172.30.34.109:8202/",
 				changeOrigin: true,
 				pathRewrite: {
