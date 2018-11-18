@@ -16,19 +16,19 @@ export default {
 			},
 			{
 				key: 2,
-				value: "(xk)找续开工单"
+				value: "续开工单"
 			},
 			{
 				key: 3,
-				value: "(mg)找美工工单"
+				value: "美工工单"
 			},
 			{
 				key: 4,
-				value: "(sdyy)找深度运营"
+				value: "深度运营"
 			},
 			{
 				key: 5,
-				value: "(yy)找运营"
+				value: "运营"
 			}
 		],
 		workSheetHandleType: [

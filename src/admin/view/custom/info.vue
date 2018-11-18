@@ -46,7 +46,7 @@
           <p v-else>二维码</p>
         </div>
         <div class="qr-code-btn">
-          <Button>
+          <Button @click="getQrcode">
             <Icon type="md-sync" />刷新二维码
           </Button>
         </div>
@@ -136,7 +136,10 @@ export default {
       this.getQrcode();
     },
     getQrcode() {
-      getQRCodeUrl(this.params).then(res => {
+      getQRCodeUrl({
+        sixiId: this.info.customerSixiId,
+        type: "BINDING_PHONE"
+      }).then(res => {
         if (res.status != 200) {
           return this.$Message.error({
             content: "二维码获取失败，请稍后再试！"
@@ -160,9 +163,12 @@ export default {
           this.customList = [obj];
         }
         this.info = res.data;
+        this.info.provinceName = res.data.provinceName || "";
+        this.info.cityName = res.data.cityName || "";
       });
     },
     unBind() {
+      console.log(this.info.openId);
       setWechatUntied(this.info.openId).then(res => {
         if (res.status != 200) {
           return this.$Message.error({
