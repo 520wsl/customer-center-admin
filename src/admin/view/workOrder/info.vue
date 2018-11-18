@@ -30,7 +30,7 @@
     <router-view></router-view>
     <Modal v-model="modal.bool" footer-hide title='工单指派' mask-closable>
       <Card class="md-card">
-        <RadioGroup v-model="modal.executorSixiId">
+        <RadioGroup v-model="modal.index">
           <table class="tab">
             <tr v-for="(item,index) in modal.personList" :key="index">
               <td class="title2">
@@ -83,7 +83,7 @@ export default {
     subAssign() {
       let params = {
         workSheetId: this.info.id,
-        executorSixiId: this.modal.executorSixiId
+        executorSixiId: this.modal.personList[this.modal.index].staffSixiId
       };
       console.log(params);
       assignWorksheet(params).then(res => {
@@ -225,7 +225,7 @@ export default {
       modal: {
         bool: false,
         personList: [],
-        executorSixiId: ""
+        index: ""
       }
     };
   },
