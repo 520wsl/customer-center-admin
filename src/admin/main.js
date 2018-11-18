@@ -8,7 +8,7 @@ import "iview/dist/styles/iview.css";
 import "@/assets/style/common.css";
 import "@/assets/style/adminBase.less";
 import "@/assets/icons/iconfont.css";
-import { CDN } from "@/libs/tools";
+import { CDN, FILE } from "@/libs/tools";
 import "./index.less";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
@@ -21,6 +21,7 @@ Vue.config.productionTip = false;
  */
 Vue.prototype.$config = config;
 Vue.prototype.$CDN = CDN;
+Vue.prototype.$FILE = FILE;
 
 /* eslint-disable no-new */
 new Vue({

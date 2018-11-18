@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-17 11:45:46
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-17 15:23:34
+ * @Last Modified time: 2018-11-17 20:04:50
  * @explanatory:  拨打电话
  */
 import config from "@/config";
@@ -21,17 +21,11 @@ export const callPhoneAction = ({
 	callback = "cb_callout",
 	recordId
 }) => {
-    api.jsonp(baseUrl+"?phone=18189393081&&callback=cb_callout&&recordId=1");
-	// window.open(
-	// 	baseUrl +
-	// 		"?phone=" +
-	// 		phone +
-	// 		"&&callback=cb_callout&&recordId=" +
-	// 		recordId
-	// );
-	// return get("", {
-	// 	phone,
-	// 	callback,
-	// 	recordId
-	// });
+	return api.jsonp(
+		baseUrl +
+			"/callout?phone=" +
+			phone +
+			"&&callback=cb_callout&&recordId=" +
+			recordId
+	);
 };

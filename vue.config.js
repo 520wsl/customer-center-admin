@@ -12,7 +12,8 @@ module.exports = {
 	devServer: {
 		proxy: {
 			"/api/work-order": {
-				target: "http://172.30.34.241:8202/",
+				// target: "http://172.30.34.241:8202/",
+				target: "http://172.30.34.109:8202/",
 				changeOrigin: true,
 				pathRewrite: {
 					"^/api/work-order": ""
