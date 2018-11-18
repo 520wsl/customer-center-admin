@@ -210,11 +210,11 @@ export default {
         },
         {
           title: "已完结",
-          component: formatTime(data.evaluateTime, "YYYY-MM-DD hh:mm:ss")
+          component: formatTime(data.finishTime, "YYYY-MM-DD hh:mm:ss")
         },
         {
           title: "已评价",
-          component: formatTime(data.finishTime, "YYYY-MM-DD hh:mm:ss")
+          component: formatTime(data.evaluateTime, "YYYY-MM-DD hh:mm:ss")
         }
       ];
     }

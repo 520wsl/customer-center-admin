@@ -198,7 +198,6 @@ export default {
 			let params = { ...this.remarkParams };
 			params.workOrderId = this.params.workOrderId;
 			params.identifier = this.params.identifier;
-
 			let res = await updateItemTalkNewsData(params);
 			if (res.status !== 200) {
 				setTimeout(() => {
@@ -221,7 +220,7 @@ export default {
 		},
 		editRemarkModal(recordId) {
 			this.isShowRemarkModal = true;
-			this.remarkParams.id = id;
+			this.remarkParams.id = recordId;
 			this.remarkParams.creationTime = formatTime(
 				new Date(),
 				"YYYY-MM-DD hh:mm:ss"
@@ -348,7 +347,7 @@ export default {
 			remarkParams: {
 				talkTime: "",
 				creationTime: "",
-				id: 1,
+				id: 0,
 				workOrderId: 0,
 				identifier: "",
 				record: "",
@@ -360,7 +359,7 @@ export default {
 				resourceType: 1
 			},
 			params: {
-				workSheetId: 8,
+				workSheetId: 0,
 				pageNum: 1,
 				pageSize: 10,
 				count: 0

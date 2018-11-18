@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-17 09:49:45
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-18 14:54:31
+ * @Last Modified time: 2018-11-18 17:10:21
  * @explanatory:  工单详情 服务信息
  */
 
@@ -54,10 +54,10 @@ export const updateItemTalkNewsData = ({
 	remark
 }) => {
 	return post("/talknews/update", {
-		id: 1,
-		workOrderId: 1,
-		identifier: "",
-		record: "",
-		remark: ""
+		id,
+		workOrderId,
+		identifier,
+		record,
+		remark
 	});
 };
