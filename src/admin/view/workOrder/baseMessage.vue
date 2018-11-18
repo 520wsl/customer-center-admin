@@ -135,6 +135,10 @@ export default {
     },
     // 设置 工单信息
     setWorkOrderInfo() {
+      let joinStr = "";
+      this.info.userVos.forEach(item => {
+        joinStr += item.userName + "(" + item.departmentName + ")，";
+      });
       let workOrderInfo = [
         [
           {
@@ -167,15 +171,15 @@ export default {
         [
           {
             title: "执行人：",
-            value: this.info.executorName
+            value: this.info.executorUser.userName || ""
           },
           {
             title: "参与者：",
-            value: "暂时没有"
+            value: joinStr
           },
           {
             title: "负责人：",
-            value: "暂时没有"
+            value: this.info.leadingUser.userName || ""
           }
         ]
       ];
