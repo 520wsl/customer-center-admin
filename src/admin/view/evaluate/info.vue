@@ -526,7 +526,7 @@ export default {
 				];
 			}
 
-			this.dimensionContent = res.data[0].content || [];
+			this.dimensionContent = res.data[0]['content'] || [];
 		},
 		addDimensionAction() {
 			this.addModelStatu = true;
