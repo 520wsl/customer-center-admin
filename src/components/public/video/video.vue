@@ -54,8 +54,6 @@ export default {
 	data() {
 		return {
 			visible: this.value,
-			src: "",
-			type: "video/mp4",
 			playerOptions: {
 				// videojs options
 				muted: false,
