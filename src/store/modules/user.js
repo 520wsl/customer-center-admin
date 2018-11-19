@@ -123,7 +123,7 @@ export default {
             setStore(state.storeageKey , sixiId );
             commit('setSixiId',sixiId);       
         },
-        getSixiiD ({ state, commit }) {
+        getSixiId ({ state, commit }) {
             let sixiId =  getStore(state.storeageKey);
             if(sixiId){
                 commit('setSixiId',sixiId);

@@ -1,5 +1,5 @@
 <template>
-	<div class="login" :style="'background-image: url('+$CDN('/login-bg.jpg')+')'">
+	<div class="login" :style="'background-image: url('+$CDN('/login-bg.png')+')'">
 		<div class="login-con">
 			<Card icon="log-in" title="欢迎登录" :bordered="false">
 				<div class="form-con" v-if="false">
