@@ -343,6 +343,9 @@ export default {
 		}
 	},
 	created() {
+		if (this.$router.query.sixiId) {
+			this.params.sixiId = this.$router.query.sixiId;
+		}
 		this.getList();
 	}
 };
