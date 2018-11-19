@@ -10,10 +10,12 @@
 					</Input>
 				</div>
 				<div class="search-input-item">
-					<Select class="search-col" clearable placeholder="工单类型" v-model="params.workType">
+					<Select class="search-col" placeholder="工单类型" v-model="params.workType">
+						<Option :value="-1">工单类型</Option>
 						<Option v-for="(item,index) in workSheetType" :key="index" :value="item.key">{{item.value}}</Option>
 					</Select>
-					<Select class="search-col" clearable placeholder="工单状态" v-model="params.handleType">
+					<Select class="search-col" placeholder="工单状态" v-model="params.handleType">
+						<Option :value="-1">工单状态</Option>
 						<Option v-for="(item,index) in statusList" :key="index" :value="item.key">{{item.value}}</Option>
 					</Select>
 				</div>
@@ -77,9 +79,9 @@ export default {
 				// 工单编号
 				identifier: "",
 				// 工单类型
-				workType: null,
+				workType: -1,
 				// 工单状态
-				handleType: null,
+				handleType: -1,
 				// 工单创建开始时间
 				startTime: "",
 				// 工单创建结束时间
@@ -138,15 +140,11 @@ export default {
 					sortable: "custom",
 					key: "startTime",
 					render: (h, params) => {
-						return h(
-							"span",
-							params.row.startTime
-								? formatInitTime(
-										params.row.startTime,
-										"YYYY-MM-DD HH:mm:ss"
-								  )
-								: ""
-						);
+						const format = "YYYY-MM-DD HH:mm:ss";
+						const ele = params.row.startTime
+							? formatInitTime(params.row.startTime, format)
+							: "";
+						return h("span", ele);
 					}
 				},
 				{
@@ -301,14 +299,6 @@ export default {
 		async getList() {
 			const data = {
 				...this.params,
-				workType:
-					this.params.workType == (null || undefined)
-						? -1
-						: this.params.workType,
-				handleType:
-					this.params.handleType == (null || undefined)
-						? -1
-						: this.params.handleType,
 				startTime: this.params.startTime
 					? startTime(this.params.startTime, "x")
 					: "",
