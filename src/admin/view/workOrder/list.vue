@@ -101,8 +101,7 @@ export default {
         // 分页参数
         pageNum: 1,
         pageSize: 10,
-        count: 0,
-        sixiId:"sixi1182660982372058111"
+        count: 0
       },
       workOrderList: [],
       columns: [
