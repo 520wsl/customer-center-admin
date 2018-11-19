@@ -1,5 +1,6 @@
 import { login, logout, getUserInfo } from "@/api/admin/user";
 import { setToken, getToken } from "@/libs/util";
+import { setStore , getStore } from "@/libs/util/storeage";
 /*
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
@@ -14,7 +15,9 @@ export default {
 		avatorImgPath: "http://1.img.dianjiangla.com/assets/user.png",
 		token: getToken(),
 		access: "",
-		hasGetInfo: false
+        hasGetInfo: false,
+        sixiId: "",
+        storeageKey: 'sixiId'
 	},
 	mutations: {
 		setAvator(state, avatorPath) {
@@ -22,6 +25,9 @@ export default {
 		},
 		setUserId(state, id) {
 			state.userId = id;
+        },
+        setSixiId(state, id) {
+			state.sixiId = id;
 		},
 		setUserName(state, name) {
 			state.userName = name;
@@ -111,6 +117,14 @@ export default {
 					reject(error);
 				}
 			});
-		}
+        },
+        // 更新四喜Id
+        updatedSixiId ({ state, commit },{ sixiId }) {
+            setStore(state.storeageKey , sixiId )
+            commit('setSixiId',sixiId);       
+        },
+        getSixiiD ({ state, commit }) {
+            getStore(state.storeageKey)
+        }
 	}
 };

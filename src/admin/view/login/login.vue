@@ -23,7 +23,7 @@ export default {
     LoginForm
   },
   methods: {
-    ...mapActions(["handleLogin", "getUserInfo"]),
+    ...mapActions(["handleLogin", "getUserInfo", "updatedSixiId"]),
     handleSubmit({ userName, password, type }) {
       this.handleLogin({ userName, password, type }).then(res => {
         this.getUserInfo().then(res => {
@@ -50,6 +50,7 @@ export default {
             content: res.mag
           });
         }
+        this.updatedSixiId({ sixiId: res.data });
         this.$router.push({
           name: "custom-list"
         });
