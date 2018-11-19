@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:13:25
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-17 19:09:38
+ * @Last Modified time: 2018-11-19 09:30:19
  * @explanatory:  config
  */
 export default {
@@ -13,7 +13,7 @@ export default {
 	/**
 	 * @description 默认打开的首页的路由name值，默认为home
 	 */
-	homeName: "home",
+	homeName: "custom-list",
 	baseUrl: {
 		dev: "/api",
 		pro: "/api"

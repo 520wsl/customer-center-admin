@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-18 19:49:51
+ * @Last Modified time: 2018-11-19 09:29:07
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -31,7 +31,8 @@ export default [
 		component: Main1,
 		meta: {
 			icon: "logo-buffer",
-			title: "案例"
+			title: "案例",
+			hideInMenu: true
 		},
 		children: [
 			{
@@ -59,30 +60,6 @@ export default [
 					require.ensure(
 						[],
 						() => r(require("@/admin/view/demo/test01")),
-						"demo"
-					) //demo
-			}
-		]
-	},
-	{
-		path: "/log",
-		name: "log",
-		component: Main1,
-		meta: {
-			hideInBread: true
-		},
-		children: [
-			{
-				path: "saleRecord",
-				meta: {
-					icon: "logo-buffer",
-					title: "saleRecord"
-				},
-				name: "saleRecord",
-				component: r =>
-					require.ensure(
-						[],
-						() => r(require("@/admin/view/log/saleRecord")),
 						"demo"
 					) //demo
 			}
