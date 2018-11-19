@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-19 09:29:07
+ * @Last Modified time: 2018-11-19 18:06:20
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -137,7 +137,7 @@ export default [
 					icon: "ios-stats",
 					title: route => `评价模板【${route.query.id}】编辑`,
 					notCache: true,
-					beforeCloseName: "before_close_normal"
+					// beforeCloseName: "before_close_normal"
 				},
 				component: r =>
 					require.ensure([], () =>
