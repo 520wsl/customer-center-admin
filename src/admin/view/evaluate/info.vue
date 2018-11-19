@@ -224,8 +224,9 @@ export default {
 									},
 									on: {
 										// 0启用，1停用
-										"on-change": () => {
-											this.setTemplateStatus({ id });
+										"on-change": type => {
+											let statu = type ? 0:1
+											this.setStatus(statu,params.index)
 										}
 									}
 								},
@@ -380,6 +381,9 @@ export default {
 	methods: {
 		...mapMutations(["closeTag"]),
 		...mapActions(["getDimensionList"]),
+		setStatus(status, index) {
+			this.templateInfo[index].status = status;
+		},
 		clostPage() {
 			console.log("clostPage");
 			this.closeTag(this.$route);
