@@ -75,7 +75,7 @@ export default [
 		component: r =>
 			require.ensure(
 				[],
-				() => r(require("@/admin/view/login/login")),
+				() => r(require("@/admin/view/login/login.vue")),
 				"login"
 			) //登录页面
 	},
