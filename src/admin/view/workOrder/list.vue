@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import { formatInitTime, startTime, endTime } from "@/libs/util/time";
 import Page from "_c/admin/page";
 import { getWorkSheetListData } from "@/api/admin/workSheet/workSheet";
@@ -267,6 +267,7 @@ export default {
 		};
 	},
 	methods: {
+        ...mapActions(["getSixiId"]),
 		sortChange(column) {
 			console.log(column);
 			// 创建时间升序
@@ -345,7 +346,10 @@ export default {
 	created() {
 		if (this.$route.query.sixiId) {
 			this.params.sixiId = this.$route.query.sixiId;
-		}
+		} else {
+            this.getSixiId();
+            this.params.sixiId = this.$store.state.user.sixiId;
+        }
 		this.getList();
 	}
 };
