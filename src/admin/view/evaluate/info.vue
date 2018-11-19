@@ -224,7 +224,7 @@ export default {
 									},
 									on: {
 										// 0启用，1停用
-										"on-change": id => {
+										"on-change": () => {
 											this.setTemplateStatus({ id });
 										}
 									}
@@ -385,8 +385,21 @@ export default {
 			this.closeTag(this.$route);
 		},
 		setTemplateTitleValue(templateTitle, index) {
+			if (templateTitle.length < 2) {
+				this.$Modal.error({
+					title: "保存模板",
+					content: "标题不能小于2个字符"
+				});
+				return;
+			}
+			if (templateTitle.length > 24) {
+				this.$Modal.error({
+					title: "保存模板",
+					content: "标题不能大于24个字符"
+				});
+				return;
+			}
 			this.templateInfo[index]["templateTitle"] = templateTitle;
-
 		},
 		async addItemTemplate() {
 			let templateInfo = { ...this.templateInfo[0] };
@@ -486,7 +499,18 @@ export default {
 				return;
 			}
 
-			this.templateInfo = res.data || [];
+			if (res.data.length > 0) {
+				this.templateInfo = res.data;
+			} else {
+				this.templateInfo = [
+					{
+						id: "",
+						status: 0,
+						templateTitle: "模板标题"
+					}
+				];
+			}
+
 			this.dimensionContent = res.data[0].content || [];
 		},
 		addDimensionAction() {
@@ -633,6 +657,16 @@ export default {
 								required: true,
 								message: "请填写",
 								trigger: "blur"
+							},
+							{
+								type: "string",
+								min: 2,
+								message: "维度名称不能小于2个字符"
+							},
+							{
+								type: "string",
+								max: 24,
+								message: "维度名称不能大于24个字符"
 							}
 						],
 						type: [
@@ -659,6 +693,16 @@ export default {
 								required: true,
 								message: "请填写",
 								trigger: "blur"
+							},
+							{
+								type: "string",
+								min: 2,
+								message: "维度名称不能小于2个字符"
+							},
+							{
+								type: "string",
+								max: 24,
+								message: "维度名称不能大于24个字符"
 							}
 						],
 						type: [
@@ -692,6 +736,16 @@ export default {
 								required: true,
 								message: "请填写",
 								trigger: "blur"
+							},
+							{
+								type: "string",
+								min: 2,
+								message: "维度名称不能小于2个字符"
+							},
+							{
+								type: "string",
+								max: 24,
+								message: "维度名称不能大于24个字符"
 							}
 						],
 						type: [
@@ -733,6 +787,16 @@ export default {
 								required: true,
 								message: "请填写",
 								trigger: "blur"
+							},
+							{
+								type: "string",
+								min: 2,
+								message: "维度名称不能小于2个字符"
+							},
+							{
+								type: "string",
+								max: 24,
+								message: "维度名称不能大于24个字符"
 							}
 						],
 						type: [
