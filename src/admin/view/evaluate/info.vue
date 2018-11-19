@@ -427,7 +427,13 @@ export default {
 				title: "保存模板",
 				content: res.msg
 			});
-			this.getTemplateInfo();
+			// this.getTemplateInfo();
+			this.$router.push({
+				name:'evaluate-info',
+				query:{
+					id:res.data
+				}
+			})
 		},
 		handleSubmit(name) {
 			this.$refs[name].validate(valid => {
