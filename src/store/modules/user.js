@@ -120,11 +120,14 @@ export default {
         },
         // 更新四喜Id
         updatedSixiId ({ state, commit },{ sixiId }) {
-            setStore(state.storeageKey , sixiId )
+            setStore(state.storeageKey , sixiId );
             commit('setSixiId',sixiId);       
         },
         getSixiiD ({ state, commit }) {
-            getStore(state.storeageKey)
+            let sixiId =  getStore(state.storeageKey);
+            if(sixiId){
+                commit('setSixiId',sixiId);
+            }
         }
 	}
 };
