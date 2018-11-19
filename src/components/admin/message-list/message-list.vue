@@ -35,7 +35,8 @@
                         <!-- 图片 -->
                         <template v-if="item.type == 2">
                             <div class="flex-left item img pic">
-                                <a class="link" target="_blank" :href="$FILE(item.enclosure)">
+                                <!-- <a class="link" target="_blank" :href="$FILE(item.enclosure)"> -->
+                                <a class="link" @click="setShowImgModalData($FILE(item.enclosure))" href="javascript:;">
                                     <img :src="$FILE(item.enclosure)">
                                 </a>
                             </div>
@@ -67,8 +68,9 @@
                     </div>
                     <div class="flex-right btn-group move-down">
                         <Button
+                            style="display:none;"
                             v-if="item.enclosure"
-                            @click="downloadFiles(item.enclosure)"
+                            @click="downloadFiles(item)"
                             type="primary"
                             class="btn"
                             icon="ios-cloud-download"
@@ -102,6 +104,11 @@
                 <Button type="primary" @click="updateItemTalkNews">提交</Button>
             </div>
         </Modal>
+        <Modal footer-hide v-model="isShowImgModal" width="600">
+            <card class="md-card pic">
+                <img :src="imgPath">
+            </card>
+        </Modal>
     </div>
 </template>
 <script>
@@ -124,6 +131,10 @@ export default {
 		myvideo
 	},
 	methods: {
+		setShowImgModalData(path) {
+			this.isShowImgModal = true;
+			this.imgPath = path;
+		},
 		// 更新对话记录
 		async updateItemTalkNews() {
 			let params = { ...this.remarkParams };
@@ -144,8 +155,8 @@ export default {
 					content: "添加成功"
 				});
 			}, 1000);
-            this.isShowRemarkModal = false;
-           this.$emit("updateItemTalkNews");
+			this.isShowRemarkModal = false;
+			this.$emit("updateItemTalkNews");
 		},
 		editRemarkModal(item) {
 			console.log(item);
@@ -174,8 +185,8 @@ export default {
 			this.isShowAudioModel = true;
 			this.audioModelPath = path;
 		},
-		downloadFiles(path) {
-			window.open(this.$FILE(path));
+		downloadFiles(item) {
+			window.open(this.$FILE(item.path));
 		},
 		setVideoModelPath(path) {
 			console.log("video", path);
@@ -185,6 +196,8 @@ export default {
 	},
 	data() {
 		return {
+			imgPath: "",
+			isShowImgModal: false,
 			isShowRemarkModal: false,
 			isShowAudioModel: false,
 			audioModelPath: "",

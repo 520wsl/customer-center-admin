@@ -15,7 +15,7 @@
 				<Button @click="sleectTemplateList(1)" class="search-btn" type="primary">
 					<Icon type="search"/>&nbsp;&nbsp;搜索
 				</Button>
-				<Button class="search-btn" type="success">
+				<Button @click="addTemplate" class="search-btn" type="success">
 					<Icon type="search"/>&nbsp;&nbsp;添加模板
 				</Button>
 			</div>
@@ -105,12 +105,12 @@ export default {
 								{
 									props: {
 										size: "large",
-										value: status
+										value: params.row.status == 1 ? false : true
 									},
 									on: {
 										// 0启用，1停用
 										"on-change": status => {
-											this.setTemplateStatus({ id });
+											this.setTemplateStatus({ id:params.row.id });
 										}
 									}
 								},
@@ -146,7 +146,7 @@ export default {
 										click: () => {
 											this.$router.push({
 												name: "evaluate-info",
-												query: { id }
+												query: { id:params.row.id }
 											});
 										}
 									}
@@ -167,7 +167,7 @@ export default {
 										on: {
 											"on-ok": () => {
 												this.delTemplate({
-													id
+													id:params.row.id
 												});
 											}
 										}
@@ -199,6 +199,12 @@ export default {
 		};
 	},
 	methods: {
+		addTemplate() {
+			this.$router.push({
+				name: "evaluate-info",
+				query: { id: -1 }
+			});
+		},
 		async getTemplateList() {
 			this.loading = true;
 			let res = await getTemplateListData({ ...this.params });

@@ -21,8 +21,8 @@
 			title="呼叫"
 		>
 			<Card class="md-card">
-				<div>通话开始时间：{{remarkParams.creationTime}}</div>
-				<div>通话持续时间： {{remarkParams.talkTime}}</div>
+				<div>通话开始时间：{{creationTime}}</div>
+				<div>通话持续时间： {{talkTime}}</div>
 				<div>通话摘要：</div>
 				<div>
 					<textarea v-model="remarkParams.remark" id="remarkModal" cols="115" rows="10"></textarea>
@@ -32,7 +32,7 @@
 				<Button type="primary" @click="updateItemTalkNews">提交</Button>
 			</div>
 		</Modal>
-		<Card v-if="getTalkNewsCountdownTimeFormat" class="md-card message">
+		<Card class="md-card message">
 			<Form>
 				<FormItem label="">
 					<Input
@@ -79,16 +79,20 @@
 						</Upload>
 					</div>
 				</div>
-				<div class="flex-right move-down">
+				<div v-if="TalkNewsCountdownTimeFormat" class="flex-right move-down">
 					<span
-						v-if="getTalkNewsCountdownTimeFormat"
+						v-if="TalkNewsCountdownTimeFormat"
 						style="margin-right:30px;"
-					>倒计时: {{getTalkNewsCountdownTimeFormat}} 失效</span>
+					>倒计时: {{TalkNewsCountdownTimeFormat}} 失效</span>
 					<Button @click="setWorkOrderCustomerServiceStaffReply" class="btn" type="success" ghost>回复</Button>
 				</div>
 			</div>
 		</Card>
-		<message-list v-if="talkNewsList.length" :data="talkNewsList" @updateItemTalkNews="getTalkNewsList"></message-list>
+		<message-list
+			v-if="talkNewsList.length"
+			:data="talkNewsList"
+			@updateItemTalkNews="getTalkNewsList"
+		></message-list>
 		<Card v-if="talkNewsList.length" class="md-card">
 			<page
 				:pageNum="params.pageNum"
@@ -112,8 +116,8 @@ import {
 } from "@/api/admin/workSheet/talkNews";
 import { callPhoneAction } from "@/api/admin/callPhone/callPhone";
 import { mapState, mapMutations } from "vuex";
-import { formatTime,formatAddTime } from "@/libs/util/time";
-import { getRelativeTime, getDateDiff } from "@/libs/tools";
+import { formatTime, formatAddTime } from "@/libs/util/time";
+import { getRelativeTime, getDateDiff, getIntervalTime } from "@/libs/tools";
 import messageList from "_c/admin/message-list";
 import Page from "_c/admin/page";
 export default {
@@ -121,32 +125,31 @@ export default {
 		messageList,
 		Page
 	},
-	computed: {
-		getTalkNewsCountdownTimeFormat() {
-
-			console.log(formatTime(new Date(),"x"))
-			console.log(formatAddTime(this.countDownTime,"x"))
-			console.log(formatTime(this.countDownTime))
-
-			if(formatTime(new Date(),"x") > formatAddTime(this.countDownTime,"x")){
-				return ""
-			}
-			
-			if (!this.countDownTime) {
-				return "";
-			}
-			let res = getRelativeTime(formatTime(this.countDownTime, "x"));
-			return getRelativeTime(formatTime(this.countDownTime, "x"));
-		}
-	},
+	computed: {},
 	methods: {
 		...mapMutations(["setWorkSheetBaseInfo"]),
-		getTalkTime() {
-			this.remarkParams.talkTime = getDateDiff(
-				this.remarkParams.creationTime,
-				formatTime(new Date(), "YYYY-MM-DD HH:mm:ss"),
-				"month"
-			);
+		getTalkNewsCountdownTimeFormat() {
+			this.getTalkNewsCountdownTimeStr();
+			setInterval(() => {
+				this.getTalkNewsCountdownTimeStr();
+			}, 120000);
+		},
+		getTalkNewsCountdownTimeStr() {
+			let endTime = formatAddTime(this.countDownTime, "x");
+			let startTime = formatTime(new Date(), "x");
+			// console.log(
+			// 	"[debug]: 当前时间",
+			// 	formatTime(new Date(), "YYYY-MM-DD HH:mm:ss")
+			// );
+			// console.log(
+			// 	"[debug]: 过期时间",
+			// 	formatAddTime(this.countDownTime, "YYYY-MM-DD HH:mm:ss")
+			// );
+			if (!this.countDownTime || endTime < startTime) {
+				return "";
+			}
+			let res = getRelativeTime(endTime);
+			this.TalkNewsCountdownTimeFormat = res;
 		},
 		async getTalkNewsCountdownTime() {
 			let res = await getTalkNewsCountdownTimeData({
@@ -160,6 +163,7 @@ export default {
 				return;
 			}
 			this.countDownTime = res.data.countDownTime || "";
+			this.getTalkNewsCountdownTimeFormat();
 		},
 		// 查询数据 分页页码重置
 		sleectTalkNewsList(pageNum) {
@@ -204,6 +208,7 @@ export default {
 		},
 		// 更新对话记录
 		async updateItemTalkNews() {
+			clearInterval(this.setIntervalFunction);
 			let params = { ...this.remarkParams };
 			params.workOrderId = this.params.workOrderId;
 			params.identifier = this.params.identifier;
@@ -230,13 +235,20 @@ export default {
 		editRemarkModal(recordId) {
 			this.isShowRemarkModal = true;
 			this.remarkParams.id = recordId;
-			this.remarkParams.creationTime = formatTime(
-				new Date(),
-				"YYYY-MM-DD HH:mm:ss"
-			);
+			this.creationTime = formatTime(new Date(), "YYYY-MM-DD HH:mm:ss");
+			this.setIntervalFunction = setInterval(() => {
+				this.getTalkTime();
+			}, 1000);
 		},
-		formatTimeData(time) {
-			return formatTime(time, "YYYY-MM-DD HH:mm:ss");
+		getTalkTime() {
+			let startTime = this.creationTime;
+			let endTime = formatTime(new Date(), "YYYY-MM-DD HH:mm:ss");
+			console.log(
+				"[debug]: 当前时间",
+				formatTime(new Date(), "YYYY-MM-DD HH:mm:ss")
+			);
+			console.log("[debug]: 过期时间", endTime);
+			this.talkTime = getIntervalTime(startTime, endTime);
 		},
 		async getTalkNewsList() {
 			let params = { ...this.params };
@@ -308,9 +320,6 @@ export default {
 			}
 		},
 		confirm(eventType) {
-			setTimeout(() => {
-				this.getTalkTime();
-			}, 1000);
 			let title = "";
 			let message = "";
 			switch (eventType) {
@@ -351,11 +360,13 @@ export default {
 	},
 	data() {
 		return {
+			setIntervalFunction: "",
 			isShowRemarkModal: false,
+			TalkNewsCountdownTimeFormat: "",
 			countDownTime: "",
+			talkTime: "",
+			creationTime: "",
 			remarkParams: {
-				talkTime: "",
-				creationTime: "",
 				id: 0,
 				workOrderId: 0,
 				identifier: "",
