@@ -9,10 +9,10 @@
         </div>
         <div class="search-input-item">
           <Select class="search-col" clearable placeholder='工单类型' v-model="params.workType">
-            <Option v-for="(item,index) in workSheetType" :key="index" :value="item.key">{{item.value}}</Option>
+            <Option v-for="(item,index) in searchWorkSheetType" :key="index" :value="item.key">{{item.value}}</Option>
           </Select>
           <Select class="search-col" clearable placeholder='工单状态' v-model="params.handleType">
-            <Option v-for="(item,index) in statusList" :key="index" :value="item.key">{{item.value}}</Option>
+            <Option v-for="(item,index) in searchStatusList" :key="index" :value="item.key">{{item.value}}</Option>
           </Select>
         </div>
         <div class="search-input-item">
@@ -58,6 +58,18 @@ export default {
   },
   computed:{
     ...mapState({
+      searchWorkSheetType: state => {
+        console.log(state.workSheet.workSheetType)
+        return [...state.workSheet.workSheetType].filter(item=>{
+          return item.key!==0
+        })
+      },
+      searchStatusList: state => {
+        console.log(state.workSheet.workSheetHandleType)
+        return [...state.workSheet.workSheetHandleType].filter(item=>{
+          return item.key!==1
+        })
+      },
       workSheetType: state => state.workSheet.workSheetType,
       statusList: state => state.workSheet.workSheetHandleType
     })

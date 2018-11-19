@@ -1,17 +1,34 @@
 <template>
 	<Modal class="video-model" v-model="visible" width="800px" footer-hide @on-cancel="cancel">
-		<div>
-			<video v-if="src" id="sixivideo" class="video-js" style="width:800px;height:auto;">
-				<source :src="src" :type="type">
-			</video>
-		</div>
+		<video-player
+			v-if="value"
+			class="video-player-box vjs-big-play-centered"
+			ref="videoPlayer"
+			:options="playerOptions"
+			:playsinline="true"
+			customEventName="customstatechangedeventname"
+			@play="onPlayerPlay($event)"
+			@pause="onPlayerPause($event)"
+			@ended="onPlayerEnded($event)"
+			@waiting="onPlayerWaiting($event)"
+			@playing="onPlayerPlaying($event)"
+			@loadeddata="onPlayerLoadeddata($event)"
+			@timeupdate="onPlayerTimeupdate($event)"
+			@canplay="onPlayerCanplay($event)"
+			@canplaythrough="onPlayerCanplaythrough($event)"
+			@statechanged="playerStateChanged($event)"
+			@ready="playerReadied"
+		></video-player>
 	</Modal>
 </template>
 <script>
-import videojs from "video.js";
 import "video.js/dist/video-js.css";
+import { videoPlayer } from "vue-video-player";
 
 export default {
+	components: {
+		videoPlayer
+	},
 	props: {
 		value: {
 			type: Boolean,
@@ -69,7 +86,13 @@ export default {
 				 * metadata:只加载视频的元数据，其中包括视频的持续时间和尺寸等信息。有时，元数据会通过下载几帧视频来加载。
 				 * none:
 				 */
-				preload: "metadata",
+				preload: "metadata"
+			},
+			playerOptions: {
+				// videojs options
+				muted: false,
+				width: 800,
+				playbackRates: [0.7, 1.0, 1.5, 2.0],
 				language: "zh-CN",
 				languages: {
 					"zh-CN": {
@@ -82,39 +105,75 @@ export default {
 						"Non-Fullscreen": "取消全屏",
 						"Current Time": "当前时间",
 						Duration: "持续时间",
-						"Remaining Time": "剩余时间"
+						"Remaining Time": "剩余时间",
+						"Playback Rate": "加速"
 					}
-				}
+				},
+				sources: []
 			}
 		};
 	},
 	mounted() {
-		if (this.videoParams.src) {
-			this.src = this.videoParams.src + "?" + Math.random();
-			this.type = this.videoParams.type || "video/mp4";
-			this.$nextTick(function() {
-				this.loadvideo(1);
-			});
+		// console.log(this.value);
+		// this.setVideo(this.videoParams.src, this.videoParams.type);
+	},
+	computed: {
+		player() {
+			return this.$refs.videoPlayer.player;
 		}
 	},
 	created() {},
 	methods: {
+		setVideo(src, type = "video/mp4") {
+			this.playerOptions.sources = [
+				{
+					src,
+					type
+				}
+			];
+		},
 		cancel() {
 			this.visible = false;
 			this.src = "";
 			this.$emit("input", this.visible);
 		},
-		loadvideo(num) {
-			if (num) {
-				let player = videojs("sixivideo", this.options, () => {
-					videojs.log("视频加载完成");
-					player.on("ended", () => {
-						videojs.log("视频播放完成啦");
-						this.endPlay();
-					});
-				});
-			}
-		}
+		// listen event
+		onPlayerPlay(player) {
+			console.log("player play!", player);
+		},
+		onPlayerPause(player) {
+			console.log("player pause!", player);
+		},
+		// ...player event
+
+		// or listen state event
+		playerStateChanged(playerCurrentState) {
+			console.log("player current update state", playerCurrentState);
+		},
+
+		// player is ready
+		playerReadied(player) {
+			console.log("the player is readied", player);
+			// you can use it to do something...
+			// player.[methods]
+		},
+		onPlayerPlaying(player) {
+			console.log('onPlayerPlaying')
+		},
+		onPlayerTimeupdate(player) {
+			console.log('onPlayerTimeupdate')
+		},
+		onPlayerCanplay(player) {
+			console.log('onPlayerCanplay')
+		},
+		onPlayerLoadeddata(player) {
+			console.log('onPlayerLoadeddata')
+		},
+		onPlayerCanplaythrough(player) {
+			console.log("player pause!", player);
+		},
+		onPlayerEnded() {},
+		onPlayerWaiting() {}
 	},
 	watch: {
 		value: {
@@ -126,13 +185,7 @@ export default {
 		videoParams: {
 			deep: true,
 			handler(val) {
-				if (this.videoParams.src) {
-					this.src = this.videoParams.src;
-					this.type = this.videoParams.type || "video/mp4";
-					this.$nextTick(function() {
-						this.loadvideo();
-					});
-				}
+				this.setVideo(val.src, val.type);
 			}
 		}
 	}
