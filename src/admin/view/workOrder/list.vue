@@ -343,8 +343,8 @@ export default {
 		}
 	},
 	created() {
-		if (this.$router.query.sixiId) {
-			this.params.sixiId = this.$router.query.sixiId;
+		if (this.$route.query.sixiId) {
+			this.params.sixiId = this.$route.query.sixiId;
 		}
 		this.getList();
 	}
