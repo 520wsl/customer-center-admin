@@ -10,11 +10,19 @@
 					</Input>
 				</div>
 				<div class="search-input-item">
-					<Select class="search-col" clearable placeholder="工单类型" v-model="params.workType">
-						<Option v-for="(item,index) in workSheetType" :key="index" :value="item.key">{{item.value}}</Option>
+					<Select class="search-col" placeholder="工单类型" v-model="params.workType">
+						<Option :value="-1">工单类型</Option>
+						<!-- <Option v-for="(item,index) in workSheetType" :key="index" :value="item.key">{{item.value}}</Option> -->
+						<Option
+							v-for="(item,index) in searchWorkSheetType"
+							:key="index"
+							:value="item.key"
+						>{{item.value}}</Option>
 					</Select>
-					<Select class="search-col" clearable placeholder="工单状态" v-model="params.handleType">
-						<Option v-for="(item,index) in statusList" :key="index" :value="item.key">{{item.value}}</Option>
+					<Select class="search-col" placeholder="工单状态" v-model="params.handleType">
+						<Option :value="-1">工单状态</Option>
+						<!-- <Option v-for="(item,index) in statusList" :key="index" :value="item.key">{{item.value}}</Option> -->
+						<Option v-for="(item,index) in searchStatusList" :key="index" :value="item.key">{{item.value}}</Option>
 					</Select>
 				</div>
 				<div class="search-input-item">
@@ -66,6 +74,18 @@ export default {
 	},
 	computed: {
 		...mapState({
+			searchWorkSheetType: state => {
+				console.log(state.workSheet.workSheetType);
+				return [...state.workSheet.workSheetType].filter(item => {
+					return item.key !== 0;
+				});
+			},
+			searchStatusList: state => {
+				console.log(state.workSheet.workSheetHandleType);
+				return [...state.workSheet.workSheetHandleType].filter(item => {
+					return item.key !== 1;
+				});
+			},
 			workSheetType: state => state.workSheet.workSheetType,
 			statusList: state => state.workSheet.workSheetHandleType
 		})
@@ -77,9 +97,9 @@ export default {
 				// 工单编号
 				identifier: "",
 				// 工单类型
-				workType: null,
+				workType: -1,
 				// 工单状态
-				handleType: null,
+				handleType: -1,
 				// 工单创建开始时间
 				startTime: "",
 				// 工单创建结束时间
@@ -98,7 +118,7 @@ export default {
 				pageNum: 1,
 				pageSize: 10,
 				count: 0,
-				sixiId: "sixi1182767681170857983"
+				sixiId: "sixi1182660982372047871"
 			},
 			workOrderList: [],
 			columns: [
@@ -138,15 +158,11 @@ export default {
 					sortable: "custom",
 					key: "startTime",
 					render: (h, params) => {
-						return h(
-							"span",
-							params.row.startTime
-								? formatInitTime(
-										params.row.startTime,
-										"YYYY-MM-DD HH:mm:ss"
-								  )
-								: ""
-						);
+						const format = "YYYY-MM-DD HH:mm:ss";
+						const ele = params.row.startTime
+							? formatInitTime(params.row.startTime, format)
+							: "";
+						return h("span", ele);
 					}
 				},
 				{
@@ -301,14 +317,6 @@ export default {
 		async getList() {
 			const data = {
 				...this.params,
-				workType:
-					this.params.workType == (null || undefined)
-						? -1
-						: this.params.workType,
-				handleType:
-					this.params.handleType == (null || undefined)
-						? -1
-						: this.params.handleType,
 				startTime: this.params.startTime
 					? startTime(this.params.startTime, "x")
 					: "",
@@ -335,6 +343,9 @@ export default {
 		}
 	},
 	created() {
+		if (this.$route.query.sixiId) {
+			this.params.sixiId = this.$route.query.sixiId;
+		}
 		this.getList();
 	}
 };

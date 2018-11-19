@@ -405,6 +405,13 @@ export default {
 			let templateInfo = { ...this.templateInfo[0] };
 			console.log(templateInfo);
 			let dimensionContent = [...this.dimensionContent];
+			if (dimensionContent.length < 1) {
+				this.$Modal.error({
+					title: "保存模板",
+					content: "至少需要添加一个维度"
+				});
+				return;
+			}
 			templateInfo.content = dimensionContent;
 			let res = await addItemTemplateData({ ...templateInfo });
 			if (res.status !== 200) {
@@ -420,7 +427,11 @@ export default {
 				title: "保存模板",
 				content: res.msg
 			});
-			this.getTemplateInfo();
+			// this.getTemplateInfo();
+			this.clostPage();
+			this.$router.push({
+				name: "evaluate-list"
+			});
 		},
 		handleSubmit(name) {
 			this.$refs[name].validate(valid => {
@@ -537,6 +548,7 @@ export default {
 			let itemDimensionData = {};
 			let dimensionData = { ...data };
 			let dimensionContent = [...this.dimensionContent];
+
 			// console.log(dimensionContent);
 
 			switch (dimensionData.type) {
