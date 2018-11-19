@@ -324,7 +324,7 @@ export default {
 				endTime: this.params.endTime
 					? endTime(this.params.endTime, "x")
 					: "",
-				isRead: this.params.handleType ? 1 : -1,
+				isRead: this.params.isRead ? 1 : -1,
 				execute: this.params.execute ? 1 : -1,
 				pageNum: 1,
 				pageSize: 10
