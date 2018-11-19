@@ -56,42 +56,11 @@ export default {
 			visible: this.value,
 			src: "",
 			type: "video/mp4",
-			options: {
-				// 自动播放
-				autoplay: false,
-
-				// 大按钮
-				bigPlayButton: false,
-				controls: true,
-				textTrackDisplay: false,
-				posterImage: true,
-				errorDisplay: false,
-				controlBar: true,
-				/**
-				 * 是否循环播放:true/false
-				 * 参数类型：Boolean
-				 **/
-				loop: false,
-				/**
-				 * 设置默认播放音频：true/false
-				 * 参数类型：Boolean
-				 **/
-				muted: false,
-				/**
-				 * 建议浏览器是否在加载<video>元素时开始下载视频数据。
-				 * 预加载:preload
-				 * 参数类型：String
-				 * 参数值列表：
-				 * auto:立即加载视频（如果浏览器支持它）。一些移动设备将不会预加载视频，以保护用户的带宽/数据使用率。这就是为什么这个值被称为“自动”，而不是更确凿的东西
-				 * metadata:只加载视频的元数据，其中包括视频的持续时间和尺寸等信息。有时，元数据会通过下载几帧视频来加载。
-				 * none:
-				 */
-				preload: "metadata"
-			},
 			playerOptions: {
 				// videojs options
 				muted: false,
-				width: 800,
+				aspectRatio: '16:9',
+				fluid: true,
 				playbackRates: [0.7, 1.0, 1.5, 2.0],
 				language: "zh-CN",
 				languages: {
@@ -124,7 +93,7 @@ export default {
 	},
 	created() {},
 	methods: {
-		setVideo(src, type = "video/mp4") {
+		setVideo(src='', type = "video/mp4") {
 			this.playerOptions.sources = [
 				{
 					src,
@@ -134,7 +103,7 @@ export default {
 		},
 		cancel() {
 			this.visible = false;
-			this.src = "";
+			this.$refs.videoPlayer.player.pause()
 			this.$emit("input", this.visible);
 		},
 		// listen event
