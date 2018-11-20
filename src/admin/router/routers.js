@@ -91,7 +91,7 @@ export default [
 				[],
 				() => r(require("@/admin/view/phone/phone.vue")),
 				"phone"
-			) //登录页面
+			) //手机回显页面
 	},
 	{
 		path: "/",
