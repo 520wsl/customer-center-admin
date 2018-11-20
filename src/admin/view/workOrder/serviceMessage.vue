@@ -146,7 +146,7 @@ export default {
 			}, 120000);
 		},
 		getTalkNewsCountdownTimeStr() {
-			let endTime = formatAddTime(this.countDownTime, "x",4,'m');
+			let endTime = formatAddTime(this.countDownTime, "x");
 			let startTime = formatTime(new Date(), "x");
 			console.log(
 				"[debug]: 当前时间",
