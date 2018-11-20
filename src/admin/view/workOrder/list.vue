@@ -75,13 +75,11 @@ export default {
 	computed: {
 		...mapState({
 			searchWorkSheetType: state => {
-				console.log(state.workSheet.workSheetType);
 				return [...state.workSheet.workSheetType].filter(item => {
 					return item.key !== 0;
 				});
 			},
 			searchStatusList: state => {
-				console.log(state.workSheet.workSheetHandleType);
 				return [...state.workSheet.workSheetHandleType].filter(item => {
 					return item.key !== 1;
 				});
@@ -229,10 +227,9 @@ export default {
 					align: "center",
 					render: (h, params) => {
 						const user = params.row.userVo || {};
-						return h(
-							"span",
-							user.userName + "(" + user.departmentName + ")"
-						);
+						const name = user.userName || '';
+						const departmentName = user.departmentName?"(" + user.departmentName + ")": ''
+						return h("span",name+departmentName);
 					}
 				},
 				{
@@ -247,7 +244,6 @@ export default {
 								},
 								on: {
 									click: () => {
-										console.log(this.$route);
 										this.$router.push({
 											name: "workOrder-info-base",
 											query: {
@@ -269,7 +265,6 @@ export default {
 	methods: {
         ...mapActions(["getSixiId"]),
 		sortChange(column) {
-			console.log(column);
 			// 创建时间升序
 			const key = column.key;
 			const order = column.order;
@@ -325,9 +320,7 @@ export default {
 					? endTime(this.params.endTime, "x")
 					: "",
 				isRead: this.params.isRead ? 1 : -1,
-				execute: this.params.execute ? 1 : -1,
-				pageNum: 1,
-				pageSize: 10
+				execute: this.params.execute ? 1 : -1
 			};
 			let res = await getWorkSheetListData(data);
 			if (res.status !== 200) {
