@@ -202,13 +202,6 @@ export default {
 		},
 		async getPersonalList() {
 			let customerSixiId = this.info.userId;
-			if (customerSixiId) {
-				this.$Modal.error({
-					title: "指派人员",
-					content: "该客户没有对应四喜id"
-				});
-				return;
-			}
 			let res = await getstaffListData({ customerSixiId });
 			console.log(res);
 			if (res.status != 200) {

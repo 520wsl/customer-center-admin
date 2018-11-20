@@ -2,7 +2,7 @@
 	<div>
 		<Card class="md-card">
 			<div slot="title">消息记录</div>
-			<div  class="btn-group flex">
+			<div class="btn-group flex">
 				<div v-if="isHaveUserId && isExectorId" class="flex-left">
 					<Button @click="confirm(1)" class="btn" icon="ios-call" type="success" ghost>拨号</Button>
 					<Button @click="confirm(2)" class="btn" icon="md-settings" type="info" ghost>电话号码采集</Button>
@@ -115,7 +115,7 @@ import {
 	updateItemTalkNewsData
 } from "@/api/admin/workSheet/talkNews";
 import { callPhoneAction } from "@/api/admin/callPhone/callPhone";
-import { mapState, mapMutations,mapActions } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 import { formatTime, formatAddTime } from "@/libs/util/time";
 import { getRelativeTime, getDateDiff, getIntervalTime } from "@/libs/tools";
 import messageList from "_c/admin/message-list";
@@ -134,7 +134,7 @@ export default {
 		},
 		isExectorId() {
 			return this.info.executorId == this.sixiId;
-		},
+		}
 	},
 	methods: {
 		...mapMutations(["setWorkSheetBaseInfo"]),
@@ -215,6 +215,8 @@ export default {
 				title: "客服回复",
 				content: "回复成功"
 			});
+			this.replyParams.content = "";
+			this.remarkParams.customerSixiId = "";
 			this.getTalkNewsList();
 		},
 		// 更新对话记录
@@ -273,8 +275,9 @@ export default {
 			}
 			this.talkNewsList = res.data.list;
 			this.params.count = res.data.count;
-
-			this.getTalkNewsCountdownTime();
+			if (this.info.userId) {
+				this.getTalkNewsCountdownTime();
+			}
 		},
 		async getWorkSheetInfo() {
 			let res = await getWorkSheetInfoData({
@@ -371,7 +374,7 @@ export default {
 	},
 	data() {
 		return {
-			sixiId:"",
+			sixiId: "",
 			setIntervalFunction: "",
 			isShowRemarkModal: false,
 			TalkNewsCountdownTimeFormat: "",
