@@ -48,7 +48,7 @@
                                 </tr>
                                 <tr :key="index" v-if="(item.type == 'checkbox' || item.type == 'radio')  && item.otherAttribute.showType == 'tag'">
                                     <td>
-                                        <Tag type="border" color="primary" v-for="(item2,index2) in item.tagList" :key="index2+item2">{{item2}}</Tag>
+                                        <Tag type="border" color="primary" v-for="(item2,index2) in item.value" :key="index2+item2">{{item2}}</Tag>
                                     </td>
                                 </tr>
                                 <!-- 文本域 -->
