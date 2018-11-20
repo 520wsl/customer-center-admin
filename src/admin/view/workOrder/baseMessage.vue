@@ -327,7 +327,7 @@ export default {
 			workOrderInfo: [],
 			talkNewsList: [],
 			evaluateList: [],
-			workSheetId: 1,
+			workSheetId: 0,
 			info: {
 				cellphone: "",
 				companyVoList: [],
@@ -352,7 +352,9 @@ export default {
 			}
 		};
 	},
-	created() {},
+	created() {
+			this.workSheetId = this.$route.query.workSheetId;
+	},
 	mounted() {
 		this.getWorkSheetInfo();
 		this.getEvaluateInfo();
