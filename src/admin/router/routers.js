@@ -78,6 +78,20 @@ export default [
 				() => r(require("@/admin/view/login/login.vue")),
 				"login"
 			) //登录页面
+    },
+    {
+		path: "/phone",
+		name: "phone",
+		meta: {
+			title: "手机回显页面",
+			hideInMenu: true
+		},
+		component: r =>
+			require.ensure(
+				[],
+				() => r(require("@/admin/view/phone/phone.vue")),
+				"phone"
+			) //登录页面
 	},
 	{
 		path: "/",
