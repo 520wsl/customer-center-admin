@@ -28,7 +28,7 @@
 						href="javascript:;"
 						class="md-card-btn-info"
 					>
-						<Icon type="md-create"></Icon>
+						<Icon type="md-create"></Icon>指派
 					</a>
 					<a
 						v-if="current == 1 && isExectorId"
@@ -67,11 +67,12 @@
 				<div v-if="false">
 					<h3>客服记录</h3>
 					<Input type="textarea">
-						<div class="modal-btn">
-							<Button class="btn" type="primary" @click="subAssign">提交</Button>
-							<Button class="btn" type="default" @click="modal.bool = false">取消</Button>
-						</div>
+						<span></span>
 					</Input>
+				</div>
+				<div class="modal-btn">
+					<Button class="btn" type="primary" @click="subAssign">提交</Button>
+					<Button class="btn" type="default" @click="modal.bool = false">取消</Button>
 				</div>
 			</Card>
 		</Modal>
@@ -191,8 +192,16 @@ export default {
 			this.info = res.data;
 			this.stepsType(res.data);
 		},
-		getPersonalList(customerSixiId) {
-			getstaffListData(customerSixiId).then(res => {
+		getPersonalList() {
+			let customerSixiId = this.info.userId;
+			if (customerSixiId) {
+				this.$Modal.error({
+					title: "指派人员",
+					content: "该客户没有对应四喜id"
+				});
+				return;
+			}
+			getstaffListData({ customerSixiId }).then(res => {
 				console.log(res);
 				if (res.status != 200) {
 					this.$Modal.error({
