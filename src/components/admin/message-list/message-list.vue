@@ -36,7 +36,11 @@
                         <template v-if="item.type == 2">
                             <div class="flex-left item img pic">
                                 <!-- <a class="link" target="_blank" :href="$FILE(item.enclosure)"> -->
-                                <a class="link" @click="setShowImgModalData($FILE(item.enclosure))" href="javascript:;">
+                                <a
+                                    class="link"
+                                    @click="setShowImgModalData($FILE(item.enclosure))"
+                                    href="javascript:;"
+                                >
                                     <img :src="$FILE(item.enclosure)">
                                 </a>
                             </div>
@@ -77,7 +81,7 @@
                             ghost
                         >下载附件</Button>
                         <Button
-                            v-if="item.eventType == 1"
+                            v-if="item.eventType == 1 && isExectorId"
                             @click="editRemarkModal(item)"
                             type="warning"
                             class="btn"
@@ -112,6 +116,7 @@
     </div>
 </template>
 <script>
+import { mapMutations, mapState, mapActions } from "vuex";
 import { updateItemTalkNewsData } from "@/api/admin/workSheet/talkNews";
 import { formatTime } from "@/libs/util/time";
 import { getArrValue } from "@/libs/tools";
@@ -130,7 +135,13 @@ export default {
 		myaudio,
 		myvideo
 	},
+	computed: {
+		isExectorId() {
+			return this.info.executorId == this.sixiId;
+		}
+	},
 	methods: {
+		...mapActions(["getSixiId"]),
 		setShowImgModalData(path) {
 			this.isShowImgModal = true;
 			this.imgPath = path;
@@ -196,6 +207,7 @@ export default {
 	},
 	data() {
 		return {
+			sixiId: "",
 			imgPath: "",
 			isShowImgModal: false,
 			isShowRemarkModal: false,
@@ -216,6 +228,10 @@ export default {
 				remark: ""
 			}
 		};
+	},
+	mounted() {
+		this.getSixiId();
+		this.sixiId = this.$store.state.user.sixiId;
 	}
 };
 </script>

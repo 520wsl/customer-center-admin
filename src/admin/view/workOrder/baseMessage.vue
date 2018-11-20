@@ -141,7 +141,9 @@ export default {
 		setWorkOrderInfo() {
 			let joinStr = "";
 			this.info.userVos.forEach(item => {
-				joinStr += item.userName + "(" + item.departmentName + ")，";
+        if(item){
+          joinStr += item.userName + "(" + item.departmentName + ")，";
+        }
 			});
 			let workOrderInfo = [
 				[
@@ -175,7 +177,7 @@ export default {
 				[
 					{
 						title: "执行人：",
-						value: this.info.executorUser.userName || ""
+						value: this.info.executorUser && this.info.executorUser.userName || ""
 					},
 					{
 						title: "参与者：",
@@ -183,7 +185,7 @@ export default {
 					},
 					{
 						title: "负责人：",
-						value: this.info.leadingUser.userName || ""
+						value: this.info.leadingUser && this.info.leadingUser.userName || ""
 					}
 				]
 			];

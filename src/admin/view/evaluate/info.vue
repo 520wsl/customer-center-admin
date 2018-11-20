@@ -225,8 +225,8 @@ export default {
 									on: {
 										// 0启用，1停用
 										"on-change": type => {
-											let statu = type ? 0:1
-											this.setStatus(statu,params.index)
+											let statu = type ? 0 : 1;
+											this.setStatus(statu, params.index);
 										}
 									}
 								},
@@ -526,7 +526,7 @@ export default {
 				];
 			}
 
-			this.dimensionContent = res.data[0]['content'] || [];
+			this.dimensionContent = (res.data[0] && res.data[0].content) || [];
 		},
 		addDimensionAction() {
 			this.addModelStatu = true;
