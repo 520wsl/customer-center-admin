@@ -275,6 +275,7 @@ export default {
 			}
 			this.talkNewsList = res.data.list;
 			this.params.count = res.data.count;
+			console.log("this.info.userId",this.info.userId)
 			if (this.info.userId) {
 				this.getTalkNewsCountdownTime();
 			}
@@ -292,6 +293,7 @@ export default {
 			}
 			this.setWorkSheetBaseInfo(res.data);
 			this.info = res.data;
+			this.getTalkNewsList();
 		},
 		// 创建对话记录
 		// eventType 事件类型 1：电话沟通 2：发起电话采集请求 3：发起账号密码采集请求
@@ -408,7 +410,6 @@ export default {
 	},
 	mounted() {
 		this.getWorkSheetInfo();
-		this.getTalkNewsList();
 		this.getSixiId();
 		this.sixiId = this.$store.state.user.sixiId;
 	}
