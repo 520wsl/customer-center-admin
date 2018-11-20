@@ -200,7 +200,6 @@ export default {
 		getTagElementByName(route) {
 			this.$nextTick(() => {
 				this.refsTag = this.$refs.tagsPageOpened;
-				console.log("refsTag",  this.$refs);
 
 				this.refsTag.forEach((item, index) => {
 					if (routeEqual(route, item.$attrs["data-route-item"])) {
