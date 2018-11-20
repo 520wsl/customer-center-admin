@@ -146,6 +146,7 @@ export default {
           });
         }
         this.qrData = res.data;
+        this.getInfo();
       });
     },
     getInfo() {
