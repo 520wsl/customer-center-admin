@@ -57,6 +57,9 @@ export default {
     this.dhhm = param.dhhm || "";
     this.cid = param.cid || "";
     this.stime = param.stime || "";
+    if (this.dhhm) {
+      this.getCompanyList(this.dhhm);
+    }
   },
   methods: {
     getObj(str) {
@@ -71,8 +74,8 @@ export default {
       });
       return obj;
     },
-    getCompanyList() {
-      getCustomerbymobileList().then(res => {
+    getCompanyList(mobile) {
+      getCustomerbymobileList(mobile).then(res => {
         if (res.status != 200) {
           return;
         }
