@@ -106,6 +106,7 @@ import { getArrValue } from "@/libs/tools";
 import { getWorkSheetInfoData } from "@/api/admin/workSheet/workSheet";
 import { getEvaluateInfo } from "@/api/admin/evaluate/dimension";
 import messageList from "_c/admin/message-list";
+import { formatTime } from "@/libs/util/time";
 export default {
 	components: {
 		messageList,
@@ -141,9 +142,9 @@ export default {
 		setWorkOrderInfo() {
 			let joinStr = "";
 			this.info.userVos.forEach(item => {
-        if(item){
-          joinStr += item.userName + "(" + item.departmentName + ")，";
-        }
+                if(item){
+                    joinStr += item.userName + "(" + item.departmentName + ")，";
+                }
 			});
 			let workOrderInfo = [
 				[
@@ -163,7 +164,7 @@ export default {
 				[
 					{
 						title: "工单创建时间：",
-						value: this.info.createAt
+						value:  formatTime(this.info.createAt,'YYYY-MM-DD hh:mm:ss')
 					},
 					{
 						title: "工单响应时间(小时)：",
@@ -171,7 +172,7 @@ export default {
 					},
 					{
 						title: "工单持续时间：",
-						value: "暂时没有"
+						value: this.info.durationTime?this.info.durationTime+'h':''
 					}
 				],
 				[

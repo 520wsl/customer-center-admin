@@ -38,7 +38,7 @@
       </div>
       <Table :columns="columns" :data="customList" border="" style="width:500px;"></Table>
     </Card>
-    <Modal v-model="bindModal" title="绑定微信账号" :footer-hide="true" width="400px;">
+    <Modal v-model="bindModal" title="绑定微信账号" :footer-hide="true" width="400px;" @on-cancel='getInfo'>
       <Card>
         <p>请客户用微信扫该二维码绑定，二维码有效期2分钟</p>
         <div class="qr-code">
@@ -146,6 +146,7 @@ export default {
           });
         }
         this.qrData = res.data;
+        this.getInfo();
       });
     },
     getInfo() {
