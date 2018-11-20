@@ -26,7 +26,7 @@ export const getArrValue = (
 	result = "value"
 ) => {
 	let value = "";
-	if (!arr.length || !key) return;
+	if (!arr.length) return;
 
 	arr.map(function(item) {
 		if (item[find] === key) {

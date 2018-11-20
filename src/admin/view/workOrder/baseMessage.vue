@@ -308,7 +308,7 @@ export default {
       //   ]
       // ];
 
-      this.workOrderPersonnel = workOrderPersonnel;
+        this.workOrderPersonnel = workOrderPersonnel;
     },
     // 获取评价详情
     getEvaluateInfo() {
@@ -331,42 +331,42 @@ export default {
     }
   },
   data() {
-    return {
-      workOrderPersonnel: [],
-      cunstomInfo: [],
-      workOrderInfo: [],
-      talkNewsList: [],
-      evaluateList: [],
-      workSheetId: 0,
-      info: {
-        cellphone: "",
-        companyVoList: [],
-        confirmTime: 1542271547000,
-        createAt: 1542250110000,
-        departmentId: null,
-        departmentName: "",
-        evaluateTime: null,
-        executorId: 10,
-        executorName: "",
-        finishTime: null,
-        handleType: 2,
-        id: 8,
-        identifier: "sixiId1182464550969017343", //工单编号
-        leadingName: "",
-        leadingOfficial: 1,
-        participator: "1,10",
-        responseTime: 6.0,
-        title: "微信昵称的工单",
-        userId: "sixiid",
-        workType: 2
-      }
-    };
-  },
-  created() {
-    this.workSheetId = this.$route.query.workSheetId;
-  },
-  mounted() {
-    this.getWorkSheetInfo();
-  }
+		return {
+			workOrderPersonnel: [],
+			cunstomInfo: [],
+			workOrderInfo: [],
+			talkNewsList: [],
+			evaluateList: [],
+			workSheetId: 0,
+			info: {
+				cellphone: "",
+				companyVoList: [],
+				confirmTime: "",
+				createAt: "",
+				departmentId: null,
+				departmentName: "",
+				evaluateTime: null,
+				executorId: 0,
+				executorName: "",
+				finishTime: null,
+				handleType: 0,
+				id: 0,
+				identifier: "", //工单编号
+				leadingName: "",
+				leadingOfficial: 0,
+				participator: "",
+				responseTime: "",
+				title: "",
+				userId: "",
+				workType: 0
+			}
+		};
+	},
+	created() {
+			this.workSheetId = this.$route.query.workSheetId;
+	},
+	mounted() {
+		this.getWorkSheetInfo();
+	}
 };
 </script>

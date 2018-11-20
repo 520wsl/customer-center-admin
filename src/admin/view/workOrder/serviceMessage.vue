@@ -3,7 +3,7 @@
 		<Card class="md-card">
 			<div slot="title">消息记录</div>
 			<div class="btn-group flex">
-				<div class="flex-left">
+				<div v-if="isHaveUserId && isExectorId" class="flex-left">
 					<Button @click="confirm(1)" class="btn" icon="ios-call" type="success" ghost>拨号</Button>
 					<Button @click="confirm(2)" class="btn" icon="md-settings" type="info" ghost>电话号码采集</Button>
 					<Button @click="confirm(3)" class="btn" icon="md-settings" type="info" ghost>账号密码采集</Button>
@@ -32,7 +32,7 @@
 				<Button type="primary" @click="updateItemTalkNews">提交</Button>
 			</div>
 		</Modal>
-		<Card class="md-card message">
+		<Card class="md-card message" v-if="isHaveUserId && isExectorId">
 			<Form>
 				<FormItem label="">
 					<Input
@@ -115,7 +115,7 @@ import {
 	updateItemTalkNewsData
 } from "@/api/admin/workSheet/talkNews";
 import { callPhoneAction } from "@/api/admin/callPhone/callPhone";
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 import { formatTime, formatAddTime } from "@/libs/util/time";
 import { getRelativeTime, getDateDiff, getIntervalTime } from "@/libs/tools";
 import messageList from "_c/admin/message-list";
@@ -125,9 +125,20 @@ export default {
 		messageList,
 		Page
 	},
-	computed: {},
+	computed: {
+		isHaveUserId() {
+			if (this.info.userId) {
+				return true;
+			}
+			return false;
+		},
+		isExectorId() {
+			return this.info.executorId == this.sixiId;
+		}
+	},
 	methods: {
 		...mapMutations(["setWorkSheetBaseInfo"]),
+		...mapActions(["getSixiId"]),
 		getTalkNewsCountdownTimeFormat() {
 			this.getTalkNewsCountdownTimeStr();
 			setInterval(() => {
@@ -204,6 +215,8 @@ export default {
 				title: "客服回复",
 				content: "回复成功"
 			});
+			this.replyParams.content = "";
+			this.remarkParams.customerSixiId = "";
 			this.getTalkNewsList();
 		},
 		// 更新对话记录
@@ -262,8 +275,9 @@ export default {
 			}
 			this.talkNewsList = res.data.list;
 			this.params.count = res.data.count;
-
-			this.getTalkNewsCountdownTime();
+			if (this.info.userId) {
+				this.getTalkNewsCountdownTime();
+			}
 		},
 		async getWorkSheetInfo() {
 			let res = await getWorkSheetInfoData({
@@ -360,6 +374,7 @@ export default {
 	},
 	data() {
 		return {
+			sixiId: "",
 			setIntervalFunction: "",
 			isShowRemarkModal: false,
 			TalkNewsCountdownTimeFormat: "",
@@ -394,6 +409,8 @@ export default {
 	mounted() {
 		this.getWorkSheetInfo();
 		this.getTalkNewsList();
+		this.getSixiId();
+		this.sixiId = this.$store.state.user.sixiId;
 	}
 };
 </script>
