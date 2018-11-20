@@ -40,3 +40,9 @@ export const getstaffListData = customerSixiId => {
     customerSixiId
   });
 };
+// 客户公司列表
+export const getCustomerbymobileList = mobile => {
+    return post("/customer/getcustomerbymobile", {
+        mobile
+    });
+  };
