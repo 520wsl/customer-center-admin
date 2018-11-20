@@ -64,7 +64,7 @@ class HttpRequest {
 	}
 
 	goLogin() {
-		location.href = "/";
+		location.href = "/login";
 	}
 
 	interceptors(instance) {
