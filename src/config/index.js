@@ -23,8 +23,8 @@ export default {
 	/**
 	 * 客户端调起 路径配置
 	 */
-	callPhonePath: "http://172.30.34.107:3366",
+	callPhonePath: "http://127.0.0.1:3366",
     attachmentPath:"http://wechat-base-images.oss-cn-hangzhou.aliyuncs.com/",
-    qywxRedirect_uri: "http://work.sixi.com/login"
+    qywxRedirectUri: "http://work.sixi.com/login"
 
 };
