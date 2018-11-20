@@ -25,6 +25,6 @@ export default {
 	 */
 	callPhonePath: "http://172.30.34.107:3366",
     attachmentPath:"http://wechat-base-images.oss-cn-hangzhou.aliyuncs.com/",
-    qywxRedirect_uri: "http://work.sixi.com/login"
+    qywxRedirectUri: "http://work.sixi.com/login"
 
 };

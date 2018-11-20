@@ -39,7 +39,7 @@ export default {
       id: "wx_reg",
       appid: "ww7dc5f02540a109d3",
       agentid: "1000003",
-      redirect_uri: this.$config.qywxRedirect_uri,
+      redirect_uri: this.$config.qywxRedirectUri,
       state: "123"
     });
     if (this.$route.query.code) {
