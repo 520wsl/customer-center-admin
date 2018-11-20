@@ -146,16 +146,16 @@ export default {
 			}, 120000);
 		},
 		getTalkNewsCountdownTimeStr() {
-			let endTime = formatAddTime(this.countDownTime, "x");
+			let endTime = formatAddTime(this.countDownTime, "x",4,'m');
 			let startTime = formatTime(new Date(), "x");
-			// console.log(
-			// 	"[debug]: 当前时间",
-			// 	formatTime(new Date(), "YYYY-MM-DD HH:mm:ss")
-			// );
-			// console.log(
-			// 	"[debug]: 过期时间",
-			// 	formatAddTime(this.countDownTime, "YYYY-MM-DD HH:mm:ss")
-			// );
+			console.log(
+				"[debug]: 当前时间",
+				formatTime(new Date(), "YYYY-MM-DD HH:mm:ss")
+			);
+			console.log(
+				"[debug]: 过期时间",
+				formatAddTime(this.countDownTime, "YYYY-MM-DD HH:mm:ss")
+			);
 			if (!this.countDownTime || endTime < startTime) {
 				return "";
 			}
