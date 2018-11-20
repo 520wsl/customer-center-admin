@@ -29,20 +29,20 @@ export const getCustomerInfoData = ({ sixiId }) => {
   });
 };
 // 微信解绑
-export const setWechatUntied = openId => {
+export const setWechatUntied = ({ openId }) => {
   return post("/wechat/untied", {
     openId
   });
 };
 // 客户指派人员列表
-export const getstaffListData = customerSixiId => {
+export const getstaffListData = ({ customerSixiId }) => {
   return post("/staff/list", {
     customerSixiId
   });
 };
 // 客户公司列表
-export const getCustomerbymobileList = mobile => {
-    return post("/customer/getcustomerbymobile", {
-        mobile
-    });
-  };
+export const getCustomerbymobileList = ({ mobile }) => {
+  return post("/customer/getcustomerbymobile", {
+    mobile
+  });
+};
