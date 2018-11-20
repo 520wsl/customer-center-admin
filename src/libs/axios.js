@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 15:32:18
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-20 15:32:37
+ * @Last Modified time: 2018-11-20 16:25:09
  * @explanatory:  axios 接口封装
  */
 import axios from "axios";
@@ -45,6 +45,32 @@ class HttpRequest {
 				);
 				alert(
 					"服务器错误500：请截图给管理员，以便快捷修复错误！" +
+						" \n请求参数：\n===>" +
+						params +
+						"\nurl: \n===>" +
+						url +
+						"\n错误信息：\n===>" +
+						msg
+				);
+				break;
+			case 503:
+				console.log(
+					"-------------------【错误拦截】------------------------------"
+				);
+				console.error(
+					"服务器错误503：请截图给管理员，以便快捷修复错误！" +
+						" \n请求参数：\n===>" +
+						params +
+						"    \nurl: \n===>" +
+						url +
+						"\n错误信息：\n===>" +
+						msg
+				);
+				console.log(
+					"-------------------【错误拦截】------------------------------"
+				);
+				alert(
+					"服务器错误503：请截图给管理员，以便快捷修复错误！" +
 						" \n请求参数：\n===>" +
 						params +
 						"\nurl: \n===>" +

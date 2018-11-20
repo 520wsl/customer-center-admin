@@ -331,24 +331,24 @@ export default {
 			info: {
 				cellphone: "",
 				companyVoList: [],
-				confirmTime: 1542271547000,
-				createAt: 1542250110000,
+				confirmTime: "",
+				createAt: "",
 				departmentId: null,
 				departmentName: "",
 				evaluateTime: null,
-				executorId: 10,
+				executorId: 0,
 				executorName: "",
 				finishTime: null,
-				handleType: 2,
-				id: 8,
-				identifier: "sixiId1182464550969017343", //工单编号
+				handleType: 0,
+				id: 0,
+				identifier: "", //工单编号
 				leadingName: "",
-				leadingOfficial: 1,
-				participator: "1,10",
-				responseTime: 6.0,
-				title: "微信昵称的工单",
-				userId: "sixiid",
-				workType: 2
+				leadingOfficial: 0,
+				participator: "",
+				responseTime: "",
+				title: "",
+				userId: "",
+				workType: 0
 			}
 		};
 	},

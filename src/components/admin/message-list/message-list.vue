@@ -2,8 +2,8 @@
     <div>
         <myaudio :src="audioModelPath" v-model="isShowAudioModel"></myaudio>
         <myvideo :videoParams="videoParams" v-model="isShowVideoModel"></myvideo>
-        <template v-for="(item,index) in data">
-            <Card :key="'message_'+index" class="md-card message">
+        <template v-for="item in data">
+            <Card :key="'message_'+item.id" class="md-card message">
                 <div class="flex message-bottom">
                     <div class="flex-left">
                         <span>{{getMessageTitle(item.sign,item.userVo)}}</span>

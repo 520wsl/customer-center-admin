@@ -12,10 +12,10 @@
 		</Card>
 		<Card class="md-card">
 			<div slot="title">当前工单状态：{{getWorkSheetTypeValue(showWorkSheetType)}}</div>
-			<div slot="extra">
+			<div slot="extra" v-if="isHaveUserId">
 				<div>
 					<a
-						v-if="current == 0"
+						v-if="current == 0 && isExectorId"
 						@click="setWorkSheetProcessing(2)"
 						href="javascript:;"
 						class="md-card-btn-warning"
@@ -24,7 +24,7 @@
 					</a>
 					<a
 						v-if="current == 1 && isExectorId"
-						@click="modal.bool = true"
+						@click="assignPersonnel"
 						href="javascript:;"
 						class="md-card-btn-info"
 					>
@@ -103,11 +103,21 @@ export default {
 		},
 		isExectorId() {
 			return this.info.executorId == this.sixiId;
+		},
+		isHaveUserId() {
+			if (this.info.userId) {
+				return true;
+			}
+			return false;
 		}
 	},
 	methods: {
 		...mapMutations(["setWorkSheetBaseInfo"]),
 		...mapActions(["getSixiId"]),
+		assignPersonnel() {
+			this.modal.bool = true;
+			this.getPersonalList();
+		},
 		subAssign() {
 			let params = {
 				workSheetId: this.info.id,
@@ -178,7 +188,6 @@ export default {
 			let res = await getWorkSheetInfoData({
 				workSheetId: this.workSheetId
 			});
-			console.log("getWorkSheetInfo", res);
 			if (res.status !== 200) {
 				console.error("getWorkSheetInfo", res.msg);
 				this.$Modal.error({
@@ -187,12 +196,11 @@ export default {
 				});
 				return;
 			}
-			this.getPersonalList(res.data.userId);
-			this.setWorkSheetBaseInfo(res.data);
 			this.info = res.data;
 			this.stepsType(res.data);
+			this.setWorkSheetBaseInfo(res.data);
 		},
-		getPersonalList() {
+		async getPersonalList() {
 			let customerSixiId = this.info.userId;
 			if (customerSixiId) {
 				this.$Modal.error({
@@ -201,17 +209,16 @@ export default {
 				});
 				return;
 			}
-			getstaffListData({ customerSixiId }).then(res => {
-				console.log(res);
-				if (res.status != 200) {
-					this.$Modal.error({
-						title: "指派人员列表",
-						content: res.msg
-					});
-					return;
-				}
-				this.modal.personList = res.data || [];
-			});
+			let res = await getstaffListData({ customerSixiId });
+			console.log(res);
+			if (res.status != 200) {
+				this.$Modal.error({
+					title: "指派人员列表",
+					content: res.msg
+				});
+				return;
+			}
+			this.modal.personList = res.data || [];
 		},
 		stepsType(data) {
 			// let handleType = this.$store.state.workSheet.workSheetBaseInfo
