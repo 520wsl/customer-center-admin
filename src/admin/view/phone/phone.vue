@@ -1,21 +1,6 @@
 <template>
   <div class="phone">
     <img :src="$CDN('/callBackBg.png')" class="bg" alt="">
-    <!-- <h1>
-      base64:{{base64}}
-    </h1>
-    <h1>
-      account:{{account}}
-    </h1>
-    <h1>
-      dhhm:{{dhhm}}
-    </h1>
-    <h1>
-      cid:{{cid}}
-    </h1>
-    <h1>
-      stime:{{stime}}
-    </h1> -->
     <div class="company">
         <p v-for="(item,index) in companyList" :key="index">{{item.name}}</p>
     </div>
@@ -79,8 +64,12 @@ export default {
         if (res.status != 200) {
           return;
         }
-        this.companyList = res.data.companyVos || [];
-        this.name = res.data.name || "暂无此用户";
+        if (res.data != null) {
+          this.companyList = res.data.companyVos ? res.data.companyVos : [];
+          this.name = res.data.name || "暂无此客户";
+        } else {
+          this.name = "暂无此客户";
+        }
       });
     }
   }

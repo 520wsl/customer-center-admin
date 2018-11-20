@@ -164,7 +164,7 @@ export default {
 				[
 					{
 						title: "工单创建时间：",
-						value:  formatTime(this.info.createAt,'YYYY-MM-DD hh:mm:ss')
+						value:  formatTime(this.info.createAt,'YYYY-MM-DD HH:mm:ss')
 					},
 					{
 						title: "工单响应时间(小时)：",
