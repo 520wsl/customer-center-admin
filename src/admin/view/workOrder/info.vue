@@ -12,8 +12,8 @@
 		</Card>
 		<Card class="md-card">
 			<div slot="title">当前工单状态：{{getWorkSheetTypeValue(showWorkSheetType)}}</div>
-			<div slot="extra" v-if="isHaveUserId">
-				<div>
+			<div slot="extra">
+				<div  v-if="isHaveUserId">
 					<a
 						v-if="current == 0 && isExectorId"
 						@click="setWorkSheetProcessing(2)"
