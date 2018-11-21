@@ -21,7 +21,7 @@ export default {
             account: "",
             dhhm: "",
             cid: "",
-            base64: "",
+            base64Code: "",
             stime: "",
             companyList: [],
             name: ""
@@ -29,15 +29,15 @@ export default {
     },
     components: {},
     created() {
-        this.base64 = this.$route.query.param1;
-        if (!this.base64) {
+        this.base64Code = this.$route.query.param1;
+        if (!this.base64Code) {
             return;
         }
-        console.log(this.base64);
-        console.log(Base64.decode(this.base64));
-        let param = this.getObj(Base64.decode(this.base64));
+        console.log("base64Code:" + this.base64Code);
+        console.log("base64Decode:" + Base64.decode(this.base64Code));
+        let param = this.getObj(Base64.decode(this.base64Code));
         // let param = this.base64decode(this.$route.query.param1);
-        console.log(param);
+        console.log("param:" + param);
         this.account = param.account || "";
         this.dhhm = param.dhhm || "";
         this.cid = param.cid || "";
