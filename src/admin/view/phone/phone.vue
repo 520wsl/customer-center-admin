@@ -4,10 +4,9 @@
         <div class="company">
             <p v-for="(item,index) in companyList" :key="index">{{item.name}}</p>
         </div>
-
         <div class="userName">
             <h3>{{name}}</h3>
-            <p>{{dhhm}}</p>
+            <p>{{showDhhm}}</p>
             <img :src="$CDN('/callBackNotice.png')" alt="">
         </div>
     </div>
@@ -18,13 +17,16 @@ let Base64 = require("js-base64").Base64;
 export default {
     data() {
         return {
-            account: "",
-            dhhm: "",
-            cid: "",
+            params: {
+                account: "",
+                dhhm: "",
+                cid: "",
+                stime: ""
+            },
             base64Code: "",
-            stime: "",
             companyList: [],
-            name: ""
+            name: "",
+            showDhhm: ''
         };
     },
     components: {},
@@ -36,15 +38,24 @@ export default {
         console.log("base64Code:" + this.base64Code);
         console.log("base64Decode:" + Base64.decode(this.base64Code));
         let param = this.getObj(Base64.decode(this.base64Code));
-        // let param = this.base64decode(this.$route.query.param1);
-        console.log("param:" + param);
-        this.account = param.account || "";
-        this.dhhm = param.dhhm || "";
-        this.cid = param.cid || "";
-        this.stime = param.stime || "";
-        if (this.dhhm) {
-            this.getCompanyList(this.dhhm);
+        console.log(param);
+        this.params = param
+        let provincePhone = this.isProvince(this.params.dhhm)
+        console.log(provincePhone)
+        switch (provincePhone) {
+            case 1:
+                this.getCompanyList(this.params.dhhm);
+                break
+            case 2:
+                this.getCompanyList(this.params.dhhm.slice(1));
+                break;
+            default:
+                this.name = '此电话号码异常';
+                break
         }
+        this.showDhhm = this.params.dhhm.slice(0, this.params.dhhm.length - 8) + "****" + this.params.dhhm.slice(-4)
+        // this.showDhhm = this.params.dhhm.splice(-8, -4, "****")
+        // console.log(this.params.dhhm.replace(3, 7, "****"), this.params.dhhm)
     },
     methods: {
         getObj(str) {
@@ -58,6 +69,20 @@ export default {
                 obj[item[0]] = item[1];
             });
             return obj;
+        },
+        isProvince(phoneNum) {
+            let provincePhoneReg = /^01[2-9]\d{9}$/;
+            let normalPhoneReg = /^1[2-9]\d{9}$/;
+            if (!phoneNum) {
+                return;
+            }
+            if (normalPhoneReg.test(phoneNum)) {
+                return 1;
+            }
+            if (provincePhoneReg.test(phoneNum)) {
+                return 2;
+            }
+            return 3;
         },
         getCompanyList(mobile) {
             getCustomerbymobileList({ mobile }).then(res => {
@@ -121,6 +146,6 @@ export default {
   position: absolute;
   float: left;
   top: 43px;
-  left: -47px;
+  right: 147px;
 }
 </style>
