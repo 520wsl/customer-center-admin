@@ -181,13 +181,13 @@ export default {
 						title: "工单响应时间(小时)：",
 						value: this.info.responseTime
 							? this.info.responseTime + "h"
-							: ""
+							: "0h"
 					},
 					{
 						title: "工单持续时间(小时)：",
 						value: this.info.durationTime
 							? this.info.durationTime + "h"
-							: ""
+							: "0h"
 					}
 				],
 				[
@@ -216,13 +216,12 @@ export default {
 		},
 		// 设置 客户信息
 		setCunstomInfo() {
+            let phone = this.info.workerOrderDetailVo ? this.info.workerOrderDetailVo.customerVo.mobile : ""
 			let cunstomInfo = [
 				[
 					{
 						title: "用户手机号码：",
-						value: this.info.workerOrderDetailVo
-							? this.info.workerOrderDetailVo.customerVo.mobile
-							: ""
+						value: phone.slice(0, 3) + "****" + phone.slice(-4)
 					}
 				]
 			];
