@@ -102,7 +102,9 @@ export default {
 			return this.$store.state.workSheet.workSheetBaseInfo.handleType;
 		},
 		isExectorId() {
-			return this.info.executorId == this.sixiId;
+			let executorId = this.$store.state.workSheet.workSheetBaseInfo
+				.executorId;
+			return executorId == this.sixiId;
 		},
 		isHaveUserId() {
 			if (this.info.userId) {

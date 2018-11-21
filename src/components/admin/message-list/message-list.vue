@@ -137,7 +137,9 @@ export default {
 	},
 	computed: {
 		isExectorId() {
-			return this.info.executorId == this.sixiId;
+			let executorId = this.$store.state.workSheet.workSheetBaseInfo
+				.executorId;
+			return executorId == this.sixiId;
 		}
 	},
 	methods: {

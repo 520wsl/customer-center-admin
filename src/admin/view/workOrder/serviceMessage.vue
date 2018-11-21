@@ -133,7 +133,9 @@ export default {
 			return false;
 		},
 		isExectorId() {
-			return this.info.executorId == this.sixiId;
+				let executorId = this.$store.state.workSheet.workSheetBaseInfo
+				.executorId;
+			return executorId == this.sixiId;
 		}
 	},
 	methods: {
@@ -293,6 +295,7 @@ export default {
 			}
 			this.setWorkSheetBaseInfo(res.data);
 			this.info = res.data;
+			console.log(this.info)
 			this.getTalkNewsList();
 		},
 		// 创建对话记录
