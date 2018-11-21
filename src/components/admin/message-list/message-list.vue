@@ -20,7 +20,7 @@
                 <div
                     class="message-counter"
                     v-if="item.eventType == 1 && item.remark"
-                >【 {{item.remark}} 】</div>
+                >【 备注 】  {{item.remark}} </div>
                 <!-- 链接 -->
                 <div class="message-counter" v-if="item.type == 6">
                     【
