@@ -4,7 +4,14 @@
 			<div slot="title">消息记录</div>
 			<div class="btn-group flex">
 				<div v-if="isHaveUserId && isExectorId" class="flex-left">
-					<Button @click="confirm(1)" class="btn" icon="ios-call" type="success" ghost>拨号</Button>
+					<Button
+						v-if="info.workerOrderDetailVo.customerVo.mobile"
+						@click="confirm(1)"
+						class="btn"
+						icon="ios-call"
+						type="success"
+						ghost
+					>拨号</Button>
 					<Button @click="confirm(2)" class="btn" icon="md-settings" type="info" ghost>电话号码采集</Button>
 					<Button @click="confirm(3)" class="btn" icon="md-settings" type="info" ghost>账号密码采集</Button>
 				</div>
@@ -133,7 +140,7 @@ export default {
 			return false;
 		},
 		isExectorId() {
-				let executorId = this.$store.state.workSheet.workSheetBaseInfo
+			let executorId = this.$store.state.workSheet.workSheetBaseInfo
 				.executorId;
 			return executorId == this.sixiId;
 		}
@@ -277,7 +284,7 @@ export default {
 			}
 			this.talkNewsList = res.data.list;
 			this.params.count = res.data.count;
-			console.log("this.info.userId",this.info.userId)
+			console.log("this.info.userId", this.info.userId);
 			if (this.info.userId) {
 				this.getTalkNewsCountdownTime();
 			}
@@ -295,7 +302,7 @@ export default {
 			}
 			this.setWorkSheetBaseInfo(res.data);
 			this.info = res.data;
-			console.log(this.info)
+			console.log(this.info);
 			this.getTalkNewsList();
 		},
 		// 创建对话记录
@@ -307,8 +314,12 @@ export default {
 				workSheetId: this.info.id,
 				eventType
 			};
-			let cellphone = this.info.cellphone;
-			if (eventType == 1 && !cellphone) {
+			let mobile =
+				this.info &&
+				this.info.workerOrderDetailVo &&
+				this.info.workerOrderDetailVo.customerVo &&
+				this.info.workerOrderDetailVo.customerVo.mobile;
+			if (eventType == 1 && !mobile) {
 				setTimeout(() => {
 					this.$Modal.error({
 						title: title,
@@ -328,7 +339,7 @@ export default {
 				return;
 			}
 			if (eventType == 1) {
-				this.callPhone(cellphone, res.data.id);
+				this.callPhone(mobile, res.data.id);
 			} else {
 				setTimeout(() => {
 					this.$Modal.success({
