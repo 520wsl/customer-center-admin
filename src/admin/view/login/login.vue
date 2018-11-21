@@ -16,7 +16,7 @@
 import LoginForm from "_c/admin/login-form";
 import { mapActions } from "vuex";
 // const { mapActions } = createNamespacedHelpers("user");
-import { sentLoginCodeData } from "@/api/admin/login/login";
+import { sentLoginCodeData } from "@/api/admin/user/user";
 import "./index.js";
 export default {
   components: {
@@ -50,6 +50,11 @@ export default {
             content: res.mag
           });
         }
+         this.getUserInfo().then(res => {
+          this.$router.push({
+            name: this.$config.homeName
+          });
+        });
         this.updatedSixiId({ sixiId: res.data });
         this.$router.push({
           name: "custom-list"

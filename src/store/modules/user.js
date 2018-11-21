@@ -1,11 +1,11 @@
-import { login, logout, getUserInfo } from "@/api/admin/user";
+import { login, logout, getUserInfo } from "@/api/admin/user/user";
 import { setToken, getToken } from "@/libs/util";
 import { setStore , getStore } from "@/libs/util/storeage";
 /*
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-16 08:48:52
+ * @Last Modified time: 2018-11-21 11:47:48
  * @explanatory:  store demo
  */
 export default {
@@ -27,6 +27,7 @@ export default {
 			state.userId = id;
         },
         setSixiId(state, id) {
+			setStore(state.storeageKey , id );
 			state.sixiId = id;
 		},
 		setUserName(state, name) {
@@ -48,35 +49,34 @@ export default {
 			commit("setUserName", { a: 1, b: 2 });
 		},
 		// 登录
-		handleLogin({ commit }, { userName, password, type }) {
-			userName = userName.trim();
-			return new Promise((resolve, reject) => {
-				login({
-					userName,
-					password,
-					type
-				})
-					.then(res => {
-						if (!res.status) {
-							console.error("[debug]:setToken", userName);
-							console.error("[debug]:handleLogin", res);
-							return;
-						}
-						commit("setToken", userName);
-						resolve();
-					})
-					.catch(err => {
-						reject(err);
-					});
-			});
-		},
+		// handleLogin({ commit }, { userName, password, type }) {
+		// 	userName = userName.trim();
+		// 	return new Promise((resolve, reject) => {
+		// 		login({
+		// 			userName,
+		// 			password,
+		// 			type
+		// 		})
+		// 			.then(res => {
+		// 				if (!res.status) {
+		// 					console.error("[debug]:setToken", userName);
+		// 					console.error("[debug]:handleLogin", res);
+		// 					return;
+		// 				}
+		// 				commit("setToken", userName);
+		// 				resolve();
+		// 			})
+		// 			.catch(err => {
+		// 				reject(err);
+		// 			});
+		// 	});
+		// },
 		// 退出登录
 		handleLogOut({ state, commit }) {
 			return new Promise((resolve, reject) => {
 				logout()
 					.then(() => {
-						commit("setToken", "");
-						commit("setAccess", []);
+						commit('setSixiId',"");      
 						resolve();
 					})
 					.catch(err => {
@@ -98,16 +98,17 @@ export default {
 								console.error("[debug]:getUserInfo", res);
 								return;
 							}
+							console.log(res)
 							const data = res.data;
-							console.log("getUserInfo", res.data);
-							commit("setAvator", data.image_url);
-							commit(
-								"setUserName",
-								data.nickname || data.username || data.phone
-							);
-							commit("setUserId", data.id);
-							commit("setAccess", data.permissions);
-							commit("setHasGetInfo", true);
+							// console.log("getUserInfo", res.data);
+							// commit("setAvator", data.image_url);
+							// commit(
+							// 	"setUserName",
+							// 	data.nickname || data.username || data.phone
+							// );
+							// commit("setUserId", data.id);
+							// commit("setAccess", data.permissions);
+							// commit("setHasGetInfo", true);
 							resolve(data);
 						})
 						.catch(err => {
@@ -120,7 +121,6 @@ export default {
         },
         // 更新四喜Id
         updatedSixiId ({ state, commit },{ sixiId }) {
-            setStore(state.storeageKey , sixiId );
             commit('setSixiId',sixiId);       
         },
         getSixiId ({ state, commit }) {
