@@ -28,12 +28,12 @@
                         <DatePicker class="search-input" v-model="params.endTime" format="yyyy-MM-dd" type="date"></DatePicker>
                     </div>
                 </div>
-                <div class="search-input-item">
+                <!-- <div class="search-input-item">
                     <span>用户手机号码：</span>
                     <Input class="search-input" v-model="params.telephone" placeholder="请输入手机号">
                     <span></span>
                     </Input>
-                </div>
+                </div> -->
                 <div class="search-input-item">
                     <Checkbox v-model="params.isRead">新消息</Checkbox>
                     <Checkbox v-model="params.execute">我执行的</Checkbox>
@@ -129,11 +129,11 @@ export default {
                         }
                     }
                 },
-                {
-                    title: "用户手机",
-                    align: "center",
-                    key: "cellphone"
-                },
+                // {
+                //     title: "用户手机",
+                //     align: "center",
+                //     key: "cellphone"
+                // },
                 {
                     title: "客户昵称",
                     align: "center",

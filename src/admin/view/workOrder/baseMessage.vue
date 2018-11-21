@@ -180,9 +180,11 @@ export default {
 					{
 						title: "工单响应时间(小时)：",
 						value: this.info.responseTime
+							? this.info.responseTime + "h"
+							: ""
 					},
 					{
-						title: "工单持续时间：",
+						title: "工单持续时间(小时)：",
 						value: this.info.durationTime
 							? this.info.durationTime + "h"
 							: ""
