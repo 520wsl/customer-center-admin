@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-20 23:37:22
+ * @Last Modified time: 2018-11-21 14:31:18
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -266,5 +266,74 @@ export default [
 				]
 			}
 		]
-	}
+	},
+	{
+		path: "/wx/workOrder",
+		name: "/wx/workOrder",
+		meta: {
+			// showAlways: true,
+			icon: "ios-stats",
+			title: "工单"
+		},
+		component: parentView,
+		children: [
+			{
+				path: "list",
+				name: "wx-workOrder-list",
+				meta: {
+					icon: "ios-stats",
+					title: "工单列表"
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/workOrder/list")
+					)
+			},
+			{
+				path: "info",
+				name: "wx-workOrder-info",
+				meta: {
+					hideInMenu: true,
+					icon: "ios-stats",
+					title: "工单详情",
+					notCache: true
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/workOrder/info")
+					),
+				children: [
+					{
+						path: "base",
+						name: "wx-workOrder-info-base",
+						meta: {
+							hideInMenu: true,
+							icon: "ios-stats",
+							title: "工单详情基本信息",
+							notCache: true
+						},
+						component: r =>
+							require.ensure([], () =>
+								require("@/admin/view/workOrder/baseMessage")
+							)
+					},
+					{
+						path: "service",
+						name: "wx-workOrder-info-service",
+						meta: {
+							hideInMenu: true,
+							icon: "ios-stats",
+							title:"工单详情服务信息",
+							notCache: true
+						},
+						component: r =>
+							require.ensure([], () =>
+								require("@/admin/view/workOrder/serviceMessage")
+							)
+					}
+				]
+			}
+		]
+	},
+	
 ];
