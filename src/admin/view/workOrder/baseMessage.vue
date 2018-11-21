@@ -221,7 +221,7 @@ export default {
 				[
 					{
 						title: "用户手机号码：",
-						value: phone.slice(0, 3) + "****" + phone.slice(-4)
+						value: phone?phone.slice(0, 3) + "****" + phone.slice(-4):""
 					}
 				]
 			];
