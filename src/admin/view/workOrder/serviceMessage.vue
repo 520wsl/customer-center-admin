@@ -318,7 +318,7 @@ export default {
 				this.info &&
 				this.info.workerOrderDetailVo &&
 				this.info.workerOrderDetailVo.customerVo &&
-				this.info.workerOrderDetailVo.customerVo.mobile;
+				this.info.workerOrderDetailVo.customerVo.mobile || "";
 			if (eventType == 1 && !mobile) {
 				setTimeout(() => {
 					this.$Modal.error({
