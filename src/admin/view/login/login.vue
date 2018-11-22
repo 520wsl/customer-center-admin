@@ -16,7 +16,7 @@
 import LoginForm from "_c/admin/login-form";
 import { mapActions } from "vuex";
 import { sentLoginCodeData } from "@/api/admin/user/user";
-import "./index.js";
+import "_js/enterpriseWeChat/wwLogin-1.0.0.js";
 export default {
 	components: {
 		LoginForm

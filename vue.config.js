@@ -13,26 +13,30 @@ module.exports = {
 		proxy: {
 			// "/api/work-order": {
 			// 	// 卢坤鹏
-			// 	target: "http://172.30.34.241:8202/",
+			// 	// target: "http://172.30.34.241:8202/",
 			// 	// 刘英楠
-			// 	// target: "http://172.30.34.109:8202/",
+			// 	target: "http://172.30.34.109:8202/",
 			// 	changeOrigin: true,
 			// 	pathRewrite: {
 			// 		"^/api/work-order": ""
 			// 	}
 			// },
 			// "/api/evaluate": {
-			// 	target: "http://172.30.34.78:8201/",
+			// 	// target: "http://172.30.34.78:8201/",
+			// 	// 刘英楠
+			// 	target: "http://172.30.34.109:8202/",
 			// 	changeOrigin: true,
 			// 	pathRewrite: {
 			// 		"^/api/evaluate": ""
 			// 	}
 			// },
 			// "/api/customer": {
-			// 	target: "http://172.30.34.13:8080/",
+			// 	// target: "http://172.30.34.13:8080/",
+			// 	// 刘英楠
+			// 	target: "http://172.30.34.109:8202/",
 			// 	changeOrigin: true,
 			// 	pathRewrite: {
-			// 		"^/api/customer": "/customer"
+			// 		"^/api/customer": ""
 			// 	}
 			// },
 			// "/api/qr": {
@@ -48,7 +52,7 @@ module.exports = {
 			// 	pathRewrite: {
 			// 		"^/api": ""
 			// 	}
-			// },
+			// }
 			"/api": {
 				target: "http://test.base.internal.sixi.com",
 				changeOrigin: true,
@@ -63,7 +67,8 @@ module.exports = {
 	chainWebpack: config => {
 		config.resolve.alias
 			.set("@", resolve("src")) // key,value自行定义，比如.set('@@', resolve('src/components'))
-			.set("_c", resolve("src/components"));
+			.set("_c", resolve("src/components"))
+			.set("_js", resolve("src/assets/js"));
 	},
 	// 打包时不生成.map文件
 	productionSourceMap: false,
