@@ -54,6 +54,8 @@ export default {
 				});
 				return;
 			}
+
+			this.skipToDefaultPage();
 		},
 		// 登录成功后 跳到默认页面
 		skipToDefaultPage(name) {
