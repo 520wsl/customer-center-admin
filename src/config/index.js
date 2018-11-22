@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:13:25
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-19 09:30:19
+ * @Last Modified time: 2018-11-22 10:08:29
  * @explanatory:  config
  */
 export default {
@@ -24,7 +24,12 @@ export default {
 	 * 客户端调起 路径配置
 	 */
 	callPhonePath: "http://127.0.0.1:3366",
-    attachmentPath:"http://wechat-base-images.oss-cn-hangzhou.aliyuncs.com/",
-    qywxRedirectUri: "http://work.sixi.com/login"
-
+	attachmentPath: "http://wechat-base-images.oss-cn-hangzhou.aliyuncs.com/",
+	enterpriseWeChatConfig: {
+		id: "wx_reg",
+		appid: "ww7dc5f02540a109d3",
+		agentid: "1000003",
+		redirect_uri: "http://work.sixi.com/login",
+		state: "123"
+	}
 };

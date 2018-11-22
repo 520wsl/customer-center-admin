@@ -1,11 +1,11 @@
-import { login, logout, getUserInfo } from "@/api/admin/user/user";
+import { login, logout, getUserInfoData } from "@/api/admin/user/user";
 import { setToken, getToken } from "@/libs/util";
 import { setStore , getStore } from "@/libs/util/storeage";
 /*
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-21 11:47:48
+ * @Last Modified time: 2018-11-22 10:35:22
  * @explanatory:  store demo
  */
 export default {
@@ -92,15 +92,15 @@ export default {
 		getUserInfo({ state, commit }) {
 			return new Promise((resolve, reject) => {
 				try {
-					getUserInfo()
+					getUserInfoData()
 						.then(res => {
 							if (!res.status) {
-								console.error("[debug]:getUserInfo", res);
+								console.error("[debug]:getUserInfoData", res);
 								return;
 							}
 							console.log(res)
 							const data = res.data;
-							// console.log("getUserInfo", res.data);
+							// console.log("getUserInfoData", res.data);
 							// commit("setAvator", data.image_url);
 							// commit(
 							// 	"setUserName",

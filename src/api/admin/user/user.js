@@ -23,7 +23,7 @@ export const sentLoginCodeData = ({ code }) => {
 // 	return api.post("/auth/login", data);
 // };
 
-export const getUserInfo = () => {
+export const getUserInfoData = () => {
 	return post("/user/info");
 };
 
