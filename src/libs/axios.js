@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 15:32:18
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-20 16:25:09
+ * @Last Modified time: 2018-11-22 16:03:22
  * @explanatory:  axios 接口封装
  */
 import axios from "axios";
@@ -111,21 +111,11 @@ class HttpRequest {
 				console.log(
 					"-------------------【错误拦截】------------------------------"
 				);
-				console.error(
-					"未登录或登陆超时 401：请重新登陆！  \nurl:" +
-						url +
-						"\n错误信息：" +
-						msg
-				);
+				console.error("未登录或登陆超时 401：请重新登陆");
 				console.log(
 					"-------------------【错误拦截】------------------------------"
 				);
-				alert(
-					"未登录或登陆超时 401：请重新登陆！  \nurl:" +
-						url +
-						"\n错误信息：" +
-						msg
-				);
+				alert("未登录或登陆超时 401：请重新登陆");
 				this.goLogin();
 				break;
 
@@ -135,7 +125,7 @@ class HttpRequest {
 	}
 
 	goLogin() {
-		location.href = "/login";
+		location.href = "/admin/login";
 	}
 
 	interceptors(instance) {

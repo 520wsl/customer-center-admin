@@ -5,7 +5,7 @@ import { setStore, getStore } from "@/libs/util/storeage";
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-22 14:59:40
+ * @Last Modified time: 2018-11-22 16:15:28
  * @explanatory:  store demo
  */
 export default {
@@ -107,7 +107,7 @@ export default {
 							}
 							const data = res.data;
 							let userName =
-								data.userName + "(" + data.userName + ")";
+								data.userName + "(" + data.departmentName + ")";
 							console.log("getUserInfoData", res.data);
 							commit("setAvator", data.avatar);
 							commit("setUserName", userName);

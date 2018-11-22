@@ -103,6 +103,19 @@ export default {
 			"addTag",
 			"setHomeRoute"
 		]),
+		...mapActions(["getUserInfo"]),
+		// 获取用户信息
+		async getUserInfoAction() {
+			let res = await this.getUserInfo();
+
+			if (res.status !== 200) {
+				this.$Modal.error({
+					title: "获取用户信息",
+					content: res.msg
+				});
+				return;
+			}
+		},
 		turnToPage(route) {
 			let { name, params, query } = {};
 			if (typeof route === "string") name = route;
@@ -171,6 +184,7 @@ export default {
 				name: this.$config.homeName
 			});
 		}
+		this.getUserInfoAction();
 	}
 };
 </script>
