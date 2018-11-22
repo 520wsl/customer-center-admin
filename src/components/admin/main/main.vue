@@ -27,7 +27,7 @@
 		<Layout>
 			<Header class="header-con">
 				<header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
-					<user :user-avator="userAvator"/>
+					<user :user-avator="userAvator" :user-name="userName"/>
 					<fullscreen v-model="isFullscreen" style="margin-right: 10px;"/>
 				</header-bar>
 			</Header>
@@ -79,6 +79,9 @@ export default {
 		userAvator() {
 			return this.$store.state.user.avatorImgPath;
 		},
+		userName() {
+			return this.$store.state.user.userName;
+		},
 		menuList() {
 			return this.$store.getters.menuList;
 		},
@@ -100,6 +103,19 @@ export default {
 			"addTag",
 			"setHomeRoute"
 		]),
+		...mapActions(["getUserInfo"]),
+		// 获取用户信息
+		async getUserInfoAction() {
+			let res = await this.getUserInfo();
+
+			if (res.status !== 200) {
+				this.$Modal.error({
+					title: "获取用户信息",
+					content: res.msg
+				});
+				return;
+			}
+		},
 		turnToPage(route) {
 			let { name, params, query } = {};
 			if (typeof route === "string") name = route;
@@ -168,6 +184,7 @@ export default {
 				name: this.$config.homeName
 			});
 		}
+		this.getUserInfoAction();
 	}
 };
 </script>

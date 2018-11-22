@@ -52,8 +52,7 @@
 				{
 					"x-invalid-end-tag": false
 				}
-			],
-			"no-undef": "off"
+			]
 		},
 		"parserOptions": {
 			"parser": "babel-eslint"

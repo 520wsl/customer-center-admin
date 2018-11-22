@@ -69,6 +69,18 @@
                                 </a>
                             </div>
                         </template>
+                          <!-- 语音 -->
+                        <template v-if="item.type == 8">
+                            <div class="flex-left item img pic">
+                                <a
+                                    class="link"
+                                    @click="setAudioModelPath($FILE(item.enclosure))"
+                                    href="javascript:;"
+                                >
+                                    <img :src="$CDN('/default_audio.png')">
+                                </a>
+                            </div>
+                        </template>
                     </div>
                     <div class="flex-right btn-group move-down">
                         <Button
