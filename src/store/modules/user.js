@@ -5,7 +5,7 @@ import { setStore , getStore } from "@/libs/util/storeage";
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-22 10:35:22
+ * @Last Modified time: 2018-11-22 10:59:41
  * @explanatory:  store demo
  */
 export default {
@@ -109,7 +109,7 @@ export default {
 							// commit("setUserId", data.id);
 							// commit("setAccess", data.permissions);
 							// commit("setHasGetInfo", true);
-							resolve(data);
+							resolve(res);
 						})
 						.catch(err => {
 							reject(err);

@@ -45,12 +45,12 @@ export default {
 		},
 		// 获取用户信息
 		getUserInfoAction() {
-			let userInfoRes = this.getUserInfo();
+			let res = this.getUserInfo();
 
-			if (userInfoRes.status !== 200) {
+			if (res.status !== 200) {
 				this.$Modal.error({
 					title: "获取用户信息",
-					content: userInfoRes.msg
+					content: res.msg
 				});
 				return;
 			}
