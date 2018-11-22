@@ -195,8 +195,9 @@ export default {
 						title: "执行人：",
 						value:
 							(this.info.executorUser &&
-								this.info.executorUser.userName) ||
-							""
+                                this.info.executorUser.userName) 
+                                ? this.info.executorUser.userName + "(" + this.info.executorUser.departmentName + ")"
+                                : ""
 					},
 					{
 						title: "参与者：",
@@ -206,8 +207,9 @@ export default {
 						title: "负责人：",
 						value:
 							(this.info.leadingUser &&
-								this.info.leadingUser.userName) ||
-							""
+                                this.info.leadingUser.userName) 
+                                ?this.info.leadingUser.userName + "(" + this.info.leadingUser.departmentName + ")"
+                                : ""
 					}
 				]
 			];
@@ -216,7 +218,7 @@ export default {
 		},
 		// 设置 客户信息
 		setCunstomInfo() {
-            let phone = this.info.workerOrderDetailVo ? this.info.workerOrderDetailVo.customerVo.mobile : ""
+            let phone = this.info.workerOrderDetailVo && this.info.workerOrderDetailVo.customerVo && this.info.workerOrderDetailVo.customerVo.mobile || ""
 			let cunstomInfo = [
 				[
 					{
@@ -229,15 +231,17 @@ export default {
 			if (this.info.workerOrderDetailVo.wechatVo) {
 				cunstomInfo[0].push({
 					title: "用户openID：",
-					value: this.info.workerOrderDetailVo
-						? this.info.workerOrderDetailVo.wechatVo.openId
-						: ""
+                    value: this.info.workerOrderDetailVo
+                        && this.info.workerOrderDetailVo.wechatVo
+						&& this.info.workerOrderDetailVo.wechatVo.openId
+						|| ""
 				});
 				cunstomInfo[0].push({
 					title: "微信昵称：",
-					value: this.info.workerOrderDetailVo
-						? this.info.workerOrderDetailVo.wechatVo.wechatNickname
-						: ""
+                    value: this.info.workerOrderDetailVo
+                        && this.info.workerOrderDetailVo.wechatVo
+						&& this.info.workerOrderDetailVo.wechatVo.wechatNickname
+						|| ""
 				});
 			} else {
 				cunstomInfo[0].push({
@@ -251,8 +255,8 @@ export default {
 			}
 
 			let companyVoList = this.info.workerOrderDetailVo
-				? this.info.workerOrderDetailVo.companyVos
-				: [];
+				&& this.info.workerOrderDetailVo.companyVos
+				|| [];
 
 			if (!companyVoList.length) {
 				this.cunstomInfo = cunstomInfo;
@@ -282,8 +286,8 @@ export default {
 		setWorkOrderPersonnel() {
 			let workOrderPersonnel = [];
 			let arr = this.info.workerOrderDetailVo
-				? this.info.workerOrderDetailVo.staffVos
-				: [];
+				&& this.info.workerOrderDetailVo.staffVos
+				|| [];
 			arr.forEach(item => {
 				workOrderPersonnel.push([
 					{
