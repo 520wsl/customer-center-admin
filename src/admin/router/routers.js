@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-21 14:31:18
+ * @Last Modified time: 2018-11-22 11:14:49
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -78,8 +78,8 @@ export default [
 				() => r(require("@/admin/view/login/login.vue")),
 				"login"
 			) //登录页面
-    },
-    {
+	},
+	{
 		path: "/phone",
 		name: "phone",
 		meta: {
@@ -149,8 +149,8 @@ export default [
 				meta: {
 					hideInMenu: true,
 					icon: "ios-stats",
-					title:"评价模板编辑",
-					notCache: true,
+					title: "评价模板编辑",
+					notCache: true
 					// beforeCloseName: "before_close_normal"
 				},
 				component: r =>
@@ -255,7 +255,7 @@ export default [
 						meta: {
 							hideInMenu: true,
 							icon: "ios-stats",
-							title:"工单详情服务信息",
+							title: "工单详情服务信息",
 							notCache: true
 						},
 						component: r =>
@@ -271,7 +271,7 @@ export default [
 		path: "/wx/workOrder",
 		name: "/wx/workOrder",
 		meta: {
-			// showAlways: true,
+			hideInMenu: true,
 			icon: "ios-stats",
 			title: "工单"
 		},
@@ -281,6 +281,7 @@ export default [
 				path: "list",
 				name: "wx-workOrder-list",
 				meta: {
+					hideInMenu: true,
 					icon: "ios-stats",
 					title: "工单列表"
 				},
@@ -323,7 +324,7 @@ export default [
 						meta: {
 							hideInMenu: true,
 							icon: "ios-stats",
-							title:"工单详情服务信息",
+							title: "工单详情服务信息",
 							notCache: true
 						},
 						component: r =>
@@ -334,6 +335,5 @@ export default [
 				]
 			}
 		]
-	},
-	
+	}
 ];
