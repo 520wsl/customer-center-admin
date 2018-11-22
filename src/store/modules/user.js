@@ -1,33 +1,39 @@
 import { login, logout, getUserInfoData } from "@/api/admin/user/user";
 import { setToken, getToken } from "@/libs/util";
-import { setStore , getStore } from "@/libs/util/storeage";
+import { setStore, getStore } from "@/libs/util/storeage";
 /*
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-22 10:59:41
+ * @Last Modified time: 2018-11-22 14:46:24
  * @explanatory:  store demo
  */
 export default {
 	state: {
+		userInfo: {},
 		userName: "",
 		userId: "",
 		avatorImgPath: "http://1.img.dianjiangla.com/assets/user.png",
 		token: getToken(),
 		access: "",
-        hasGetInfo: false,
-        sixiId: "",
-        storeageKey: 'sixiId'
+		hasGetInfo: false,
+		sixiId: "",
+		storeageKey: "sixiId",
+		storeageUserInfoKey: "userInfo"
 	},
 	mutations: {
+		setUserInfo(state, userInfo) {
+			setStore(state.storeageUserInfoKey, userInfo);
+			state.userInfo = userInfo;
+		},
 		setAvator(state, avatorPath) {
 			state.avatorImgPath = avatorPath;
 		},
 		setUserId(state, id) {
 			state.userId = id;
-        },
-        setSixiId(state, id) {
-			setStore(state.storeageKey , id );
+		},
+		setSixiId(state, id) {
+			setStore(state.storeageKey, id);
 			state.sixiId = id;
 		},
 		setUserName(state, name) {
@@ -76,7 +82,7 @@ export default {
 			return new Promise((resolve, reject) => {
 				logout()
 					.then(() => {
-						commit('setSixiId',"");      
+						commit("setSixiId", "");
 						resolve();
 					})
 					.catch(err => {
@@ -98,15 +104,16 @@ export default {
 								console.error("[debug]:getUserInfoData", res);
 								return;
 							}
-							console.log(res)
 							const data = res.data;
-							// console.log("getUserInfoData", res.data);
-							// commit("setAvator", data.image_url);
-							// commit(
-							// 	"setUserName",
-							// 	data.nickname || data.username || data.phone
-							// );
-							// commit("setUserId", data.id);
+							console.log("getUserInfoData", res.data);
+							commit("setAvator", data.avatar);
+							commit(
+								"setUserName",
+								data.userName + "(" + data.userName + ")"
+							);
+							commit("setUserId", data.userId);
+							commit("setSixiId", data.sixiId);
+							commit("setUserInfo", data);
 							// commit("setAccess", data.permissions);
 							// commit("setHasGetInfo", true);
 							resolve(res);
@@ -118,16 +125,16 @@ export default {
 					reject(error);
 				}
 			});
-        },
-        // 更新四喜Id
-        updatedSixiId ({ state, commit },{ sixiId }) {
-            commit('setSixiId',sixiId);       
-        },
-        getSixiId ({ state, commit }) {
-            let sixiId =  getStore(state.storeageKey);
-            if(sixiId){
-                commit('setSixiId',sixiId);
-            }
-        }
+		},
+		// 更新四喜Id
+		updatedSixiId({ state, commit }, { sixiId }) {
+			commit("setSixiId", sixiId);
+		},
+		getSixiId({ state, commit }) {
+			let sixiId = getStore(state.storeageKey);
+			if (sixiId) {
+				commit("setSixiId", sixiId);
+			}
+		}
 	}
 };
