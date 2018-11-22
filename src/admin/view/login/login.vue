@@ -44,8 +44,8 @@ export default {
 			});
 		},
 		// 获取用户信息
-		getUserInfoAction() {
-			let res = this.getUserInfo();
+		async getUserInfoAction() {
+			let res = await this.getUserInfo();
 
 			if (res.status !== 200) {
 				this.$Modal.error({
