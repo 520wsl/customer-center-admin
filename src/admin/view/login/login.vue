@@ -123,11 +123,11 @@ export default {
 	},
 	mounted() {
 		this.WXLogin();
-		// this.WwLogin();
-		// if (this.$route.query.code) {
-		// 	this.code = this.$route.query.code;
-		// 	this.sentLoginCode();
-		// }
+		this.WwLogin();
+		if (this.$route.query.code) {
+			this.code = this.$route.query.code;
+			this.sentLoginCode();
+		}
 	}
 };
 </script>
