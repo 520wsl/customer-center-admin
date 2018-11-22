@@ -5,7 +5,7 @@ import { setStore, getStore } from "@/libs/util/storeage";
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-22 14:46:24
+ * @Last Modified time: 2018-11-22 14:52:42
  * @explanatory:  store demo
  */
 export default {
@@ -83,6 +83,7 @@ export default {
 				logout()
 					.then(() => {
 						commit("setSixiId", "");
+						commit("setUserInfo", "");
 						resolve();
 					})
 					.catch(err => {
