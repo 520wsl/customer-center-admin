@@ -5,7 +5,7 @@ import { setStore, getStore } from "@/libs/util/storeage";
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-22 14:52:42
+ * @Last Modified time: 2018-11-22 14:59:40
  * @explanatory:  store demo
  */
 export default {
@@ -106,17 +106,16 @@ export default {
 								return;
 							}
 							const data = res.data;
+							let userName =
+								data.userName + "(" + data.userName + ")";
 							console.log("getUserInfoData", res.data);
 							commit("setAvator", data.avatar);
-							commit(
-								"setUserName",
-								data.userName + "(" + data.userName + ")"
-							);
+							commit("setUserName", userName);
 							commit("setUserId", data.userId);
 							commit("setSixiId", data.sixiId);
 							commit("setUserInfo", data);
 							// commit("setAccess", data.permissions);
-							// commit("setHasGetInfo", true);
+							commit("setHasGetInfo", true);
 							resolve(res);
 						})
 						.catch(err => {

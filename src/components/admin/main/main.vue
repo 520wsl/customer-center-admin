@@ -27,7 +27,7 @@
 		<Layout>
 			<Header class="header-con">
 				<header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
-					<user :user-avator="userAvator"/>
+					<user :user-avator="userAvator" :user-name="userName"/>
 					<fullscreen v-model="isFullscreen" style="margin-right: 10px;"/>
 				</header-bar>
 			</Header>
@@ -78,6 +78,9 @@ export default {
 		},
 		userAvator() {
 			return this.$store.state.user.avatorImgPath;
+		},
+		userName() {
+			return this.$store.state.user.userName;
 		},
 		menuList() {
 			return this.$store.getters.menuList;
