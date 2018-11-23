@@ -9,6 +9,7 @@
         <div id="wx_reg"></div>
       </Card>
     </div>
+	<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3c0c1aef00b3d175&redirect_uri=https://cca.n.yumc.pw/admin/login&response_type=code&scope=snsapi_base&state=123#wechat_redirect">测试</a>
   </div>
 </template>
 
@@ -40,6 +41,48 @@ export default {
 			console.log(res);
 			/* eslint-disable no-undef */
 			wx.config(res.data);
+// 			wx.config({
+//     "appId": "wx3c0c1aef00b3d175",
+//     "debug": false,
+//     "jsApiList": [
+//         "updateAppMessageShareData",
+//         "updateTimelineShareData",
+//         "onMenuShareWeibo",
+//         "onMenuShareQZone",
+//         "startRecord",
+//         "onVoiceRecordEnd",
+//         "playVoice",
+//         "pauseVoice",
+//         "stopVoice",
+//         "onVoicePlayEnd",
+//         "uploadVoice",
+//         "downloadVoice",
+//         "chooseImage",
+//         "previewImage",
+//         "uploadImage",
+//         "downloadImage",
+//         "translateVoice",
+//         "getNetworkType",
+//         "openLocation",
+//         "getLocation",
+//         "hideOptionMenu",
+//         "showOptionMenu",
+//         "hideMenuItems",
+//         "showMenuItems",
+//         "hideAllNonBaseMenuItem",
+//         "showAllNonBaseMenuItem",
+//         "closeWindow",
+//         "scanQRCode",
+//         "chooseWXPay",
+//         "openProductSpecificView",
+//         "addCard",
+//         "chooseCard",
+//         "openCard"
+//     ],
+//     "nonceStr": "Wm3WZYTPz0wzccnW",
+//     "signature": "87410fa3d1891be890474fa2aeabac93085dd937",
+//     "timestamp": "1542939244457"
+// })
 			console.log("config**************");
 			wx.ready(function() {
 				console.log("ready**************");

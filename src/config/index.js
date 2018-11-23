@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:13:25
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-22 14:25:35
+ * @Last Modified time: 2018-11-23 10:33:28
  * @explanatory:  config
  */
 export default {
@@ -15,8 +15,8 @@ export default {
 	 */
 	homeName: "custom-list",
 	baseUrl: {
-		dev: "/api",
-		pro: "/api"
+		dev: "/3api",
+		pro: "/3api"
 	},
 	CDN:
 		"http://custom-center.oss-cn-hangzhou.aliyuncs.com/customerCenter/image",
