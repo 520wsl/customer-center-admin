@@ -16,7 +16,10 @@
 import LoginForm from "_c/admin/login-form";
 import { mapActions } from "vuex";
 import { sentLoginCodeData } from "@/api/admin/user/user";
-import { getWxJSSDKConfig } from "@/api/admin/wechatProxy/wxSDK";
+import {
+	getWxJSSDKConfig,
+	getWxSnsapiUserInfoData
+} from "@/api/admin/wechatProxy/wxSDK";
 
 import "_js/enterpriseWeChat/wwLogin-1.0.0.js";
 export default {
@@ -107,6 +110,11 @@ export default {
 			this.updatedSixiId({ sixiId: res.data });
 			this.getUserInfoAction();
 		},
+		async getWxSnsapiUserInfo(code) {
+			let res = await getWxSnsapiUserInfoData({ code });
+			console.log("getWxSnsapiUserInfoData", res);
+			return;
+		},
 		scheduler(query) {
 			let code = query.code;
 			let state = query.state || "enterpriseWeChat";
@@ -120,7 +128,7 @@ export default {
 			if (code && state == "weChat") {
 				this.code = this.$route.query.code;
 				console.log(code);
-				return;
+				this.getWxSnsapiUserInfo(code);
 			}
 		}
 	},
