@@ -141,7 +141,7 @@ export default {
 	},
 	created() {
 		console.log(
-			"<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3c0c1aef00b3d175&redirect_uri=http://work.sixi.com/admin/login&response_type=code&scope=snsapi_base&state=#wechat_redirect'>测试</a>"
+			"<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3c0c1aef00b3d175&redirect_uri=http://work.sixi.com/admin/login&response_type=code&scope=snsapi_base&state=weChat#wechat_redirect'>测试</a>"
 		);
 		this.EWCConfig = this.$config.enterpriseWeChatConfig;
 	},
