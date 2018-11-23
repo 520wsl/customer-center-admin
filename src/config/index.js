@@ -15,8 +15,8 @@ export default {
 	 */
 	homeName: "custom-list",
 	baseUrl: {
-		dev: "/3api",
-		pro: "/3api"
+		dev: "/api",
+		pro: "/api"
 	},
 	CDN:
 		"http://custom-center.oss-cn-hangzhou.aliyuncs.com/customerCenter/image",
@@ -30,7 +30,7 @@ export default {
 		appid: "ww7dc5f02540a109d3",
 		agentid: "1000003",
 		redirect_uri: "http://work.sixi.com/login",
-		state: "123"
+		state: "enterpriseWeChat"
 	},
 	wechatConfig:{
 		debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。

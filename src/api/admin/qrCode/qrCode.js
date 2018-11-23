@@ -15,3 +15,9 @@ export const getQRCodeUrl = ({ sixiId, type }) => {
     })
   });
 };
+
+
+// 微信二维码获取
+export const getWxJSSDKConfig = ({ url }) => {
+  return post("/wx/WxJSSDKConfig", { url });
+};
