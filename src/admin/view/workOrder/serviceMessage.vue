@@ -12,8 +12,8 @@
 						type="success"
 						ghost
 					>拨号</Button>
-					<Button @click="confirm(2)" class="btn" icon="md-settings" type="info" ghost>电话号码采集</Button>
-					<Button @click="confirm(3)" class="btn" icon="md-settings" type="info" ghost>账号密码采集</Button>
+					<Button v-if="TalkNewsCountdownTimeFormat" @click="confirm(2)" class="btn" icon="md-settings" type="info" ghost>电话号码采集</Button>
+					<Button v-if="TalkNewsCountdownTimeFormat" @click="confirm(3)" class="btn" icon="md-settings" type="info" ghost>账号密码采集</Button>
 				</div>
 				<div class="flex-right">
 					<Button @click="sleectTalkNewsList(1)" class="btn" icon="md-refresh" type="warning" ghost>刷新</Button>
@@ -315,10 +315,11 @@ export default {
 				eventType
 			};
 			let mobile =
-				this.info &&
-				this.info.workerOrderDetailVo &&
-				this.info.workerOrderDetailVo.customerVo &&
-				this.info.workerOrderDetailVo.customerVo.mobile || "";
+				(this.info &&
+					this.info.workerOrderDetailVo &&
+					this.info.workerOrderDetailVo.customerVo &&
+					this.info.workerOrderDetailVo.customerVo.mobile) ||
+				"";
 			if (eventType == 1 && !mobile) {
 				setTimeout(() => {
 					this.$Modal.error({
@@ -352,6 +353,12 @@ export default {
 		confirm(eventType) {
 			let title = "";
 			let message = "";
+			let content = "";
+			let wechatNickname =
+				(this.info.workerOrderDetailVo &&
+					this.info.workerOrderDetailVo.wechatVo &&
+					this.info.workerOrderDetailVo.wechatVo.wechatNickname) ||
+				"";
 			switch (eventType) {
 				case 1:
 					title = "拨号";
@@ -360,11 +367,21 @@ export default {
 				case 2:
 					title = "电话号码采集";
 					message = "即将发送客户采集电话号码通知，请确认";
-					break;
+					content =
+						"【 " +
+						wechatNickname +
+						" 】您好，为了更好的为您提供服务，客服人员能够与您电话沟通，请绑定您的手机号。\n\n点击<a target='_blank' href='http://workapp.sixi.com/serviceBill/getphone'>绑定手机号>></a>";
+					this.setReplyParamsContent(content);
+					return;
 				case 3:
 					title = "账号密码采集";
 					message = "即将发送客户采集账号密码通知，请确认";
-					break;
+					content =
+						"【 " +
+						wechatNickname +
+						" 】您好，为了更好的为您提供服务请提交，您店铺的账号密码；\n注意：请不要将账号密码直接回复在聊天窗口 \n\n点击<a target='_blank' href='http://workapp.sixi.com/serviceBill/getphone'>提交阿里店铺账号密码>></a>";
+					this.setReplyParamsContent(content);
+					return;
 			}
 
 			this.$Modal.confirm({
@@ -375,6 +392,9 @@ export default {
 				},
 				onCancel: () => {}
 			});
+		},
+		setReplyParamsContent(content) {
+			this.replyParams.content = content;
 		},
 		async callPhone(phone, recordId) {
 			let params = {

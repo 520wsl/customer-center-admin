@@ -141,9 +141,13 @@ export default {
     };
   },
   created() {
+    console.log('微信')
     console.log(
-      "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3c0c1aef00b3d175&redirect_uri=http://work.sixi.com/admin/login&response_type=code&scope=snsapi_userinfo&state=weChat#wechat_redirect"
+      "https://open.weixin.qq.com/connect/oauth2/authorize?appid=ww7dc5f02540a109d3&redirect_uri=http://work.sixi.com/admin/login&response_type=code&scope=snsapi_base&state=enterpriseWeChat#wechat_redirect"
     );
+
+    console.log('企业微信')
+    console.log("https://open.weixin.qq.com/connect/oauth2/authorize?appid=ww7dc5f02540a109d3&redirect_uri=http://work.sixi.com/admin/login&response_type=code&scope=snsapi_base&state=enterpriseWeChat#wechat_redirect")
     this.EWCConfig = this.$config.enterpriseWeChatConfig;
   },
 

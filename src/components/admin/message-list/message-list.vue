@@ -14,8 +14,7 @@
                 <div class="message-counter" v-if="item.record">
                     <span
                         v-if="item.eventType != 0"
-                    >【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span>
-                    {{item.record}}
+                    >【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span><span v-html="item.record"></span>
                 </div>
                 <div
                     class="message-counter"
