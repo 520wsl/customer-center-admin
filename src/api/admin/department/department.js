@@ -10,7 +10,7 @@ function get(url, params) {
 }
 
 export const getDepartmentData = () => {
-    return post("/department/listuser");
+    return post("/department/listdepartment");
 };
 export const getUserData = ({
     departmentId
