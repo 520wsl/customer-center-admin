@@ -4,7 +4,13 @@
             <p slot="title">工单后台</p>
             <div class="search-con flex">
                 <div class="search-input-item">
-                    <span>工单编号：</span>
+                    <span class="search-input-item-lable">客户名称：</span>
+                    <Input class="search-input" v-model="params.companyName" placeholder="请输入搜索客户名称">
+                    <span></span>
+                    </Input>
+                </div>
+                <div class="search-input-item">
+                    <span class="search-input-item-lable">工单编号：</span>
                     <Input class="search-input" v-model="params.identifier" placeholder="请输入搜索关键词">
                     <span></span>
                     </Input>
@@ -22,11 +28,26 @@
                     </Select>
                 </div>
                 <div class="search-input-item">
-                    <span>工单创建时间：</span>
+                    <Select class="search-col" style="width:120px;" v-model="params.timeType">
+                        <Option :value="0">创建时间</Option>
+                        <Option :value="1">结束时间</Option>
+                    </Select>
                     <div class="search-input-item">
                         <DatePicker class="search-input" v-model="params.startTime" format="yyyy-MM-dd" type="date"></DatePicker>
                         <DatePicker class="search-input" v-model="params.endTime" format="yyyy-MM-dd" type="date"></DatePicker>
                     </div>
+                </div>
+                <div class="search-input-item">
+                    <span class="search-input-item-lable">持续时间：</span>
+                    <Input class="search-input" v-model="params.durationHour" placeholder="请输入搜索持续时间">
+                    <span></span>
+                    </Input>
+                </div>
+                <div class="search-input-item">
+                    <span class="search-input-item-lable">响应时间：</span>
+                    <Input class="search-input" v-model="params.responseHour" placeholder="请输入搜索响应时间">
+                    <span></span>
+                    </Input>
                 </div>
                 <!-- <div class="search-input-item">
                     <span>用户手机号码：</span>
@@ -35,8 +56,13 @@
                     </Input>
                 </div> -->
                 <div class="search-input-item">
+                    <span class="search-input-item-lable">切换客户：</span>
+                    <Department class="search-input" width="200" :get-user-info="getUserInfo" :loading-user="true" v-model="params.customerIdList"></Department>
+                </div>
+                <div class="search-input-item">
                     <Checkbox v-model="params.isRead">新消息</Checkbox>
-                    <Checkbox v-model="params.execute">我执行的</Checkbox>
+                    <Checkbox v-model="params.execute">执行者</Checkbox>
+                    <Checkbox v-model="params.partake">我参与的</Checkbox>
                 </div>
                 <div class="search-btn flex-right">
                     <Button @click="search" type="primary">搜索</Button>
@@ -56,11 +82,13 @@
 import { mapState, mapActions } from "vuex";
 import { formatInitTime, startTime, endTime } from "@/libs/util/time";
 import Page from "_c/admin/page";
+import Department from "_c/public/department";
 import { getWorkSheetListData } from "@/api/admin/workSheet/workSheet";
 import "./index.less";
 export default {
     components: {
-        Page
+        Page,
+        Department
     },
     computed: {
         ...mapState({
@@ -82,34 +110,50 @@ export default {
         return {
             videoModel: true,
             params: {
+                // 客户名称
+                companyName: "",
                 // 工单编号
                 identifier: "",
                 // 工单类型
                 workType: -1,
                 // 工单状态
                 handleType: -1,
-                // 工单创建开始时间
+                // 工单开始时间
                 startTime: "",
-                // 工单创建结束时间
+                // 工单结束时间
                 endTime: "",
+                // 工单时间类型
+                timeType: 0,
+                // 持续时间
+                durationHour: "",
+                // 响应时间
+                responseHour: "",
                 // 是否新消息
                 isRead: false,
                 // 是否是我执行
                 execute: false,
-                // 创建时间排序
-                timeSort: -1,
-                // 持续时间排序
-                hourSort: -1,
+                // 是否我参与 1:我参与 默认为空
+                partake: true,
+                // 排序规则 0:创建时间 1:结束时间 2:持续时间
+                sortType: 0,
+                // 正序倒序规则 0:倒序 1:正序
+                sort: 0,
                 // 手机号
                 telephone: "",
                 // 分页参数
                 pageNum: 1,
                 pageSize: 10,
                 count: 0,
-                sixiId: ""
+                customerId: "",
+                customerIdList: []
             },
             workOrderList: [],
             columns: [
+                {
+                    title: "客户名称",
+                    align: "center",
+                    key: "companyName"
+                },
                 {
                     title: "工单编号",
                     align: "center",
@@ -135,7 +179,7 @@ export default {
                 //     key: "cellphone"
                 // },
                 {
-                    title: "客户昵称",
+                    title: "微信昵称",
                     align: "center",
                     key: "wechatNickname"
                 },
@@ -149,6 +193,20 @@ export default {
                         const format = "YYYY-MM-DD HH:mm:ss";
                         const ele = params.row.startTime
                             ? formatInitTime(params.row.startTime, format)
+                            : "";
+                        return h("span", ele);
+                    }
+                },
+                {
+                    title: "结束时间",
+                    align: "center",
+                    width: 130,
+                    sortable: "custom",
+                    key: "endTime",
+                    render: (h, params) => {
+                        const format = "YYYY-MM-DD HH:mm:ss";
+                        const ele = params.row.endTime
+                            ? formatInitTime(params.row.endTime, format)
                             : "";
                         return h("span", ele);
                     }
@@ -254,31 +312,46 @@ export default {
     },
     methods: {
         ...mapActions(["getSixiId"]),
+        getUserInfo(data) {
+            console.log(data)
+        },
         sortChange(column) {
             // 创建时间升序
             const key = column.key;
             const order = column.order;
             if (key === "startTime" && order === "asc") {
-                this.params.hourSort = -1;
-                this.params.timeSort = 1;
+                this.params.sortType = 0;
+                this.params.sort = 1;
                 this.getList();
             }
             // 创建时间降序序
             if (key === "startTime" && order === "desc") {
-                this.params.hourSort = -1;
-                this.params.timeSort = 0;
+                this.params.sortType = 0;
+                this.params.sort = 0;
                 this.getList();
             }
             // 持续时间升序
             if (key === "hourSum" && order === "asc") {
-                this.params.timeSort = -1;
-                this.params.hourSort = 1;
+                this.params.sortType = 2;
+                this.params.sortType = 1;
                 this.getList();
             }
             // 持续时间降序序
             if (key === "hourSum" && order === "desc") {
-                this.params.timeSort = -1;
-                this.params.hourSort = 0;
+                this.params.sortType = 2;
+                this.params.sortType = 0;
+                this.getList();
+            }
+            // 结束时间升序
+            if (key === "endTime" && order === "asc") {
+                this.params.sortType = 1;
+                this.params.sortType = 1;
+                this.getList();
+            }
+            // 结束时间降序序
+            if (key === "endTime" && order === "desc") {
+                this.params.sortType = 1;
+                this.params.sortType = 0;
                 this.getList();
             }
         },
@@ -310,7 +383,9 @@ export default {
                     ? endTime(this.params.endTime, "x")
                     : "",
                 isRead: this.params.isRead ? 0 : -1,
-                execute: this.params.execute ? 1 : -1
+                execute: this.params.execute ? 1 : -1,
+                partake: this.params.execute ? 1 : null,
+                customerId: this.params.customerIdList.length > 0 ? this.params.customerIdList[this.params.customerIdList.length - 1] : ''
             };
             let res = await getWorkSheetListData(data);
             if (res.status !== 200) {
@@ -327,13 +402,13 @@ export default {
         }
     },
     created() {
-        if (this.$route.query.sixiId) {
-            this.params.sixiId = this.$route.query.sixiId;
-        } else {
-            this.getSixiId();
-            this.params.sixiId = this.$store.state.user.sixiId;
-        }
-        this.getList();
+        // if (this.$route.query.sixiId) {
+        //     this.params.sixiId = this.$route.query.sixiId;
+        // } else {
+        //     this.getSixiId();
+        //     this.params.sixiId = this.$store.state.user.sixiId;
+        // }
+        // this.getList();
     }
 };
 </script>
