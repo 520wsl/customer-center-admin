@@ -60,7 +60,7 @@ import {
     getCustomerInfoData,
     setWechatUntied
 } from "@/api/admin/custom/custom";
-import { getQRCodeUrl } from "@/api/admin/qrCode/qrCode";
+import { getQRCodeUrl } from "@/api/admin/wechatProxy/qrCode";
 export default {
     data() {
         return {

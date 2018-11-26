@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:13:25
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-22 14:25:35
+ * @Last Modified time: 2018-11-23 10:33:28
  * @explanatory:  config
  */
 export default {
@@ -30,7 +30,7 @@ export default {
 		appid: "ww7dc5f02540a109d3",
 		agentid: "1000003",
 		redirect_uri: "http://work.sixi.com/login",
-		state: "123"
+		state: "enterpriseWeChat"
 	},
 	wechatConfig:{
 		debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
