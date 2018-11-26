@@ -2,7 +2,6 @@
     <div>
         <Card class="md-card">
             <p slot="title">工单后台</p>
-            {{params}}
             <div class="search-con flex">
                 <div class="search-input-item">
                     <span class="search-input-item-lable">客户名称：</span>
