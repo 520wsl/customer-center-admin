@@ -293,7 +293,7 @@ export default {
                                 on: {
                                     click: () => {
                                         this.$router.push({
-                                            name: "workOrder-info-base",
+                                            name: "workOrder-info-service",
                                             query: {
                                                 workSheetId: params.row.id,
                                                 identifier:
