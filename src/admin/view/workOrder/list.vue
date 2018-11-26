@@ -408,7 +408,7 @@ export default {
         //     this.getSixiId();
         //     this.params.sixiId = this.$store.state.user.sixiId;
         // }
-        // this.getList();
+        this.getList();
     }
 };
 </script>
