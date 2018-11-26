@@ -9,66 +9,84 @@ import api from "@/libs/api.request";
 const baseUrl = "/work-order";
 
 function post(url, params) {
-	return api.post(baseUrl + url, params);
+    return api.post(baseUrl + url, params);
 }
 
 function get(url, params) {
-	return api.get(baseUrl + url, params);
+    return api.get(baseUrl + url, params);
 }
 
 // 工单详情详情--基本信息
-export const getWorkSheetInfoData = ({ workSheetId }) => {
-	return post("/worksheet/detail", {
-		workSheetId
-	});
+export const getWorkSheetInfoData = ({
+    workSheetId
+}) => {
+    return post("/worksheet/detail", {
+        workSheetId
+    });
 };
 
 // 工单详情  设置工单 处理 状态
 // handleType  处理状态 0:待处理 1:已超时 2:工单确认 3:设为完结 4:已评价
-export const setWorkSheetProcessingState = ({ workSheetId, handleType }) => {
-	return post("/worksheet/confirm", {
-		workSheetId,
-		handleType
-	});
+export const setWorkSheetProcessingState = ({
+    workSheetId,
+    handleType
+}) => {
+    return post("/worksheet/confirm", {
+        workSheetId,
+        handleType
+    });
 };
 // 工单列表
 export const getWorkSheetListData = ({
-	identifier,
-	workType,
-	handleType,
-	startTime,
-	endTime,
-	callPhone,
-	isRead,
-	execute,
-	timeSort,
-	hourSort,
-	pageNum,
-	pageSize,
-	telephone,
-	sixiId
+    companyName,
+    identifier,
+    workType,
+    handleType,
+    startTime,
+    endTime,
+    timeType,
+    durationHour,
+    responseHour,
+    isRead,
+    execute,
+    partake,
+    sortType,
+    sort,
+    telephone,
+    pageNum,
+    pageSize,
+    count,
+    customerId
 }) => {
-	return post("/worksheet/list", {
-		identifier,
-		workType,
-		handleType,
-		startTime,
-		endTime,
-		callPhone,
-		isRead,
-		execute,
-		timeSort,
-		hourSort,
-		pageNum,
-		pageSize,
-		telephone,
-		sixiId
-	});
+    return post("/worksheet/list", {
+        companyName,
+        identifier,
+        workType,
+        handleType,
+        startTime,
+        endTime,
+        timeType,
+        durationHour,
+        responseHour,
+        isRead,
+        execute,
+        partake,
+        sortType,
+        sort,
+        telephone,
+        pageNum,
+        pageSize,
+        count,
+        customerId
+    });
 };
 // 工单详情详情--指派工单
-export const assignWorksheet = ({ workSheetId, executorSixiId }) => {
-	return post("/worksheet/assign", {
-		workSheetId,
-		executorSixiId
-	});
+export const assignWorksheet = ({
+    workSheetId,
+    executorSixiId
+}) => {
+    return post("/worksheet/assign", {
+        workSheetId,
+        executorSixiId
+    });
 };
