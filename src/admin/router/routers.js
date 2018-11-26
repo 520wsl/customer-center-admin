@@ -161,6 +161,30 @@ export default [
 		]
 	},
 	{
+		path: "/workorderEvaluate",
+		name: "workorderEvaluate",
+		meta: {
+			// showAlways: true,
+			icon: "ios-stats",
+			title: "评价列表"
+		},
+		component: Main1,
+		children: [
+			{
+				path: "list",
+				name: "workorder-evaluate-list",
+				meta: {
+					icon: "ios-stats",
+					title: "工单评价列表"
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/evaluate/workorderEvaluateList")
+					)
+			}
+		]
+	},
+	{
 		path: "/custom",
 		name: "custom",
 		meta: {

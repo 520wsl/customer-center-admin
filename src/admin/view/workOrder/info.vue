@@ -42,8 +42,8 @@
 			</div>
 			<div class="btn-group">
 				<ButtonGroup>
-					<Button @click="toPage('workOrder-info-base')" type="info" :ghost="isBase">基本信息</Button>
 					<Button @click="toPage('workOrder-info-service')" type="info" :ghost="!isBase">服务信息</Button>
+					<Button @click="toPage('workOrder-info-base')" type="info" :ghost="isBase">基本信息</Button>
 				</ButtonGroup>
 			</div>
 		</Card>
