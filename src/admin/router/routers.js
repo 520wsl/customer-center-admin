@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-22 11:14:49
+ * @Last Modified time: 2018-11-26 21:06:48
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -25,6 +25,74 @@ const Main1 = r =>
 const parentView = r =>
 	require.ensure([], () => r(require("_c/admin/parent-view")), "main"); //模板页
 export default [
+	{
+		path: "/workOrder",
+		name: "workOrder",
+		meta: {
+			// showAlways: true,
+			icon: "ios-stats",
+			title: "工单"
+		},
+		component: Main1,
+		children: [
+			{
+				path: "list",
+				name: "workOrder-list",
+				meta: {
+					icon: "ios-stats",
+					title: "工单列表"
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/workOrder/list")
+					)
+			},
+			{
+				path: "info",
+				name: "workOrder-info",
+				meta: {
+					hideInMenu: true,
+					icon: "ios-stats",
+					title: "工单详情",
+					notCache: true
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/workOrder/info")
+					),
+				children: [
+					{
+						path: "base",
+						name: "workOrder-info-base",
+						meta: {
+							hideInMenu: true,
+							icon: "ios-stats",
+							title: "工单详情基本信息",
+							notCache: true
+						},
+						component: r =>
+							require.ensure([], () =>
+								require("@/admin/view/workOrder/baseMessage")
+							)
+					},
+					{
+						path: "service",
+						name: "workOrder-info-service",
+						meta: {
+							hideInMenu: true,
+							icon: "ios-stats",
+							title: "工单详情服务信息",
+							notCache: true
+						},
+						component: r =>
+							require.ensure([], () =>
+								require("@/admin/view/workOrder/serviceMessage")
+							)
+					}
+				]
+			}
+		]
+	},
 	{
 		path: "/demo",
 		name: "demo",
@@ -220,74 +288,6 @@ export default [
 					require.ensure([], () =>
 						require("@/admin/view/custom/info")
 					)
-			}
-		]
-	},
-	{
-		path: "/workOrder",
-		name: "workOrder",
-		meta: {
-			// showAlways: true,
-			icon: "ios-stats",
-			title: "工单"
-		},
-		component: Main1,
-		children: [
-			{
-				path: "list",
-				name: "workOrder-list",
-				meta: {
-					icon: "ios-stats",
-					title: "工单列表"
-				},
-				component: r =>
-					require.ensure([], () =>
-						require("@/admin/view/workOrder/list")
-					)
-			},
-			{
-				path: "info",
-				name: "workOrder-info",
-				meta: {
-					hideInMenu: true,
-					icon: "ios-stats",
-					title: "工单详情",
-					notCache: true
-				},
-				component: r =>
-					require.ensure([], () =>
-						require("@/admin/view/workOrder/info")
-					),
-				children: [
-					{
-						path: "base",
-						name: "workOrder-info-base",
-						meta: {
-							hideInMenu: true,
-							icon: "ios-stats",
-							title: "工单详情基本信息",
-							notCache: true
-						},
-						component: r =>
-							require.ensure([], () =>
-								require("@/admin/view/workOrder/baseMessage")
-							)
-					},
-					{
-						path: "service",
-						name: "workOrder-info-service",
-						meta: {
-							hideInMenu: true,
-							icon: "ios-stats",
-							title: "工单详情服务信息",
-							notCache: true
-						},
-						component: r =>
-							require.ensure([], () =>
-								require("@/admin/view/workOrder/serviceMessage")
-							)
-					}
-				]
 			}
 		]
 	},

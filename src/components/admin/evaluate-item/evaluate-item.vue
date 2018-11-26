@@ -3,7 +3,7 @@
         <div class="flex-left" style="width:49%">
             <table class="tab">
                 <tbody>
-                    <tr v-for="(item,index) in evaluateList" :key="index">
+                    <tr v-for="item in evaluateList" :key="item.evaluateName">
                         <!-- 星级评价 -->
                         <td
                             class="title col-large"
@@ -59,3 +59,16 @@
         </div>
     </div>
 </template>
+
+<script>
+export default {
+	props: {
+		evaluateList: {
+			type: Array,
+			default() {
+				return [];
+			}
+		}
+	}
+};
+</script>

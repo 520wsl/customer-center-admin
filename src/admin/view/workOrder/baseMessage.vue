@@ -1,108 +1,21 @@
 <template>
-    <div>
-        <Card class="md-card">
-            <div slot="title">工单信息</div>
-            <tables :data="workOrderInfo"></tables>
-        </Card>
-        <Card class="md-card">
-            <div slot="title">客户信息</div>
-            <tables :data="cunstomInfo"></tables>
-        </Card>
-        <Card class="md-card">
-            <div slot="title">关联业务员</div>
-            <tables :data="workOrderPersonnel"></tables>
-        </Card>
-        <Card v-if="talkNewsList.length" class="md-card">
-            <div slot="title">客服记录</div>
-            <message-list :data="talkNewsList"></message-list>
-        </Card>
-        <Card class="md-card" v-if="evaluateList.length != 0">
-            <div slot="title">客户评价</div>
-            <div class="flex">
-                <div class="flex-left" style="width:49%">
-                    <table class="tab">
-                        <tbody>
-                            <!-- <tr>
-                <td class="title col-large">服务态度：</td>
-                <td>
-                  <Rate allow-half/>
-                </td>
-                            </tr>-->
-                            <tr v-for="(item,index) in evaluateList" :key="index">
-                                <!-- 星级评价 -->
-                                <td
-                                    class="title col-large"
-                                    v-if="item.type == 'number' && item.otherAttribute.showType == 'score'"
-                                >{{item.evaluateName}}</td>
-                                <td
-                                    v-if="item.type == 'number' && item.otherAttribute.showType == 'score'"
-                                >
-                                    <Rate
-                                        v-model="item.value"
-                                        :allow-half="item.otherAttribute.isHalf == 1"
-                                        disabled
-                                        :count="item.otherAttribute.maxNum"
-                                    />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="flex-right" style="width:49%">
-                    <table class="tab">
-                        <tbody>
-                            <template v-for="item in evaluateList">
-                                <!-- 单选双选 -->
-                                <!-- <tr :key="index+item.type" v-if="(item.type == 'checkbox' || item.type == 'radio')  && item.otherAttribute.showType == 'tag'">
-                                    <td class="title left-align">{{item.evaluateName}}</td>
-                                </tr>
-                                <tr :key="index" v-if="(item.type == 'checkbox' || item.type == 'radio')  && item.otherAttribute.showType == 'tag'">
-                                    <td>
-                                        <Tag type="border" color="primary" v-for="(item2,index2) in item.value" :key="index2+item2">{{item2}}</Tag>
-                                    </td>
-                                </tr>-->
-
-                                <!-- 文本域 -->
-                                <!-- <tr :key="index" v-if="item.type == 'text'  && item.otherAttribute.showType == 'textarea'">
-                                    <Input v-model="item.value" readonly :rows="4" style="widtg:100%">
-                                    </Input>
-                                </tr>-->
-
-                                <!-- 标题 -->
-                                <tr
-                                    :key="item.evaluateName+'_th'"
-                                    v-if="item.type == 'checkbox' || item.type == 'radio' || item.type == 'text' || (item.type == 'number' && item.otherAttribute.showType != 'score')"
-                                >
-                                    <td class="title left-align">{{item.evaluateName}}</td>
-                                </tr>
-                                <!-- 单选双选 -->
-                                <tr
-                                    :key="item.evaluateName+'_td'"
-                                    v-if="item.type == 'checkbox' || item.type == 'radio'"
-                                >
-                                    <td class="left-align">
-                                        <Tag
-                                            type="border"
-                                            color="primary"
-                                            v-for="(item2,index2) in item.value"
-                                            :key="index2+item2"
-                                        >{{item2}}</Tag>
-                                    </td>
-                                </tr>
-                                <!-- 文本域 -->
-                                <tr
-                                    :key="item.evaluateName+'_td'"
-                                    v-if="item.type == 'text' || (item.type == 'number' && item.otherAttribute.showType != 'score')"
-                                >
-                                    <td class="left-align">{{item.value}}</td>
-                                </tr>
-                            </template>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </Card>
-    </div>
+	<div>
+		<Card class="md-card">
+			<div slot="title">工单信息</div>
+			<tables :data="workOrderInfo"></tables>
+		</Card>
+		<Card class="md-card">
+			<div slot="title">客户信息</div>
+			<tables :data="cunstomInfo"></tables>
+		</Card>
+		<Card class="md-card" v-if="evaluateList.length != 0">
+			<div slot="title">客户评价</div>
+			<Card v-for="(item,index) in evaluateList" :key="'evaluate_'+index">
+				<div slot="title">评价时间：{{item.time}}</div>
+				<evaluate-item :evaluateList="item.evaluateContent"></evaluate-item>
+			</Card>
+		</Card>
+	</div>
 </template>
 
 <script>
@@ -111,11 +24,11 @@ import { mapState, mapMutations } from "vuex";
 import { getArrValue } from "@/libs/tools";
 import { getWorkSheetInfoData } from "@/api/admin/workSheet/workSheet";
 import { getEvaluateInfo } from "@/api/admin/evaluate/dimension";
-import messageList from "_c/admin/message-list";
+import evaluateItem from "_c/admin/evaluate-item";
 import { formatTime } from "@/libs/util/time";
 export default {
 	components: {
-		messageList,
+		evaluateItem,
 		tables
 	},
 	computed: {},
@@ -143,7 +56,6 @@ export default {
 		assembleMessage() {
 			this.setWorkOrderInfo();
 			this.setCunstomInfo();
-			this.setWorkOrderPersonnel();
 		},
 		// 设置 工单信息
 		setWorkOrderInfo() {
@@ -154,6 +66,24 @@ export default {
 						item.userName + "(" + item.departmentName + ")，";
 				}
 			});
+			let executorUser = "";
+			if (this.info.executorUser && this.info.executorUser.userName) {
+				executorUser = this.info.executorUser.userName;
+				if (this.info.executorUser.departmentName) {
+					executorUser +=
+						"(" + this.info.executorUser.departmentName + ")";
+				}
+			}
+
+			let leadingUser = "";
+			if (this.info.leadingUser && this.info.leadingUser.userName) {
+				leadingUser = this.info.leadingUser.userName;
+
+				if (this.info.leadingUser.departmentName) {
+					leadingUser +=
+						"(" + this.info.leadingUser.departmentName + ")";
+				}
+			}
 			let workOrderInfo = [
 				[
 					{
@@ -178,26 +108,18 @@ export default {
 						)
 					},
 					{
-						title: "工单响应时间(小时)：",
-						value: this.info.responseTime
-							? this.info.responseTime + "h"
-							: "0h"
+						title: "工单响应时间：",
+						value: this.info.responseStr
 					},
 					{
-						title: "工单持续时间(小时)：",
-						value: this.info.durationTime
-							? this.info.durationTime + "h"
-							: "0h"
+						title: "工单持续时间：",
+						value: this.info.durationStr
 					}
 				],
 				[
 					{
 						title: "执行人：",
-						value:
-							(this.info.executorUser &&
-                                this.info.executorUser.userName) 
-                                ? this.info.executorUser.userName + "(" + this.info.executorUser.departmentName + ")"
-                                : ""
+						value: executorUser
 					},
 					{
 						title: "参与者：",
@@ -205,11 +127,7 @@ export default {
 					},
 					{
 						title: "负责人：",
-						value:
-							(this.info.leadingUser &&
-                                this.info.leadingUser.userName) 
-                                ?this.info.leadingUser.userName + "(" + this.info.leadingUser.departmentName + ")"
-                                : ""
+						value: leadingUser
 					}
 				]
 			];
@@ -218,30 +136,35 @@ export default {
 		},
 		// 设置 客户信息
 		setCunstomInfo() {
-            let phone = this.info.workerOrderDetailVo && this.info.workerOrderDetailVo.customerVo && this.info.workerOrderDetailVo.customerVo.mobile || ""
+			let phone =
+				(this.info.customerDetailVo &&
+					this.info.customerDetailVo.mobile) ||
+				"";
 			let cunstomInfo = [
 				[
 					{
 						title: "用户手机号码：",
-						value: phone?phone.slice(0, 3) + "****" + phone.slice(-4):""
+						value: phone
+							? phone.slice(0, 3) + "****" + phone.slice(-4)
+							: ""
 					}
 				]
 			];
 
-			if (this.info.workerOrderDetailVo.wechatVo) {
+			if (this.info.customerDetailVo) {
 				cunstomInfo[0].push({
 					title: "用户openID：",
-                    value: this.info.workerOrderDetailVo
-                        && this.info.workerOrderDetailVo.wechatVo
-						&& this.info.workerOrderDetailVo.wechatVo.openId
-						|| ""
+					value:
+						(this.info.customerDetailVo &&
+							this.info.customerDetailVo.openId) ||
+						""
 				});
 				cunstomInfo[0].push({
 					title: "微信昵称：",
-                    value: this.info.workerOrderDetailVo
-                        && this.info.workerOrderDetailVo.wechatVo
-						&& this.info.workerOrderDetailVo.wechatVo.wechatNickname
-						|| ""
+					value:
+						(this.info.customerDetailVo &&
+							this.info.customerDetailVo.wechatNickname) ||
+						""
 				});
 			} else {
 				cunstomInfo[0].push({
@@ -254,82 +177,26 @@ export default {
 				});
 			}
 
-			let companyVoList = this.info.workerOrderDetailVo
-				&& this.info.workerOrderDetailVo.companyVos
-				|| [];
-
-			if (!companyVoList.length) {
-				this.cunstomInfo = cunstomInfo;
-				return;
-			}
-
-			companyVoList.map(function(item) {
-				cunstomInfo.push([
-					{
-						title: "公司名称：",
-						value: item.name
-					},
-					{
-						title: "网址：",
-						value: item.url
-					},
-					{
-						title: "合作业务：",
-						value: "暂时没有"
-					}
-				]);
-			});
+			cunstomInfo.push([
+				{
+					title: "公司名称：",
+					value:
+						this.info.customerDetailVo &&
+						this.info.customerDetailVo.companyName
+				},
+				{
+					title: "网址：",
+					value:
+						this.info.customerDetailVo &&
+						this.info.customerDetailVo.url
+				},
+				{
+					title: "合作业务：",
+					value: "暂无"
+				}
+			]);
 
 			this.cunstomInfo = cunstomInfo;
-		},
-		// 设置 关联业务员信息
-		setWorkOrderPersonnel() {
-			let workOrderPersonnel = [];
-			let arr = this.info.workerOrderDetailVo
-				&& this.info.workerOrderDetailVo.staffVos
-				|| [];
-			arr.forEach(item => {
-				workOrderPersonnel.push([
-					{
-						title: item.staffTag,
-						value: item.staffName + "(" + item.department + ")"
-					}
-				]);
-			});
-			// let workOrderPersonnel = [
-			//   [
-			//     {
-			//       title: "原属业务员：",
-			//       value: "暂时没有"
-			//     }
-			//   ],
-			//   [
-			//     {
-			//       title: "运营主管：",
-			//       value: "暂时没有"
-			//     }
-			//   ],
-			//   [
-			//     {
-			//       title: "阿里客服：",
-			//       value: "暂时没有"
-			//     }
-			//   ],
-			//   [
-			//     {
-			//       title: "旺旺客服：",
-			//       value: "暂时没有"
-			//     }
-			//   ],
-			//   [
-			//     {
-			//       title: "美工：",
-			//       value: "暂时没有"
-			//     }
-			//   ]
-			// ];
-
-			this.workOrderPersonnel = workOrderPersonnel;
 		},
 		// 获取评价详情
 		getEvaluateInfo() {
@@ -338,18 +205,15 @@ export default {
 					return;
 				}
 				console.log(res);
-				let evaluateList = res.data[0]
-					? res.data[0].evaluateContent
-					: [];
-				evaluateList.forEach(item => {
-					if (
-						item.type == "number" &&
-						item.otherAttribute.showType == "score"
-					) {
-						item.otherAttribute.maxNum = parseFloat(
-							item.otherAttribute.maxNum
+				let evaluateList = res.data || [];
+				evaluateList.map(item => {
+					item.evaluateContent.map(e => {
+						e.otherAttribute.maxNum = parseFloat(
+							e.otherAttribute.maxNum
 						);
-					}
+						return e;
+					});
+					return item;
 				});
 				this.evaluateList = evaluateList;
 			});
@@ -357,10 +221,8 @@ export default {
 	},
 	data() {
 		return {
-			workOrderPersonnel: [],
 			cunstomInfo: [],
 			workOrderInfo: [],
-			talkNewsList: [],
 			evaluateList: [],
 			workSheetId: 0,
 			info: {

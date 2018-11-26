@@ -5,7 +5,7 @@ import { setStore, getStore } from "@/libs/util/storeage";
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-22 16:15:28
+ * @Last Modified time: 2018-11-26 21:25:45
  * @explanatory:  store demo
  */
 export default {
