@@ -1,11 +1,16 @@
-import { login, logout, getUserInfoData } from "@/api/admin/user/user";
+import {
+	login,
+	logout,
+	getUserInfoData,
+	sentLoginCodeData
+} from "@/api/admin/user/user";
 import { setToken, getToken } from "@/libs/util";
 import { setStore, getStore } from "@/libs/util/storeage";
 /*
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-26 21:25:45
+ * @Last Modified time: 2018-11-27 16:32:58
  * @explanatory:  store demo
  */
 export default {
@@ -134,6 +139,34 @@ export default {
 			let sixiId = getStore(state.storeageKey);
 			if (sixiId) {
 				commit("setSixiId", sixiId);
+			}
+		},
+		async loginScheduler(
+			{ dispatch, state, commit },
+			{ codeData, stateData }
+		) {
+			console.log("【debug】loginScheduler ** codeData：", codeData);
+			console.log("【debug】loginScheduler ** stateData：", stateData);
+			let res = "";
+			let res2 = "";
+			if (codeData) {
+				switch (stateData) {
+					case "enterpriseWeChat":
+						res = await sentLoginCodeData({ code: codeData });
+						if (res.status !== 200) {
+							console.error("[debug]:sentLoginCodeData", res);
+							return false;
+						}
+						await dispatch("updatedSixiId", res.data);
+						res2 = await dispatch("getUserInfo");
+						if (res2.status !== 200) {
+							console.error("[debug]:getUserInfo", res2);
+							return false;
+						}
+						return true;
+					case "weChat":
+						break;
+				}
 			}
 		}
 	}
