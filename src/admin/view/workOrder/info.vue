@@ -23,7 +23,7 @@
 						<Icon type="md-hammer"></Icon>工单确认
 					</a>
 					<a
-						v-if="current == 1 && isExectorId"
+						
 						@click="assignPersonnel"
 						href="javascript:;"
 						class="md-card-btn-info"
@@ -50,7 +50,7 @@
 		<router-view></router-view>
 		<Modal v-model="modal.bool" footer-hide title="工单指派" mask-closable>
 			<Card class="md-card">
-				<RadioGroup v-model="modal.index">
+				<!-- <RadioGroup v-model="modal.index">
 					<table class="tab">
 						<tbody>
 							<tr v-for="(item,index) in modal.personList" :key="index">
@@ -62,7 +62,10 @@
 							</tr>
 						</tbody>
 					</table>
-				</RadioGroup>
+				</RadioGroup> -->
+                <RadioGroup v-model="modal.type" vertical>
+                    
+                </RadioGroup>
 				<!-- 本期不做 -->
 				<div v-if="false">
 					<h3>客服记录</h3>
@@ -88,6 +91,7 @@ import {
 	assignWorksheet
 } from "@/api/admin/workSheet/workSheet";
 import { getstaffListData } from "@/api/admin/custom/custom";
+import { getSuperiorLeader } from "@/api/admin/department/department";
 import { formatTime } from "@/libs/util/time";
 import "./index.less";
 export default {
@@ -118,7 +122,8 @@ export default {
 		...mapActions(["getSixiId"]),
 		assignPersonnel() {
 			this.modal.bool = true;
-			this.getPersonalList();
+            this.getPersonalList();
+            // this.getSuperiorLeader();
 		},
 		subAssign() {
 			let params = {
@@ -201,7 +206,13 @@ export default {
 			this.info = res.data;
 			this.stepsType(res.data);
 			this.setWorkSheetBaseInfo(res.data);
-		},
+        },
+        // 得到上级领导
+        async getSuperiorLeader(){
+            let department = this.info.executorUser && this.info.executorUser.department || "";
+            console.log(department)
+            let res = await getSuperiorLeader({ department });
+        },
 		async getPersonalList() {
 			let customerSixiId = this.info.userId;
 			let res = await getstaffListData({ customerSixiId });
@@ -279,7 +290,8 @@ export default {
 			modal: {
 				bool: false,
 				personList: [],
-				index: ""
+                index: "",
+                type: ""
 			}
 		};
 	},
