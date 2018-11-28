@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 15:32:18
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-22 16:03:22
+ * @Last Modified time: 2018-11-27 15:13:30
  * @explanatory:  axios 接口封装
  */
 import axios from "axios";
@@ -106,7 +106,15 @@ class HttpRequest {
 						msg
 				);
 				break;
-
+			case 403:
+				console.log(
+					"-------------------【错误拦截】------------------------------"
+				);
+				console.error(msg);
+				console.log(
+					"-------------------【错误拦截】------------------------------"
+				);
+				break;
 			case 401:
 				console.log(
 					"-------------------【错误拦截】------------------------------"
@@ -116,7 +124,7 @@ class HttpRequest {
 					"-------------------【错误拦截】------------------------------"
 				);
 				alert("未登录或登陆超时 401：请重新登陆");
-				this.goLogin();
+				// this.goLogin();
 				break;
 
 			default:
