@@ -1,0 +1,169 @@
+<template>
+    <div>
+        <Poptip confirm placement="bottom-end" title="解绑不可撤销，请谨慎操作！是否确认解绑？" @on-ok="cancelBind()">
+            <Button type="primary" size="small" class="mar-l" ghost>解绑</Button>
+        </Poptip>
+        <Button type="primary" size="small" class="mar-l" @click="modal = true" ghost>编辑</Button>
+        <Button type="primary" size="small" class="mar-l" @click="getMobilePhone()" ghost>采集电话</Button>
+        <Button type="primary" size="small" class="mar-l" @click="getAccountPassword()" ghost>采集账号密码</Button>
+        <Modal v-model="modal" @on-ok="edit()" :loading="loading" :mask-closable="false" title="编辑">
+            <Card class="md-card">
+                <table class="tab">
+                    <tbody>
+                        <tr>
+                            <td class="title">微信昵称:</td>
+                            <td>
+                                <img :src="row.wechatAvatar" class="acatar" alt="404"> {{row.wechatNickname}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title">绑定时间:</td>
+                            <td>该字段缺少</td>
+                        </tr>
+                        <tr>
+                            <td class="title">称呼:</td>
+                            <td>{{row.callName}}</td>
+                        </tr>
+                        <tr>
+                            <td class="title">性别:</td>
+                            <td>
+                                <RadioGroup v-model="sex">
+                                    <Radio :label="0">先生</Radio>
+                                    <Radio :label="1">女士</Radio>
+                                </RadioGroup>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title">角色:</td>
+                            <td>
+                                <Select class="wid" v-model="role">
+                                    <Option :value="1">老板</Option>
+                                    <Option :value="2">老板娘</Option>
+                                    <Option :value="3">经理</Option>
+                                    <Option :value="4">业务员</Option>
+                                </Select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title">手机号:</td>
+                            <td>
+                                <Input class="wid" v-model="phoneNumber" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </Card>
+        </Modal>
+    </div>
+</template>
+<script>
+import { setWechatUntied } from "@/api/admin/custom/custom";
+// import { callPhoneAction } from "@/api/admin/callPhone/callPhone";
+import { addItemTalkNewsData } from "@/api/admin/workSheet/talkNews";
+import "./index.less";
+export default {
+	props: ["row"],
+	data() {
+		return {
+			modal: false,
+			loading: true,
+			sex: 0,
+			// 客户角色: 0:未知;1:老板;2:老板娘;3:经理;4:业务员;
+			role: 1,
+			phoneNumber: ""
+		};
+	},
+	created() {
+		// 赋值
+		this.sex = this.row.sex;
+		this.role = this.row.role;
+		this.phoneNumber = this.row.mobile;
+	},
+	methods: {
+		cancelBind() {
+			// 当前暂无openid
+			let openid = 1111111;
+			setWechatUntied({ openid }).then(res => {
+				if (res.status !== 200) {
+					this.$Modal.error({ title: "提示", content: res.msg });
+					return;
+				}
+				this.$emit("callFun");
+			});
+		},
+		edit() {
+			// if (!isPass) return;
+			// this.loading = false;
+			// this.modal = false;
+		},
+		getMobilePhone() {
+			this.$Modal.confirm({
+				title: "电话号码采集",
+				content:
+					"<p>" + "即将发送客户采集电话号码通知，请确认" + "</p>",
+				onOk: () => {
+					addItemTalkNewsData({
+						eventType: 2,
+						userSixiId: this.row.customerSixiId
+					}).then(res => {
+						if (res.status !== 200) {
+							this.$Modal.error({
+								title: "提示",
+								content: res.msg
+							});
+							return;
+						}
+					});
+				},
+				onCancel: () => {}
+			});
+		},
+		getAccountPassword() {
+			this.$Modal.confirm({
+				title: "账号密码采集",
+				content: "<p>" + "即将发送客户采集账号密码通知，请确认",
+				onOk: () => {
+					addItemTalkNewsData({
+						eventType: 3,
+						userSixiId: this.row.customerSixiId
+					}).then(res => {
+						if (res.status !== 200) {
+							this.$Modal.error({
+								title: "提示",
+								content: res.msg
+							});
+							return;
+						}
+					});
+				},
+				onCancel: () => {}
+			});
+		}
+	}
+};
+</script>
+<style lang="less" scoped>
+.mar-l {
+	margin-left: 10px !important;
+	margin: 5px 0;
+}
+.wid {
+	width: 150px;
+}
+.tab .title {
+	width: 100px;
+}
+
+.md-card .tab td {
+	border-bottom: 0;
+}
+.md-card .tab tr:nth-last-child(1) td {
+	border-bottom: 1px solid #e8eaec;
+}
+.acatar {
+	width: 40px;
+	// 表格居中
+	vertical-align: middle;
+}
+</style>
+

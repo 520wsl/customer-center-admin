@@ -363,3 +363,7 @@ export const localSave = (key, value) => {
 export const localRead = key => {
 	return localStorage.getItem(key) || "";
 };
+
+export const hidePhone = phone => {
+  return phone?phone.slice(0, 3) + "****" + phone.slice(-4):""
+};

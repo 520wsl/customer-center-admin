@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-17 09:49:21
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-18 19:46:55
+ * @Last Modified time: 2018-11-27 16:21:47
  * @explanatory:  工单详情 基本信息
  */
 import api from "@/libs/api.request";

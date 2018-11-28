@@ -18,7 +18,10 @@
                         <td>{{info.account}}</td>
                         <td rowspan="3" class="title">所属：</td>
                         <td rowspan="3">
-                            <div v-for="(item,index) in info.staffVos" :key="index">{{item.staffTag+"："+item.staffName+"("+item.department+")"}}</div>
+                            <div v-for="(item,index) in info.staffVos" :key="index" style="margin-bottom:10px">
+                                {{item.staffTag+"："+item.staffName+"("+item.department+")"}}
+                                <Button type="primary" size="small" @click="setStaff(index,item)" style="float:right">设置</Button>
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -36,8 +39,72 @@
             <div class="btn-group">
                 <Button type="primary" class="md-card-btn-bind" @click="bindAccount">绑定账号</Button>
             </div>
-            <Table :columns="columns" :data="customList" border="" style="width:500px;"></Table>
+
+            <Tabs type="card" class="tabTable" v-model="bindOrderOrBillList">
+                <TabPane label="已绑定账号" name="bindOrder">
+                    <Table :columns="columns" :data="wechatBindVos" border></Table>
+                </TabPane>
+                <TabPane label="工单列表" name="billList">
+                    <div class="search-con search-con-top">
+                        <Input v-model="billSerrchData.text" class="search-col" style="width:300px;display:inline-table">
+                        <Select v-model="billSerrchData.searchTextType" slot="prepend" style="width:130px">
+                            <Option value="identifier">工单编号</Option>
+                            <!--后端说无法实现，暂时注释,后端加字段后将该value该为后端文档上的字段即可-->
+                            <!-- <Option value="2">客户手机号码</Option> -->
+                        </Select>
+                        </Input>
+                        <Select v-model="billSerrchData.workType" class="search-col" slot="prepend">
+                            <Option :value="-1">工单类型</Option>
+                            <Option v-for="(item,index) in searchWorkSheetType" :key="index" :value="item.key">{{item.value}}</Option>
+                        </Select>
+                        <Select v-model="billSerrchData.handleType" class="search-col" slot="prepend">
+                            <Option :value="-1">工单状态</Option>
+                            <Option v-for="(item,index) in searchStatusList" :key="index" :value="item.key">{{item.value}}</Option>
+                        </Select>
+                        <div class="prependTime">
+                            <Select class="prepend" v-model="billSerrchData.timeType">
+                                <Option :value="0">工单创建时间</Option>
+                                <Option :value="1">工单结束时间</Option>
+                            </Select>
+                            <DatePicker v-model="billSerrchData.startTime" type="date" class="search-col ivu-date-border"></DatePicker>
+                            <DatePicker v-model="billSerrchData.endTime" type="date" class="search-col"></DatePicker>
+                        </div>
+                        <div class="search-btn flex-right">
+                            <Button @click="search()" type="primary">搜索</Button>
+                        </div>
+                    </div>
+                    <Table :columns="billColumns" :data="workOrderList" border="" style="margin-left:1px"></Table>
+                    <page :pageNum="billSerrchData.pageNum" :pageSize="billSerrchData.pageSize" :count="billSerrchData.count" @pageCurrentChange="pageCurrentChange" @pageSizeChange="pageSizeChange" style="margin-top:10px"></page>
+
+                </TabPane>
+            </Tabs>
         </Card>
+        <Modal v-model="setStaffModal" title="所属设置">
+            <Card class="md-card">
+                <table class="tab">
+                    <tr>
+                        <td class="title">新开业务员：</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="title">续开业务员：</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="title">运营人员：</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="title">美工：</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="title">旺旺客服：</td>
+                        <td></td>
+                    </tr>
+                </table>
+            </Card>
+        </Modal>
         <Modal v-model="bindModal" title="绑定微信账号" :footer-hide="true" width="400px;" @on-cancel='getInfo'>
             <Card>
                 <p>请客户用微信扫该二维码绑定，二维码有效期2分钟</p>
@@ -57,134 +124,467 @@
 <script>
 import "./index.less";
 import {
-    getCustomerInfoData,
-    setWechatUntied
+	getCustomerInfoData,
+	setWechatUntied
 } from "@/api/admin/custom/custom";
+import {
+	workSheet,
+	getWorkSheetListData
+} from "@/api/admin/workSheet/workSheet";
+import Page from "_c/admin/page";
 import { getQRCodeUrl } from "@/api/admin/wechatProxy/qrCode";
+import { hidePhone } from "@/libs/util/index";
+import operation from "./operation";
+import { mapState, mapActions } from "vuex";
+import { formatInitTime, startTime, endTime } from "@/libs/util/time";
+import callPhone from "_c/callPhone";
 export default {
-    data() {
-        return {
-            bindModal: false,
-            columns: [
-                {
-                    title: "微信号",
-                    keyWord: true,
-                    key: "wechatNickName"
-                },
-                {
-                    title: "手机号",
-                    keyWord: true,
-                    key: "mobile"
-                },
-                {
-                    title: "操作",
-                    keyWord: true,
-                    render: (h, params) => {
-                        return h(
-                            "Poptip",
-                            {
-                                attrs: {
-                                    confirm: true,
-                                    title: `解绑不可撤销，请谨慎操作！是否确认解绑？`
-                                },
-                                on: {
-                                    "on-ok": () => {
-                                        this.unBind();
-                                    },
-                                    "on-cancel": () => { }
-                                }
-                            },
-                            [
-                                h(
-                                    "Button",
-                                    {
-                                        attrs: {
-                                            type: "primary"
-                                        }
-                                    },
-                                    "解绑"
-                                )
-                            ]
-                        );
-                    }
-                }
-            ],
-            customList: [],
-            info: {
-                name: "",
-                account: "",
-                industry: "",
-                provinceName: "",
-                cityName: "",
-                url: ""
-            },
-            params: {
-                sixiId: "",
-                type: "BINDING_PHONE"
-            },
-            qrData: {}
-        };
-    },
-    methods: {
-        bindAccount() {
-            if (this.customList.length != 0) {
-                return this.$Message.warning({
-                    content: "已有绑定的，需要解绑才能重新绑定!"
-                });
-            }
-            this.bindModal = true;
-            this.getQrcode();
-        },
-        getQrcode() {
-            getQRCodeUrl({
-                sixiId: this.info.customerSixiId,
-                type: "BINDING_PHONE"
-            }).then(res => {
-                if (res.status != 200) {
-                    return this.$Message.error({
-                        content: "二维码获取失败，请稍后再试！"
-                    });
-                }
-                this.qrData = res.data;
-                this.getInfo();
-            });
-        },
-        getInfo() {
-            getCustomerInfoData(this.params).then(res => {
-                if (res.status != 200) {
-                    return this.$Notice.error({ title: res.msg });
-                }
-                let obj = {
-                    wechatNickName: res.data.wechatNickName,
-                    mobile: res.data.mobile
-                };
-                if (res.data.wechatNickName == "" && res.data.openId == "") {
-                    this.customList = [];
-                } else {
-                    this.customList = [obj];
-                }
-                this.info = res.data;
-                this.info.provinceName = res.data.provinceName || "";
-                this.info.cityName = res.data.cityName || "";
-            });
-        },
-        unBind() {
-            console.log(this.info.openId);
-            setWechatUntied({ openId: this.info.openId }).then(res => {
-                if (res.status != 200) {
-                    return this.$Message.error({
-                        content: res.msg
-                    });
-                }
-                this.getInfo();
-            });
-        }
-    },
-    created() {
-        if (this.$route.query.sixiId) {
-            this.params.sixiId = this.$route.query.sixiId;
-            this.getInfo();
-        }
-    }
+	components: { operation, Page, callPhone }, //eslint-disable-line
+	data() {
+		return {
+			bindOrderOrBillList: "bindOrder", // "billList", //
+			bindModal: false,
+			setStaffModal: false,
+			columns: [
+				{
+					title: "称呼",
+					key: "callName"
+				},
+				{
+					title: "角色",
+					//0:未知;1:老板;2:老板娘;3:经理;4:业务员;
+					key: "role",
+					render: (h, params) => {
+						return h("span", this.roleList[params.row.role]);
+					}
+				},
+				{
+					title: "微信昵称",
+					key: "wechatNickname",
+					render: (h, params) => {
+						return h(
+							"div",
+							{
+								style: {
+									display: "flex",
+									"align-items": "center"
+								}
+							},
+							[
+								h("img", {
+									domProps: {
+										src: params.row.wechatAvatar,
+										title: "404"
+									},
+									style: {
+										width: "40px"
+									}
+								}),
+								h(
+									"span",
+									{
+										style: {
+											"margin-left": "20px"
+										}
+									},
+									params.row.wechatNickname
+								)
+							]
+						);
+					}
+				},
+				{
+					title: "手机号",
+					key: "角色",
+					render: (h, params) => {
+						console.log(params);
+						return h("div", [
+							h("span", hidePhone(params.row.mobile)),
+							h(
+								callPhone,
+								{
+									style: {
+										"margin-left": "20px",
+										color: "#2d8cf0",
+										cursor: "pointer"
+									},
+									props: {
+										phone: params.row.mobile
+									}
+								},
+								"呼叫"
+							)
+						]);
+					}
+				},
+				{
+					title: "操作",
+					render: (h, params) => {
+						return h(operation, {
+							props: { row: params.row },
+							on: {
+								callFun() {
+									console.log("刷新绑定账号列表");
+								}
+							}
+						});
+					}
+				}
+			],
+			// 已绑定账号列表
+			wechatBindVos: [],
+			billSerrchData: {
+				searchTextType: "identifier", // 工单编号 or 客户手机号码
+				text: "", // 关键词
+				handleType: -1, // 工单类型
+				workType: -1, // 工单状态
+				timeType: 0, // 工单创建时间 or 结束时间
+				startTime: "", // 工单开始时间
+				endTime: "", // 工单结束时间,
+				// 分页参数
+				pageNum: 1,
+				pageSize: 10,
+				count: 0
+			},
+			// 工单列表
+			billColumns: [
+				{
+					title: "工单编号",
+					align: "center",
+					key: "identifier"
+				},
+				{
+					title: "类型",
+					align: "center",
+					render: (h, params) => {
+						const typelist = this.workSheetType.filter(item => {
+							return item.key == params.row.workType;
+						});
+						if (typelist.length > 0) {
+							return h("span", typelist[0]["value"]);
+						} else {
+							return h("span", "");
+						}
+					}
+				},
+				{
+					title: "用户手机号码",
+					key: "角色",
+					align: "center",
+					render: (h, params) => {
+						return h("span", hidePhone("12345674567"));
+					}
+				},
+				{
+					title: "微信昵称",
+					align: "center",
+					key: "wechatNickname"
+				},
+				{
+					title: "创建时间",
+					key: "startTime",
+					align: "center",
+					render: (h, params) => {
+						const format = "YYYY-MM-DD HH:mm:ss";
+						const ele = params.row.startTime
+							? formatInitTime(params.row.startTime, format)
+							: "";
+						return h("span", ele);
+					}
+				},
+				{
+					title: "结束时间",
+					key: "finishTime",
+					align: "center",
+					render: (h, params) => {
+						const format = "YYYY-MM-DD HH:mm:ss";
+						const ele = params.row.finishTime
+							? formatInitTime(params.row.finishTime, format)
+							: "";
+						return h("span", ele);
+					}
+				},
+				{
+					title: "持续时间",
+					align: "center",
+					key: "hourSum",
+					render: (h, params) => {
+						return h(
+							"span",
+							!params.row.hourSum
+								? 0 + "h"
+								: params.row.hourSum + "h"
+						);
+					}
+				},
+				{
+					title: "响应时间",
+					align: "center",
+					render: (h, params) => {
+						return h(
+							"span",
+							!params.row.responseTime
+								? 0 + "h"
+								: params.row.responseTime + "h"
+						);
+					}
+				},
+				{
+					title: "状态",
+					align: "center",
+					render: (h, params) => {
+						const statusList = this.statusList.filter(item => {
+							return item.key == params.row.type;
+						});
+						if (statusList.length > 0) {
+							if (params.row.type == 1) {
+								return h(
+									"span",
+									{ style: { color: "red" } },
+									statusList[0]["value"]
+								);
+							}
+							return h("span", statusList[0]["value"]);
+						} else {
+							return h("span", "");
+						}
+					}
+				},
+				{
+					title: "新消息",
+					render: (h, params) => {
+						if (!params.row.isRead) {
+							return h("span", "有");
+						} else {
+							return h("span", "无");
+						}
+					}
+				},
+				{
+					title: "责任人",
+					align: "center",
+					render: (h, params) => {
+						const user = params.row.userVo || {};
+						const name = user.userName || "";
+						const departmentName = user.departmentName
+							? "(" + user.departmentName + ")"
+							: "";
+						return h("span", name + departmentName);
+					}
+				},
+				{
+					title: "操作",
+					align: "center",
+					render: (h, params) => {
+						return h(
+							"span",
+							{
+								style: {
+									color: "#2d8cf0",
+									cursor: "pointer"
+								},
+								on: {
+									click: () => {
+										this.$router.push({
+											name: "workOrder-info-base",
+											query: {
+												workSheetId: params.row.id,
+												identifier:
+													params.row.identifier
+											}
+										});
+									}
+								}
+							},
+							"查看工单"
+						);
+					}
+				}
+			],
+			customList: [],
+			workOrderList: [],
+			info: {
+				name: "",
+				account: "",
+				industry: "",
+				provinceName: "",
+				cityName: "",
+				url: ""
+			},
+			params: {
+				sixiId: "",
+				type: "BINDING_PHONE"
+			},
+			qrData: {}
+		};
+	},
+	computed: {
+		...mapState({
+			searchWorkSheetType: state => {
+				return [...state.workSheet.workSheetType].filter(item => {
+					return item.key !== 0;
+				});
+			},
+			searchStatusList: state => {
+				return [...state.workSheet.workSheetHandleType].filter(item => {
+					return item.key !== 1;
+				});
+			},
+			workSheetType: state => state.workSheet.workSheetType,
+			statusList: state => state.workSheet.workSheetHandleType,
+			roleList: state => state.custom.roleList
+		})
+	},
+	methods: {
+		bindAccount() {
+			if (this.customList.length != 0) {
+				return this.$Message.warning({
+					content: "已有绑定的，需要解绑才能重新绑定!"
+				});
+			}
+			this.bindModal = true;
+			this.getQrcode();
+		},
+		getQrcode() {
+			getQRCodeUrl({
+				sixiId: this.info.customerSixiId,
+				type: "BINDING_PHONE"
+			}).then(res => {
+				if (res.status != 200) {
+					return this.$Message.error({
+						content: "二维码获取失败，请稍后再试！"
+					});
+				}
+				this.qrData = res.data;
+				this.getInfo();
+			});
+		},
+		getInfo() {
+			getCustomerInfoData(this.params).then(res => {
+				if (res.status != 200) {
+					return this.$Notice.error({ title: res.msg });
+				}
+				let obj = {
+					wechatNickName: res.data.wechatNickName,
+					mobile: res.data.mobile
+				};
+				if (res.data.wechatNickName == "" && res.data.openId == "") {
+					this.customList = [];
+				} else {
+					this.customList = [obj];
+				}
+				this.info = res.data;
+				this.info.provinceName = res.data.provinceName || "";
+				this.info.cityName = res.data.cityName || "";
+				// 已绑定信息
+				this.wechatBindVos = res.data.wechatBindVos;
+				// this.wechatBindVos[0].mobile = 15167141601;
+				this.wechatBindVos = [
+					{
+						mobile: "15557151779",
+						callName: "王先生",
+						customerSixiId: "1182862037307360255",
+						role: 1,
+						sex: 0,
+						wechatAvatar: "wechatAvatar",
+						wechatNickname: "wechatNickName"
+					}
+				];
+			});
+		},
+		unBind() {
+			// console.log(this.info.openId);
+			setWechatUntied({ openId: this.info.openId }).then(res => {
+				if (res.status != 200) {
+					return this.$Message.error({
+						content: res.msg
+					});
+				}
+				this.getInfo();
+			});
+		},
+		search() {
+			this.billSerrchData.pageNum = 1;
+			this.getList();
+		},
+		// 查询数据 分页页码重置
+		sleectTemplateList(pageNum) {
+			this.billSerrchData.pageNum = pageNum;
+			this.getList();
+		},
+		// 设置分页页码
+		pageCurrentChange(pageNum) {
+			this.sleectTemplateList(pageNum);
+		},
+		// 设置分页大小
+		pageSizeChange(pageSize) {
+			this.billSerrchData.pageSize = pageSize;
+			this.sleectTemplateList(1);
+		},
+		async getList() {
+			// let data = {};
+			let data = {
+				...this.billSerrchData,
+				startTime: this.billSerrchData.startTime
+					? startTime(this.billSerrchData.startTime, "x")
+					: "",
+				endTime: this.billSerrchData.endTime
+					? endTime(this.billSerrchData.endTime, "x")
+					: ""
+			};
+			data[data.searchTextType] = data.text;
+			// 需要处理该对象，时间类型，时间，搜索的文本类型
+			console.log(data);
+			let res = await getWorkSheetListData(data);
+			if (res.status !== 200) {
+				this.$Modal.error({
+					title: "工单列表",
+					content: res.msg
+				});
+			}
+			console.log(res);
+			this.workOrderList = res.data.list || [];
+			this.billSerrchData.pageNum = res.data.num || 1;
+			this.billSerrchData.pageSize = res.data.size || 10;
+			this.billSerrchData.count = res.data.count || 0;
+
+			// const data = {
+			// 	...this.billSerrchData,
+			// 	startTime: this.billSerrchData.startTime
+			// 		? startTime(this.billSerrchData.startTime, "x")
+			// 		: "",
+			// 	endTime: this.billSerrchData.endTime
+			// 		? endTime(this.billSerrchData.endTime, "x")
+			// 		: "",
+			// 	isRead: this.billSerrchData.isRead ? 0 : -1,
+			// 	execute: this.billSerrchData.execute ? 1 : -1
+			// };
+			// let res = await getWorkSheetListData(data);
+			// if (res.status !== 200) {
+			// 	this.$Modal.error({
+			// 		title: "工单列表",
+			// 		content: res.msg
+			// 	});
+			// }
+			// this.workOrderList = res.data.list || [];
+			// this.billSerrchData.pageNum = res.data.num || 1;
+			// this.billSerrchData.pageSize = res.data.size || 10;
+			// this.billSerrchData.count = res.data.count || 0;
+		},
+		setStaff(index, item) {
+			this.setStaffModal = true;
+			console.log(item);
+			// 在这里设置默认的员工信息
+		}
+	},
+	created() {
+		console.log(window);
+		if (this.$route.query.sixiId) {
+			this.params.sixiId = this.$route.query.sixiId;
+			this.getInfo();
+		}
+		// 获取数据
+		this.getList();
+	}
 };
 </script>

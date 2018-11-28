@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 09:15:59
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-16 19:09:28
+ * @Last Modified time: 2018-11-27 18:03:25
  * @explanatory:  # 我们组装模块并导出 store 的地方
  */
 import Vue from "vue";
@@ -12,6 +12,7 @@ import mutations from "./mutations";
 // import createLogger from "vuex/dist/logger";
 
 import user from "./modules/user";
+import custom from "./modules/custom";
 import app from "./modules/app";
 import dimension from "./modules/dimension";
 import workSheet from "./modules/workSheet";
@@ -23,6 +24,7 @@ Vue.use(Vuex);
 
 const Store = new Vuex.Store({
     modules: {
+        custom,
         user,
         app,
         dimension,
