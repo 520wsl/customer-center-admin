@@ -1,16 +1,19 @@
 import {
-	login,
 	logout,
-	getUserInfoData,
 	sentLoginCodeData
+} from "@/api/admin/qywechatProxy/user";
+import {
+	getUserInfoData
 } from "@/api/admin/user/user";
 import { setToken, getToken } from "@/libs/util";
 import { setStore, getStore } from "@/libs/util/storeage";
+import config from "@/config";
+const { storeageUserInfoKey } = config;
 /*
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-27 16:32:58
+ * @Last Modified time: 2018-11-28 15:38:31
  * @explanatory:  store demo
  */
 export default {
@@ -24,7 +27,7 @@ export default {
 		hasGetInfo: false,
 		sixiId: "",
 		storeageKey: "sixiId",
-		storeageUserInfoKey: "userInfo"
+		storeageUserInfoKey: storeageUserInfoKey
 	},
 	mutations: {
 		setUserInfo(state, userInfo) {
@@ -59,29 +62,6 @@ export default {
 		setUser({ commit }) {
 			commit("setUserName", { a: 1, b: 2 });
 		},
-		// 登录
-		// handleLogin({ commit }, { userName, password, type }) {
-		// 	userName = userName.trim();
-		// 	return new Promise((resolve, reject) => {
-		// 		login({
-		// 			userName,
-		// 			password,
-		// 			type
-		// 		})
-		// 			.then(res => {
-		// 				if (!res.status) {
-		// 					console.error("[debug]:setToken", userName);
-		// 					console.error("[debug]:handleLogin", res);
-		// 					return;
-		// 				}
-		// 				commit("setToken", userName);
-		// 				resolve();
-		// 			})
-		// 			.catch(err => {
-		// 				reject(err);
-		// 			});
-		// 	});
-		// },
 		// 退出登录
 		handleLogOut({ state, commit }) {
 			return new Promise((resolve, reject) => {

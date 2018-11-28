@@ -1,6 +1,8 @@
 import Cookies from "js-cookie";
 // cookie保存的天数
 import config from "@/config";
+import { getStore } from "@/libs/util/storeage";
+const { title, storeageUserInfoKey } = config;
 import { forEach, hasOneOf, objEqual } from "@/libs/tools";
 
 export const TOKEN_KEY = "token";
@@ -15,6 +17,21 @@ export const getToken = () => {
 	else return false;
 };
 
+export const getSixiID = () => {
+	let userInfoData = getStore(storeageUserInfoKey);
+	if (!userInfoData) {
+		return false;
+	}
+	let userInfo = JSON.parse(userInfoData);
+	if (!userInfo) {
+		return false;
+	}
+	let sixiId = userInfo.sixiId || "";
+	if (!sixiId) {
+		return false;
+	}
+	return sixiId;
+};
 export const hasChild = item => {
 	return item.children && item.children.length !== 0;
 };
@@ -362,4 +379,51 @@ export const localSave = (key, value) => {
 
 export const localRead = key => {
 	return localStorage.getItem(key) || "";
+};
+
+// scrollTop animation
+export const scrollTop = (el, from = 0, to, duration = 500, endCallback) => {
+	if (!window.requestAnimationFrame) {
+		window.requestAnimationFrame =
+			window.webkitRequestAnimationFrame ||
+			window.mozRequestAnimationFrame ||
+			window.msRequestAnimationFrame ||
+			function(callback) {
+				return window.setTimeout(callback, 1000 / 60);
+			};
+	}
+	const difference = Math.abs(from - to);
+	const step = Math.ceil((difference / duration) * 50);
+
+	const scroll = (start, end, step) => {
+		if (start === end) {
+			endCallback && endCallback();
+			return;
+		}
+
+		let d = start + step > end ? end : start + step;
+		if (start > end) {
+			d = start - step < end ? end : start - step;
+		}
+
+		if (el === window) {
+			window.scrollTo(d, d);
+		} else {
+			el.scrollTop = d;
+		}
+		window.requestAnimationFrame(() => scroll(d, end, step));
+	};
+	scroll(from, to, step);
+};
+
+/**
+ * @description 根据当前跳转的路由设置显示在浏览器标签的title
+ * @param {Object} routeItem 路由对象
+ * @param {Object} vm Vue实例
+ */
+export const setTitle = (routeItem, vm) => {
+	const handledRoute = getRouteTitleHandled(routeItem);
+	const pageTitle = showTitle(handledRoute, vm);
+	const resTitle = pageTitle ? `${title} - ${pageTitle}` : title;
+	window.document.title = resTitle;
 };
