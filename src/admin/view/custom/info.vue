@@ -19,7 +19,7 @@
                         <td rowspan="3" class="title">所属：</td>
                         <td rowspan="3">
                             <div v-for="(item,index) in info.staffVos" :key="index" style="margin-bottom:10px">
-                                {{staffTagIdList[item.staffTagId] || ''+"："+item.staffName+"("+item.department+")"}}
+                                {{staffTagIdList[item.staffTagId]}}： {{item.staffName}} ({{item.department}})
                                 <!--注释批量设置人员-->
                                 <!-- <Button v-if="info.staffVos.length == index+1" type="primary" size="small" @click="setStaff(index,item)" style="float:right">设置</Button> -->
                             </div>
