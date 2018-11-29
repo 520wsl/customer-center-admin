@@ -57,13 +57,27 @@
         </div>
         <div class="search-input-item">
           <span class="search-input-item-lable">持续时间：</span>
-          <Input class="search-input" v-model="params.durationHour" placeholder="请输入搜索持续时间">
+          <Input
+            @keypress.native="utils.inLimit.int"
+            @keyup.native="utils.inLimit.int"
+            v-model="params.durationHour"
+            class="search-input"
+            :maxlength="6"
+            placeholder="请输入搜索持续时间"
+          >
             <span></span>
           </Input>
         </div>
         <div class="search-input-item">
           <span class="search-input-item-lable">响应时间：</span>
-          <Input class="search-input" v-model="params.responseHour" placeholder="请输入搜索响应时间">
+          <Input
+            @keypress.native="utils.inLimit.int"
+            @keyup.native="utils.inLimit.int"
+            class="search-input"
+            v-model="params.responseHour"
+            :maxlength="6"
+            placeholder="请输入搜索响应时间"
+          >
             <span></span>
           </Input>
         </div>
@@ -109,11 +123,14 @@
 </template>
 
 <script>
+import Vue from 'vue';
+Vue.prototype.utils = utils;
 import { mapState, mapActions } from "vuex";
 import { formatInitTime, startTime, endTime } from "@/libs/util/time";
 import Page from "_c/admin/page";
 import Department from "_c/public/department";
 import { getWorkSheetListData } from "@/api/admin/workSheet/workSheet";
+import utils from "@/libs/util/public";
 import "./index.less";
 export default {
   components: {
@@ -232,11 +249,11 @@ export default {
           align: "center",
           width: 130,
           sortable: "custom",
-          key: "endTime",
+          key: "finishTime",
           render: (h, params) => {
             const format = "YYYY-MM-DD HH:mm:ss";
-            const ele = params.row.endTime
-              ? formatInitTime(params.row.endTime, format)
+            const ele = params.row.finishTime
+              ? formatInitTime(params.row.finishTime, format)
               : "";
             return h("span", ele);
           }
@@ -246,22 +263,16 @@ export default {
           align: "center",
           width: 130,
           sortable: "custom",
-          key: "hourSum",
+          key: "durationStr",
           render: (h, params) => {
-            return h(
-              "span",
-              !params.row.hourSum ? 0 + "h" : params.row.hourSum + "h"
-            );
+            return h("span", params.row.durationStr);
           }
         },
         {
           title: "响应时间",
           align: "center",
           render: (h, params) => {
-            return h(
-              "span",
-              !params.row.responseTime ? 0 + "h" : params.row.responseTime + "h"
-            );
+            return h("span", params.row.responseStr);
           }
         },
         {
@@ -301,10 +312,8 @@ export default {
           align: "center",
           render: (h, params) => {
             const user = params.row.userVo || {};
-            const name = user.userName || "";
-            const departmentName = user.departmentName
-              ? "(" + user.departmentName + ")"
-              : "";
+            const name = user.userName || '';
+            const departmentName = user.departmentName ? "(" + user.departmentName + ")" : ''
             return h("span", name + departmentName);
           }
         },
@@ -344,7 +353,7 @@ export default {
   methods: {
     ...mapActions(["getSixiId"]),
     getUserInfo(data) {
-      console.log(data);
+      console.log(data)
     },
     sortChange(column) {
       // 创建时间升序
@@ -362,27 +371,27 @@ export default {
         this.getList();
       }
       // 持续时间升序
-      if (key === "hourSum" && order === "asc") {
+      if (key === "durationStr" && order === "asc") {
         this.params.sortType = 2;
-        this.params.sortType = 1;
+        this.params.sort = 1;
         this.getList();
       }
       // 持续时间降序序
-      if (key === "hourSum" && order === "desc") {
+      if (key === "durationStr" && order === "desc") {
         this.params.sortType = 2;
-        this.params.sortType = 0;
+        this.params.sort = 0;
         this.getList();
       }
       // 结束时间升序
-      if (key === "endTime" && order === "asc") {
+      if (key === "finishTime" && order === "asc") {
         this.params.sortType = 1;
-        this.params.sortType = 1;
+        this.params.sort = 1;
         this.getList();
       }
       // 结束时间降序序
-      if (key === "endTime" && order === "desc") {
+      if (key === "finishTime" && order === "desc") {
         this.params.sortType = 1;
-        this.params.sortType = 0;
+        this.params.sort = 0;
         this.getList();
       }
     },
@@ -410,14 +419,13 @@ export default {
         startTime: this.params.startTime
           ? startTime(this.params.startTime, "x")
           : "",
-        endTime: this.params.endTime ? endTime(this.params.endTime, "x") : "",
+        endTime: this.params.endTime
+          ? endTime(this.params.endTime, "x")
+          : "",
         isRead: this.params.isRead ? 0 : -1,
         execute: this.params.execute ? 1 : -1,
         partake: this.params.execute ? 1 : null,
-        customerId:
-          this.params.customerIdList.length > 0
-            ? this.params.customerIdList[this.params.customerIdList.length - 1]
-            : ""
+        customerId: this.params.customerIdList.length > 0 ? this.params.customerIdList[this.params.customerIdList.length - 1] : ''
       };
       let res = await getWorkSheetListData(data);
       if (res.status !== 200) {
