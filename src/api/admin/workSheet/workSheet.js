@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-17 09:49:21
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-18 19:46:55
+ * @Last Modified time: 2018-11-29 10:27:58
  * @explanatory:  工单详情 基本信息
  */
 import api from "@/libs/api.request";
@@ -59,6 +59,52 @@ export const getWorkSheetListData = ({
     customerId
 }) => {
     return post("/worksheet/list", {
+        companyName,
+        identifier,
+        workType,
+        handleType,
+        startTime,
+        endTime,
+        timeType,
+        durationHour,
+        responseHour,
+        isRead,
+        execute,
+        partake,
+        sortType,
+        sort,
+        telephone,
+        pageNum,
+        pageSize,
+        count,
+        customerId
+    });
+};
+// 公司工单列表
+export const getWorkcustomerListData = ({
+    companyId,
+    companyName,
+    identifier,
+    workType,
+    handleType,
+    startTime,
+    endTime,
+    timeType,
+    durationHour,
+    responseHour,
+    isRead,
+    execute,
+    partake,
+    sortType,
+    sort,
+    telephone,
+    pageNum,
+    pageSize,
+    count,
+    customerId
+}) => {
+    return post("/worksheet/customerlist", {
+        companyId,
         companyName,
         identifier,
         workType,
