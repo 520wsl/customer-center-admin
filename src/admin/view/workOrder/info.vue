@@ -171,6 +171,7 @@ export default {
                     title: "人员指派",
                     content: "请选择指派类型"
                 });
+                return;
             }
             let params = {
                 workSheetId: this.info.id,
