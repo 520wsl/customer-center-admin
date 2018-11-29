@@ -18,3 +18,32 @@ export const getEvaluateInfo = (orderNumber = "", sixiId = "") => {
     sixiId
   });
 };
+
+// 获取工单评价列表
+export const getWorkEvaluateListData = ({
+  workType = -1,
+  evaluateName = "",
+  companyName = "",
+  identifier = "",
+  phone = "",
+  value = "",
+  executorId = "",
+  timeMin = "",
+  timeMax = "",
+  pageNum = 1,
+  pageSize= 10
+}) => {
+  return post("/evaluatework/listBy", {
+    workType,
+    evaluateName,
+    companyName,
+    identifier,
+    phone,
+    value,
+    executorId,
+    timeMin,
+    timeMax,
+    pageNum,
+    pageSize
+  });
+};
