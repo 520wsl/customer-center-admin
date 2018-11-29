@@ -1,5 +1,5 @@
 import api from "@/libs/api.request";
-const baseUrl = "/qywechat-proxy";
+const baseUrl = "/qywechat-proxy-service";
 function post(url, params) {
   return api.post(baseUrl + url, params);
 }
