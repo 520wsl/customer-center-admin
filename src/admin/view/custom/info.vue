@@ -19,8 +19,9 @@
                         <td rowspan="3" class="title">所属：</td>
                         <td rowspan="3">
                             <div v-for="(item,index) in info.staffVos" :key="index" style="margin-bottom:10px">
-                                {{item.staffTag+"："+item.staffName+"("+item.department+")"}}
-                                <Button type="primary" size="small" @click="setStaff(index,item)" style="float:right">设置</Button>
+                                {{staffTagIdList[item.staffTagId] || ''+"："+item.staffName+"("+item.department+")"}}
+                                <!--注释批量设置人员-->
+                                <!-- <Button v-if="info.staffVos.length == index+1" type="primary" size="small" @click="setStaff(index,item)" style="float:right">设置</Button> -->
                             </div>
                         </td>
                     </tr>
@@ -79,7 +80,8 @@
                 </TabPane>
             </Tabs>
         </Card>
-        <setServiceSatff v-model="setStaffModal" :data="setServiceStaffData" :ids="this.params.sixiId"></setServiceSatff>
+        <!--注释批量设置人员-->
+        <!-- <setServiceSatff v-model="setStaffModal" :data="setServiceStaffData" :ids="[this.params.sixiId]"></setServiceSatff> -->
         <Modal v-model="bindModal" title="绑定微信账号" :footer-hide="true" width="400px;" @on-cancel='getInfo'>
             <Card>
                 <p>请客户用微信扫该二维码绑定，二维码有效期2分钟</p>
@@ -113,16 +115,24 @@ import { mapState, mapActions } from "vuex";
 import { formatInitTime, startTime, endTime } from "@/libs/util/time";
 import callPhone from "_c/public/callPhone";
 import operation from "./operation";
-import setServiceSatff from "./setServiceSatff";
+// <!--注释批量设置人员-->
+// import setServiceSatff from "./setServiceSatff";
+import { getValueOfObj } from "@/libs/util/index";
 export default {
-	components: { operation, Page, callPhone, setServiceSatff }, //eslint-disable-line
+	//<!--注释批量设置人员-->
+	// components: { operation, Page, callPhone, setServiceSatff }, //eslint-disable-line
+	components: { operation, Page, callPhone }, //eslint-disable-line
 	data() {
 		return {
 			bindOrderOrBillList: "bindOrder", // "billList", //
 			bindModal: false,
+
+			//<!--注释批量设置人员-->
 			setStaffModal: false,
 			// 员工信息
-			setServiceStaffData: {},
+
+			//<!--注释批量设置人员-->
+			// setServiceStaffData: {},
 			columns: [
 				{
 					title: "称呼",
@@ -411,6 +421,7 @@ export default {
 			workSheetType: state => state.workSheet.workSheetType,
 			statusList: state => state.workSheet.workSheetHandleType,
 			roleList: state => state.custom.roleList,
+			staffTagIdObj: state => state.custom.staffTagIdObj,
 			staffTagIdList: state => state.custom.staffTagIdList
 		})
 	},
@@ -526,12 +537,14 @@ export default {
 			this.billSerrchData.pageNum = res.data.num || 1;
 			this.billSerrchData.pageSize = res.data.size || 10;
 			this.billSerrchData.count = res.data.count || 0;
-		},
-		setStaff(index, item) {
-			this.setStaffModal = true;
-			console.log(item);
-			// 在这里设置默认的员工信息
 		}
+		//<!--注释批量设置人员-->
+		// setStaff(index, item) {
+		// 	this.setStaffModal = true;
+		// 	this.setServiceStaffData = item;
+		// 	console.log(index, item);
+		// 	// 在这里设置默认的员工信息
+		// }
 	},
 	created() {
 		if (this.$route.query.sixiId) {
