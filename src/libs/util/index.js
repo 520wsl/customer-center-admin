@@ -456,3 +456,30 @@ export const setTitle = (routeItem, vm) => {
     const resTitle = pageTitle ? `${title} - ${pageTitle}` : title;
     window.document.title = resTitle;
 };
+
+/**
+ * 获取对象中指定key的值
+ * @param {arr} Array 匹配该数组的值
+ * @param {content} String 需要匹配的值（这里的和key对比）
+ * @param {key} String 匹配值的名称（这里的和content对比）
+ * @param {value} String 匹配到的值后返回哪一个（这里也是一个key）
+ * @returns {all}  返回匹配的结果,没有则为空字符串
+ */
+export const getValueOfObj = ({
+    arr,
+    content,
+    key,
+    value
+}) => {
+    // 所有参数必填
+    if (arr && arr.length <= 0) return ''
+    if (!content || !key || !value) return ''
+    let returnValue;
+    arr.forEach(el => {
+        // console.log(el[key], content, 12321321)
+        if (el[key] == content) {
+            returnValue = el[value] || ''
+        }
+    });
+    return returnValue
+}

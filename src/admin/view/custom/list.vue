@@ -15,11 +15,13 @@
             </div>
             <div>
                 <Table :loading="loading" :columns="columns" :data="customList" @on-selection-change="getids($event)"></Table>
-                <Button type="primary" @click="setStaffModal = true" style="margin-top:20px;">批量设置所属</Button>
+                <!--注释批量设置人员-->
+                <!-- <Button type="primary" @click="setStaffModal = true" style="margin-top:20px;">批量设置所属</Button> -->
             </div>
         </Card>
         <Card class="md-card">
-            <setServiceSatff v-model="setStaffModal" :ids="ids"></setServiceSatff>
+            <!--注释批量设置人员-->
+            <!-- <setServiceSatff v-model="setStaffModal" :ids="ids"></setServiceSatff> -->
             <page :pageNum="params.pageNum" :pageSize="params.pageSize" :count="params.count" @pageCurrentChange="pageCurrentChange" @pageSizeChange="pageSizeChange"></page>
         </Card>
     </div>
@@ -28,7 +30,8 @@
 <script>
 import Page from "_c/admin/page";
 import { getCustomerListDate } from "@/api/admin/custom/custom";
-import setServiceSatff from "./setServiceSatff";
+// 注释批量设置人员
+// import setServiceSatff from "./setServiceSatff";
 import "./index.less";
 export default {
 	data() {
@@ -133,7 +136,9 @@ export default {
 			customList: []
 		};
 	},
-	components: { Page, setServiceSatff },
+	// 注释批量设置人员
+	// components: { Page, setServiceSatff },
+	components: { Page },
 	created() {
 		this.getlist();
 	},

@@ -73,3 +73,28 @@ export const updateBindInfo = ({
         role
     });
 };
+// 批量设置客服人员
+/**
+ * 
+ * @param {staffSetListFormList} 设置人员
+ * {
+      "companySixiId": "1182862037307361279", // 公司id
+      "staffList": [
+        {
+          "staffSixiId": "sixi1183688690736592895",
+          "staffName": "郭靖",
+          "staffAlias": "",
+          "staffTagId": 1,
+          "departmentId": 14
+        }
+      ]
+    }
+ * 
+ */
+export const setcompanystaff = ({
+    staffSetListFormList
+}) => {
+    return post("/customer/update", {
+        staffSetListFormList
+    });
+};

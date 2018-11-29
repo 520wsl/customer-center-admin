@@ -12,7 +12,9 @@ import { callPhoneAction } from "@/api/admin/callPhone/callPhone";
 export default {
 	// phone 要拨打的电话号码
 	props: ["phone"],
-	data() {},
+	data() {
+		return {};
+	},
 	methods: {
 		async callPhone() {
 			// 拨打确认
