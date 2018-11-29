@@ -437,7 +437,8 @@ export default {
 		},
 		getQrcode() {
 			getQRCodeUrl({
-				sixiId: this.info.customerSixiId,
+				companySixiId:
+					this.info.staffVos && this.info.staffVos.companySixiId,
 				type: "BINDING_PHONE"
 			}).then(res => {
 				if (res.status != 200) {
