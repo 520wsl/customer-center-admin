@@ -13,16 +13,18 @@
                         <tr>
                             <td class="title">微信昵称:</td>
                             <td>
-                                <img :src="row.wechatAvatar" class="acatar" alt="404"> {{row.wechatNickname}}
+                                <img :src="row.wechatAvatar" class="acatar" alt="404">&emsp;{{row.wechatNickname}}
                             </td>
                         </tr>
                         <tr>
                             <td class="title">绑定时间:</td>
-                            <td>该字段缺少</td>
+                            <td>{{row.bindTime}}</td>
                         </tr>
                         <tr>
                             <td class="title">称呼:</td>
-                            <td>{{row.callName}}</td>
+                            <td>
+                                <Input class="wid" v-model="callName"></Input>
+                            </td>
                         </tr>
                         <tr>
                             <td class="title">性别:</td>
@@ -57,7 +59,7 @@
     </div>
 </template>
 <script>
-import { setWechatUntied } from "@/api/admin/custom/custom";
+import { setWechatUntied, updateBindInfo } from "@/api/admin/custom/custom";
 // import { callPhoneAction } from "@/api/admin/callPhone/callPhone";
 import { addItemTalkNewsData } from "@/api/admin/workSheet/talkNews";
 import "./index.less";
@@ -70,7 +72,8 @@ export default {
 			sex: 0,
 			// 客户角色: 0:未知;1:老板;2:老板娘;3:经理;4:业务员;
 			role: 1,
-			phoneNumber: ""
+			phoneNumber: "",
+			callName: ""
 		};
 	},
 	created() {
@@ -78,6 +81,7 @@ export default {
 		this.sex = this.row.sex;
 		this.role = this.row.role;
 		this.phoneNumber = this.row.mobile;
+		this.callName = this.row.callName;
 	},
 	methods: {
 		cancelBind() {
@@ -92,10 +96,34 @@ export default {
 			});
 		},
 		edit() {
-			// if (!isPass) return;
-			// this.loading = false;
-			// this.modal = false;
+			let sex, sixiId, callName, mobile, role;
+			let params = {
+				sex: this.sex,
+				sixiId: this.row.customerSixiId,
+				callName: this.callName,
+				mobile: this.phoneNumber,
+				role: this.role
+			};
+			updateBindInfo(params).then(
+				res => {
+					if (res.status !== 200) {
+						this.$Modal.error({
+							title: "提示",
+							content: res.msg
+						});
+						return;
+					}
+					this.loading = false;
+					this.modal = false;
+					this.$emit("callFun");
+				},
+				error => {
+					this.loading = false;
+					this.modal = false;
+				}
+			);
 		},
+		// 采集手机
 		getMobilePhone() {
 			this.$Modal.confirm({
 				title: "电话号码采集",
@@ -113,11 +141,13 @@ export default {
 							});
 							return;
 						}
+						this.$emit("callFun");
 					});
 				},
 				onCancel: () => {}
 			});
 		},
+		// 采集账号密码
 		getAccountPassword() {
 			this.$Modal.confirm({
 				title: "账号密码采集",
@@ -134,6 +164,7 @@ export default {
 							});
 							return;
 						}
+						this.$emit("callFun");
 					});
 				},
 				onCancel: () => {}

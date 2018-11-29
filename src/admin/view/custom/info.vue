@@ -79,32 +79,7 @@
                 </TabPane>
             </Tabs>
         </Card>
-        <Modal v-model="setStaffModal" title="所属设置">
-            <Card class="md-card">
-                <table class="tab">
-                    <tr>
-                        <td class="title">新开业务员：</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="title">续开业务员：</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="title">运营人员：</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="title">美工：</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="title">旺旺客服：</td>
-                        <td></td>
-                    </tr>
-                </table>
-            </Card>
-        </Modal>
+        <setServiceSatff v-model="setStaffModal" :data="setServiceStaffData" :ids="this.params.sixiId"></setServiceSatff>
         <Modal v-model="bindModal" title="绑定微信账号" :footer-hide="true" width="400px;" @on-cancel='getInfo'>
             <Card>
                 <p>请客户用微信扫该二维码绑定，二维码有效期2分钟</p>
@@ -129,22 +104,25 @@ import {
 } from "@/api/admin/custom/custom";
 import {
 	workSheet,
-	getWorkSheetListData
+	getWorkcustomerListData
 } from "@/api/admin/workSheet/workSheet";
 import Page from "_c/admin/page";
 import { getQRCodeUrl } from "@/api/admin/wechatProxy/qrCode";
 import { hidePhone } from "@/libs/util/index";
-import operation from "./operation";
 import { mapState, mapActions } from "vuex";
 import { formatInitTime, startTime, endTime } from "@/libs/util/time";
-import callPhone from "_c/callPhone";
+import callPhone from "_c/public/callPhone";
+import operation from "./operation";
+import setServiceSatff from "./setServiceSatff";
 export default {
-	components: { operation, Page, callPhone }, //eslint-disable-line
+	components: { operation, Page, callPhone, setServiceSatff }, //eslint-disable-line
 	data() {
 		return {
 			bindOrderOrBillList: "bindOrder", // "billList", //
 			bindModal: false,
 			setStaffModal: false,
+			// 员工信息
+			setServiceStaffData: {},
 			columns: [
 				{
 					title: "称呼",
@@ -432,7 +410,8 @@ export default {
 			},
 			workSheetType: state => state.workSheet.workSheetType,
 			statusList: state => state.workSheet.workSheetHandleType,
-			roleList: state => state.custom.roleList
+			roleList: state => state.custom.roleList,
+			staffTagIdList: state => state.custom.staffTagIdList
 		})
 	},
 	methods: {
@@ -478,18 +457,17 @@ export default {
 				this.info.cityName = res.data.cityName || "";
 				// 已绑定信息
 				this.wechatBindVos = res.data.wechatBindVos;
-				// this.wechatBindVos[0].mobile = 15167141601;
-				this.wechatBindVos = [
-					{
-						mobile: "15557151779",
-						callName: "王先生",
-						customerSixiId: "1182862037307360255",
-						role: 1,
-						sex: 0,
-						wechatAvatar: "wechatAvatar",
-						wechatNickname: "wechatNickName"
-					}
-				];
+				// this.wechatBindVos = [
+				// 	{
+				// 		mobile: "15557151779",
+				// 		callName: "王先生",
+				// 		customerSixiId: "1182862037307360255",
+				// 		role: 1,
+				// 		sex: 0,
+				// 		wechatAvatar: "wechatAvatar",
+				// 		wechatNickname: "wechatNickName"
+				// 	}
+				// ];
 			});
 		},
 		unBind() {
@@ -533,43 +511,21 @@ export default {
 					: ""
 			};
 			data[data.searchTextType] = data.text;
+			// data.companyId = this.info.customerSixiId;
+			data.companyId = this.info.sixiId;
 			// 需要处理该对象，时间类型，时间，搜索的文本类型
 			console.log(data);
-			let res = await getWorkSheetListData(data);
+			let res = await getWorkcustomerListData(data);
 			if (res.status !== 200) {
 				this.$Modal.error({
 					title: "工单列表",
 					content: res.msg
 				});
 			}
-			console.log(res);
 			this.workOrderList = res.data.list || [];
 			this.billSerrchData.pageNum = res.data.num || 1;
 			this.billSerrchData.pageSize = res.data.size || 10;
 			this.billSerrchData.count = res.data.count || 0;
-
-			// const data = {
-			// 	...this.billSerrchData,
-			// 	startTime: this.billSerrchData.startTime
-			// 		? startTime(this.billSerrchData.startTime, "x")
-			// 		: "",
-			// 	endTime: this.billSerrchData.endTime
-			// 		? endTime(this.billSerrchData.endTime, "x")
-			// 		: "",
-			// 	isRead: this.billSerrchData.isRead ? 0 : -1,
-			// 	execute: this.billSerrchData.execute ? 1 : -1
-			// };
-			// let res = await getWorkSheetListData(data);
-			// if (res.status !== 200) {
-			// 	this.$Modal.error({
-			// 		title: "工单列表",
-			// 		content: res.msg
-			// 	});
-			// }
-			// this.workOrderList = res.data.list || [];
-			// this.billSerrchData.pageNum = res.data.num || 1;
-			// this.billSerrchData.pageSize = res.data.size || 10;
-			// this.billSerrchData.count = res.data.count || 0;
 		},
 		setStaff(index, item) {
 			this.setStaffModal = true;
@@ -578,7 +534,6 @@ export default {
 		}
 	},
 	created() {
-		console.log(window);
 		if (this.$route.query.sixiId) {
 			this.params.sixiId = this.$route.query.sixiId;
 			this.getInfo();
