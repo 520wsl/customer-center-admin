@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-26 21:06:48
+ * @Last Modified time: 2018-11-28 16:46:18
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -18,6 +18,7 @@
  *  access: (null) 可访问该页面的权限数组，当前路由设置的权限会影响子路由
  *  icon: (-) 该页面在左侧菜单、面包屑和标签导航处显示的图标，如果是自定义图标，需要在图标名称前加下划线'_'
  *  beforeCloseName: (-) 设置该字段，则在关闭当前tab页时会去'@/router/before-close.js'里寻找该字段名对应的方法，作为关闭前的钩子函数
+ *  noLogin: (false) 页面是否需要登陆拦截，默认需要
  * }
  */
 const Main1 = r =>
@@ -297,7 +298,8 @@ export default [
 		meta: {
 			hideInMenu: true,
 			icon: "ios-stats",
-			title: "工单"
+			title: "工单",
+			noLogin: true
 		},
 		component: parentView,
 		children: [
@@ -307,7 +309,8 @@ export default [
 				meta: {
 					hideInMenu: true,
 					icon: "ios-stats",
-					title: "工单列表"
+					title: "工单列表",
+					noLogin: true
 				},
 				component: r =>
 					require.ensure([], () =>
@@ -321,7 +324,8 @@ export default [
 					hideInMenu: true,
 					icon: "ios-stats",
 					title: "工单详情",
-					notCache: true
+					notCache: true,
+					noLogin: true
 				},
 				component: r =>
 					require.ensure([], () =>
@@ -335,7 +339,8 @@ export default [
 							hideInMenu: true,
 							icon: "ios-stats",
 							title: "工单详情基本信息",
-							notCache: true
+							notCache: true,
+							noLogin: true
 						},
 						component: r =>
 							require.ensure([], () =>
@@ -349,7 +354,8 @@ export default [
 							hideInMenu: true,
 							icon: "ios-stats",
 							title: "工单详情服务信息",
-							notCache: true
+							notCache: true,
+							noLogin: true
 						},
 						component: r =>
 							require.ensure([], () =>
