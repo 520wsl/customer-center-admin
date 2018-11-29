@@ -9,7 +9,7 @@ function get(url, params) {
 
 // 微信  获取 微信 jsapi SDK config 配置
 export const getWxJSSDKConfig = ({ url }) => {
-	return get("/wx/WxJSSDKConfig", { url });
+	return get("/wx/wxJSSDKConfig", { url });
 };
 
 
