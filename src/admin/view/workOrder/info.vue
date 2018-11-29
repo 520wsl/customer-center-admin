@@ -50,7 +50,7 @@
         <router-view></router-view>
         <Modal v-model="modal.bool" footer-hide title="工单指派" mask-closable>
             <Card class="md-card">
-                <RadioGroup v-model="modal.index">
+                <!-- <RadioGroup v-model="modal.index">
                     <table class="tab">
                         <tbody>
                             <tr v-for="(item,index) in modal.personList" :key="index">
@@ -62,12 +62,22 @@
                             </tr>
                         </tbody>
                     </table>
+                </RadioGroup> -->
+                <RadioGroup v-model="modal.type" vertical>
+                    <Radio label="1">关联客服：</Radio>
+                    <Select v-model="modal.relateService" style="width:200px">
+                        <Option v-for='(item,index) in modal.personList' :value="item.staffSixiId" :key="index">{{item.staffTag+":"+item.staffName+"("+item.department+")"}}</Option>
+                    </Select>
+                    <Radio label="2">上级领导：</Radio>
+                    {{modal.superiorLeader.userName}}
+                    <Radio label="3">其他员工：</Radio>
+                    <Department :loading-user="true" width="200" :get-user-info="getUserInfo"  v-model="modal.customerIdList"></Department>
                 </RadioGroup>
                 <!-- 本期不做 -->
                 <div v-if="false">
                     <h3>客服记录</h3>
                     <Input type="textarea">
-                        <span></span>
+                    <span></span>
                     </Input>
                 </div>
                 <div class="modal-btn">
@@ -91,7 +101,11 @@ import { getstaffListData } from "@/api/admin/custom/custom";
 import { getSuperiorLeader } from "@/api/admin/department/department";
 import { formatTime } from "@/libs/util/time";
 import "./index.less";
+import Department from "_c/public/department";
 export default {
+    components:{
+        Department
+    },
     computed: {
         isShowStatus() {
             return this.status.list.length > 0;
@@ -129,17 +143,39 @@ export default {
     methods: {
         ...mapMutations(["setWorkSheetBaseInfo"]),
         ...mapActions(["getSixiId"]),
+        getUserInfo(data) {
+            console.log(data)
+        },
         assignPersonnel() {
             this.modal.bool = true;
             this.getPersonalList();
+            this.getLeaderData();
+        },
+        async getLeaderData() {
+            let department = this.info.executorUser && this.info.executorUser.department || "";
+            let res = await getSuperiorLeader({ department });
+            console.log(res)
+            this.modal.superiorLeader = res.data || { sixiId: "", userName: ""}
         },
         subAssign() {
+            let executorSixiId = "";
+            if(this.modal.type == '1'){
+                executorSixiId = this.modal.relateService
+            } else if(this.modal.type == '2'){
+                executorSixiId = this.modal.superiorLeader.sixiId
+            } else if(this.modal.type == '3'){
+                let arr = this.modal.customerIdList
+                executorSixiId = arr[arr.length-1]
+            } else {
+                this.$Modal.error({
+                    title: "人员指派",
+                    content: "请选择指派类型"
+                });
+            }
             let params = {
                 workSheetId: this.info.id,
-                executorSixiId: this.modal.personList[this.modal.index]
-                    .staffSixiId
+                executorSixiId
             };
-            console.log(params);
             assignWorksheet(params).then(res => {
                 console.log(res);
                 if (res.status != 200) {
@@ -294,7 +330,11 @@ export default {
             modal: {
                 bool: false,
                 personList: [],
-                index: ""
+                index: "",
+                type: "1",
+                relateService: '',
+                customerIdList: [],
+                superiorLeader:{}
             }
         };
     },

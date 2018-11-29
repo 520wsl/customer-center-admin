@@ -306,6 +306,9 @@ export default {
         async getList() {
             this.customerInfoChange(this.params.customerInfo)
             this.evaluateTypeChange(this.params.evaluateType)
+            if (this.params.customerIdList.length > 0) {
+                this.params.executorId = this.params.customerIdList[this.params.customerIdList.length - 1];
+            }
             let params = JSON.parse(JSON.stringify(this.params))
             let res = await getWorkEvaluateListData(params)
 
