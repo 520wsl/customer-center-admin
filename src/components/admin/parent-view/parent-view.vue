@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Button @click="opendefaultbrowserBtn">用系统浏览器打开</Button>
+    <!-- <Button @click="opendefaultbrowserBtn">用系统浏览器打开</Button> -->
     <router-view/>
   </div>
 </template>
