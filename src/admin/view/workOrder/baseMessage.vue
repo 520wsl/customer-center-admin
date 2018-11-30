@@ -164,10 +164,7 @@ export default {
                 });
                 cunstomInfo[0].push({
                     title: "微信昵称：",
-                    value:
-                        (this.info.customerDetailVo &&
-                            this.info.customerDetailVo.wechatNickname) ||
-                        ""
+                    value: this.info.wechatNickname || ""
                 });
             } else {
                 cunstomInfo[0].push({
