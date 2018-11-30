@@ -9,12 +9,15 @@
             <tables :data="cunstomInfo"></tables>
         </Card>
         <Card class="md-card" v-if="evaluateList.length != 0">
-            <div slot="title">客户评价</div>
+            <div slot="title" class="flex">客户评价<Button type="primary" class="flex-right" @click="clickAgianEvaluate">重新评价</Button></div>
             <Card v-for="(item,index) in evaluateList" :key="'evaluate_'+index">
                 <div slot="title">评价时间：{{formatTime(item.createAt)}}</div>
                 <evaluate-item :evaluateList="item.evaluateContent"></evaluate-item>
             </Card>
         </Card>
+        <Modal v-model="modal" width="400px;" class="again-evaluate" title="重新评价" :mask-closable="false" @on-ok="sureEvaluate">
+            <span class="text">确定是否追加评价？</span>   
+        </Modal>
     </div>
 </template>
 
@@ -22,7 +25,7 @@
 import tables from "_c/admin/md-tables";
 import { mapState, mapMutations } from "vuex";
 import { getArrValue } from "@/libs/tools";
-import { getWorkSheetInfoData } from "@/api/admin/workSheet/workSheet";
+import { getWorkSheetInfoData, againEvaluate } from "@/api/admin/workSheet/workSheet";
 import { getEvaluateInfo } from "@/api/admin/evaluate/dimension";
 import evaluateItem from "_c/admin/evaluate-item";
 import { formatTime } from "@/libs/util/time";
@@ -60,7 +63,7 @@ export default {
         // 设置 工单信息
         setWorkOrderInfo() {
             let joinStr = "";
-            this.info.userVos.forEach(item => {
+            this.info.userVos && this.info.userVos.forEach(item => {
                 if (item) {
                     joinStr +=
                         item.userName + "(" + item.departmentName + ")，";
@@ -214,6 +217,22 @@ export default {
                 });
                 this.evaluateList = evaluateList;
             });
+        },
+        async sureEvaluate() {
+            let param = {
+                workSheetId: this.workSheetId
+            }
+            let res = await againEvaluate(param);
+            if(res.status != 200){
+                this.$Modal.error({
+                    title: "重新评价",
+                    content: res.msg
+                });
+                return;
+            }
+        },
+        clickAgianEvaluate() {
+            this.modal = true;
         }
     },
     data() {
@@ -243,7 +262,8 @@ export default {
                 title: "",
                 userId: "",
                 workType: 0
-            }
+            },
+            modal: false
         };
     },
     created() {
