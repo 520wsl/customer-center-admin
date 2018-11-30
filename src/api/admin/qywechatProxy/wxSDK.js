@@ -11,3 +11,8 @@ function get(url, params) {
 export const getQyWxJSSDKConfig = ({ url }) => {
 	return get("/wx/wxJSSDKConfig", { url });
 };
+
+// 企业微信  获取 微信 jsapi SDK config 配置 jtk
+// export const getQyWxJSSDKConfig = ({ url }) => {
+// 	return api.get("https://qywx.n.yumc.pw/api/jsapi/config",{url});
+// };
