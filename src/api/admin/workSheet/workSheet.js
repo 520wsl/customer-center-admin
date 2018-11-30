@@ -136,3 +136,11 @@ export const assignWorksheet = ({
         executorSixiId
     });
 };
+// 再次发送评价通知
+export const againEvaluate = ({
+    workSheetId
+}) => {
+    return post("/worksheet/againevaluate", {
+        workSheetId
+    });
+};

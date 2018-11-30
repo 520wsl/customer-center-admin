@@ -91,13 +91,15 @@ export default {
 								return;
 							}
 							const data = res.data;
-							let userName =
-								data.userName + "(" + data.departmentName + ")";
+                            let userName = "";
+                            if(data && data.userName && data.departmentName){
+                                userName = data.userName + "(" + data.departmentName + ")";
+                            }   
 							console.log("getUserInfoData", res.data);
-							commit("setAvator", data.avatar);
+							commit("setAvator", data && data.avatar);
 							commit("setUserName", userName);
-							commit("setUserId", data.userId);
-							commit("setSixiId", data.sixiId);
+							commit("setUserId", data && data.userId);
+							commit("setSixiId", data && data.sixiId);
 							commit("setUserInfo", data);
 							// commit("setAccess", data.permissions);
 							commit("setHasGetInfo", true);

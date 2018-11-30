@@ -126,7 +126,7 @@ export default {
             return res;
         },
         showWorkSheetType() {
-            return this.$store.state.workSheet.workSheetBaseInfo.handleType;
+            return this.$store.state.workSheet && this.$store.state.workSheet.workSheetBaseInfo && this.$store.state.workSheet.workSheetBaseInfo.handleType || '';
         },
         isExectorId() {
             let executorId = this.$store.state.workSheet.workSheetBaseInfo
@@ -134,7 +134,7 @@ export default {
             return executorId == this.sixiId;
         },
         isHaveUserId() {
-            if (this.info.userId) {
+            if (this.info && this.info.userId) {
                 return true;
             }
             return false;
@@ -255,7 +255,7 @@ export default {
             this.setWorkSheetBaseInfo(res.data);
         },
         async getPersonalList() {
-            let customerSixiId = this.info.userId;
+            let customerSixiId = this.info.userId || '';
             let res = await getstaffListData({ customerSixiId });
             console.log(res);
             if (res.status != 200) {
