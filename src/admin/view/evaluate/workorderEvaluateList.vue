@@ -134,7 +134,12 @@ export default {
                             },
                             on: {
                                 click: () => {
-                                    console.log(1111)
+                                    this.$router.push({
+                                        name: "custom-info",
+                                        query: {
+                                            sixiId: params.row.companyId
+                                        }
+                                    })
                                 }
                             }
                         }, params.row.companyName)
@@ -151,7 +156,12 @@ export default {
                             },
                             on: {
                                 click: () => {
-                                    console.log(2222)
+                                    this.$router.push({
+                                        name: "wx-workOrder-info",
+                                        query: {
+                                            workSheetId: params.row.workSheetId
+                                        }
+                                    })
                                 }
                             }
                         }, params.row.identifier)
@@ -308,6 +318,8 @@ export default {
             this.evaluateTypeChange(this.params.evaluateType)
             if (this.params.customerIdList.length > 0) {
                 this.params.executorId = this.params.customerIdList[this.params.customerIdList.length - 1];
+            } else {
+                this.params.executorId = "";
             }
             let params = JSON.parse(JSON.stringify(this.params))
             let res = await getWorkEvaluateListData(params)
