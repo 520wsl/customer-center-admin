@@ -132,7 +132,8 @@ export default {
 				onOk: () => {
 					addItemTalkNewsData({
 						eventType: 2,
-						userSixiId: this.row.customerSixiId
+						userSixiId: this.row.customerSixiId,
+						companySixiId: this.row.sixiId
 					}).then(res => {
 						if (res.status !== 200) {
 							this.$Modal.error({
@@ -155,7 +156,8 @@ export default {
 				onOk: () => {
 					addItemTalkNewsData({
 						eventType: 3,
-						userSixiId: this.row.customerSixiId
+						userSixiId: this.row.customerSixiId,
+						companySixiId: this.row.sixiId
 					}).then(res => {
 						if (res.status !== 200) {
 							this.$Modal.error({

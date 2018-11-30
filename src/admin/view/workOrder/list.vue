@@ -424,7 +424,7 @@ export default {
           : "",
         isRead: this.params.isRead ? 0 : -1,
         execute: this.params.execute ? 1 : -1,
-        partake: this.params.execute ? 1 : null,
+        partake: this.params.partake ? 1 : null,
         customerId: this.params.customerIdList.length > 0 ? this.params.customerIdList[this.params.customerIdList.length - 1] : ''
       };
       let res = await getWorkSheetListData(data);
