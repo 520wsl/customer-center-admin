@@ -1,10 +1,5 @@
-import {
-	logout,
-	sentLoginCodeData
-} from "@/api/admin/qywechatProxy/user";
-import {
-	getUserInfoData
-} from "@/api/admin/user/user";
+import { logout, sentLoginCodeData } from "@/api/admin/qywechatProxy/user";
+import { getUserInfoData } from "@/api/admin/user/user";
 import { setToken, getToken } from "@/libs/util";
 import { setStore, getStore } from "@/libs/util/storeage";
 import config from "@/config";
@@ -13,7 +8,7 @@ const { storeageUserInfoKey } = config;
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-28 15:38:31
+ * @Last Modified time: 2018-11-30 13:29:25
  * @explanatory:  store demo
  */
 export default {
@@ -86,8 +81,9 @@ export default {
 				try {
 					getUserInfoData()
 						.then(res => {
-							if (!res.status) {
+							if (!res.status || !res.data) {
 								console.error("[debug]:getUserInfoData", res);
+								resolve(res);
 								return;
 							}
 							const data = res.data;
