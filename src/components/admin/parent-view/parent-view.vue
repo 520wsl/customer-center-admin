@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- <Button @click="opendefaultbrowserBtn">用系统浏览器打开</Button> -->
+        <Button v-if="test" @click="opendefaultbrowserBtn">用系统浏览器打开</Button>
         <router-view/>
     </div>
 </template>
@@ -9,7 +9,11 @@ import { mapActions } from "vuex";
 import { getQyWxJSSDKConfig } from "@/api/admin/qywechatProxy/wxSDK";
 export default {
     name: "ParentView",
-
+    data() {
+        return {
+            test: false
+        };
+    },
     methods: {
         ...mapActions([
             "handleLogin",
@@ -97,6 +101,7 @@ export default {
         let query = route.query;
         let codeData = query.code || "";
         let stateData = query.state || "enterpriseWeChat";
+        this.test = query.test || false;
         this.QYWXLogin();
         if (!codeData && !stateData) {
             return;
