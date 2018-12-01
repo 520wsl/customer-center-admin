@@ -19,7 +19,7 @@
                         icon="md-settings"
                         type="info"
                         ghost
-                    >电话号码采集</Button>
+                    >工单联系号码采集</Button>
                     <Button
                         v-if="TalkNewsCountdownTimeFormat"
                         @click="confirm(3)"

@@ -69,7 +69,6 @@ export default {
                 timeMin: "",
                 timeMax: "",
                 customerIdList: [],
-                phone: "",
                 inputIdentifier: "",
                 identifier: "",
                 evaluateName: "",
@@ -190,18 +189,6 @@ export default {
                             str = params.row.executorInfo.userName + "(" + params.row.executorInfo.departmentName + ")";
                         }
                         return h("span", {}, str);
-                    }
-                },
-                {
-                    title: "用户手机号码",
-                    key: "phone",
-                    align: "center",
-                    render: (h, params) => {
-                        let phone = params.row.phone || '';
-                        if (phone) {
-                            phone = phone.slice(0, 3) + "****" + phone.slice(-4)
-                        }
-                        return h('span', {}, phone)
                     }
                 },
                 {
