@@ -18,7 +18,7 @@
                         </tr>
                         <tr>
                             <td class="title">绑定时间:</td>
-                            <td>{{row.bindTime}}</td>
+                            <td>{{ getTime(row.bindTime)}}</td>
                         </tr>
                         <tr>
                             <td class="title">称呼:</td>
@@ -62,9 +62,11 @@
 import { setWechatUntied, updateBindInfo } from "@/api/admin/custom/custom";
 // import { callPhoneAction } from "@/api/admin/callPhone/callPhone";
 import { addItemTalkNewsData } from "@/api/admin/workSheet/talkNews";
+
+import { formatTime } from "@/libs/util/time";
 import "./index.less";
 export default {
-	props: ["row"],
+	props: ["row", "companySixiId"],
 	data() {
 		return {
 			modal: false,
@@ -86,8 +88,9 @@ export default {
 	methods: {
 		cancelBind() {
 			// 当前暂无openid
-			let openid = 1111111;
-			setWechatUntied({ openid }).then(res => {
+			let companySixiId = this.companySixiId;
+			let customerSixiId = this.row.customerSixiId;
+			setWechatUntied({ companySixiId, customerSixiId }).then(res => {
 				if (res.status !== 200) {
 					this.$Modal.error({ title: "提示", content: res.msg });
 					return;
@@ -171,6 +174,9 @@ export default {
 				},
 				onCancel: () => {}
 			});
+		},
+		getTime(val) {
+			return formatTime(val, "YYYY-MM-DD H:mm:ss");
 		}
 	}
 };

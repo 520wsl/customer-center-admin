@@ -34,10 +34,12 @@ export const getCustomerInfoData = ({
 };
 // 微信解绑
 export const setWechatUntied = ({
-    openId
+    companySixiId,
+    customerSixiId
 }) => {
     return post("/wechat/untied", {
-        openId
+        companySixiId,
+        customerSixiId
     });
 };
 // 客户指派人员列表
