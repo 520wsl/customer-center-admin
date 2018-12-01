@@ -5,8 +5,8 @@
             <div class="btn-group flex">
                 <div v-if="isHaveUserId && isExectorId" class="flex-left">
                     <Button
-                        v-if="info.customerDetailVo.mobile"
-                        @click="confirm(1)"
+                        v-if="workOrderPhoneList && workOrderPhoneList.mobile"
+                        @click="callPhoneModal()"
                         class="btn"
                         icon="ios-call"
                         type="success"
@@ -19,7 +19,7 @@
                         icon="md-settings"
                         type="info"
                         ghost
-                    >工单联系号码采集</Button>
+                    >工单联系电话采集</Button>
                     <Button
                         v-if="TalkNewsCountdownTimeFormat"
                         @click="confirm(3)"
@@ -134,12 +134,37 @@
                 @pageSizeChange="pageSizeChange"
             ></page>
         </Card>
+        <Modal v-model="isShowCallPhoneModal" width="300" title="拨号">
+            <Card class="md-card">
+                <p>即将拨打客户电话号码，请确认</p>
+                <RadioGroup v-model="remarkParams.mobile" vertical>
+                    <Radio :label="workOrderPhoneList.mobile">
+                        <Icon type="social-apple"></Icon>
+                        <span>{{getEncryptionPhone(workOrderPhoneList.mobile)}}</span>
+                    </Radio>
+                    <Radio
+                        v-if="workOrderPhoneList.phone && workOrderPhoneList.mobile !== workOrderPhoneList.phone"
+                        :label="workOrderPhoneList.phone"
+                    >
+                        <Icon type="social-android"></Icon>
+                        <span>{{getEncryptionPhone(workOrderPhoneList.phone)}}</span>
+                    </Radio>
+                </RadioGroup>
+            </Card>
+            <div slot="footer">
+                <Button type="primary" @click="addItemTalkNews(1, '拨号')">确认</Button>
+                <Button @click="closeCallPhoneModal">返回</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 
 <script>
 import { getWorkSheetInfoData } from "@/api/admin/workSheet/workSheet";
-import { setWorkOrderCustomerServiceStaffReplyData } from "@/api/admin/workSheet/workOrder";
+import {
+    setWorkOrderCustomerServiceStaffReplyData,
+    getWorkOrderPhoneListData
+} from "@/api/admin/workSheet/workOrder";
 import {
     addItemTalkNewsData,
     getTalkNewsListData,
@@ -149,7 +174,12 @@ import {
 import { callPhoneAction } from "@/api/admin/callPhone/callPhone";
 import { mapState, mapMutations, mapActions } from "vuex";
 import { formatTime, formatAddTime } from "@/libs/util/time";
-import { getRelativeTime, getDateDiff, getIntervalTime } from "@/libs/tools";
+import {
+    getRelativeTime,
+    getDateDiff,
+    getIntervalTime,
+    getEncryptionPhone
+} from "@/libs/tools";
 import messageList from "_c/admin/message-list";
 import Page from "_c/admin/page";
 export default {
@@ -173,6 +203,29 @@ export default {
     methods: {
         ...mapMutations(["setWorkSheetBaseInfo"]),
         ...mapActions(["getSixiId"]),
+        getEncryptionPhone(phone) {
+            return getEncryptionPhone(phone);
+        },
+        callPhoneModal() {
+            this.remarkParams.mobile = this.workOrderPhoneList.mobile;
+            this.isShowCallPhoneModal = true;
+        },
+        closeCallPhoneModal() {
+            this.remarkParams.mobile = "";
+            this.isShowCallPhoneModal = false;
+        },
+        async getWorkOrderPhoneList(workSheetId) {
+            console.log(workSheetId);
+            let res = await getWorkOrderPhoneListData({ workSheetId });
+            if (res.status !== 200) {
+                this.$Modal.error({
+                    title: "获取手机号列表",
+                    content: res.msg
+                });
+                return;
+            }
+            this.workOrderPhoneList = res.data;
+        },
         getTalkNewsCountdownTimeFormat() {
             this.getTalkNewsCountdownTimeStr();
             setInterval(() => {
@@ -233,6 +286,13 @@ export default {
                 this.$Modal.error({
                     title: "客服回复",
                     content: "请填写回复信息。。。"
+                });
+                return;
+            }
+            if (params.content.length > 800) {
+                this.$Modal.error({
+                    title: "客服回复",
+                    content: "回复信息过长，不能超过800个字符"
                 });
                 return;
             }
@@ -328,6 +388,7 @@ export default {
             this.setWorkSheetBaseInfo(res.data);
             this.info = res.data;
             console.log(this.info);
+            this.getWorkOrderPhoneList(res.data.id);
             this.getTalkNewsList();
         },
         // 创建对话记录
@@ -339,11 +400,7 @@ export default {
                 workSheetId: this.info.id,
                 eventType
             };
-            let mobile =
-                (this.info &&
-                    this.info.customerDetailVo &&
-                    this.info.customerDetailVo.mobile) ||
-                "";
+            let mobile = this.remarkParams.mobile || "";
             if (eventType == 1 && !mobile) {
                 setTimeout(() => {
                     this.$Modal.error({
@@ -386,14 +443,12 @@ export default {
                 case 1:
                     title = "拨号";
                     message = "即将拨打客户电话号码，请确认";
-                    break;
+                    return;
                 case 2:
-                    title = "电话号码采集";
+                    title = "工单联系电话采集";
                     message = "即将发送客户采集电话号码通知，请确认";
                     content =
-                        "【 " +
-                        wechatNickname +
-                        " 】您好，为了更好的为您提供服务，客服人员能够与您电话沟通，请绑定您的手机号。\n\n点击<a target='_blank' href='http://workapp.sixi.com/serviceBill/getphone'>绑定手机号>></a>";
+                        "非常抱歉，您留下的工单联系人电话有误，电话没有接通，请提供新的联系电话！\n\n点击<a target='_blank' href='http://workapp.sixi.com/serviceBill/getphone'>提交工单联系人信息>></a>";
                     this.setReplyParamsContent(content);
                     return;
                 case 3:
@@ -402,20 +457,23 @@ export default {
                     content =
                         "【 " +
                         wechatNickname +
-                        " 】您好，为了更好的为您提供服务请提交，您店铺的账号密码；\n注意：请不要将账号密码直接回复在聊天窗口 \n\n点击<a target='_blank' href='http://workapp.sixi.com/serviceBill/getphone'>提交阿里店铺账号密码>></a>";
+                        " 】您好，为了更好的为您提供服务请提交，您店铺的账号密码；\n注意：请不要将账号密码直接回复在聊天窗口 \n\n点击<a target='_blank' href='http://workapp.sixi.com/personal/passwordstore?companyId='" +
+                        this.info.companyId +
+                        "'>提交阿里店铺账号密码>></a>";
                     this.setReplyParamsContent(content);
                     return;
             }
 
-            this.$Modal.confirm({
-                title: title,
-                content: "<p>" + message + "</p>",
-                onOk: () => {
-                    this.addItemTalkNews(eventType, title);
-                },
-                onCancel: () => {}
-            });
+            // this.$Modal.confirm({
+            //     title: title,
+            //     content: "<p>" + message + "</p>",
+            //     onOk: () => {
+            //         this.addItemTalkNews(eventType, title);
+            //     },
+            //     onCancel: () => {}
+            // });
         },
+
         setReplyParamsContent(content) {
             this.replyParams.content = content;
         },
@@ -433,14 +491,20 @@ export default {
     },
     data() {
         return {
+            workOrderPhoneList: {
+                mobile: "",
+                phone: ""
+            },
             sixiId: "",
             setIntervalFunction: "",
             isShowRemarkModal: false,
+            isShowCallPhoneModal: false,
             TalkNewsCountdownTimeFormat: "",
             countDownTime: "",
             talkTime: "",
             creationTime: "",
             remarkParams: {
+                mobile: "",
                 id: 0,
                 workOrderId: 0,
                 identifier: "",
