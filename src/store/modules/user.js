@@ -1,14 +1,14 @@
 import { logout, sentLoginCodeData } from "@/api/admin/qywechatProxy/user";
 import { getUserInfoData } from "@/api/admin/user/user";
 import { setToken, getToken } from "@/libs/util";
-import { setStore, getStore } from "@/libs/util/storeage";
+import { setItem, getItem } from "@/libs/util/session";
 import config from "@/config";
 const { storeageUserInfoKey } = config;
 /*
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-30 13:29:25
+ * @Last Modified time: 2018-12-01 10:05:12
  * @explanatory:  store demo
  */
 export default {
@@ -26,7 +26,7 @@ export default {
 	},
 	mutations: {
 		setUserInfo(state, userInfo) {
-			setStore(state.storeageUserInfoKey, userInfo);
+			setItem(state.storeageUserInfoKey, userInfo);
 			state.userInfo = userInfo;
 		},
 		setAvator(state, avatorPath) {
@@ -36,7 +36,7 @@ export default {
 			state.userId = id;
 		},
 		setSixiId(state, id) {
-			setStore(state.storeageKey, id);
+			setItem(state.storeageKey, id);
 			state.sixiId = id;
 		},
 		setUserName(state, name) {
@@ -114,7 +114,7 @@ export default {
 			commit("setSixiId", sixiId);
 		},
 		getSixiId({ state, commit }) {
-			let sixiId = getStore(state.storeageKey);
+			let sixiId = getItem(state.storeageKey);
 			if (sixiId) {
 				commit("setSixiId", sixiId);
 			}
