@@ -88,18 +88,10 @@ export default {
             "addTag",
             "setHomeRoute"
         ]),
-        ...mapActions(["getUserInfo"]),
+        ...mapActions(["getUserInfoAction"]),
         // 获取用户信息
-        async getUserInfoAction() {
-            let res = await this.getUserInfo();
-
-            if (res.status !== 200) {
-                this.$Modal.error({
-                    title: "获取用户信息",
-                    content: res.msg
-                });
-                return;
-            }
+        getUserInfo() {
+           this.getUserInfoAction();
         },
         turnToPage(route) {
             let { name, params, query } = {};
@@ -169,7 +161,7 @@ export default {
                 name: this.$config.homeName
             });
         }
-        this.getUserInfoAction();
+        this.getUserInfo();
         // 获取列表
         this.$store.dispatch('getDepartmentData');
     }
