@@ -20,7 +20,7 @@
                         href="javascript:;"
                         class="md-card-btn-warning"
                     >
-                        <Icon type="md-hammer"></Icon>工单确认
+                        <Icon type="md-hammer"></Icon>工单受理
                     </a>
                     <a
                         v-if="current == 1 && isExectorId"
