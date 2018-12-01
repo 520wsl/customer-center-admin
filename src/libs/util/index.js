@@ -2,8 +2,8 @@ import Cookies from "js-cookie";
 // cookie保存的天数
 import config from "@/config";
 import {
-    getStore
-} from "@/libs/util/storeage";
+    getItem
+} from "@/libs/util/session";
 const {
     title,
     storeageUserInfoKey
@@ -29,11 +29,11 @@ export const getToken = () => {
 };
 
 export const getSixiID = () => {
-    let userInfoData = getStore(storeageUserInfoKey);
+    let userInfoData = getItem(storeageUserInfoKey);
     if (!userInfoData) {
         return false;
     }
-    let userInfo = JSON.parse(userInfoData);
+    let userInfo = userInfoData;
     if (!userInfo) {
         return false;
     }
