@@ -66,7 +66,7 @@ import { addItemTalkNewsData } from "@/api/admin/workSheet/talkNews";
 import { formatTime } from "@/libs/util/time";
 import "./index.less";
 export default {
-	props: ["row"],
+	props: ["row", "companySixiId"],
 	data() {
 		return {
 			modal: false,
@@ -88,8 +88,9 @@ export default {
 	methods: {
 		cancelBind() {
 			// 当前暂无openid
-			let openid = 1111111;
-			setWechatUntied({ openid }).then(res => {
+			let companySixiId = this.companySixiId;
+			let customerSixiId = this.row.customerSixiId;
+			setWechatUntied({ companySixiId, customerSixiId }).then(res => {
 				if (res.status !== 200) {
 					this.$Modal.error({ title: "提示", content: res.msg });
 					return;
