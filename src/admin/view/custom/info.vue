@@ -44,6 +44,7 @@
             <Tabs type="card" class="tabTable" v-model="bindOrderOrBillList">
                 <TabPane label="已绑定账号" name="bindOrder">
                     <Table :columns="columns" :data="wechatBindVos" border></Table>
+
                 </TabPane>
                 <TabPane label="工单列表" name="billList">
                     <div class="search-con search-con-top">
@@ -524,7 +525,7 @@ export default {
 			};
 			data[data.searchTextType] = data.text;
 			// data.companyId = this.info.customerSixiId;
-			data.companyId = this.info.sixiId;
+			data.companyId = this.params.sixiId;
 			// 需要处理该对象，时间类型，时间，搜索的文本类型
 			console.log(data);
 			let res = await getWorkcustomerListData(data);

@@ -18,7 +18,7 @@
                         </tr>
                         <tr>
                             <td class="title">绑定时间:</td>
-                            <td>{{row.bindTime}}</td>
+                            <td>{{ getTime(row.bindTime)}}</td>
                         </tr>
                         <tr>
                             <td class="title">称呼:</td>
@@ -62,6 +62,8 @@
 import { setWechatUntied, updateBindInfo } from "@/api/admin/custom/custom";
 // import { callPhoneAction } from "@/api/admin/callPhone/callPhone";
 import { addItemTalkNewsData } from "@/api/admin/workSheet/talkNews";
+
+import { formatTime } from "@/libs/util/time";
 import "./index.less";
 export default {
 	props: ["row"],
@@ -171,6 +173,9 @@ export default {
 				},
 				onCancel: () => {}
 			});
+		},
+		getTime(val) {
+			return formatTime(val, "YYYY-MM-DD H:mm:ss");
 		}
 	}
 };
