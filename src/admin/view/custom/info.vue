@@ -42,7 +42,7 @@
                 </tbody>
             </table>
             <!-- <div class="btn-group">
-                <Button type="primary" class="md-card-btn-bind" @click="bindAccount">绑定账号</Button>
+                <Button type="primary" class="md-card-btn-bind" @click="bindAccount()">绑定账号</Button>
             </div> -->
 
             <Tabs type="card" class="tabTable" v-model="bindOrderOrBillList">
