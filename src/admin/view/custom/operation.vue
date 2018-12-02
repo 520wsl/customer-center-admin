@@ -6,7 +6,7 @@
         <!-- <Button type="primary" size="small" class="mar-l" @click="modal = true" ghost>编辑</Button> -->
         <Button type="primary" size="small" class="mar-l" @click="getMobilePhone()" ghost>采集电话</Button>
         <Button type="primary" size="small" class="mar-l" @click="getAccountPassword()" ghost>采集账号密码</Button>
-        <Button type="primary" size="small" class="mar-l" @click="bindAccount()" ghost>绑定微信</Button>
+        <Button type="primary" size="small" class="mar-l" v-if="!row.wechatNickname" @click="bindAccount()" ghost>绑定微信</Button>
         <!-- <Modal v-model="modal" @on-ok="edit()" :loading="loading" :mask-closable="false" title="编辑">
             <Card class="md-card">
                 <table class="tab">

@@ -43,8 +43,7 @@
             </table>
             <!-- <div class="btn-group">
                 <Button type="primary" class="md-card-btn-bind" @click="bindAccount()">绑定账号</Button>
-            </div> -->
-
+            </div>-->
             <Tabs type="card" class="tabTable" v-model="bindOrderOrBillList">
                 <TabPane label="已绑定账号" name="bindOrder">
                     <Table :columns="columns" :data="wechatBindVos" border></Table>
@@ -267,10 +266,7 @@ export default {
                                     this.getInfo();
                                 },
                                 bindAccount: data => {
-                                    console.log(
-                                        "customerSixiId",
-                                        data
-                                    );
+                                    console.log("customerSixiId", data);
                                     this.bindAccount(data.customerSixiId);
                                 }
                             }
@@ -354,7 +350,7 @@ export default {
                 {
                     title: "持续时间",
                     align: "center",
-                    key: "durationStr",
+                    key: "durationStr"
                     // render: (h, params) => {
                     //     return h(
                     //         "span",
@@ -367,7 +363,7 @@ export default {
                 {
                     title: "响应时间",
                     align: "center",
-                    key:"durationStr"
+                    key: "durationStr"
                     // render: (h, params) => {
                     //     return h(
                     //         "span",
@@ -491,7 +487,7 @@ export default {
             this.getQrcode(customerSixiId);
         },
         getQrcode(customerSixiId) {
-			console.log('customerSixiId====',customerSixiId)
+            console.log("customerSixiId====", customerSixiId);
             getQRCodeUrl({
                 companySixiId: this.info.sixiId,
                 customerSixiId: customerSixiId,
