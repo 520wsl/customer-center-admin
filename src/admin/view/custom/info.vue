@@ -41,9 +41,9 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="btn-group">
+            <!-- <div class="btn-group">
                 <Button type="primary" class="md-card-btn-bind" @click="bindAccount">绑定账号</Button>
-            </div>
+            </div> -->
 
             <Tabs type="card" class="tabTable" v-model="bindOrderOrBillList">
                 <TabPane label="已绑定账号" name="bindOrder">
