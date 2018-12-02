@@ -1,8 +1,8 @@
 <template>
     <div>
-        <!-- <Poptip confirm placement="bottom-end" title="解绑不可撤销，请谨慎操作！是否确认解绑？" @on-ok="cancelBind()">
+        <Poptip confirm placement="bottom-end" title="解绑不可撤销，请谨慎操作！是否确认解绑？" @on-ok="cancelBind()">
             <Button type="primary" size="small" class="mar-l" ghost>解绑</Button>
-        </Poptip>-->
+        </Poptip>
         <!-- <Button type="primary" size="small" class="mar-l" @click="modal = true" ghost>编辑</Button> -->
         <Button type="primary" size="small" class="mar-l" @click="getMobilePhone()" ghost>采集电话</Button>
         <Button type="primary" size="small" class="mar-l" @click="getAccountPassword()" ghost>采集账号密码</Button>
