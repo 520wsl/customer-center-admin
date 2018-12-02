@@ -8,7 +8,7 @@ const { storeageUserInfoKey } = config;
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-01 19:50:25
+ * @Last Modified time: 2018-12-02 18:08:35
  * @explanatory:  store demo
  */
 export default {
@@ -28,7 +28,7 @@ export default {
 		setUserInfo(state, userInfo) {
 			state.userInfo = userInfo;
 		},
-		setUserInfoStoreage(state, userInfo){
+		setUserInfoStoreage(state, userInfo) {
 			setItem(state.storeageUserInfoKey, userInfo);
 		},
 		setAvator(state, avatorPath) {
@@ -78,24 +78,29 @@ export default {
 				// resolve();
 			});
 		},
-		getUserInfoAction({ state, commit }) {
+		async getUserInfoAction({ dispatch, state, commit }) {
 			let userInfo = getItem(state.storeageUserInfoKey);
 			if (userInfo) {
-				console.log('getUserInfoAction',userInfo)
+				console.log("getUserInfoAction", userInfo);
 				let userName = "";
-							if (userInfo && userInfo.userName && userInfo.departmentName) {
-								userName =
-									userInfo.userName +
-									"(" +
-									userInfo.departmentName +
-									")";
-							}
+				if (userInfo && userInfo.userName && userInfo.departmentName) {
+					userName =
+						userInfo.userName + "(" + userInfo.departmentName + ")";
+				}
 				commit("setUserInfo", userInfo);
 				commit("setAvator", userInfo && userInfo.avatar);
 				commit("setUserName", userName);
 				commit("setUserId", userInfo && userInfo.userId);
 				commit("setSixiId", userInfo && userInfo.sixiId);
+				return;
 			}
+			let res2 = "";
+			res2 = await dispatch("getUserInfo");
+			if (res2.status !== 200) {
+				console.error("[debug]:getUserInfo", res2);
+				return false;
+			}
+			return true;
 		},
 		// 获取用户相关信息
 		getUserInfo({ state, commit }) {
