@@ -12,6 +12,11 @@ export const FILE = path => {
 	return config.attachmentPath + path;
 };
 
+export const getEncryptionPhone = phone => {
+	console.log("phone", phone);
+	return phone.slice(0, 3) + "****" + phone.slice(-4);
+};
+
 /**
  * 获取指定数组指定key对应的值比较，若相等则返回该value值
  * @param arr Array       需要遍历的数组
@@ -70,7 +75,9 @@ export const getDateDiff = (startTime, endTime, diffType) => {
 		default:
 			break;
 	}
-	return parseInt((eTime.getTime() - sTime.getTime()) / parseInt(divNum)) || 1;
+	return (
+		parseInt((eTime.getTime() - sTime.getTime()) / parseInt(divNum)) || 1
+	);
 };
 
 /*
@@ -79,48 +86,49 @@ export const getDateDiff = (startTime, endTime, diffType) => {
  * 返回精度为：天 小时：分：秒
  */
 
- 
 export const getIntervalTime = (startTime, endTime, diffType = "hour") => {
-    //将xxxx-xx-xx的时间格式，转换为 xxxx/xx/xx的格式
-    startTime = startTime.replace(/-/g, "/");
-    endTime = endTime.replace(/-/g, "/");
-    //将计算间隔类性字符转换为小写
-    diffType = diffType.toLowerCase();
-    var leftTimeNum = new Date(endTime) - new Date(startTime);
-    var sentTimeNum = "";
-    //作为除数的数字
-    switch (diffType) {
-        case "second":
-            sentTimeNum = Math.floor(leftTimeNum / 1000);
-            break;
-        case "minute":
-            sentTimeNum =
-                Math.floor(leftTimeNum / (60 * 1000)) +
-                ":" +
-                Math.floor((leftTimeNum % (60 * 1000)) / 1000);
-            break;
-        case "hour":
-            sentTimeNum =
-                Math.floor(leftTimeNum / (60 * 60 * 1000)) +
-                ":" +
-                Math.floor((leftTimeNum % (60 * 60 * 1000)) / (60 * 1000)) +
-                ":" +
-                Math.floor((leftTimeNum % (60 * 1000)) / 1000);
-            break;
-        case "day":
-            sentTimeNum =
-                Math.floor(leftTimeNum / (24 * 360 * 1000)) +
-                "天 " +
-                Math.floor((leftTimeNum % (24 * 360 * 1000)) / (60 * 60 * 1000)) +
-                ":" +
-                Math.floor((leftTimeNum % (360 * 1000)) / (60 * 1000)) +
-                ":" +
-                Math.floor((leftTimeNum % (60 * 1000)) / 1000);
-            break;
-        default:
-            break;
-        }
-    return sentTimeNum;
+	//将xxxx-xx-xx的时间格式，转换为 xxxx/xx/xx的格式
+	startTime = startTime.replace(/-/g, "/");
+	endTime = endTime.replace(/-/g, "/");
+	//将计算间隔类性字符转换为小写
+	diffType = diffType.toLowerCase();
+	var leftTimeNum = new Date(endTime) - new Date(startTime);
+	var sentTimeNum = "";
+	//作为除数的数字
+	switch (diffType) {
+		case "second":
+			sentTimeNum = Math.floor(leftTimeNum / 1000);
+			break;
+		case "minute":
+			sentTimeNum =
+				Math.floor(leftTimeNum / (60 * 1000)) +
+				":" +
+				Math.floor((leftTimeNum % (60 * 1000)) / 1000);
+			break;
+		case "hour":
+			sentTimeNum =
+				Math.floor(leftTimeNum / (60 * 60 * 1000)) +
+				":" +
+				Math.floor((leftTimeNum % (60 * 60 * 1000)) / (60 * 1000)) +
+				":" +
+				Math.floor((leftTimeNum % (60 * 1000)) / 1000);
+			break;
+		case "day":
+			sentTimeNum =
+				Math.floor(leftTimeNum / (24 * 360 * 1000)) +
+				"天 " +
+				Math.floor(
+					(leftTimeNum % (24 * 360 * 1000)) / (60 * 60 * 1000)
+				) +
+				":" +
+				Math.floor((leftTimeNum % (360 * 1000)) / (60 * 1000)) +
+				":" +
+				Math.floor((leftTimeNum % (60 * 1000)) / 1000);
+			break;
+		default:
+			break;
+	}
+	return sentTimeNum;
 };
 
 export const forEach = (arr, fn) => {

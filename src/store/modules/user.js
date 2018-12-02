@@ -8,7 +8,7 @@ const { storeageUserInfoKey } = config;
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-01 10:05:12
+ * @Last Modified time: 2018-12-01 19:50:25
  * @explanatory:  store demo
  */
 export default {
@@ -26,8 +26,10 @@ export default {
 	},
 	mutations: {
 		setUserInfo(state, userInfo) {
-			setItem(state.storeageUserInfoKey, userInfo);
 			state.userInfo = userInfo;
+		},
+		setUserInfoStoreage(state, userInfo){
+			setItem(state.storeageUserInfoKey, userInfo);
 		},
 		setAvator(state, avatorPath) {
 			state.avatorImgPath = avatorPath;
@@ -64,6 +66,7 @@ export default {
 					.then(() => {
 						commit("setSixiId", "");
 						commit("setUserInfo", "");
+						commit("setUserInfoStoreage", "");
 						resolve();
 					})
 					.catch(err => {
@@ -74,6 +77,25 @@ export default {
 				// commit("setAccess", []);
 				// resolve();
 			});
+		},
+		getUserInfoAction({ state, commit }) {
+			let userInfo = getItem(state.storeageUserInfoKey);
+			if (userInfo) {
+				console.log('getUserInfoAction',userInfo)
+				let userName = "";
+							if (userInfo && userInfo.userName && userInfo.departmentName) {
+								userName =
+									userInfo.userName +
+									"(" +
+									userInfo.departmentName +
+									")";
+							}
+				commit("setUserInfo", userInfo);
+				commit("setAvator", userInfo && userInfo.avatar);
+				commit("setUserName", userName);
+				commit("setUserId", userInfo && userInfo.userId);
+				commit("setSixiId", userInfo && userInfo.sixiId);
+			}
 		},
 		// 获取用户相关信息
 		getUserInfo({ state, commit }) {
@@ -87,16 +109,21 @@ export default {
 								return;
 							}
 							const data = res.data;
-                            let userName = "";
-                            if(data && data.userName && data.departmentName){
-                                userName = data.userName + "(" + data.departmentName + ")";
-                            }   
+							let userName = "";
+							if (data && data.userName && data.departmentName) {
+								userName =
+									data.userName +
+									"(" +
+									data.departmentName +
+									")";
+							}
 							console.log("getUserInfoData", res.data);
 							commit("setAvator", data && data.avatar);
 							commit("setUserName", userName);
 							commit("setUserId", data && data.userId);
 							commit("setSixiId", data && data.sixiId);
 							commit("setUserInfo", data);
+							commit("setUserInfoStoreage", data);
 							// commit("setAccess", data.permissions);
 							commit("setHasGetInfo", true);
 							resolve(res);
