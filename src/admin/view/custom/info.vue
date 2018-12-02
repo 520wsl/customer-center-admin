@@ -314,14 +314,14 @@ export default {
                         }
                     }
                 },
-                {
-                    title: "用户手机号码",
-                    key: "角色",
-                    align: "center",
-                    render: (h, params) => {
-                        return h("span", hidePhone("12345674567"));
-                    }
-                },
+                // {
+                //     title: "用户手机号码",
+                //     key: "角色",
+                //     align: "center",
+                //     render: (h, params) => {
+                //         return h("span", hidePhone("12345674567"));
+                //     }
+                // },
                 {
                     title: "微信昵称",
                     align: "center",
@@ -354,27 +354,28 @@ export default {
                 {
                     title: "持续时间",
                     align: "center",
-                    key: "hourSum",
-                    render: (h, params) => {
-                        return h(
-                            "span",
-                            !params.row.hourSum
-                                ? 0 + "h"
-                                : params.row.hourSum + "h"
-                        );
-                    }
+                    key: "durationStr",
+                    // render: (h, params) => {
+                    //     return h(
+                    //         "span",
+                    //         !params.row.hourSum
+                    //             ? 0 + "h"
+                    //             : params.row.hourSum + "h"
+                    //     );
+                    // }
                 },
                 {
                     title: "响应时间",
                     align: "center",
-                    render: (h, params) => {
-                        return h(
-                            "span",
-                            !params.row.responseTime
-                                ? 0 + "h"
-                                : params.row.responseTime + "h"
-                        );
-                    }
+                    key:"durationStr"
+                    // render: (h, params) => {
+                    //     return h(
+                    //         "span",
+                    //         !params.row.responseTime
+                    //             ? 0 + "h"
+                    //             : params.row.responseTime + "h"
+                    //     );
+                    // }
                 },
                 {
                     title: "状态",
