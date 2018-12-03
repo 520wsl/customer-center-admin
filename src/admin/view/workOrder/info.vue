@@ -66,7 +66,7 @@
                 <RadioGroup v-model="modal.type" vertical>
                     <Radio label="1">关联客服：</Radio>
                     <Select v-model="modal.relateService" style="width:200px">
-                        <Option v-for='(item,index) in modal.personList' :value="item.staffSixiId" :key="index">{{item.staffTag+":"+item.staffName+"("+item.department+")"}}</Option>
+                        <Option v-for='(item,index) in modal.personList' :value="item.staffSixiId" :key="index">{{staffTagIdList[item.staffTagId]}}：{{item.staffName+"("+item.department+")"}}</Option>
                     </Select>
                     <Radio label="2">上级领导：</Radio>
                     {{modal.superiorLeader.userName}}
@@ -143,9 +143,12 @@ export default {
     methods: {
         ...mapMutations(["setWorkSheetBaseInfo"]),
         ...mapActions(["getSixiId"]),
+        ...mapState({
+			staffTagIdList: state => state.custom.staffTagIdList
+		}),
         getUserInfo(data) {
             console.log(data)
-        },
+        },    
         assignPersonnel() {
             this.modal.bool = true;
             this.getPersonalList();

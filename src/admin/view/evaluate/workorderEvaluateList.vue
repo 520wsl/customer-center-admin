@@ -239,7 +239,7 @@ export default {
                     render: (h, params) => {
                         return h("span", {
                             attrs: {
-                                style: "cursor:pointer"
+                                style: "cursor:pointer;color:#72ACE3;"
                             },
                             on: {
                                 click: () => {
