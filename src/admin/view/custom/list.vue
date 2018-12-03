@@ -104,7 +104,7 @@ export default {
 							"a",
 							{
 								attrs: {
-									src: params.row.url,
+									href: params.row.url,
 									target: "_blank",
 									style: "color:#72ACE3",
 									title: params.row.name
