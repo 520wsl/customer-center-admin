@@ -18,7 +18,6 @@ export default {
         ...mapActions([
             "handleLogin",
             "getUserInfo",
-            "updatedSixiId",
             "loginScheduler"
         ]),
         // 登录成功后 跳到默认页面
