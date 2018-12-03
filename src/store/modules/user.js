@@ -8,7 +8,7 @@ const { storeageUserInfoKey } = config;
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-02 18:08:35
+ * @Last Modified time: 2018-12-03 13:22:01
  * @explanatory:  store demo
  */
 export default {
@@ -141,10 +141,6 @@ export default {
 				}
 			});
 		},
-		// 更新四喜Id
-		updatedSixiId({ state, commit }, { sixiId }) {
-			commit("setSixiId", sixiId);
-		},
 		getSixiId({ state, commit }) {
 			let sixiId = getItem(state.storeageKey);
 			if (sixiId) {
@@ -167,7 +163,6 @@ export default {
 							console.error("[debug]:sentLoginCodeData", res);
 							return false;
 						}
-						await dispatch("updatedSixiId", res.data);
 						res2 = await dispatch("getUserInfo");
 						if (res2.status !== 200) {
 							console.error("[debug]:getUserInfo", res2);

@@ -30,7 +30,6 @@ export default {
         ...mapActions([
             "handleLogin",
             "getUserInfo",
-            "updatedSixiId",
             "loginScheduler"
         ]),
         // 账号密码登陆流程，暂时没有
