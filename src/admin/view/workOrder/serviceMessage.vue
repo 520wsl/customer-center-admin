@@ -178,7 +178,8 @@ import {
     getRelativeTime,
     getDateDiff,
     getIntervalTime,
-    getEncryptionPhone
+    getEncryptionPhone,
+    createToWeChatPagePage
 } from "@/libs/tools";
 import messageList from "_c/admin/message-list";
 import Page from "_c/admin/page";
@@ -261,7 +262,7 @@ export default {
                 return;
             }
             this.countDownTime = res.data.countDownTime || "";
-            this.getTalkNewsCountdownTimeFormat();
+            // this.getTalkNewsCountdownTimeFormat();
         },
         // 查询数据 分页页码重置
         sleectTalkNewsList(pageNum) {
@@ -421,6 +422,7 @@ export default {
                 return;
             }
             if (eventType == 1) {
+                this.isShowCallPhoneModal = false;
                 this.callPhone(mobile, res.data.id);
             } else {
                 setTimeout(() => {
@@ -432,6 +434,7 @@ export default {
             }
         },
         confirm(eventType) {
+            let url = "";
             let title = "";
             let message = "";
             let content = "";
@@ -447,19 +450,24 @@ export default {
                 case 2:
                     title = "工单联系电话采集";
                     message = "即将发送客户采集电话号码通知，请确认";
+                    url = createToWeChatPagePage("pageName=getPhone");
                     content =
-                        "非常抱歉，您留下的工单联系人电话有误，电话没有接通，请提供新的联系电话！\n\n点击<a target='_blank' href='http://workapp.sixi.com/serviceBill/getphone'>提交工单联系人信息>></a>";
+                        "非常抱歉，您留下的工单联系人电话有误，电话没有接通，请提供新的联系电话！\n\n点击<a target='_blank' href='" +
+                        url +
+                        "'>提交工单联系人信息>></a>";
                     this.setReplyParamsContent(content);
                     return;
                 case 3:
                     title = "账号密码采集";
                     message = "即将发送客户采集账号密码通知，请确认";
+                    url = createToWeChatPagePage(
+                        "pageName=passwordStore&companySixiId=" +
+                            this.info.companyId
+                    );
                     content =
                         "【 " +
                         wechatNickname +
-                        " 】您好，为了更好的为您提供服务请提交，您店铺的账号密码；\n注意：请不要将账号密码直接回复在聊天窗口 \n\n点击<a target='_blank' href='http://workapp.sixi.com/personal/passwordstore?companyId='" +
-                        this.info.companyId +
-                        "'>提交阿里店铺账号密码>></a>";
+                        " 】您好，为了更好的为您提供服务请提交，您店铺的账号密码；\n注意：请不要将账号密码直接回复在聊天窗口 \n\n点击<a target='_blank' href='http%3A%2F%2Fworkapp.sixi.com%2Fpersonal%2Fpasswordstore%3Fpar%3DcompanySixiId%253D1184160351160108031%2526pageName%253DpasswordStore'>提交阿里店铺账号密码>></a>";
                     this.setReplyParamsContent(content);
                     return;
             }

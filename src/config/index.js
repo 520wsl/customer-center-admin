@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:13:25
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-28 15:54:31
+ * @Last Modified time: 2018-12-03 20:16:28
  * @explanatory:  config
  */
 export default {
@@ -44,5 +44,6 @@ export default {
 		signature: "", // 必填，签名
 		jsApiList: [] // 必填，需要使用的JS接口列表
 	},
-	storeageUserInfoKey: "userInfo"
+	storeageUserInfoKey: "userInfo",
+	wechatToPagePath:"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3c0c1aef00b3d175&response_type=code&scope=snsapi_userinfo&state=weChat&connect_redirect=1"
 };
