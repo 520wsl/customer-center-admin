@@ -440,6 +440,8 @@ export default {
             let content = "";
             let wechatNickname =
                 (this.info.customerDetailVo &&
+                    this.info.customerDetailVo.callName) ||
+                (this.info.customerDetailVo &&
                     this.info.customerDetailVo.wechatNickname) ||
                 "";
             switch (eventType) {
@@ -467,7 +469,9 @@ export default {
                     content =
                         "【 " +
                         wechatNickname +
-                        " 】您好，为了更好的为您提供服务请提交，您店铺的账号密码；\n注意：请不要将账号密码直接回复在聊天窗口 \n\n点击<a target='_blank' href='http%3A%2F%2Fworkapp.sixi.com%2Fpersonal%2Fpasswordstore%3Fpar%3DcompanySixiId%253D1184160351160108031%2526pageName%253DpasswordStore'>提交阿里店铺账号密码>></a>";
+                        " 】您好，为了更好的为您提供服务请提交，您店铺的账号密码；\n注意：请不要将账号密码直接回复在聊天窗口 \n\n点击<a target='_blank' href='" +
+                        url +
+                        "'>提交阿里店铺账号密码>></a>";
                     this.setReplyParamsContent(content);
                     return;
             }
