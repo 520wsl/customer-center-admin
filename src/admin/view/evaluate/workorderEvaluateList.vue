@@ -156,9 +156,10 @@ export default {
                             on: {
                                 click: () => {
                                     this.$router.push({
-                                        name: "wx-workOrder-info",
+                                        name: "workOrder-info-service",
                                         query: {
-                                            workSheetId: params.row.workSheetId
+                                            workSheetId: params.row.workSheetId,
+                                            identifier: params.row.identifier
                                         }
                                     })
                                 }
