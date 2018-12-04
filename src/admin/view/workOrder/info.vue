@@ -135,17 +135,17 @@ export default {
         },
         isHaveUserId() {
             if (this.info && this.info.userId) {
-                return true;
+                return true; 
             }
             return false;
-        }
-    },
-    methods: {
-        ...mapMutations(["setWorkSheetBaseInfo"]),
-        ...mapActions(["getSixiId"]),
+        },
         ...mapState({
 			staffTagIdList: state => state.custom.staffTagIdList
 		}),
+    },
+    methods: {
+        ...mapMutations(["setWorkSheetBaseInfo"]),
+        ...mapActions(["getSixiId"]),     
         getUserInfo(data) {
             console.log(data)
         },    
@@ -348,7 +348,7 @@ export default {
     mounted() {
         this.getWorkSheetInfo();
         this.getSixiId();
-        this.sixiId = this.$store.state.user.sixiId;
+        this.sixiId = this.$store.state.user.sixiId; 
     }
 };
 </script>
