@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-17 09:49:21
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-01 15:18:14
+ * @Last Modified time: 2018-12-04 18:11:22
  * @explanatory:  工单详情 基本信息
  */
 import api from "@/libs/api.request";
@@ -32,8 +32,9 @@ export const setWorkOrderCustomerServiceStaffReplyData = ({
 };
 
 // 工单详情 -- 手机号列表
-export const getWorkOrderPhoneListData = ({ workSheetId }) => {
+export const getWorkOrderPhoneListData = ({ workSheetId, companySixiId }) => {
 	return post("/workorder/phonelist", {
-		workSheetId
+		workSheetId,
+		companySixiId
 	});
 };

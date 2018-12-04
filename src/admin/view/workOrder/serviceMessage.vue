@@ -215,9 +215,12 @@ export default {
             this.remarkParams.mobile = "";
             this.isShowCallPhoneModal = false;
         },
-        async getWorkOrderPhoneList(workSheetId) {
-            console.log(workSheetId);
-            let res = await getWorkOrderPhoneListData({ workSheetId });
+        async getWorkOrderPhoneList(workSheetId,companySixiId) {
+            console.log(workSheetId,companySixiId);
+            let res = await getWorkOrderPhoneListData({
+                workSheetId,
+                companySixiId
+            });
             if (res.status !== 200) {
                 this.$Modal.error({
                     title: "获取手机号列表",
@@ -390,7 +393,7 @@ export default {
             this.setWorkSheetBaseInfo(res.data);
             this.info = res.data;
             console.log(this.info);
-            this.getWorkOrderPhoneList(res.data.id);
+            this.getWorkOrderPhoneList(res.data.id,res.data.companyId);
             this.getTalkNewsList();
         },
         // 创建对话记录
@@ -453,7 +456,10 @@ export default {
                 case 2:
                     title = "工单联系电话采集";
                     message = "即将发送客户采集电话号码通知，请确认";
-                    url = createToWeChatPagePage("pageName=getPhone&workSheetId="+this.params.workSheetId);
+                    url = createToWeChatPagePage(
+                        "pageName=getPhone&workSheetId=" +
+                            this.params.workSheetId
+                    );
                     content =
                         "非常抱歉，您留下的工单联系人电话有误，电话没有接通，请提供新的联系电话！\n\n点击<a target='_blank' href='" +
                         url +
