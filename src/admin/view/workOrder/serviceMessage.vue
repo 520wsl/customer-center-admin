@@ -229,9 +229,9 @@ export default {
         },
         getTalkNewsCountdownTimeFormat() {
             this.getTalkNewsCountdownTimeStr();
-            setInterval(() => {
-                this.getTalkNewsCountdownTimeStr();
-            }, 120000);
+            // setInterval(() => {
+            //     this.getTalkNewsCountdownTimeStr();
+            // }, 120000);
         },
         getTalkNewsCountdownTimeStr() {
             let endTime = formatAddTime(this.countDownTime, "x");
@@ -262,7 +262,7 @@ export default {
                 return;
             }
             this.countDownTime = res.data.countDownTime || "";
-            // this.getTalkNewsCountdownTimeFormat();
+            this.getTalkNewsCountdownTimeFormat();
         },
         // 查询数据 分页页码重置
         sleectTalkNewsList(pageNum) {
