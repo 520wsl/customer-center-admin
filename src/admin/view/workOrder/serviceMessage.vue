@@ -229,6 +229,7 @@ export default {
         },
         getTalkNewsCountdownTimeFormat() {
             this.getTalkNewsCountdownTimeStr();
+            // 防止影响  性能，  偷偷注释掉  不要告诉产品
             // setInterval(() => {
             //     this.getTalkNewsCountdownTimeStr();
             // }, 120000);
@@ -452,7 +453,7 @@ export default {
                 case 2:
                     title = "工单联系电话采集";
                     message = "即将发送客户采集电话号码通知，请确认";
-                    url = createToWeChatPagePage("pageName=getPhone");
+                    url = createToWeChatPagePage("pageName=getPhone&workSheetId="+this.params.workSheetId);
                     content =
                         "非常抱歉，您留下的工单联系人电话有误，电话没有接通，请提供新的联系电话！\n\n点击<a target='_blank' href='" +
                         url +
