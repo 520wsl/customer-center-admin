@@ -135,7 +135,7 @@ export default {
         },
         isHaveUserId() {
             if (this.info && this.info.userId) {
-                return true; 
+                return true;
             }
             return false;
         },
@@ -348,7 +348,7 @@ export default {
     mounted() {
         this.getWorkSheetInfo();
         this.getSixiId();
-        this.sixiId = this.$store.state.user.sixiId; 
+        this.sixiId = this.$store.state.user.sixiId;
     }
 };
 </script>
