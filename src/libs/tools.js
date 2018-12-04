@@ -17,6 +17,20 @@ export const getEncryptionPhone = phone => {
 	return phone.slice(0, 3) + "****" + phone.slice(-4);
 };
 
+export const createToWeChatPagePage = (
+	query = "pageName='personalServie'",
+	redirectUrl = "http://workapp.sixi.com/personal/index"
+) => {
+	return (
+		config.wechatToPagePath +
+		"&redirect_uri=" +
+		encodeURIComponent(
+			redirectUrl + "?par=" + window.btoa(encodeURIComponent(query))
+		) +
+		"#wechat_redirect"
+	);
+};
+
 /**
  * 获取指定数组指定key对应的值比较，若相等则返回该value值
  * @param arr Array       需要遍历的数组

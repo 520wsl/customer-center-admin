@@ -11,7 +11,7 @@
         <Card class="md-card" v-if="evaluateList.length != 0">
             <div slot="title" class="flex">客户评价<Button type="primary" class="flex-right" @click="clickAgianEvaluate">重新评价</Button></div>
             <Card v-for="(item,index) in evaluateList" :key="'evaluate_'+index">
-                <div slot="title">评价时间：{{formatTime(item.createAt)}}</div>
+                <div slot="title">评价时间：{{formatTimeAction(item.createAt)}}</div>
                 <evaluate-item :evaluateList="item.evaluateContent"></evaluate-item>
             </Card>
         </Card>
@@ -37,6 +37,9 @@ export default {
     computed: {},
     methods: {
         ...mapMutations(["setWorkSheetBaseInfo"]),
+        formatTimeAction(time){
+            return formatTime(time)
+        },
         getWorkSheetTypeValue(key) {
             return getArrValue(this.$store.state.workSheet.workSheetType, key);
         },
