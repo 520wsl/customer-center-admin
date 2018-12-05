@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:13:25
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-03 20:16:28
+ * @Last Modified time: 2018-12-05 09:43:32
  * @explanatory:  config
  */
 export default {
@@ -42,7 +42,7 @@ export default {
 		timestamp: 0, // 必填，生成签名的时间戳
 		nonceStr: "", // 必填，生成签名的随机串
 		signature: "", // 必填，签名
-		jsApiList: [] // 必填，需要使用的JS接口列表
+		jsApiList: [] // 必填，需要使用的JS接口列表 test
 	},
 	storeageUserInfoKey: "userInfo",
 	wechatToPagePath:"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3c0c1aef00b3d175&response_type=code&scope=snsapi_userinfo&state=weChat&connect_redirect=1"
