@@ -1,10 +1,12 @@
 <template>
-  <Cascader
-    :style="{width:width+'px'}"
-    :data="departmentData"
-    :load-data="loadingUser?loadData:null"
-    v-model="visible"
-  ></Cascader>
+  <div>
+    <Cascader
+      :style="{width:width+'px'}"
+      :data="departmentData"
+      :load-data="loadingUser?loadData:null"
+      v-model="visible"
+    ></Cascader>
+  </div>
 </template>
 <script>
 import { mapState, mapActions } from "vuex";
@@ -40,22 +42,14 @@ export default {
       departmentData: []
     }
   },
+  mounted() {
+    this.getDepartmentData()
+  },
   methods: {
-    async getDepartmentData({ state, commit }) {
-      let store = localStorage.departmentData || "";
-      var list = [];
-      if (!store) {
-        let arr = await getDepartmentData();
-        const list = arr[0].children || [];
-        if (list.length > 0) {
-          localStorage.departmentData = JSON.stringify(list);
-        } else {
-          localStorage.departmentData = "";
-        }
-      } else {
-        list = JSON.parse(store);
-      }
-      this.departmentData = list;
+    async getDepartmentData() {
+      let arr = await getDepartmentData();
+      const list = arr[0].children || [];
+      this.departmentData = JSON.parse(JSON.stringify(list));
     },
     async loadData(item, callback) {
       let userInfo = JSON.parse(JSON.stringify(await this.getUserList(item.value))) || [];
