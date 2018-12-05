@@ -482,7 +482,6 @@ export default {
                     this.setReplyParamsContent(content);
                     return;
             }
-
             // this.$Modal.confirm({
             //     title: title,
             //     content: "<p>" + message + "</p>",
