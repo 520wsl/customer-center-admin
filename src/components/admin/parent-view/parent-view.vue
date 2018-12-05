@@ -15,11 +15,18 @@ export default {
         };
     },
     methods: {
-        ...mapActions([
-            "handleLogin",
-            "getUserInfo",
-            "loginScheduler"
-        ]),
+        ...mapActions(["handleLogin", "getUserInfo", "loginScheduler"]),
+         method1(url) {
+            // 使用正则来 两边的参数不可能是 &=? 所以去反集[^&=?]
+            console.log("method1", url);
+            let regex = /([^&=?]+)=([^&=?]+)/g,
+                obj = {};
+            url.replace(regex, (...arg) => {
+                obj[arg[1]] = arg[2];
+            });
+            console.log(obj);
+            return obj;
+        },
         // 登录成功后 跳到默认页面
         skipToDefaultPage(name) {
             name = name || this.$config.homeName;
@@ -45,6 +52,7 @@ export default {
             //   alert(location.href.split("#")[0]);
 
             wx.ready(function() {
+                wx.hideOptionMenu();
                 // wx.onUserCaptureScreen(function(res) {
                 //   alert("用户截屏了");
                 //   location.href = "https://www.baidu.com/";
@@ -97,19 +105,49 @@ export default {
     created() {},
     async mounted() {
         let route = this.$route;
-        let query = route.query;
-        let codeData = query.code || "";
-        let stateData = query.state || "enterpriseWeChat";
-        this.test = query.test || false;
+        let queryData = route.query;
+        let codeData = queryData.code || "";
+        let stateData = queryData.state || "";
+        this.test = queryData.test || false;
+
         this.QYWXLogin();
+
         if (!codeData && !stateData) {
             return;
         }
+
         let res = await this.loginScheduler({
             codeData,
             stateData,
             route: this.$route
         });
+
+       if (res) {
+            console.log("code登录", res);
+            let par = queryData.par || "";
+            let query = {};
+
+            if (par) {
+                query = this.method1(decodeURIComponent(window.atob(par)));
+                console.log("par", par);
+                console.log(
+                    "decodeURIComponent(window.atob(par))",
+                    decodeURIComponent(window.atob(par))
+                );
+                console.log("query", query);
+            }
+
+            let pageName = query.pageName || "wx-workOrder";
+            if (pageName && pageName !== "wx-workOrder") {
+                this.$router.push({
+                    name: pageName,
+                    query: query
+                });
+            }
+
+            return;
+        }
+
         console.log("code登录", res);
     }
 };
