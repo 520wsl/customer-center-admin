@@ -55,6 +55,7 @@ import Department from "_c/public/department";
 import { mapState, mapActions } from "vuex";
 import { getWorkEvaluateListData } from "@/api/admin/evaluate/dimension";
 import evaluateItem from "_c/admin/evaluate-item";
+import { startTime, endTime, formatTime } from "@/libs/util/time";
 export default {
     data() {
         return {
@@ -310,6 +311,10 @@ export default {
                 this.params.executorId = "";
             }
             let params = JSON.parse(JSON.stringify(this.params))
+            params.timeMin = params.timeMin ? startTime(params.timeMin, "x") : "";
+            params.timeMax = params.timeMax ? endTime(params.timeMax, "x") : "";
+            params.timeMin = formatTime(parseInt(params.timeMin))
+            params.timeMax = formatTime(parseInt(params.timeMax))
             let res = await getWorkEvaluateListData(params)
 
             let list = res.data.content || []
