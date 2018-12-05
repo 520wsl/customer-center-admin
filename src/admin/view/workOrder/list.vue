@@ -88,7 +88,7 @@
                     </Input>
         </div>-->
         <div class="search-input-item">
-          <span class="search-input-item-lable">切换客户：</span>
+          <span class="search-input-item-lable">切换客服：</span>
           <Department
             class="search-input"
             width="200"
