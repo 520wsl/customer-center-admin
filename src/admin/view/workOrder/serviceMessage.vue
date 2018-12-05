@@ -491,7 +491,6 @@ export default {
             //     onCancel: () => {}
             // });
         },
-
         setReplyParamsContent(content) {
             this.replyParams.content = content;
         },
