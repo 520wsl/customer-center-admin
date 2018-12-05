@@ -240,6 +240,7 @@ export default {
                     title: "手机号",
                     key: "角色",
                     render: (h, params) => {
+                        if(!params.row.mobile) return;
                         return h("div", [
                             h("span", hidePhone(params.row.mobile)),
                             h(
@@ -262,22 +263,24 @@ export default {
                 {
                     title: "操作",
                     render: (h, params) => {
-                        console.log(this.info.wechatBindVos);
-                        return h(operation, {
-                            props: {
-                                row: params.row,
-                                companySixiId: this.params.sixiId
-                            },
-                            on: {
-                                callFun: () => {
-                                    this.getInfo();
+                        if(params.row.wechatNickname !== null && params.row.wechatNickname !== undefined && params.row.wechatNickname !== '') {
+                            console.log(this.info.wechatBindVos);
+                            return h(operation, {
+                                props: {
+                                    row: params.row,
+                                    companySixiId: this.params.sixiId
                                 },
-                                bindAccount: data => {
-                                    console.log("customerSixiId", data);
-                                    this.bindAccount(data.customerSixiId);
+                                on: {
+                                    callFun: () => {
+                                        this.getInfo();
+                                    },
+                                    bindAccount: data => {
+                                        console.log("customerSixiId", data);
+                                        this.bindAccount(data.customerSixiId);
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 }
             ],
