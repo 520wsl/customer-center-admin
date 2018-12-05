@@ -457,7 +457,7 @@ export default {
                     title = "工单联系电话采集";
                     message = "即将发送客户采集电话号码通知，请确认";
                     url = createToWeChatPagePage(
-                        "pageName=getPhone&workSheetId=" +
+                        "pageName=billGetPhone&workSheetId=" +
                             this.params.workSheetId
                     );
                     content =
