@@ -41,6 +41,7 @@ export default {
   methods: {
     async getDepartmentData() {
       if (!this.loadingUser) {
+
         let arr = await getDepartmentData();
         const list = arr || [];
         this.departmentData = JSON.parse(JSON.stringify(list));
