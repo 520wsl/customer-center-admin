@@ -430,7 +430,7 @@ export default {
                 return;
             }
 
-            this.$Modal.error({
+            this.$Modal.success({
                 title: "发起工单",
                 content: "发起成功"
             });
