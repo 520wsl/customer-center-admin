@@ -141,6 +141,7 @@
                     <Radio :label="workOrderPhoneList.mobile">
                         <Icon type="social-apple"></Icon>
                         <span>{{getEncryptionPhone(workOrderPhoneList.mobile)}}</span>
+                        <span>(工单联系号码)</span>
                     </Radio>
                     <Radio
                         v-if="workOrderPhoneList.phone && workOrderPhoneList.mobile !== workOrderPhoneList.phone"
@@ -148,6 +149,7 @@
                     >
                         <Icon type="social-android"></Icon>
                         <span>{{getEncryptionPhone(workOrderPhoneList.phone)}}</span>
+                        <span>(客户预留号码)</span>
                     </Radio>
                 </RadioGroup>
             </Card>

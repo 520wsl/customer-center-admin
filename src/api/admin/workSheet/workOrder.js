@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-17 09:49:21
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-04 18:11:22
+ * @Last Modified time: 2018-12-06 13:23:41
  * @explanatory:  工单详情 基本信息
  */
 import api from "@/libs/api.request";
@@ -36,5 +36,26 @@ export const getWorkOrderPhoneListData = ({ workSheetId, companySixiId }) => {
 	return post("/workorder/phonelist", {
 		workSheetId,
 		companySixiId
+	});
+};
+
+// 创建工单
+export const saveWorkOrder = ({
+	workOrderType,
+	context,
+	mobile,
+	companySixiId,
+	companyName,
+	customerSixiId,
+	wechatNickname
+}) => {
+	return post("/workorder/save", {
+		workOrderType,
+		context,
+		mobile,
+		companySixiId,
+		companyName,
+		customerSixiId,
+		wechatNickname
 	});
 };
