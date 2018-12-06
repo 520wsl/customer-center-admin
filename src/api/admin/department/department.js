@@ -12,6 +12,9 @@ function get(url, params) {
 export const getDepartmentData = () => {
   return post("/department/listdepartment");
 };
+export const getUserDepartmentData = () => {
+    return post("/department/selectdepartment");
+};
 export const getUserData = ({ 
     departmentId
  }) => {
