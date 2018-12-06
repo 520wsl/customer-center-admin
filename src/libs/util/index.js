@@ -21,11 +21,10 @@ export const getToken = () => {
 
 export const getSixiID = () => {
 	let userInfoData = getStore(storeageUserInfoKey);
-	console.log("userInfoData", userInfoData);
 	if (!userInfoData) {
 		return false;
 	}
-	let userInfo = userInfoData;
+	let userInfo = JSON.parse(userInfoData);
 	if (!userInfo) {
 		return false;
 	}
