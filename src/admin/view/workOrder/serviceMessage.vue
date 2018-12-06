@@ -31,7 +31,7 @@
                 </div>
                 <div class="flex-right">
                     <Button
-                        @click="sleectTalkNewsList(1)"
+                        @click="restartPage()"
                         class="btn"
                         icon="md-refresh"
                         type="warning"
@@ -269,6 +269,9 @@ export default {
             }
             this.countDownTime = res.data.countDownTime || "";
             this.getTalkNewsCountdownTimeFormat();
+        },
+        restartPage(){
+            location.reload()
         },
         // 查询数据 分页页码重置
         sleectTalkNewsList(pageNum) {
