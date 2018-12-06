@@ -463,9 +463,9 @@ export default {
                             this.params.workSheetId
                     );
                     content =
-                        "非常抱歉，您留下的工单联系人电话有误，电话没有接通，请提供新的联系电话！\n\n点击<a target='_blank' href='" +
+                        "请修改工单联系电话！\n\n点击<a target='_blank' href='" +
                         url +
-                        "'>提交工单联系人信息>></a>";
+                        "'>点击修改>></a> \n\n原联系电话："+ this.getEncryptionPhone(this.workOrderPhoneList.mobile);
                     this.setReplyParamsContent(content);
                     return;
                 case 3:

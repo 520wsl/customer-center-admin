@@ -123,6 +123,16 @@
                 @pageSizeChange="pageSizeChange"
             ></page>
         </Card>
+        <Modal
+            v-model="isSaveWorkOrderAction"
+            width="400px;"
+            class="again-evaluate"
+            title="发起工单"
+            :mask-closable="false"
+            @on-ok="saveWorkOrderAction"
+        >
+            <span class="text">确定是否发起工单？</span>
+        </Modal>
     </div>
 </template>
 
@@ -160,7 +170,9 @@ export default {
     },
     data() {
         return {
+            isSaveWorkOrderAction: false,
             videoModel: true,
+            saveWorkOrderActionData: {},
             params: {
                 // 客户名称
                 companyName: "",
@@ -330,7 +342,10 @@ export default {
                     render: (h, params) => {
                         let btnGroup = [];
                         let query = params.row;
-                        if (query.type == 3 || query.type == 4) {
+                        if (
+                            (query.type == 3 && query.isSend) ||
+                            (query.type == 4 && query.isSend)
+                        ) {
                             btnGroup.push(
                                 h(
                                     "a",
@@ -342,15 +357,21 @@ export default {
                                         },
                                         on: {
                                             click: () => {
-                                                this.saveWorkOrderAction(
-                                                    query.workType,
-                                                    "客服发起...",
-                                                    query.mobile,
-                                                    query.companyId,
-                                                    query.companyName,
-                                                    query.sixiId,
-                                                    query.wechatNickname
-                                                );
+                                                this.isSaveWorkOrderAction = true;
+                                                this.saveWorkOrderActionData = {
+                                                    workOrderType:
+                                                        query.workType,
+                                                    context: "客服发起...",
+                                                    mobile: query.mobile,
+                                                    companySixiId:
+                                                        query.companyId,
+                                                    companyName:
+                                                        query.companyName,
+                                                    customerSixiId:
+                                                        query.sixiId,
+                                                    wechatNickname:
+                                                        query.wechatNickname
+                                                };
                                             }
                                         }
                                     },
@@ -403,24 +424,8 @@ export default {
         getUserInfo(data) {
             console.log(data);
         },
-        async saveWorkOrderAction(
-            workOrderType,
-            context,
-            mobile,
-            companySixiId,
-            companyName,
-            customerSixiId,
-            wechatNickname
-        ) {
-            let res = await saveWorkOrder({
-                workOrderType,
-                context,
-                mobile,
-                companySixiId,
-                companyName,
-                customerSixiId,
-                wechatNickname
-            });
+        async saveWorkOrderAction() {
+            let res = await saveWorkOrder({ ...this.saveWorkOrderActionData });
             console.log(res);
             if (res.status !== 200) {
                 this.$Modal.error({
@@ -429,7 +434,7 @@ export default {
                 });
                 return;
             }
-
+            this.isSaveWorkOrderAction = false;
             this.$Modal.success({
                 title: "发起工单",
                 content: "发起成功"
