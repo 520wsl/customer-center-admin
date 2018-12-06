@@ -435,6 +435,7 @@ export default {
                 return;
             }
             this.isSaveWorkOrderAction = false;
+            this.search();
             this.$Modal.success({
                 title: "发起工单",
                 content: "发起成功"
