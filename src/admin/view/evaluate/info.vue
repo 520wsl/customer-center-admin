@@ -61,7 +61,7 @@
 						</RadioGroup>
 					</FormItem>
 					<FormItem
-						v-if="itemDimension.type =='redio' || itemDimension.type =='checkbox'"
+						v-if="itemDimension.type =='radio' || itemDimension.type =='checkbox'"
 						label="是否必选 ： "
 						prop="isRequired"
 					>
@@ -82,7 +82,7 @@
 						</Input>
 						<span class="red">每个选项用 | 号隔开，如：非常专业|非常细心</span>
 					</FormItem>
-					<FormItem v-if="itemDimension.type =='redio'" label="单选选项 ：" prop="value">
+					<FormItem v-if="itemDimension.type =='radio'" label="单选选项 ：" prop="value">
 						<Input v-model="itemDimension.value" placeholder="请填写">
 							<span></span>
 						</Input>
@@ -461,7 +461,7 @@ export default {
 				params.otherAttribute.isHalf = params.otherAttribute.isHalf.toString();
 			}
 
-			if (params.type == "checkbox" || params.type == "redio") {
+			if (params.type == "checkbox" || params.type == "radio") {
 				params.value = params.tagList.join("|");
 			}
 			// console.log("params", params);
@@ -562,7 +562,7 @@ export default {
 					dimensionData.tagList = [];
 					dimensionData.value = "";
 					break;
-				case "redio":
+				case "radio":
 					if (typeof dimensionData.value == "string") {
 						dimensionData.tagList = dimensionData.value.split("|");
 					}
@@ -695,7 +695,7 @@ export default {
 						]
 					};
 					break;
-				case "redio":
+				case "radio":
 					this.ruleInline = {
 						// isRequired: [
 						// 	{
