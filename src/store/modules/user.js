@@ -8,7 +8,7 @@ const { storeageUserInfoKey } = config;
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-06 11:27:25
+ * @Last Modified time: 2018-12-06 12:18:07
  * @explanatory:  store demo
  */
 export default {
@@ -79,7 +79,7 @@ export default {
 			});
 		},
 		async getUserInfoAction({ dispatch, state, commit }) {
-			let userInfo = getStore(state.storeageUserInfoKey);
+			let userInfo = JSON.parse(getStore(state.storeageUserInfoKey));
 			if (userInfo) {
 				console.log("getUserInfoAction", userInfo);
 				let userName = "";
