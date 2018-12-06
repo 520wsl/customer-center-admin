@@ -330,7 +330,7 @@ export default {
                     render: (h, params) => {
                         let btnGroup = [];
                         let query = params.row;
-                        if (query.type == 4 || query.type == 4) {
+                        if (query.type == 3 || query.type == 4) {
                             btnGroup.push(
                                 h(
                                     "a",
