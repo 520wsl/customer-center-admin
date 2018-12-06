@@ -1,5 +1,5 @@
 <template>
-  <Cascader :style="{width:width+'px'}" :data="departmentData" v-model="visible"></Cascader>
+  <Cascader :style="{width:width+'px'}" :data="departmentData" filterable v-model="visible"></Cascader>
 </template>
 <script>
 import { mapState, mapActions } from "vuex";
@@ -41,6 +41,7 @@ export default {
   methods: {
     async getDepartmentData() {
       if (!this.loadingUser) {
+
         let arr = await getDepartmentData();
         const list = arr || [];
         this.departmentData = JSON.parse(JSON.stringify(list));
