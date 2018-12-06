@@ -1,14 +1,14 @@
 import { logout, sentLoginCodeData } from "@/api/admin/qywechatProxy/user";
 import { getUserInfoData } from "@/api/admin/user/user";
 import { setToken, getToken } from "@/libs/util";
-import { setItem, getItem } from "@/libs/util/session";
+import { setStore, getStore } from "@/libs/util/storeage";
 import config from "@/config";
 const { storeageUserInfoKey } = config;
 /*
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-03 13:22:01
+ * @Last Modified time: 2018-12-06 11:27:25
  * @explanatory:  store demo
  */
 export default {
@@ -29,7 +29,7 @@ export default {
 			state.userInfo = userInfo;
 		},
 		setUserInfoStoreage(state, userInfo) {
-			setItem(state.storeageUserInfoKey, userInfo);
+			setStore(state.storeageUserInfoKey, userInfo);
 		},
 		setAvator(state, avatorPath) {
 			state.avatorImgPath = avatorPath;
@@ -38,7 +38,7 @@ export default {
 			state.userId = id;
 		},
 		setSixiId(state, id) {
-			setItem(state.storeageKey, id);
+			setStore(state.storeageKey, id);
 			state.sixiId = id;
 		},
 		setUserName(state, name) {
@@ -79,7 +79,7 @@ export default {
 			});
 		},
 		async getUserInfoAction({ dispatch, state, commit }) {
-			let userInfo = getItem(state.storeageUserInfoKey);
+			let userInfo = getStore(state.storeageUserInfoKey);
 			if (userInfo) {
 				console.log("getUserInfoAction", userInfo);
 				let userName = "";
@@ -142,7 +142,7 @@ export default {
 			});
 		},
 		getSixiId({ state, commit }) {
-			let sixiId = getItem(state.storeageKey);
+			let sixiId = getStore(state.storeageKey);
 			if (sixiId) {
 				commit("setSixiId", sixiId);
 			}

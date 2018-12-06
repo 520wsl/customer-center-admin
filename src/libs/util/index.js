@@ -2,8 +2,8 @@ import Cookies from "js-cookie";
 // cookie保存的天数
 import config from "@/config";
 import {
-    getItem
-} from "@/libs/util/session";
+    getStore
+} from "@/libs/util/storeage";
 const {
     title,
     storeageUserInfoKey
@@ -29,7 +29,7 @@ export const getToken = () => {
 };
 
 export const getSixiID = () => {
-    let userInfoData = getItem(storeageUserInfoKey);
+    let userInfoData = getStore(storeageUserInfoKey);
     if (!userInfoData) {
         return false;
     }
@@ -404,7 +404,7 @@ export const localSave = (key, value) => {
 };
 
 export const localRead = key => {
-    return localStorage.getItem(key) || "";
+    return localStorage.getStore(key) || "";
 };
 
 export const hidePhone = phone => {
