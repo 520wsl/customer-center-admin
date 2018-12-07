@@ -72,6 +72,9 @@ export default {
                         item.userName + "(" + item.departmentName + ")，";
                 }
             });
+            if(joinStr != ""){
+                joinStr = joinStr.slice(0,-1);
+            }
             let executorUser = "";
             if (this.info.executorUser && this.info.executorUser.userName) {
                 executorUser = this.info.executorUser.userName;
