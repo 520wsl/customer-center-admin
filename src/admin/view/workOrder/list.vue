@@ -370,7 +370,8 @@ export default {
                                                     customerSixiId:
                                                         query.sixiId,
                                                     wechatNickname:
-                                                        query.wechatNickname
+                                                        query.wechatNickname,
+                                                    saveWorkOrder: 1
                                                 };
                                             }
                                         }

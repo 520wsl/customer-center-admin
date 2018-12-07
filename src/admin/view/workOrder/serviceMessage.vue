@@ -198,9 +198,12 @@ export default {
             return false;
         },
         isExectorId() {
-            let executorId = this.$store.state.workSheet.workSheetBaseInfo
-                .executorId;
-            return executorId == this.sixiId;
+            let executorId =
+                this.$store.state.workSheet.workSheetBaseInfo ==
+                this.sixiId.executorId;
+            let ishandleType =
+                this.info.handleType != 3 || this.info.handleType != 4;
+            return executorId && ishandleType;
         }
     },
     methods: {
@@ -217,8 +220,8 @@ export default {
             this.remarkParams.mobile = "";
             this.isShowCallPhoneModal = false;
         },
-        async getWorkOrderPhoneList(workSheetId,companySixiId) {
-            console.log(workSheetId,companySixiId);
+        async getWorkOrderPhoneList(workSheetId, companySixiId) {
+            console.log(workSheetId, companySixiId);
             let res = await getWorkOrderPhoneListData({
                 workSheetId,
                 companySixiId
@@ -270,8 +273,8 @@ export default {
             this.countDownTime = res.data.countDownTime || "";
             this.getTalkNewsCountdownTimeFormat();
         },
-        restartPage(){
-            location.reload()
+        restartPage() {
+            location.reload();
         },
         // 查询数据 分页页码重置
         sleectTalkNewsList(pageNum) {
@@ -398,7 +401,7 @@ export default {
             this.setWorkSheetBaseInfo(res.data);
             this.info = res.data;
             console.log(this.info);
-            this.getWorkOrderPhoneList(res.data.id,res.data.companyId);
+            this.getWorkOrderPhoneList(res.data.id, res.data.companyId);
             this.getTalkNewsList();
         },
         // 创建对话记录
@@ -468,7 +471,8 @@ export default {
                     content =
                         "请修改工单联系电话！\n\n点击<a target='_blank' href='" +
                         url +
-                        "'>点击修改>></a> \n\n原联系电话："+ this.getEncryptionPhone(this.workOrderPhoneList.mobile);
+                        "'>点击修改>></a> \n\n原联系电话：" +
+                        this.getEncryptionPhone(this.workOrderPhoneList.mobile);
                     this.setReplyParamsContent(content);
                     return;
                 case 3:

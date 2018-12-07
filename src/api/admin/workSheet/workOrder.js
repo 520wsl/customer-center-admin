@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-17 09:49:21
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-06 13:23:41
+ * @Last Modified time: 2018-12-07 15:32:22
  * @explanatory:  工单详情 基本信息
  */
 import api from "@/libs/api.request";
@@ -47,7 +47,8 @@ export const saveWorkOrder = ({
 	companySixiId,
 	companyName,
 	customerSixiId,
-	wechatNickname
+	wechatNickname,
+	sponsorType,
 }) => {
 	return post("/workorder/save", {
 		workOrderType,
@@ -56,6 +57,7 @@ export const saveWorkOrder = ({
 		companySixiId,
 		companyName,
 		customerSixiId,
-		wechatNickname
+		wechatNickname,
+		sponsorType
 	});
 };
