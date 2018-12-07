@@ -199,11 +199,11 @@ export default {
         },
         isExectorId() {
             let executorId =
-                this.$store.state.workSheet.workSheetBaseInfo ==
-                this.sixiId.executorId;
+                this.$store.state.workSheet.workSheetBaseInfo.executorId ==
+                this.sixiId;
             let ishandleType =
-                this.info.handleType != 3 || this.info.handleType != 4;
-            return executorId && ishandleType;
+                this.info.handleType == 3 || this.info.handleType == 4;
+            return executorId && !ishandleType;
         }
     },
     methods: {

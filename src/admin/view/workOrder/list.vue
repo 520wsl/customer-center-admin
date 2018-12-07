@@ -371,7 +371,7 @@ export default {
                                                         query.sixiId,
                                                     wechatNickname:
                                                         query.wechatNickname,
-                                                    saveWorkOrder: 1
+                                                    sponsorType: 1
                                                 };
                                             }
                                         }
