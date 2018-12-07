@@ -213,6 +213,7 @@ export default {
             return getEncryptionPhone(phone);
         },
         callPhoneModal() {
+            this.getWorkSheetInfo()
             this.remarkParams.mobile = this.workOrderPhoneList.mobile;
             this.isShowCallPhoneModal = true;
         },
