@@ -14,12 +14,13 @@
                 <div class="message-counter" v-if="item.record">
                     <span
                         v-if="item.eventType != 0"
-                    >【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span><span v-html="item.record"></span>
+                    >【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span>
+                    <span v-html="item.record"></span>
                 </div>
                 <div
                     class="message-counter"
                     v-if="item.eventType == 1 && item.remark"
-                >【 备注 】  {{item.remark}} </div>
+                >【 备注 】 {{item.remark}}</div>
                 <!-- 链接 -->
                 <div class="message-counter" v-if="item.type == 6">
                     【
@@ -68,7 +69,7 @@
                                 </a>
                             </div>
                         </template>
-                          <!-- 语音 -->
+                        <!-- 语音 -->
                         <template v-if="item.type == 8">
                             <div class="flex-left item img pic">
                                 <a
@@ -78,6 +79,10 @@
                                 >
                                     <img :src="$CDN('/default_audio.png')">
                                 </a>
+                            </div>
+                            <div class="message-counter" v-if="item.record">
+                                <span>【 语音备注 】</span>
+                                <span v-html="item.record"></span>
                             </div>
                         </template>
                     </div>
@@ -134,126 +139,125 @@ import { getArrValue } from "@/libs/tools";
 import myaudio from "_c/public/audio";
 import myvideo from "_c/public/video";
 export default {
-	props: {
-		data: {
-			type: Array,
-			default() {
-				return [];
-			}
+    props: {
+        data: {
+            type: Array,
+            default() {
+                return [];
+            }
         },
-        handleType:{
-            type:Number,
-            default(){
-                return 0
+        handleType: {
+            type: Number,
+            default() {
+                return 0;
             }
         }
-	},
-	components: {
-		myaudio,
-		myvideo
-	},
-	computed: {
-		isExectorId() {
-             let executorId =
+    },
+    components: {
+        myaudio,
+        myvideo
+    },
+    computed: {
+        isExectorId() {
+            let executorId =
                 this.$store.state.workSheet.workSheetBaseInfo.executorId ==
                 this.sixiId;
-            let ishandleType =
-                this.handleType == 3 || this.handleType == 4;
+            let ishandleType = this.handleType == 3 || this.handleType == 4;
             return executorId && !ishandleType;
-		}
-	},
-	methods: {
-		...mapActions(["getSixiId"]),
-		setShowImgModalData(path) {
-			this.isShowImgModal = true;
-			this.imgPath = path;
-		},
-		// 更新对话记录
-		async updateItemTalkNews() {
-			let params = { ...this.remarkParams };
-			let res = await updateItemTalkNewsData(params);
-			if (res.status !== 200) {
-				setTimeout(() => {
-					this.$Modal.error({
-						title: "通话摘要",
-						content: res.msg
-					});
-				}, 1000);
-				this.isShowRemarkModal = false;
-				return;
-			}
-			setTimeout(() => {
-				this.$Modal.success({
-					title: "通话摘要",
-					content: "添加成功"
-				});
-			}, 1000);
-			this.isShowRemarkModal = false;
-			this.$emit("updateItemTalkNews");
-		},
-		editRemarkModal(item) {
-			console.log(item);
-			this.isShowRemarkModal = true;
-			this.remarkParams.record = item.record;
-			this.remarkParams.workSheetId = item.workSheetId;
-			this.remarkParams.identifier = item.identifier;
-			this.remarkParams.remark = item.remark;
-			this.remarkParams.id = item.id;
-		},
-		getMessageTitle(type, userVo) {
-			return type == 1
-				? userVo.userName + "(" + userVo.departmentName + ") ："
-				: "客户 ：";
-		},
-		formatTimeData(time) {
-			return formatTime(time, "YYYY-MM-DD HH:mm:ss");
-		},
-		getWorkSheetEventTypeValue(key) {
-			return getArrValue(
-				this.$store.state.workSheet.workSheetEventType,
-				key
-			);
-		},
-		setAudioModelPath(path) {
-			this.isShowAudioModel = true;
-			this.audioModelPath = path;
-		},
-		downloadFiles(item) {
-			window.open(this.$FILE(item.path));
-		},
-		setVideoModelPath(path) {
-			console.log("video", path);
-			this.isShowVideoModel = true;
-			this.videoParams.src = path;
-		}
-	},
-	data() {
-		return {
-			sixiId: "",
-			imgPath: "",
-			isShowImgModal: false,
-			isShowRemarkModal: false,
-			isShowAudioModel: false,
-			audioModelPath: "",
-			isShowVideoModel: false,
-			videoParams: {
-				src: "",
-				type: "video/mp4"
-			},
-			remarkParams: {
-				talkTime: "",
-				creationTime: "",
-				id: 0,
-				workOrderId: 0,
-				identifier: "",
-				record: "",
-				remark: ""
-			}
-		};
-	},
-	mounted() {
-		this.getSixiId();
-		this.sixiId = this.$store.state.user.sixiId;
-	}
+        }
+    },
+    methods: {
+        ...mapActions(["getSixiId"]),
+        setShowImgModalData(path) {
+            this.isShowImgModal = true;
+            this.imgPath = path;
+        },
+        // 更新对话记录
+        async updateItemTalkNews() {
+            let params = { ...this.remarkParams };
+            let res = await updateItemTalkNewsData(params);
+            if (res.status !== 200) {
+                setTimeout(() => {
+                    this.$Modal.error({
+                        title: "通话摘要",
+                        content: res.msg
+                    });
+                }, 1000);
+                this.isShowRemarkModal = false;
+                return;
+            }
+            setTimeout(() => {
+                this.$Modal.success({
+                    title: "通话摘要",
+                    content: "添加成功"
+                });
+            }, 1000);
+            this.isShowRemarkModal = false;
+            this.$emit("updateItemTalkNews");
+        },
+        editRemarkModal(item) {
+            console.log(item);
+            this.isShowRemarkModal = true;
+            this.remarkParams.record = item.record;
+            this.remarkParams.workSheetId = item.workSheetId;
+            this.remarkParams.identifier = item.identifier;
+            this.remarkParams.remark = item.remark;
+            this.remarkParams.id = item.id;
+        },
+        getMessageTitle(type, userVo) {
+            return type == 1
+                ? userVo.userName + "(" + userVo.departmentName + ") ："
+                : "客户 ：";
+        },
+        formatTimeData(time) {
+            return formatTime(time, "YYYY-MM-DD HH:mm:ss");
+        },
+        getWorkSheetEventTypeValue(key) {
+            return getArrValue(
+                this.$store.state.workSheet.workSheetEventType,
+                key
+            );
+        },
+        setAudioModelPath(path) {
+            this.isShowAudioModel = true;
+            this.audioModelPath = path;
+        },
+        downloadFiles(item) {
+            window.open(this.$FILE(item.path));
+        },
+        setVideoModelPath(path) {
+            console.log("video", path);
+            this.isShowVideoModel = true;
+            this.videoParams.src = path;
+        }
+    },
+    data() {
+        return {
+            sixiId: "",
+            imgPath: "",
+            isShowImgModal: false,
+            isShowRemarkModal: false,
+            isShowAudioModel: false,
+            audioModelPath: "",
+            isShowVideoModel: false,
+            videoParams: {
+                src: "",
+                type: "video/mp4"
+            },
+            remarkParams: {
+                talkTime: "",
+                creationTime: "",
+                id: 0,
+                workOrderId: 0,
+                identifier: "",
+                record: "",
+                remark: ""
+            }
+        };
+    },
+    mounted() {
+        this.getSixiId();
+        this.sixiId = this.$store.state.user.sixiId;
+    }
 };
 </script>
