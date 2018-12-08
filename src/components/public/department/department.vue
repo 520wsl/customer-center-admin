@@ -41,14 +41,21 @@ export default {
   methods: {
     async getDepartmentData() {
       if (!this.loadingUser) {
-
-        let arr = await getDepartmentData();
-        const list = arr || [];
-        this.departmentData = JSON.parse(JSON.stringify(list));
+        if (sessionStorage.departmentData) {
+          this.departmentData = JSON.parse(sessionStorage.departmentData);
+        } else {
+          const list = await getDepartmentData() || [];
+          sessionStorage.departmentData = JSON.stringify(list)
+          this.departmentData = JSON.parse(sessionStorage.departmentData);
+        }
       } else {
-        let arr = await getUserDepartmentData();
-        const list = arr || [];
-        this.departmentData = JSON.parse(JSON.stringify(list));
+        if (sessionStorage.userDepartmentData) {
+          this.departmentData = JSON.parse(sessionStorage.userDepartmentData);
+        } else {
+          const list = await getUserDepartmentData() || [];
+          sessionStorage.userDepartmentData = JSON.stringify(list)
+          this.departmentData = JSON.parse(sessionStorage.userDepartmentData);
+        }
       }
     }
   },
