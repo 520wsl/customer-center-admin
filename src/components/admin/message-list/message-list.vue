@@ -140,7 +140,13 @@ export default {
 			default() {
 				return [];
 			}
-		}
+        },
+        handleType:{
+            type:Number,
+            default(){
+                return 0
+            }
+        }
 	},
 	components: {
 		myaudio,
@@ -148,9 +154,12 @@ export default {
 	},
 	computed: {
 		isExectorId() {
-			let executorId = this.$store.state.workSheet.workSheetBaseInfo
-				.executorId;
-			return executorId == this.sixiId;
+             let executorId =
+                this.$store.state.workSheet.workSheetBaseInfo.executorId ==
+                this.sixiId;
+            let ishandleType =
+                this.handleType == 3 || this.handleType == 4;
+            return executorId && !ishandleType;
 		}
 	},
 	methods: {

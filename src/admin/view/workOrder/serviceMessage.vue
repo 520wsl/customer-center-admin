@@ -123,6 +123,7 @@
         <message-list
             v-if="talkNewsList.length"
             :data="talkNewsList"
+            :handleType="info.handleType"
             @updateItemTalkNews="getTalkNewsList"
         ></message-list>
         <Card v-if="talkNewsList.length" class="md-card">
@@ -213,7 +214,7 @@ export default {
             return getEncryptionPhone(phone);
         },
         callPhoneModal() {
-            this.getWorkSheetInfo()
+            this.getWorkSheetInfo();
             this.remarkParams.mobile = this.workOrderPhoneList.mobile;
             this.isShowCallPhoneModal = true;
         },
