@@ -7,6 +7,10 @@ import { forEach, hasOneOf, objEqual } from "@/libs/tools";
 
 export const TOKEN_KEY = "token";
 
+export const getSexValue = type => {
+	let arr = ["未知", "男", "女"];
+	return arr[type];
+};
 export const setToken = token => {
 	Cookies.set(TOKEN_KEY, token, {
 		expires: config.cookieExpires || 1

@@ -2,21 +2,37 @@
     <div>
         <Card class="md-card">
             <div slot="title">工单信息</div>
-            <tables :data="workOrderInfo"></tables>
+            <tables @eventCallback="eventCallback" :data="workOrderInfo"></tables>
         </Card>
         <Card class="md-card">
             <div slot="title">客户信息</div>
             <tables :data="cunstomInfo"></tables>
         </Card>
         <Card class="md-card" v-if="evaluateList.length != 0">
-            <div slot="title" class="flex">客户评价<Button type="primary" class="flex-right" @click="clickAgianEvaluate">重新评价</Button></div>
+            <div slot="title" class="flex">客户评价
+                <Button type="primary" class="flex-right" @click="clickAgianEvaluate">重新评价</Button>
+            </div>
             <Card v-for="(item,index) in evaluateList" :key="'evaluate_'+index">
                 <div slot="title">评价时间：{{formatTimeAction(item.createAt)}}</div>
                 <evaluate-item :evaluateList="item.evaluateContent"></evaluate-item>
             </Card>
         </Card>
-        <Modal v-model="modal" width="400px;" class="again-evaluate" title="重新评价" :mask-closable="false" @on-ok="sureEvaluate">
-            <span class="text">确定是否追加评价？</span>   
+        <Modal
+            v-model="modal"
+            width="400px;"
+            class="again-evaluate"
+            title="重新评价"
+            :mask-closable="false"
+            @on-ok="sureEvaluate"
+        >
+            <span class="text">确定是否追加评价？</span>
+        </Modal>
+        <Modal v-model="isShowEditWorkOrderTitle" @on-ok="editWorkOrderTitleAction" title="工单标题">
+            <Card class="md-card">
+                <Input type="text" v-model="info.title">
+                    <span></span>
+                </Input>
+            </Card>
         </Modal>
     </div>
 </template>
@@ -25,23 +41,64 @@
 import tables from "_c/admin/md-tables";
 import { mapState, mapMutations } from "vuex";
 import { getArrValue } from "@/libs/tools";
-import { getWorkSheetInfoData, againEvaluate } from "@/api/admin/workSheet/workSheet";
+import {
+    getWorkSheetInfoData,
+    againEvaluate
+} from "@/api/admin/workSheet/workSheet";
+import { editWorkOrderTitle } from "@/api/admin/workSheet/workOrder";
 import { getEvaluateInfo } from "@/api/admin/evaluate/dimension";
 import evaluateItem from "_c/admin/evaluate-item";
 import { formatTime } from "@/libs/util/time";
+import { getSexValue } from "@/libs/util";
 export default {
     components: {
         evaluateItem,
         tables
     },
-    computed: {},
     methods: {
         ...mapMutations(["setWorkSheetBaseInfo"]),
-        formatTimeAction(time){
-            return formatTime(time)
+        eventCallback(type) {
+            if (type == 1) {
+                this.isShowEditWorkOrderTitle = true;
+            }
+        },
+        async editWorkOrderTitleAction() {
+            if (this.info.title.length <= 3) {
+                this.$Modal.error({
+                    title: "修改工单标题",
+                    content: "工单标题不能少于四个字符"
+                });
+                return;
+            }
+            let res = await editWorkOrderTitle({
+                id: this.info.id,
+                title: this.info.title
+            });
+
+            if (res.status !== 200) {
+                this.$Modal.error({
+                    title: "修改工单标题",
+                    content: res.msg
+                });
+                return;
+            }
+            this.getWorkSheetInfo();
+            this.$Modal.success({
+                title: "修改工单标题",
+                content: "修改成功"
+            });
+        },
+        formatTimeAction(time) {
+            return formatTime(time);
         },
         getWorkSheetTypeValue(key) {
             return getArrValue(this.$store.state.workSheet.workSheetType, key);
+        },
+        getCustomeIdentityValue() {
+            return getArrValue(
+                this.$store.state.workSheet.customeIdentity,
+                this.info.customerDetailVo && this.info.customerDetailVo.role
+            );
         },
         async getWorkSheetInfo() {
             let res = await getWorkSheetInfoData({
@@ -66,12 +123,13 @@ export default {
         // 设置 工单信息
         setWorkOrderInfo() {
             let joinStr = "";
-            this.info.userVos && this.info.userVos.forEach(item => {
-                if (item) {
-                    joinStr +=
-                        item.userName + "(" + item.departmentName + ")，";
-                }
-            });
+            this.info.userVos &&
+                this.info.userVos.forEach(item => {
+                    if (item) {
+                        joinStr +=
+                            item.userName + "(" + item.departmentName + ")，";
+                    }
+                });
             if(joinStr != ""){
                 joinStr = joinStr.slice(0,-1);
             }
@@ -104,8 +162,8 @@ export default {
                         value: this.getWorkSheetTypeValue(this.info.workType)
                     },
                     {
-                        title: "工单标题：",
-                        value: this.info.title
+                        title: "发起人：",
+                        value: this.info.sponsorName
                     }
                 ],
                 [
@@ -137,6 +195,21 @@ export default {
                     {
                         title: "负责人：",
                         value: leadingUser
+                    }
+                ],
+                [
+                    {
+                        title: "工单标题：",
+                        value: this.info.title,
+                        eventType: 1
+                    },
+                    {
+                        title: "",
+                        value: ""
+                    },
+                    {
+                        title: "",
+                        value: ""
                     }
                 ]
             ];
@@ -182,7 +255,25 @@ export default {
                     value: ""
                 });
             }
-
+            cunstomInfo.push([
+                {
+                    title: "称呼：",
+                    value:
+                        this.info.customerDetailVo &&
+                        this.info.customerDetailVo.callName
+                },
+                {
+                    title: "性别：",
+                    value: getSexValue(
+                        this.info.customerDetailVo &&
+                            this.info.customerDetailVo.role
+                    )
+                },
+                {
+                    title: "客户角色：",
+                    value: this.getCustomeIdentityValue()
+                }
+            ]);
             cunstomInfo.push([
                 {
                     title: "公司名称：",
@@ -227,9 +318,9 @@ export default {
         async sureEvaluate() {
             let param = {
                 workSheetId: this.workSheetId
-            }
+            };
             let res = await againEvaluate(param);
-            if(res.status != 200){
+            if (res.status != 200) {
                 this.$Modal.error({
                     title: "重新评价",
                     content: res.msg
@@ -243,6 +334,7 @@ export default {
     },
     data() {
         return {
+            isShowEditWorkOrderTitle: false,
             cunstomInfo: [],
             workOrderInfo: [],
             evaluateList: [],
