@@ -1,13 +1,15 @@
 <template>
-  <div>
-    <!-- <Poptip confirm placement="bottom-end" title="解绑不可撤销，请谨慎操作！是否确认解绑？" @on-ok="cancelBind()">
+    <div>
+        <!-- <Poptip confirm placement="bottom-end" title="解绑不可撤销，请谨慎操作！是否确认解绑？" @on-ok="cancelBind()">
       <Button type="primary" size="small" class="mar-l" ghost>解绑</Button>
     </Poptip> -->
-    <!-- <Button type="primary" size="small" class="mar-l" @click="modal = true" ghost>编辑</Button> -->
-    <Button type="primary" size="small" class="mar-l" @click="getMobilePhone()" ghost>采集电话</Button>
-    <Button type="primary" size="small" class="mar-l" @click="getAccountPassword()" ghost>采集账号密码</Button>
-    <!-- <Button type="primary" size="small" class="mar-l" v-if="!row.wechatNickname" @click="bindAccount()" ghost>绑定微信</Button> -->
-    <!-- <Modal v-model="modal" @on-ok="edit()" :loading="loading" :mask-closable="false" title="编辑">
+        <Button type="primary" size="small" class="mar-l" @click="modal = true" ghost>编辑联系人</Button>
+        <Button type="primary" size="small" class="mar-l" v-if="isXuKai" @click="delContacts()" ghost>删除联系人</Button>
+        <Button type="primary" size="small" class="mar-l" @click="getMobilePhone()" ghost>采集电话</Button>
+        <Button type="primary" size="small" class="mar-l" @click="getAccountPassword()" ghost>采集账号密码</Button>
+        <!-- <Button type="primary" size="small" class="mar-l" @click="getStartWorkorder()" ghost>发起工单</Button> -->
+        <!-- <Button type="primary" size="small" class="mar-l" v-if="!row.wechatNickname" @click="bindAccount()" ghost>绑定微信</Button> -->
+        <Modal v-model="modal" @on-ok="edit()" :loading="loading" :mask-closable="false" title="编辑">
             <Card class="md-card">
                 <table class="tab">
                     <tbody>
@@ -56,8 +58,8 @@
                     </tbody>
                 </table>
             </Card>
-        </Modal>-->
-  </div>
+        </Modal>
+    </div>
 </template>
 <script>
 import { setWechatUntied, updateBindInfo } from "@/api/admin/custom/custom";
@@ -67,121 +69,173 @@ import { addItemTalkNewsData } from "@/api/admin/workSheet/talkNews";
 import { formatTime } from "@/libs/util/time";
 import "./index.less";
 export default {
-  props: ["row", "companySixiId"],
-  data() {
-    return {
-      modal: false,
-      loading: true,
-      sex: 0,
-      // 客户角色: 0:未知;1:老板;2:老板娘;3:经理;4:业务员;
-      role: 1,
-      phoneNumber: "",
-      callName: ""
-    };
-  },
-  created() {
-    // 赋值
-    this.sex = this.row.sex;
-    this.role = this.row.role;
-    this.phoneNumber = this.row.mobile;
-    this.callName = this.row.callName;
-  },
-  methods: {
-    cancelBind() {
-      // 当前暂无openid
-      let companySixiId = this.companySixiId;
-      let customerSixiId = this.row.customerSixiId;
-      setWechatUntied({ companySixiId, customerSixiId }).then(res => {
-        if (res.status !== 200) {
-          this.$Modal.error({ title: "提示", content: res.msg });
-          return;
+    props: ["row", "companySixiId", "isXuKai"],
+    data() {
+        return {
+            modal: false,
+            loading: true,
+            sex: 0,
+            // 客户角色: 0:未知;1:老板;2:老板娘;3:经理;4:业务员;
+            role: 1,
+            phoneNumber: "",
+            callName: ""
+        };
+    },
+    computed:{
+        operator:function() {
+            return this.$store.state.user.sixiId;
         }
-        this.$emit("callFun");
-      });
     },
-    bindAccount() {
-      this.$emit("bindAccount", { customerSixiId: this.row.customerSixiId });
+    created() {
+        // 赋值
+        this.sex = this.row.sex;
+        this.role = this.row.role;
+        this.phoneNumber = this.row.mobile;
+        this.callName = this.row.callName;
     },
-    edit() {
-      let sex, sixiId, callName, mobile, role;
-      let params = {
-        sex: this.sex,
-        sixiId: this.row.customerSixiId,
-        callName: this.callName,
-        mobile: this.phoneNumber,
-        role: this.role
-      };
-      updateBindInfo(params).then(
-        res => {
-          if (res.status !== 200) {
-            this.$Modal.error({
-              title: "提示",
-              content: res.msg
+    methods: {
+        cancelBind() {
+            // 当前暂无openid
+            let companySixiId = this.companySixiId;
+            let customerSixiId = this.row.customerSixiId;
+            setWechatUntied({ companySixiId, customerSixiId }).then(res => {
+                if (res.status !== 200) {
+                    this.$Modal.error({ title: "提示", content: res.msg });
+                    return;
+                }
+                this.$emit("callFun");
             });
-            return;
-          }
-          this.loading = false;
-          this.modal = false;
-          this.$emit("callFun");
         },
-        error => {
-          this.loading = false;
-          this.modal = false;
+        bindAccount() {
+            this.$emit("bindAccount", { customerSixiId: this.row.customerSixiId });
+        },
+        edit() {
+            let params = {
+                sex: this.sex,
+                customerSixiId: this.row.customerSixiId,
+                callName: this.callName,
+                mobile: this.phoneNumber,
+                role: this.role,
+                id: this.row.id || '',
+                deletedAt: "",
+                operator: this.operator,
+                companySixiId: this.companySixiId
+            };
+            updateBindInfo(params).then(
+                res => {
+                    if (res.status !== 200) {
+                        this.$Modal.error({
+                            title: "提示",
+                            content: res.msg
+                        });
+                        return;
+                    }
+                    this.loading = false;
+                    this.modal = false;
+                    this.$emit("callFun");
+                },
+                error => {
+                    this.loading = false;
+                    this.modal = false;
+                }
+            );
+        },
+        // 删除联系人
+        delContacts() {
+            this.$Modal.confirm({
+                title: "删除联系人",
+                content: "<p>" + "删除之后不可恢复，请谨慎操作" + "</p>",
+                onOk: () => {
+                    let params = {
+                        sex: this.row.sex || "",
+                        customerSixiId: this.row.customerSixiId || "",
+                        callName: this.row.callName || "",
+                        mobile: this.row.mobile || "",
+                        role: this.row.role || "",
+                        id: this.row.id || "",
+                        deletedAt: (new Date()).getTime(),
+                        operator: this.operator,
+                        companySixiId: this.companySixiId || ""
+                    };
+                    console.log(params)
+                    updateBindInfo(params).then(res => {
+                        if (res.status !== 200) {
+                            this.$Modal.error({
+                                title: "提示",
+                                content: res.msg
+                            });
+                            return;
+                        }
+                        this.$emit("callFun");
+                    },
+                    error => { });
+                },
+                onCancel: () => { }
+            });
+        },
+        // 发起工单
+        // getStartWorkorder() {
+        //     this.$Modal.confirm({
+        //         title: "发起工单",
+        //         content: "<p>" + "即将发起工单通知，请确认" + "</p>",
+        //         onOk: () => {
+        //             console.log(123)
+        //         },
+        //         onCancel: () => { }
+        //     });
+        // },
+        // 采集手机
+        getMobilePhone() {
+            this.$Modal.confirm({
+                title: "电话号码采集",
+                content: "<p>" + "即将发送客户采集电话号码通知，请确认" + "</p>",
+                onOk: () => {
+                    addItemTalkNewsData({
+                        eventType: 2,
+                        userSixiId: this.row.customerSixiId,
+                        companySixiId: this.companySixiId
+                    }).then(res => {
+                        if (res.status !== 200) {
+                            this.$Modal.error({
+                                title: "提示",
+                                content: res.msg
+                            });
+                            return;
+                        }
+                        this.$emit("callFun");
+                    });
+                },
+                onCancel: () => { }
+            });
+        },
+        // 采集账号密码
+        getAccountPassword() {
+            this.$Modal.confirm({
+                title: "账号密码采集",
+                content: "<p>" + "即将发送客户采集账号密码通知，请确认" + "</p>",
+                onOk: () => {
+                    addItemTalkNewsData({
+                        eventType: 3,
+                        userSixiId: this.row.customerSixiId,
+                        companySixiId: this.companySixiId
+                    }).then(res => {
+                        if (res.status !== 200) {
+                            this.$Modal.error({
+                                title: "提示",
+                                content: res.msg
+                            });
+                            return;
+                        }
+                        this.$emit("callFun");
+                    });
+                },
+                onCancel: () => { }
+            });
+        },
+        getTime(val) {
+            return formatTime(val, "YYYY-MM-DD H:mm:ss");
         }
-      );
-    },
-    // 采集手机
-    getMobilePhone() {
-      this.$Modal.confirm({
-        title: "电话号码采集",
-        content: "<p>" + "即将发送客户采集电话号码通知，请确认" + "</p>",
-        onOk: () => {
-          addItemTalkNewsData({
-            eventType: 2,
-            userSixiId: this.row.customerSixiId,
-            companySixiId: this.companySixiId
-          }).then(res => {
-            if (res.status !== 200) {
-              this.$Modal.error({
-                title: "提示",
-                content: res.msg
-              });
-              return;
-            }
-            this.$emit("callFun");
-          });
-        },
-        onCancel: () => {}
-      });
-    },
-    // 采集账号密码
-    getAccountPassword() {
-      this.$Modal.confirm({
-        title: "账号密码采集",
-        content: "<p>" + "即将发送客户采集账号密码通知，请确认",
-        onOk: () => {
-          addItemTalkNewsData({
-            eventType: 3,
-            userSixiId: this.row.customerSixiId,
-            companySixiId: this.companySixiId
-          }).then(res => {
-            if (res.status !== 200) {
-              this.$Modal.error({
-                title: "提示",
-                content: res.msg
-              });
-              return;
-            }
-            this.$emit("callFun");
-          });
-        },
-        onCancel: () => {}
-      });
-    },
-    getTime(val) {
-      return formatTime(val, "YYYY-MM-DD H:mm:ss");
     }
-  }
 };
 </script>
 <style lang="less" scoped>

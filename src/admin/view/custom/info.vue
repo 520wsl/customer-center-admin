@@ -46,6 +46,7 @@
             </div>-->
             <Tabs type="card" class="tabTable" v-model="bindOrderOrBillList">
                 <TabPane label="已绑定账号" name="bindOrder">
+                    <Button type="primary" style="margin:10px 0 30px;" v-if="isXuKai" @click="addContacts.bool = true;">新增联系人</Button>
                     <Table :columns="columns" :data="wechatBindVos" border></Table>
                 </TabPane>
                 <TabPane label="工单列表" name="billList">
@@ -144,13 +145,54 @@
                 </div>
             </Card>
         </Modal>
+        <Modal v-model="addContacts.bool" @on-ok="addContactsNumber()" :loading="addContacts.loading" :mask-closable="false" title="新增">
+            <Card class="md-card">
+                <table class="tab">
+                    <tbody>
+                        <tr>
+                            <td class="title">称呼:</td>
+                            <td>
+                                <Input class="wid" v-model="addContacts.callName"></Input>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title">性别:</td>
+                            <td>
+                                <RadioGroup v-model="addContacts.sex">
+                                    <Radio :label="0">先生</Radio>
+                                    <Radio :label="1">女士</Radio>
+                                </RadioGroup>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title">角色:</td>
+                            <td>
+                                <Select class="wid" v-model="addContacts.role">
+                                    <Option :value="1">老板</Option>
+                                    <Option :value="2">老板娘</Option>
+                                    <Option :value="3">经理</Option>
+                                    <Option :value="4">业务员</Option>
+                                </Select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title">手机号:</td>
+                            <td>
+                                <Input class="wid" v-model="addContacts.mobile" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </Card>
+        </Modal>
     </div>
 </template>
 <script>
 import "./index.less";
 import {
     getCustomerInfoData,
-    setWechatUntied
+    setWechatUntied,
+    updateBindInfo
 } from "@/api/admin/custom/custom";
 import {
     workSheet,
@@ -174,7 +216,14 @@ export default {
         return {
             bindOrderOrBillList: "bindOrder", // "billList", //
             bindModal: false,
-
+            addContacts:{
+                loading: true,
+                bool: false,
+                callName: "",
+                sex: 0,
+                role: 1,
+                mobile: ""
+            },
             //<!--注释批量设置人员-->
             setStaffModal: false,
             // 员工信息
@@ -232,7 +281,16 @@ export default {
                                 ]
                             );
                         }else{
-                            return h('div')
+                            return h('div',{
+                                attrs:{
+                                    style: "color:#2d8cf0;cursor:pointer;"
+                                },
+                                on:{
+                                    click:()=>{
+                                        this.bindAccount(params.row);
+                                    }
+                                }
+                            },"绑定微信")
                         }
                     }
                 },
@@ -268,16 +326,17 @@ export default {
                             return h(operation, {
                                 props: {
                                     row: params.row,
-                                    companySixiId: this.params.sixiId
+                                    companySixiId: this.params.sixiId,
+                                    isXuKai: this.isXuKai
                                 },
                                 on: {
                                     callFun: () => {
                                         this.getInfo();
-                                    },
-                                    bindAccount: data => {
-                                        console.log("customerSixiId", data);
-                                        this.bindAccount(data.customerSixiId);
                                     }
+                                    // bindAccount: data => {
+                                    //     console.log("customerSixiId", data);
+                                    //     this.bindAccount(data.customerSixiId);
+                                    // }
                                 }
                             });
                         }
@@ -488,19 +547,72 @@ export default {
             statusList: state => state.workSheet.workSheetHandleType,
             roleList: state => state.custom.roleList,
             staffTagIdObj: state => state.custom.staffTagIdObj,
-            staffTagIdList: state => state.custom.staffTagIdList
-        })
+            staffTagIdList: state => state.custom.staffTagIdList,
+            operator: state => state.user.sixiId
+        }),
+        // 判断当前登录的人员是否为续开人员
+        isXuKai:function() {
+            // let arr = ["16", "36", "71", "121", "151", "158", "172", "173", "175"];
+            // let departmentId = this.$store.state.user.userInfo.department || "";
+            let arr = this.info && this.info.staffVos || [];
+            let staffSixiId = this.$store.state.user.sixiId || '';
+            let bool = false;
+            arr.forEach(item=>{
+                if(item.staffSixiId == staffSixiId && item.staffTagId == 2){
+                    bool = true;
+                }
+            })
+            return bool;
+        }
     },
     methods: {
-        bindAccount(customerSixiId) {
-            this.bindModal = true;
-            this.getQrcode(customerSixiId);
+        // 新增联系人
+        addContactsNumber() {
+            if(this.addContacts.callName == ""){
+                this.$Modal.error({
+                    title: "提示",
+                    content: "称呼不可为空！"
+                });
+                this.addContacts.loading = false;
+                return;
+            }
+            let param = {
+                sex: this.addContacts.sex,
+                mobile: this.addContacts.mobile,
+                role: this.addContacts.role,
+                id: null,
+                companySixiId: this.$route.query.sixiId,
+                deletedAt: "",
+                callName: this.addContacts.callName,
+                operator: this.operator,
+                customerSixiId: ""
+            }
+            updateBindInfo(param).then(
+                res => {
+                    if (res.status !== 200) {
+                        this.$Modal.error({
+                            title: "提示",
+                            content: res.msg
+                        });
+                        return;
+                    }
+                    this.addContacts.loading = false;
+                    this.getInfo();
+                },
+                error => {
+                    this.addContacts.loading = false;
+                }
+            );
         },
-        getQrcode(customerSixiId) {
-            console.log("customerSixiId====", customerSixiId);
+        // 绑定微信
+        bindAccount(row) {
+            this.bindModal = true;
+            this.getQrcode(row);
+        },
+        getQrcode(row) {
+            console.log("row", row)
             getQRCodeUrl({
-                companySixiId: this.info.sixiId,
-                customerSixiId: customerSixiId,
+                regId: row.id,
                 type: "BINDING_PHONE"
             }).then(res => {
                 if (res.status != 200) {

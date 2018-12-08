@@ -62,14 +62,22 @@ export const getCustomerbymobileList = ({
 // 编辑已绑定账号
 export const updateBindInfo = ({
     sex,
-    sixiId,
+    id,
+    customerSixiId,
+    companySixiId,
+    deletedAt = null,
+    operator,
     callName,
     mobile,
     role
 }) => {
     return post("/customer/update", {
         sex,
-        sixiId,
+        id,
+        customerSixiId,
+        companySixiId,
+        deletedAt,
+        operator,
         callName,
         mobile,
         role
