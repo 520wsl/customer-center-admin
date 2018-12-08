@@ -597,10 +597,12 @@ export default {
                         return;
                     }
                     this.addContacts.loading = false;
+                    this.addContacts.bool = false;
                     this.getInfo();
                 },
                 error => {
                     this.addContacts.loading = false;
+                    this.addContacts.bool = false;
                 }
             );
         },
