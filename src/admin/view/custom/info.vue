@@ -159,8 +159,8 @@
                             <td class="title">性别:</td>
                             <td>
                                 <RadioGroup v-model="addContacts.sex">
-                                    <Radio :label="0">先生</Radio>
-                                    <Radio :label="1">女士</Radio>
+                                    <Radio :label="1">{{getSexValue(1)}}</Radio>
+                                    <Radio :label="2">{{getSexValue(2)}}</Radio>
                                 </RadioGroup>
                             </td>
                         </tr>
@@ -207,7 +207,8 @@ import callPhone from "_c/public/callPhone";
 import operation from "./operation";
 // <!--注释批量设置人员-->
 // import setServiceSatff from "./setServiceSatff";
-import { getValueOfObj } from "@/libs/util/index";
+// import { getValueOfObj } from "@/libs/util/index";
+import { getSexValue } from "@/libs/util";
 export default {
     //<!--注释批量设置人员-->
     // components: { operation, Page, callPhone, setServiceSatff }, //eslint-disable-line
@@ -321,25 +322,25 @@ export default {
                 {
                     title: "操作",
                     render: (h, params) => {
-                        if(params.row.wechatNickname !== null && params.row.wechatNickname !== undefined && params.row.wechatNickname !== '') {
-                            console.log(this.info.wechatBindVos);
-                            return h(operation, {
-                                props: {
-                                    row: params.row,
-                                    companySixiId: this.params.sixiId,
-                                    isXuKai: this.isXuKai
-                                },
-                                on: {
-                                    callFun: () => {
-                                        this.getInfo();
-                                    }
-                                    // bindAccount: data => {
-                                    //     console.log("customerSixiId", data);
-                                    //     this.bindAccount(data.customerSixiId);
-                                    // }
+                        let bool = params.row.wechatNickname !== null && params.row.wechatNickname !== undefined && params.row.wechatNickname !== '';
+                        console.log(this.info.wechatBindVos);
+                        return h(operation, {
+                            props: {
+                                row: params.row,
+                                companySixiId: this.params.sixiId,
+                                isXuKai: this.isXuKai,
+                                isShow: bool
+                            },
+                            on: {
+                                callFun: () => {
+                                    this.getInfo();
                                 }
-                            });
-                        }
+                                // bindAccount: data => {
+                                //     console.log("customerSixiId", data);
+                                //     this.bindAccount(data.customerSixiId);
+                                // }
+                            }
+                        });                       
                     }
                 }
             ],
@@ -566,6 +567,9 @@ export default {
         }
     },
     methods: {
+        getSexValue(type) {
+            return getSexValue(type);
+        },
         // 新增联系人
         addContactsNumber() {
             if(this.addContacts.callName == ""){
