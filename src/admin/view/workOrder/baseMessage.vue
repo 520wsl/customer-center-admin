@@ -63,7 +63,7 @@ export default {
             }
         },
         async editWorkOrderTitleAction() {
-            if (this.info.title.length <= 4) {
+            if (this.info.title.length <= 3) {
                 this.$Modal.error({
                     title: "修改工单标题",
                     content: "工单标题不能少于四个字符"
