@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-16 18:48:22
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-20 10:51:04
+ * @Last Modified time: 2018-12-07 16:18:13
  * @explanatory:  工单模块
  */
 import { getWorkSheetInfoData } from "@/api/admin/workSheet/workSheet";
@@ -18,22 +18,22 @@ export default {
 				key: 2,
 				value: "续开工单"
 			},
-			{
-				key: 3,
-				value: "美工工单"
-			},
-			{
-				key: 4,
-				value: "深度运营"
-			},
+			// {
+			// 	key: 3,
+			// 	value: "美工工单"
+			// },
+			// {
+			// 	key: 4,
+			// 	value: "深度运营"
+			// },
 			{
 				key: 5,
 				value: "运营"
 			},
-			{
-				key: 6,
-				value: "新开工单"
-			}
+			// {
+			// 	key: 6,
+			// 	value: "新开工单"
+			// }
 		],
 		workSheetHandleType: [
 			{

@@ -31,7 +31,7 @@
                 </div>
                 <div class="flex-right">
                     <Button
-                        @click="sleectTalkNewsList(1)"
+                        @click="restartPage()"
                         class="btn"
                         icon="md-refresh"
                         type="warning"
@@ -198,9 +198,12 @@ export default {
             return false;
         },
         isExectorId() {
-            let executorId = this.$store.state.workSheet.workSheetBaseInfo
-                .executorId;
-            return executorId == this.sixiId;
+            let executorId =
+                this.$store.state.workSheet.workSheetBaseInfo.executorId ==
+                this.sixiId;
+            let ishandleType =
+                this.info.handleType == 3 || this.info.handleType == 4;
+            return executorId && !ishandleType;
         }
     },
     methods: {
@@ -210,6 +213,7 @@ export default {
             return getEncryptionPhone(phone);
         },
         callPhoneModal() {
+            this.getWorkSheetInfo()
             this.remarkParams.mobile = this.workOrderPhoneList.mobile;
             this.isShowCallPhoneModal = true;
         },
@@ -217,8 +221,8 @@ export default {
             this.remarkParams.mobile = "";
             this.isShowCallPhoneModal = false;
         },
-        async getWorkOrderPhoneList(workSheetId,companySixiId) {
-            console.log(workSheetId,companySixiId);
+        async getWorkOrderPhoneList(workSheetId, companySixiId) {
+            console.log(workSheetId, companySixiId);
             let res = await getWorkOrderPhoneListData({
                 workSheetId,
                 companySixiId
@@ -269,6 +273,9 @@ export default {
             }
             this.countDownTime = res.data.countDownTime || "";
             this.getTalkNewsCountdownTimeFormat();
+        },
+        restartPage() {
+            location.reload();
         },
         // 查询数据 分页页码重置
         sleectTalkNewsList(pageNum) {
@@ -395,7 +402,7 @@ export default {
             this.setWorkSheetBaseInfo(res.data);
             this.info = res.data;
             console.log(this.info);
-            this.getWorkOrderPhoneList(res.data.id,res.data.companyId);
+            this.getWorkOrderPhoneList(res.data.id, res.data.companyId);
             this.getTalkNewsList();
         },
         // 创建对话记录
@@ -463,9 +470,10 @@ export default {
                             this.params.workSheetId
                     );
                     content =
-                        "非常抱歉，您留下的工单联系人电话有误，电话没有接通，请提供新的联系电话！\n\n点击<a target='_blank' href='" +
+                        "请修改工单联系电话！\n\n点击<a target='_blank' href='" +
                         url +
-                        "'>提交工单联系人信息>></a>";
+                        "'>点击修改>></a> \n\n原联系电话：" +
+                        this.getEncryptionPhone(this.workOrderPhoneList.mobile);
                     this.setReplyParamsContent(content);
                     return;
                 case 3:
