@@ -5,8 +5,8 @@
     </Poptip> -->
         <Button type="primary" size="small" class="mar-l" v-if="isXuKai" @click="modal = true" ghost>编辑联系人</Button>
         <Button type="primary" size="small" class="mar-l" v-if="isXuKai" @click="delContacts()" ghost>删除联系人</Button>
-        <Button type="primary" size="small" class="mar-l" @click="getMobilePhone()" ghost>采集电话</Button>
-        <Button type="primary" size="small" class="mar-l" @click="getAccountPassword()" ghost>采集账号密码</Button>
+        <Button type="primary" size="small" class="mar-l" v-if="isShow" @click="getMobilePhone()" ghost>采集电话</Button>
+        <Button type="primary" size="small" class="mar-l" v-if="isShow" @click="getAccountPassword()" ghost>采集账号密码</Button>
         <!-- <Button type="primary" size="small" class="mar-l" @click="getStartWorkorder()" ghost>发起工单</Button> -->
         <!-- <Button type="primary" size="small" class="mar-l" v-if="!row.wechatNickname" @click="bindAccount()" ghost>绑定微信</Button> -->
         <Modal v-model="modal" @on-ok="edit()" :loading="loading" :mask-closable="false" title="编辑">
@@ -33,8 +33,8 @@
                             <td class="title">性别:</td>
                             <td>
                                 <RadioGroup v-model="sex">
-                                    <Radio :label="0">先生</Radio>
-                                    <Radio :label="1">女士</Radio>
+                                    <Radio :label="1">{{getSexValue(1)}}</Radio>
+                                    <Radio :label="2">{{getSexValue(2)}}</Radio>
                                 </RadioGroup>
                             </td>
                         </tr>
@@ -65,11 +65,11 @@
 import { setWechatUntied, updateBindInfo } from "@/api/admin/custom/custom";
 // import { callPhoneAction } from "@/api/admin/callPhone/callPhone";
 import { addItemTalkNewsData } from "@/api/admin/workSheet/talkNews";
-
+import { getSexValue } from "@/libs/util";
 import { formatTime } from "@/libs/util/time";
 import "./index.less";
 export default {
-    props: ["row", "companySixiId", "isXuKai"],
+    props: ["row", "companySixiId", "isXuKai", "isShow"],
     data() {
         return {
             modal: false,
@@ -94,6 +94,9 @@ export default {
         this.callName = this.row.callName;
     },
     methods: {
+        getSexValue(type) {
+            return getSexValue(type);
+        },
         cancelBind() {
             // 当前暂无openid
             let companySixiId = this.companySixiId;

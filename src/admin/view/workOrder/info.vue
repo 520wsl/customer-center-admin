@@ -23,7 +23,7 @@
                         <Icon type="md-hammer"></Icon>工单受理
                     </a>
                     <a
-                        v-if="current == 1 && isExectorId"
+                        v-if="current == 1 && isExectorId" 
                         @click="assignPersonnel"
                         href="javascript:;"
                         class="md-card-btn-info"
@@ -68,8 +68,10 @@
                     <Select v-model="modal.relateService" style="width:200px">
                         <Option v-for='(item,index) in modal.personList' :value="item.staffSixiId" :key="index">{{staffTagIdList[item.staffTagId]}}：{{item.staffName+"("+item.department+")"}}</Option>
                     </Select>
-                    <Radio label="2">上级领导：</Radio>
-                    {{modal.superiorLeader.userName}}
+                    <Radio label="2" disabled>上级领导：</Radio>
+                    <Select v-model="modal.superiorLeaderSixiId">
+                        <Option v-for='(item,index) in modal.superiorLeaderList' :value="item.sixiId" :key="index">{{item.userName+"("+item.departmentName+")"}}</Option>
+                    </Select>
                     <Radio label="3">其他员工：</Radio>
                     <Department :loading-user="true" width="200" :get-user-info="getUserInfo"  v-model="modal.customerIdList"></Department>
                 </RadioGroup>
@@ -158,14 +160,14 @@ export default {
             let department = this.info.executorUser && this.info.executorUser.department || "";
             let res = await getSuperiorLeader({ department });
             console.log(res)
-            this.modal.superiorLeader = res.data || { sixiId: "", userName: ""}
+            this.modal.superiorLeaderList = res.data || [];
         },
         subAssign() {
             let executorSixiId = "";
             if(this.modal.type == '1'){
                 executorSixiId = this.modal.relateService
             } else if(this.modal.type == '2'){
-                executorSixiId = this.modal.superiorLeader.sixiId
+                executorSixiId = this.modal.superiorLeaderSixiId
             } else if(this.modal.type == '3'){
                 let arr = this.modal.customerIdList
                 executorSixiId = arr[arr.length-1]
@@ -338,7 +340,8 @@ export default {
                 type: "1",
                 relateService: '',
                 customerIdList: [],
-                superiorLeader:{}
+                superiorLeaderSixiId: "",
+                superiorLeaderList: []
             }
         };
     },
