@@ -178,7 +178,7 @@
                         <tr>
                             <td class="title">手机号:</td>
                             <td>
-                                <Input class="wid" v-model="addContacts.mobile" />
+                                <Input class="wid" v-model="addContacts.mobile" maxlength="11"/>
                             </td>
                         </tr>
                     </tbody>
@@ -576,6 +576,14 @@ export default {
                 this.addContacts.loading = false;
                 return;
             }
+            if (!(/^\d{11}$/.test(this.addContacts.mobile))) {
+                this.$Modal.error({
+                    title: "提示",
+                    content: '请输入11位手机号'
+                });
+                this.addContacts.loading = false;
+                return;
+            }
             let param = {
                 sex: this.addContacts.sex,
                 mobile: this.addContacts.mobile,
@@ -597,10 +605,12 @@ export default {
                         return;
                     }
                     this.addContacts.loading = false;
+                    this.addContacts.bool = false;
                     this.getInfo();
                 },
                 error => {
                     this.addContacts.loading = false;
+                    this.addContacts.bool = false;
                 }
             );
         },
