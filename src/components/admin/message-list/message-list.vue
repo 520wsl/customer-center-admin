@@ -13,8 +13,9 @@
                 <!-- 普通消息 -->
                 <div class="message-counter" v-if="item.record">
                     <span
-                        v-if="item.eventType != 0"
+                        v-if="item.eventType != 0 && item.type != 8"
                     >【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span>
+                    <span v-if="item.type == 8">【 语音备注 】</span>
                     <span v-html="item.record"></span>
                 </div>
                 <div
@@ -79,10 +80,6 @@
                                 >
                                     <img :src="$CDN('/default_audio.png')">
                                 </a>
-                            </div>
-                            <div class="message-counter" v-if="item.record">
-                                <span>【 语音备注 】</span>
-                                <span v-html="item.record"></span>
                             </div>
                         </template>
                     </div>
