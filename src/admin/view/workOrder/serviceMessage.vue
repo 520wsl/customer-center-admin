@@ -482,7 +482,9 @@ export default {
                     message = "即将发送客户采集账号密码通知，请确认";
                     url = createToWeChatPagePage(
                         "pageName=passwordStore&companySixiId=" +
-                            this.info.companyId
+                            this.info.companyId +
+                            "&workSheetId=" +
+                            this.params.workSheetId
                     );
                     content =
                         "【 " +

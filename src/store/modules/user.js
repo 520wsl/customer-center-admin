@@ -8,7 +8,7 @@ const { storeageUserInfoKey } = config;
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-06 12:18:07
+ * @Last Modified time: 2018-12-10 09:22:05
  * @explanatory:  store demo
  */
 export default {
@@ -64,6 +64,7 @@ export default {
 			return new Promise((resolve, reject) => {
 				logout()
 					.then(() => {
+						localStorage.tagNaveList = JSON.stringify({});
 						commit("setSixiId", "");
 						commit("setUserInfo", "");
 						commit("setUserInfoStoreage", "");
