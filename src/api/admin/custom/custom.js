@@ -14,14 +14,18 @@ export const getCustomerListDate = ({
     pageNum,
     mobile,
     account,
-    companyName
+    companyName,
+    operator,
+    callName = ""
 }) => {
     return post("/company/listbysearch", {
         pageSize,
         pageNum,
         mobile,
         account,
-        companyName
+        companyName,
+        operator,
+        callName
     });
 };
 // 客户详情
@@ -34,12 +38,10 @@ export const getCustomerInfoData = ({
 };
 // 微信解绑
 export const setWechatUntied = ({
-    companySixiId,
-    customerSixiId
+    id
 }) => {
     return post("/wechat/untied", {
-        companySixiId,
-        customerSixiId
+        id
     });
 };
 // 客户指派人员列表
