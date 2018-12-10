@@ -208,10 +208,12 @@ export default {
             console.log(this.$route);
             let route = this.$route;
             let workSheetId = route.query.workSheetId;
+            let companyName = route.query.companyName;
             this.$router.push({
                 path: path,
                 query: {
-                    workSheetId
+                    workSheetId,
+                    companyName
                 }
             });
         },
