@@ -4,7 +4,7 @@
       <Button type="primary" size="small" class="mar-l" ghost>解绑</Button>
     </Poptip> -->
         <Button type="primary" size="small" class="mar-l" v-if="isXuKai" @click="modal = true" ghost>编辑联系人</Button>
-        <Button type="primary" size="small" class="mar-l" v-if="isXuKai" @click="delContacts()" ghost>删除联系人</Button>
+        <Button type="primary" size="small" class="mar-l" v-if="isXuKai && row.customerSixiId" @click="delContacts()" ghost>解绑微信</Button>
         <Button type="primary" size="small" class="mar-l" v-if="isShow" @click="getMobilePhone()" ghost>采集电话</Button>
         <Button type="primary" size="small" class="mar-l" v-if="isShow" @click="getAccountPassword()" ghost>采集账号密码</Button>
         <!-- <Button type="primary" size="small" class="mar-l" @click="getStartWorkorder()" ghost>发起工单</Button> -->
