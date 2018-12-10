@@ -499,9 +499,9 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        let name = "workOrder-info-base";
+                                        let name = "workOrder-info-service";
                                         if(this.$route.name == "wx-custom-info"){
-                                            name = "wx-workOrder-info-base"
+                                            name = "wx-workOrder-info-service"
                                         }
                                         this.$router.push({    
                                             name,
