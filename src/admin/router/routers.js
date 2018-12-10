@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-10 10:27:56
+ * @Last Modified time: 2018-12-10 10:46:05
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -68,7 +68,8 @@ export default [
 						meta: {
 							hideInMenu: true,
 							icon: "ios-stats",
-							title: "工单详情基本信息",
+							// title: "工单详情基本信息",
+							title: route => `${route.query.companyName}-工单详情基本信息`,
 							notCache: true
 						},
 						component: r =>
@@ -82,7 +83,8 @@ export default [
 						meta: {
 							hideInMenu: true,
 							icon: "ios-stats",
-							title: "工单详情服务信息",
+							// title: "工单详情服务信息",
+							title: route => `${route.query.companyName}-工单详情服务信息`,
 							notCache: true
 						},
 						component: r =>

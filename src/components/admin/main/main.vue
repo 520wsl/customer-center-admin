@@ -1,7 +1,22 @@
 <template>
     <Layout style="height: 100%" class="main">
-        <Sider hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed" class="left-sider" :style="{overflow: 'hidden'}">
-            <side-menu accordion ref="sideMenu" :active-name="$route.name" :collapsed="collapsed" @on-select="turnToPage" :menu-list="menuList">
+        <Sider
+            hide-trigger
+            collapsible
+            :width="256"
+            :collapsed-width="64"
+            v-model="collapsed"
+            class="left-sider"
+            :style="{overflow: 'hidden'}"
+        >
+            <side-menu
+                accordion
+                ref="sideMenu"
+                :active-name="$route.name"
+                :collapsed="collapsed"
+                @on-select="turnToPage"
+                :menu-list="menuList"
+            >
                 <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
                 <div class="logo-con">
                     <img v-show="!collapsed" :src="$CDN('/logo.png')" key="max-logo">
@@ -12,18 +27,23 @@
         <Layout>
             <Header class="header-con">
                 <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
-                    <user :user-avator="userAvator" :user-name="userName" />
-                    <fullscreen v-model="isFullscreen" style="margin-right: 10px;" />
+                    <user :user-avator="userAvator" :user-name="userName"/>
+                    <fullscreen v-model="isFullscreen" style="margin-right: 10px;"/>
                 </header-bar>
             </Header>
             <Content class="main-content-con">
                 <Layout class="main-layout-con">
                     <div class="tag-nav-wrapper">
-                        <tags-nav :value="$route" @input="handleClick" :list="tagNavList" @on-close="handleCloseTag" />
+                        <tags-nav
+                            :value="$route"
+                            @input="handleClick"
+                            :list="tagNavList"
+                            @on-close="handleCloseTag"
+                        />
                     </div>
                     <Content class="content-wrapper">
                         <keep-alive :include="cacheList">
-                            <router-view />
+                            <router-view/>
                         </keep-alive>
                     </Content>
                 </Layout>
@@ -75,8 +95,8 @@ export default {
                 "ParentView",
                 ...(this.tagNavList.length
                     ? this.tagNavList
-                        .filter(item => !(item.meta && item.meta.notCache))
-                        .map(item => item.name)
+                          .filter(item => !(item.meta && item.meta.notCache))
+                          .map(item => item.name)
                     : [])
             ];
         }
@@ -91,7 +111,7 @@ export default {
         ...mapActions(["getUserInfoAction"]),
         // 获取用户信息
         getUserInfo() {
-           this.getUserInfoAction();
+            this.getUserInfoAction();
         },
         turnToPage(route) {
             let { name, params, query } = {};
@@ -115,15 +135,15 @@ export default {
             this.collapsed = state;
         },
         handleCloseTag(res, type, route) {
-            console.log()
+            console.log();
             if (type === "all") {
                 this.turnToPage(this.$config.homeName);
             } else if (routeEqual(this.$route, route)) {
                 if (type !== "others") {
                     const nextRoute = getNextRoute(this.tagNavList, route);
-                    console.log("tagNavList", this.tagNavList)
-                    console.log("route", route)
-                    console.log("nextRoute", nextRoute)
+                    console.log("tagNavList", this.tagNavList);
+                    console.log("route", route);
+                    console.log("nextRoute", nextRoute);
                     this.$router.push(nextRoute);
                 }
             }
@@ -145,10 +165,13 @@ export default {
             this.$refs.sideMenu.updateOpenName(newRoute.name);
         }
     },
+    created() {
+        this.getUserInfo();
+    },
     mounted() {
-		/**
-		 * @description 初始化设置面包屑导航和标签导航
-		 */
+        /**
+         * @description 初始化设置面包屑导航和标签导航
+         */
         this.setTagNavList();
         this.setHomeRoute(routers);
         this.addTag({
@@ -161,9 +184,8 @@ export default {
                 name: this.$config.homeName
             });
         }
-        this.getUserInfo();
         // 获取列表
-        this.$store.dispatch('getDepartmentData');
+        this.$store.dispatch("getDepartmentData");
     }
 };
 </script>
