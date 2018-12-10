@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-05 17:18:17
+ * @Last Modified time: 2018-12-10 10:27:56
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -363,6 +363,51 @@ export default [
 							)
 					}
 				]
+			}
+		]
+	},
+	{
+		path: "/wx/custom",
+		name: "wx-custom",
+		meta: {
+			icon: "ios-stats",
+			title: "客户",
+			hideInMenu: true,
+			notCache: true,
+			noLogin: true
+		},
+		component: Main1,
+		children: [
+			{
+				path: "list",
+				name: "wx-custom-list",
+				meta: {
+					icon: "ios-stats",
+					title: "客户列表",
+					hideInMenu: true,
+					notCache: true,
+					noLogin: true
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/custom/list")
+					)
+			},
+			{
+				path: "info",
+				name: "wx-custom-info",
+				meta: {
+					icon: "ios-stats",
+					title: "客户详情",
+					beforeCloseName: "before_close_normal",
+					hideInMenu: true,
+					notCache: true,
+					noLogin: true
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/custom/info")
+					)
 			}
 		]
 	}
