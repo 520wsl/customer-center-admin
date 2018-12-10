@@ -14,14 +14,18 @@ export const getCustomerListDate = ({
     pageNum,
     mobile,
     account,
-    companyName
+    companyName,
+    operator,
+    callName = ""
 }) => {
     return post("/company/listbysearch", {
         pageSize,
         pageNum,
         mobile,
         account,
-        companyName
+        companyName,
+        operator,
+        callName
     });
 };
 // 客户详情

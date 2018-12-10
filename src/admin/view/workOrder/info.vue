@@ -68,7 +68,7 @@
                     <Select v-model="modal.relateService" style="width:200px">
                         <Option v-for='(item,index) in modal.personList' :value="item.staffSixiId" :key="index">{{staffTagIdList[item.staffTagId]}}：{{item.staffName+"("+item.department+")"}}</Option>
                     </Select>
-                    <Radio label="2" disabled>上级领导：</Radio>
+                    <Radio label="2">上级领导：</Radio>
                     <Select v-model="modal.superiorLeaderSixiId">
                         <Option v-for='(item,index) in modal.superiorLeaderList' :value="item.sixiId" :key="index">{{item.userName+"("+item.departmentName+")"}}</Option>
                     </Select>

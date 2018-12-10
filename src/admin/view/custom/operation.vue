@@ -26,7 +26,7 @@
                         <tr>
                             <td class="title">称呼:</td>
                             <td>
-                                <Input class="wid" v-model="callName"></Input>
+                                <Input class="wid" v-model="callName"><span></span></Input>
                             </td>
                         </tr>
                         <tr>
@@ -52,7 +52,7 @@
                         <tr>
                             <td class="title">手机号:</td>
                             <td>
-                                <Input class="wid" v-model="phoneNumber" />
+                                <Input class="wid" v-model="phoneNumber"><span></span></Input>
                             </td>
                         </tr>
                     </tbody>
