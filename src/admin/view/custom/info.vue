@@ -499,8 +499,12 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.$router.push({
-                                            name: "workOrder-info-base",
+                                        let name = "workOrder-info-base";
+                                        if(this.$route.name == "wx-custom-info"){
+                                            name = "wx-workOrder-info-base"
+                                        }
+                                        this.$router.push({    
+                                            name,
                                             query: {
                                                 workSheetId: params.row.id,
                                                 identifier:

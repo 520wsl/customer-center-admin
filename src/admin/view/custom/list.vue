@@ -81,8 +81,12 @@ export default {
 								},
 								on: {
 									click: () => {
+                                        let name = "custom-info";
+                                        if(this.$route.name == "wx-custom-list"){
+                                            name = "wx-custom-info"
+                                        }
 										this.$router.push({
-											name: "custom-info",
+											name,
 											query: {
 												sixiId: params.row.sixiId,
 												userName: params.row.name
@@ -169,7 +173,7 @@ export default {
 			params.account = "";
             params.companyName = "";
             // 目前先设置为当前登录人的四喜Id
-            params.operator = this.operator;
+            params.operator = this.$store.state.user.userInfo.sixiId || "";
 			if (this.params.select == 1) {
 				params.companyName = this.params.keyword;
 			} else if (this.params.select == 2) {
