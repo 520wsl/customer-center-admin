@@ -32,7 +32,7 @@
                         <tr>
                             <td class="title">性别:</td>
                             <td>
-                                
+
                                 <RadioGroup v-model="sex">
                                     <Radio :label="1">{{getSexValue(1)}}</Radio>
                                     <Radio :label="2">{{getSexValue(2)}}</Radio>
@@ -84,7 +84,7 @@ export default {
     },
     computed:{
         operator:function() {
-            return this.$store.state.user.sixiId;
+            return this.$store.state.user.userInfo.sixiId;
         }
     },
     created() {

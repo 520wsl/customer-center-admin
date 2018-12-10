@@ -142,10 +142,10 @@ export default {
     components: { Page },
     computed: {
         ...mapState({
-            operator: state => state.user.sixiId
+            operator: state => state.user.userInfo.sixiId
         })
     },
-	created() {
+	mounted() {
 		this.getlist();
 	},
 	methods: {
@@ -168,7 +168,8 @@ export default {
 			params.mobile = "";
 			params.account = "";
             params.companyName = "";
-            params.operator = this.operator;
+            // 目前先设置为当前登录人的四喜Id
+            params.operator = this.$store.state.user.sixiId;
 			if (this.params.select == 1) {
 				params.companyName = this.params.keyword;
 			} else if (this.params.select == 2) {

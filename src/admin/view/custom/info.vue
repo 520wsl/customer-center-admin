@@ -549,7 +549,7 @@ export default {
             roleList: state => state.custom.roleList,
             staffTagIdObj: state => state.custom.staffTagIdObj,
             staffTagIdList: state => state.custom.staffTagIdList,
-            operator: state => state.user.sixiId
+            operator: state => state.user.userInfo.sixiId
         }),
         // 判断当前登录的人员是否为续开人员
         isXuKai:function() {
