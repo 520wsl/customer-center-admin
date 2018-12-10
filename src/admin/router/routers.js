@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-10 10:46:05
+ * @Last Modified time: 2018-12-10 11:54:10
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -378,7 +378,7 @@ export default [
 			notCache: true,
 			noLogin: true
 		},
-		component: Main1,
+		component: parentView,
 		children: [
 			{
 				path: "list",
