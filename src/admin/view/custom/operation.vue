@@ -16,7 +16,7 @@
                         <tr>
                             <td class="title">微信昵称:</td>
                             <td>
-                                <img :src="row.wechatAvatar" class="acatar" alt="404">&emsp;{{row.wechatNickname}}
+                                <img v-if="row.wechatAvatar" :src="row.wechatAvatar" class="acatar" alt="404">&emsp;{{row.wechatNickname}}
                             </td>
                         </tr>
                         <tr>
@@ -26,12 +26,13 @@
                         <tr>
                             <td class="title">称呼:</td>
                             <td>
-                                <Input class="wid" v-model="callName"></Input>
+                                <Input class="wid" v-model="callName"><span></span></Input>
                             </td>
                         </tr>
                         <tr>
                             <td class="title">性别:</td>
                             <td>
+                                
                                 <RadioGroup v-model="sex">
                                     <Radio :label="1">{{getSexValue(1)}}</Radio>
                                     <Radio :label="2">{{getSexValue(2)}}</Radio>
@@ -52,7 +53,7 @@
                         <tr>
                             <td class="title">手机号:</td>
                             <td>
-                                <Input class="wid" v-model="phoneNumber" />
+                                <Input class="wid" v-model="phoneNumber"><span></span></Input>
                             </td>
                         </tr>
                     </tbody>
@@ -97,11 +98,10 @@ export default {
         getSexValue(type) {
             return getSexValue(type);
         },
+        // 微信解绑
         cancelBind() {
-            // 当前暂无openid
-            let companySixiId = this.companySixiId;
-            let customerSixiId = this.row.customerSixiId;
-            setWechatUntied({ companySixiId, customerSixiId }).then(res => {
+            let id = this.row.id;
+            setWechatUntied({ id }).then(res => {
                 if (res.status !== 200) {
                     this.$Modal.error({ title: "提示", content: res.msg });
                     return;
@@ -112,6 +112,7 @@ export default {
         bindAccount() {
             this.$emit("bindAccount", { customerSixiId: this.row.customerSixiId });
         },
+        // 编辑联系人
         edit() {
             let params = {
                 sex: this.sex,
@@ -149,29 +150,30 @@ export default {
                 title: "删除联系人",
                 content: "<p>" + "删除之后不可恢复，请谨慎操作" + "</p>",
                 onOk: () => {
-                    let params = {
-                        sex: this.row.sex || "",
-                        customerSixiId: this.row.customerSixiId || "",
-                        callName: this.row.callName || "",
-                        mobile: this.row.mobile || "",
-                        role: this.row.role || "",
-                        id: this.row.id || "",
-                        deletedAt: (new Date()).getTime(),
-                        operator: this.operator,
-                        companySixiId: this.companySixiId || ""
-                    };
-                    console.log(params)
-                    updateBindInfo(params).then(res => {
-                        if (res.status !== 200) {
-                            this.$Modal.error({
-                                title: "提示",
-                                content: res.msg
-                            });
-                            return;
-                        }
-                        this.$emit("callFun");
-                    },
-                    error => { });
+                    // let params = {
+                    //     sex: this.row.sex || "",
+                    //     customerSixiId: this.row.customerSixiId || "",
+                    //     callName: this.row.callName || "",
+                    //     mobile: this.row.mobile || "",
+                    //     role: this.row.role || "",
+                    //     id: this.row.id || "",
+                    //     deletedAt: (new Date()).getTime(),
+                    //     operator: this.operator,
+                    //     companySixiId: this.companySixiId || ""
+                    // };
+                    // console.log(params)
+                    // updateBindInfo(params).then(res => {
+                    //     if (res.status !== 200) {
+                    //         this.$Modal.error({
+                    //             title: "提示",
+                    //             content: res.msg
+                    //         });
+                    //         return;
+                    //     }
+                    //     this.$emit("callFun");
+                    // },
+                    // error => { });
+                    this.cancelBind();
                 },
                 onCancel: () => { }
             });

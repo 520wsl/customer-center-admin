@@ -30,6 +30,7 @@
 <script>
 import Page from "_c/admin/page";
 import { getCustomerListDate } from "@/api/admin/custom/custom";
+import { mapState, mapActions } from "vuex";
 // 注释批量设置人员
 // import setServiceSatff from "./setServiceSatff";
 import "./index.less";
@@ -138,7 +139,12 @@ export default {
 	},
 	// 注释批量设置人员
 	// components: { Page, setServiceSatff },
-	components: { Page },
+    components: { Page },
+    computed: {
+        ...mapState({
+            operator: state => state.user.sixiId
+        })
+    },
 	created() {
 		this.getlist();
 	},
@@ -161,7 +167,8 @@ export default {
 			params.pageNum = this.params.pageNum;
 			params.mobile = "";
 			params.account = "";
-			params.companyName = "";
+            params.companyName = "";
+            params.operator = this.operator;
 			if (this.params.select == 1) {
 				params.companyName = this.params.keyword;
 			} else if (this.params.select == 2) {

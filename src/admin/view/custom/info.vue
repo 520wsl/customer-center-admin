@@ -152,7 +152,7 @@
                         <tr>
                             <td class="title">称呼:</td>
                             <td>
-                                <Input class="wid" v-model="addContacts.callName"></Input>
+                                <Input class="wid" v-model="addContacts.callName"><span></span></Input>
                             </td>
                         </tr>
                         <tr>
@@ -178,7 +178,7 @@
                         <tr>
                             <td class="title">手机号:</td>
                             <td>
-                                <Input class="wid" v-model="addContacts.mobile" maxlength="11"/>
+                                <Input class="wid" v-model="addContacts.mobile" maxlength="11"><span></span></Input>
                             </td>
                         </tr>
                     </tbody>
