@@ -584,7 +584,7 @@ export default {
                 this.addContacts.loading = false;
                 return;
             }
-            if (!(/^\d{11}$/.test(this.addContacts.mobile))) {
+            if (this.addContacts.mobile && !(/^\d{11}$/.test(this.addContacts.mobile))) {
                 this.$Modal.error({
                     title: "提示",
                     content: '请输入11位手机号'
