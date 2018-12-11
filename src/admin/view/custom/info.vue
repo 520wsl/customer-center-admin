@@ -507,8 +507,8 @@ export default {
                                             name,
                                             query: {
                                                 workSheetId: params.row.id,
-                                                identifier:
-                                                    params.row.identifier
+                                                companyName:
+                                                    params.row.companyName,
                                             }
                                         });
                                     }
