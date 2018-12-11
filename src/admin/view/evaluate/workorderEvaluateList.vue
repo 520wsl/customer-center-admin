@@ -160,7 +160,7 @@ export default {
                                         name: "workOrder-info-service",
                                         query: {
                                             workSheetId: params.row.workSheetId,
-                                            identifier: params.row.identifier
+                                            companyName: params.row.companyName
                                         }
                                     })
                                 }
