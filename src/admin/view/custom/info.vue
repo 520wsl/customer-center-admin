@@ -133,7 +133,7 @@
             @on-cancel="getInfo"
         >
             <Card>
-                <p>请客户用微信扫该二维码绑定，二维码有效期2分钟</p>
+                <p>请客户用微信扫该二维码绑定，二维码有效期15分钟</p>
                 <div class="qr-code">
                     <img v-if="qrData.codeUrl" :src="qrData.codeUrl" alt="微信二维码" title="微信二维码">
                     <p v-else>二维码</p>
