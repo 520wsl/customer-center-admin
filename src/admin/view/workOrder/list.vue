@@ -342,44 +342,44 @@ export default {
                     render: (h, params) => {
                         let btnGroup = [];
                         let query = params.row;
-                        if (
-                            (query.type == 3 && query.isSend) ||
-                            (query.type == 4 && query.isSend)
-                        ) {
-                            btnGroup.push(
-                                h(
-                                    "a",
-                                    {
-                                        style: {
-                                            color: "#2d8cf0",
-                                            display: "block",
-                                            margin: "5px"
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.isSaveWorkOrderAction = true;
-                                                this.saveWorkOrderActionData = {
-                                                    workOrderType:
-                                                        query.workType,
-                                                    context: "客服发起...",
-                                                    mobile: query.mobile,
-                                                    companySixiId:
-                                                        query.companyId,
-                                                    companyName:
-                                                        query.companyName,
-                                                    customerSixiId:
-                                                        query.sixiId,
-                                                    wechatNickname:
-                                                        query.wechatNickname,
-                                                    sponsorType: 1
-                                                };
-                                            }
-                                        }
-                                    },
-                                    "发起工单"
-                                )
-                            );
-                        }
+                        // if (
+                        //     (query.type == 3 && query.isSend) ||
+                        //     (query.type == 4 && query.isSend)
+                        // ) {
+                        //     btnGroup.push(
+                        //         h(
+                        //             "a",
+                        //             {
+                        //                 style: {
+                        //                     color: "#2d8cf0",
+                        //                     display: "block",
+                        //                     margin: "5px"
+                        //                 },
+                        //                 on: {
+                        //                     click: () => {
+                        //                         this.isSaveWorkOrderAction = true;
+                        //                         this.saveWorkOrderActionData = {
+                        //                             workOrderType:
+                        //                                 query.workType,
+                        //                             context: "客服发起...",
+                        //                             mobile: query.mobile,
+                        //                             companySixiId:
+                        //                                 query.companyId,
+                        //                             companyName:
+                        //                                 query.companyName,
+                        //                             customerSixiId:
+                        //                                 query.sixiId,
+                        //                             wechatNickname:
+                        //                                 query.wechatNickname,
+                        //                             sponsorType: 1
+                        //                         };
+                        //                     }
+                        //                 }
+                        //             },
+                        //             "发起工单"
+                        //         )
+                        //     );
+                        // }
                         btnGroup.push(
                             h(
                                 "a",
