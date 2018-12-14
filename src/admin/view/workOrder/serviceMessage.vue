@@ -513,10 +513,16 @@ export default {
                 recordId
             };
             let res = await callPhoneAction({ ...params });
+            console.log("拨号：", res);
             if (res.status == 1) {
                 this.editRemarkModal(recordId);
+                return;
             }
-            console.log("拨号：", res);
+
+            this.$Modal.error({
+                title: "拨号",
+                content: "异常：请检查设备是否正常安装，或电话号码是否正确！"
+            });
         }
     },
     data() {
