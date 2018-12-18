@@ -105,11 +105,15 @@ export default {
 					align: "center",
 					key: "url",
 					render: (h, params) => {
+                        let url = params.row.url || "";
+                        if( !url.startWith("http") && url != "" ){
+                            url = "http://" + url;
+                        }
 						return h(
 							"a",
 							{
 								attrs: {
-									href: params.row.url,
+									href: url,
 									target: "_blank",
 									style: "color:#72ACE3",
 									title: params.row.name
