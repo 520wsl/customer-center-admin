@@ -36,7 +36,7 @@
                     <tr>
                         <td class="title">店铺网址：</td>
                         <td>
-                            <a :href="info.url" :title="info.name" target="_blank">{{info.url}}</a>
+                            <a :href="( !info.url.startWith('http') && url != '') ? 'http://' + info.url : info.url " :title="info.name" target="_blank">{{info.url}}</a>
                         </td>
                     </tr>
                 </tbody>
@@ -221,7 +221,7 @@ export default {
                 loading: true,
                 bool: false,
                 callName: "",
-                sex: 0,
+                sex: 1,
                 role: 1,
                 mobile: ""
             },
