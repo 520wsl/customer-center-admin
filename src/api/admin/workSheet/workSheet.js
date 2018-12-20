@@ -144,3 +144,50 @@ export const againEvaluate = ({
         workSheetId
     });
 };
+
+// 部门工单列表
+export const getLeaderList = ({
+    customerId,
+    identifier,
+    handleType,
+    startTime,
+    endTime,
+    pageNum,
+    pageSize,
+    workType,
+    durationHour,
+    responseHour,
+    companyName,
+    timeType,
+    sortType,
+    sort,
+    departmentId
+}) => {
+    return post("/leader/list", {
+        customerId,
+        identifier,
+        handleType,
+        startTime,
+        endTime,
+        pageNum,
+        pageSize,
+        workType,
+        durationHour,
+        responseHour,
+        companyName,
+        timeType,
+        sortType,
+        sort,
+        departmentId
+    });
+};
+
+// 客户权限部门
+export const getLeaderDepartment = () => {
+    return post("/staff/department/leader/list", {});
+};
+
+// 获取部门人员信息
+export const getLeaderDepartmentList = ({ pid }) => {
+    return post("/staff/user/listbypid", { pid });
+};

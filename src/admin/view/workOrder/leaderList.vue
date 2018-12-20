@@ -91,23 +91,24 @@
                     <span></span>
                     </Input>
                 </div>-->
-                <!-- <div class="search-input-item">
-                    <span class="search-input-item-lable">切换客服：</span>
-                    <Department
+                <div class="search-input-item">
+                    <span class="search-input-item-lable">切换部门：</span>
+                    <Cascader class="search-input-item" filterable change-on-select v-model="params.customerIdList" :data="departmentList" @on-change="changeDepartment"></Cascader>
+                    <!-- <Department
                         class="search-input"
                         width="200"
                         :get-user-info="getUserInfo"
                         :loading-user="true"
                         v-model="params.customerIdList"
-                    ></Department>
-                </div> -->
-                <div class="search-input-item">
+                    ></Department> -->
+                </div>
+                <!-- <div class="search-input-item">
                     <Checkbox v-model="params.isRead">新消息</Checkbox>
                     <Checkbox v-model="params.execute">执行者</Checkbox>
                     <Checkbox v-model="params.partake">我参与的</Checkbox>
-                </div>
+                </div> -->
                 <div class="search-btn flex-right">
-                    <Button @click="search" type="primary">搜索</Button>
+                    <Button @click="search" type="primary" :disabled="isLead == 0">搜索</Button>
                 </div>
             </div>
         </Card>
@@ -143,14 +144,14 @@ import { mapState, mapActions } from "vuex";
 import { formatInitTime, startTime, endTime } from "@/libs/util/time";
 import Page from "_c/admin/page";
 // import Department from "_c/public/department";
-import { getWorkSheetListData } from "@/api/admin/workSheet/workSheet";
+import { getLeaderList, getLeaderDepartment, getLeaderDepartmentList } from "@/api/admin/workSheet/workSheet";
 import { saveWorkOrder } from "@/api/admin/workSheet/workOrder";
 import utils from "@/libs/util/public";
 import "./index.less";
 export default {
     components: {
         Page,
-        // Department
+        // Departmen
     },
     computed: {
         ...mapState({
@@ -165,11 +166,13 @@ export default {
                 });
             },
             workSheetType: state => state.workSheet.workSheetType,
-            statusList: state => state.workSheet.workSheetHandleType
+            statusList: state => state.workSheet.workSheetHandleType,
+            isLead: state => state.user.userInfo.isLead || 0
         })
     },
     data() {
         return {
+            departmentList: [],
             isSaveWorkOrderAction: false,
             videoModel: true,
             saveWorkOrderActionData: {},
@@ -193,11 +196,11 @@ export default {
                 // 响应时间
                 responseHour: "",
                 // 是否新消息
-                isRead: false,
+                // isRead: false,
                 // 是否是我执行
-                execute: false,
+                // execute: false,
                 // 是否我参与 1:我参与 默认为空
-                partake: true,
+                // partake: true,
                 // 排序规则 0:创建时间 1:结束时间 2:持续时间
                 sortType: 0,
                 // 正序倒序规则 0:倒序 1:正序
@@ -209,6 +212,7 @@ export default {
                 pageSize: 10,
                 count: 0,
                 customerId: "",
+                departmentId: "",
                 customerIdList: []
             },
             workOrderList: [],
@@ -342,44 +346,44 @@ export default {
                     render: (h, params) => {
                         let btnGroup = [];
                         let query = params.row;
-                        // if (
-                        //     (query.type == 3 && query.isSend) ||
-                        //     (query.type == 4 && query.isSend)
-                        // ) {
-                        //     btnGroup.push(
-                        //         h(
-                        //             "a",
-                        //             {
-                        //                 style: {
-                        //                     color: "#2d8cf0",
-                        //                     display: "block",
-                        //                     margin: "5px"
-                        //                 },
-                        //                 on: {
-                        //                     click: () => {
-                        //                         this.isSaveWorkOrderAction = true;
-                        //                         this.saveWorkOrderActionData = {
-                        //                             workOrderType:
-                        //                                 query.workType,
-                        //                             context: "客服发起...",
-                        //                             mobile: query.mobile,
-                        //                             companySixiId:
-                        //                                 query.companyId,
-                        //                             companyName:
-                        //                                 query.companyName,
-                        //                             customerSixiId:
-                        //                                 query.sixiId,
-                        //                             wechatNickname:
-                        //                                 query.wechatNickname,
-                        //                             sponsorType: 1
-                        //                         };
-                        //                     }
-                        //                 }
-                        //             },
-                        //             "发起工单"
-                        //         )
-                        //     );
-                        // }
+                        if (
+                            (query.type == 3 && query.isSend) ||
+                            (query.type == 4 && query.isSend)
+                        ) {
+                            btnGroup.push(
+                                h(
+                                    "a",
+                                    {
+                                        style: {
+                                            color: "#2d8cf0",
+                                            display: "block",
+                                            margin: "5px"
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.isSaveWorkOrderAction = true;
+                                                this.saveWorkOrderActionData = {
+                                                    workOrderType:
+                                                        query.workType,
+                                                    context: "客服发起...",
+                                                    mobile: query.mobile,
+                                                    companySixiId:
+                                                        query.companyId,
+                                                    companyName:
+                                                        query.companyName,
+                                                    customerSixiId:
+                                                        query.sixiId,
+                                                    wechatNickname:
+                                                        query.wechatNickname,
+                                                    sponsorType: 1
+                                                };
+                                            }
+                                        }
+                                    },
+                                    "发起工单"
+                                )
+                            );
+                        }
                         btnGroup.push(
                             h(
                                 "a",
@@ -422,9 +426,9 @@ export default {
     },
     methods: {
         ...mapActions(["getSixiId"]),
-        getUserInfo(data) {
-            console.log(data);
-        },
+        // getUserInfo(data) {
+        //     console.log(data);
+        // },
         async saveWorkOrderAction() {
             let res = await saveWorkOrder({ ...this.saveWorkOrderActionData });
             console.log(res);
@@ -500,6 +504,51 @@ export default {
             this.params.pageNum = 1;
             this.getList();
         },
+        changeDepartment(value, selectedData) {
+            if(selectedData.length > 0){
+                let obj = selectedData[selectedData.length-1];
+                if(obj.type == "user"){
+                    this.params.customerId = value[value.length-1] || "";
+                    this.params.departmentId = "";
+                } else if(obj.type == "department"){
+                    this.params.departmentId = value[value.length-1] || "";
+                    this.params.customerId = "";
+                }
+            } else {
+                this.params.departmentId = "";
+                this.params.customerId = "";
+            }
+        },
+        getDepartmentList() {
+            getLeaderDepartment().then( res =>{
+                if(res.status != 200){
+                    this.$Modal.error({
+                        title: "部门数据",
+                        content: res.msg
+                    });
+                    return;
+                }
+                let pid = res.data.departmentId || "";
+                getLeaderDepartmentList({ pid }).then( res =>{
+                    if(res.status != 200){
+                        this.$Modal.error({
+                            title: "部门列表数据",
+                            content: res.msg
+                        });
+                        return;
+                    }
+                    this.departmentList = res.data || [];
+                })
+            }).catch( res =>{
+                // if(res.status != 200){
+                //     this.$Modal.error({
+                //         title: "部门数据",
+                //         content: res.msg
+                //     });
+                //     return;
+                // }
+            })
+        },
         async getList() {
             const data = {
                 ...this.params,
@@ -509,17 +558,17 @@ export default {
                 endTime: this.params.endTime
                     ? endTime(this.params.endTime, "x")
                     : "",
-                isRead: this.params.isRead ? 0 : -1,
-                execute: this.params.execute ? 1 : -1,
-                partake: this.params.partake ? 1 : null,
-                customerId:
-                    this.params.customerIdList.length > 0
-                        ? this.params.customerIdList[
-                              this.params.customerIdList.length - 1
-                          ]
-                        : ""
+                // isRead: this.params.isRead ? 0 : -1,
+                // execute: this.params.execute ? 1 : -1,
+                // partake: this.params.partake ? 1 : null,
+                // customerId:
+                //     this.params.customerIdList.length > 0
+                //         ? this.params.customerIdList[
+                //               this.params.customerIdList.length - 1
+                //           ]
+                //         : ""
             };
-            let res = await getWorkSheetListData(data);
+            let res = await getLeaderList(data);
             if (res.status !== 200) {
                 this.$Modal.error({
                     title: "工单列表",
@@ -533,13 +582,21 @@ export default {
             this.params.count = res.data.count || 0;
         }
     },
-    created() {
+    mounted() {
         // if (this.$route.query.sixiId) {
         //     this.params.sixiId = this.$route.query.sixiId;
         // } else {
         //     this.getSixiId();
         //     this.params.sixiId = this.$store.state.user.sixiId;
         // }
+        if(this.isLead == 0){
+            this.$Modal.error({
+                title: "部门工单列表",
+                content: "您暂无权限"
+            });
+            return ;
+        }
+        this.getDepartmentList();
         this.getList();
     }
 };

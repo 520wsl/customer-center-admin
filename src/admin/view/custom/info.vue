@@ -178,7 +178,7 @@
                         <tr>
                             <td class="title">手机号:</td>
                             <td>
-                                <Input class="wid" v-model="addContacts.mobile" maxlength="11"><span></span></Input>
+                                <Input class="wid" v-model="addContacts.mobile" :maxlength="11"><span></span></Input>
                             </td>
                         </tr>
                     </tbody>
@@ -323,7 +323,7 @@ export default {
                     title: "操作",
                     render: (h, params) => {
                         let bool = params.row.wechatNickname !== null && params.row.wechatNickname !== undefined && params.row.wechatNickname !== '';
-                        console.log(this.info.wechatBindVos);
+                        // console.log(this.info.wechatBindVos);
                         return h(operation, {
                             props: {
                                 row: params.row,
@@ -560,10 +560,13 @@ export default {
             // let arr = ["16", "36", "71", "121", "151", "158", "172", "173", "175"];
             // let departmentId = this.$store.state.user.userInfo.department || "";
             let arr = this.info && this.info.staffVos || [];
-            let staffSixiId = this.$store.state.user.sixiId || '';
+            let staffSixiId = this.$store.state.user.userInfo.sixiId || '';
+            // if( !staffSixiId ){
+            //     this.getUserInfo();
+            // }
             let bool = false;
             arr.forEach(item=>{
-                if(item.staffSixiId == staffSixiId && item.staffTagId == 2){
+                if(item.staffSixiId == staffSixiId && (item.staffTagId == 2 || item.staffTagId == 3)){
                     bool = true;
                 }
             })
@@ -571,6 +574,7 @@ export default {
         }
     },
     methods: {
+        // ...mapActions(["getUserInfo"]),
         getSexValue(type) {
             return getSexValue(type);
         },
@@ -628,7 +632,6 @@ export default {
             this.getQrcode(row);
         },
         getQrcode(row) {
-            console.log("row", row)
             getQRCodeUrl({
                 regId: row.id,
                 type: "BINDING_PHONE"
@@ -675,7 +678,6 @@ export default {
             });
         },
         unBind() {
-            // console.log(this.info.openId);
             setWechatUntied({ openId: this.info.openId }).then(res => {
                 if (res.status != 200) {
                     return this.$Message.error({
@@ -717,7 +719,6 @@ export default {
             data[data.searchTextType] = data.text;
             data.companyId = this.params.sixiId;
             // 需要处理该对象，时间类型，时间，搜索的文本类型
-            console.log(data);
             let res = await getWorkcustomerListData(data);
             if (res.status !== 200) {
                 this.$Modal.error({
