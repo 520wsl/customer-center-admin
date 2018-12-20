@@ -318,6 +318,20 @@ export default [
 					require.ensure([], () =>
 						require("@/admin/view/workOrder/list")
 					)
+            },
+            {
+				path: "leaderList",
+				name: "wx-workOrder-leaderList",
+				meta: {
+					hideInMenu: true,
+					icon: "ios-stats",
+					title: "工单列表",
+					noLogin: true
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/workOrder/leaderList")
+					)
 			},
 			{
 				path: "info",
