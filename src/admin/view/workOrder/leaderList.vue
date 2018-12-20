@@ -528,7 +528,7 @@ export default {
                     });
                     return;
                 }
-                let pid = res.data.departmentId || "";
+                let pid = res.data && res.data[0] && res.data[0].departmentId || "";
                 getLeaderDepartmentList({ pid }).then( res =>{
                     if(res.status != 200){
                         this.$Modal.error({
