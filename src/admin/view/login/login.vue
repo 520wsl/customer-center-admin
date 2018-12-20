@@ -27,11 +27,7 @@ export default {
         LoginForm
     },
     methods: {
-        ...mapActions([
-            "handleLogin",
-            "getUserInfo",
-            "loginScheduler"
-        ]),
+        ...mapActions(["handleLogin", "getUserInfo", "loginScheduler"]),
         // 账号密码登陆流程，暂时没有
         handleSubmit({ userName, password, type }) {
             this.handleLogin({ userName, password, type }).then(res => {
@@ -154,7 +150,11 @@ export default {
         console.log(
             "https://open.weixin.qq.com/connect/oauth2/authorize?appid=ww7dc5f02540a109d3&redirect_uri=http://work.sixi.com/admin/login&response_type=code&scope=snsapi_base&state=enterpriseWeChat#wechat_redirect"
         );
-        this.EWCConfig = this.$config.enterpriseWeChatConfig;
+        console.log("process.env.NODE_ENV:", process.env.NODE_ENV);
+        this.EWCConfig =
+            process.env.NODE_ENV === "development"
+                ? this.$config.enterpriseWeChatConfig.dev
+                : this.$config.enterpriseWeChatConfig.pro;
     },
 
     async mounted() {
