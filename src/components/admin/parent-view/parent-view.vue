@@ -15,8 +15,13 @@ export default {
         };
     },
     methods: {
-        ...mapActions(["handleLogin", "getUserInfo", "loginScheduler"]),
-         method1(url) {
+        ...mapActions([
+            "handleLogin",
+            "getUserInfo",
+            "loginScheduler",
+            "getUserInfoAction"
+        ]),
+        method1(url) {
             // 使用正则来 两边的参数不可能是 &=? 所以去反集[^&=?]
             console.log("method1", url);
             let regex = /([^&=?]+)=([^&=?]+)/g,
@@ -102,7 +107,9 @@ export default {
             );
         }
     },
-    created() {},
+    created() {
+        this.getUserInfoAction();
+    },
     async mounted() {
         let route = this.$route;
         let queryData = route.query;
@@ -122,7 +129,7 @@ export default {
             route: this.$route
         });
 
-       if (res) {
+        if (res) {
             console.log("code登录", res);
             let par = queryData.par || "";
             let query = {};
