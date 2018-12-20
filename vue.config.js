@@ -53,13 +53,13 @@ module.exports = {
 			// 		"^/api": ""
 			// 	}
 			// }
-			"/api/open": {
-				target: "https://wsl.n.yumc.pw",
-				changeOrigin: true,
-				pathRewrite: {
-					"^/api/open": "/api/open"
-				}
-			},
+			// "/api/open": {
+			// 	target: "https://wsl.n.yumc.pw",
+			// 	changeOrigin: true,
+			// 	pathRewrite: {
+			// 		"^/api/open": "/api/open"
+			// 	}
+			// },
 			"/api": {
 				target: "http://test.base.internal.sixi.com",
 				changeOrigin: true,
