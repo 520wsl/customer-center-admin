@@ -173,7 +173,7 @@ export default {
 			params.account = "";
             params.companyName = "";
             // 目前先设置为当前登录人的四喜Id
-            params.operator = this.$store.state.user.userInfo.sixiId || "";
+			params.operator = this.$store.state.user.userInfo.sixiId || "";
 			if (this.params.select == 1) {
 				params.companyName = this.params.keyword;
 			} else if (this.params.select == 2) {

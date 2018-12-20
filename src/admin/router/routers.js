@@ -254,7 +254,7 @@ export default [
 					)
 			}
 		]
-	},
+    },
 	{
 		path: "/custom",
 		name: "custom",
@@ -293,7 +293,31 @@ export default [
 					)
 			}
 		]
-	},
+    },
+    {
+        path: "/departmentWorkOrder",
+		name: "departmentWorkOrder",
+		meta: {
+			// showAlways: true,
+			icon: "ios-stats",
+			title: "工单"
+        },
+        component: Main1,
+		children: [
+			{
+				path: "list",
+				name: "departmentWorkOrder-list",
+				meta: {
+					icon: "ios-stats",
+					title: "部门工单"
+				},
+				component: r =>
+					require.ensure([], () =>
+                        require("@/admin/view/workOrder/leaderList")
+					)
+			}
+		]
+    },
 	{
 		path: "/wx/workOrder",
 		name: "wx-workOrder",
@@ -317,6 +341,20 @@ export default [
 				component: r =>
 					require.ensure([], () =>
 						require("@/admin/view/workOrder/list")
+					)
+            },
+            {
+				path: "leaderList",
+				name: "wx-workOrder-leaderList",
+				meta: {
+					hideInMenu: true,
+					icon: "ios-stats",
+					title: "部门工单列表",
+					noLogin: true
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/workOrder/leaderList")
 					)
 			},
 			{
