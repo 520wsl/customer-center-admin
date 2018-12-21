@@ -512,21 +512,33 @@ export default {
                 phone,
                 recordId
             };
-            let res = await callPhoneAction({ ...params });
-            console.log("拨号：", res);
-            if (res.status == 1) {
-                this.editRemarkModal(recordId);
-                return;
-            }
+            let isPading = true;
+            setTimeout(() => {
+                if (isPading) {
+                    this.$Modal.error({
+                        title: "拨号",
+                        content:
+                            "异常：请检查设备是否正常安装，或电话号码是否正确！"
+                    });
+                }
+            }, 2000);
 
-            res.catch(function(error) {
+            try {
+                let res = await callPhoneAction({ ...params });
+                console.log("拨号：", res);
+                if (res.status == 1) {
+                    this.editRemarkModal(recordId);
+                    isPading = false;
+                    return;
+                }
+            } catch (error) {
                 this.$Modal.error({
                     title: "拨号",
                     content:
                         "异常：请检查设备是否正常安装，或电话号码是否正确！"
                 });
-                console.log(error);
-            });
+                isPading = false;
+            }
         }
     },
     data() {
