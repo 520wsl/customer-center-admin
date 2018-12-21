@@ -399,7 +399,7 @@ export default {
                                             let name = "workOrder-info-service";
                                             if (
                                                 this.$route.name ==
-                                                "wx-workOrder-list"
+                                                "wx-workOrder-leaderList"
                                             ) {
                                                 name =
                                                     "wx-workOrder-info-service";
