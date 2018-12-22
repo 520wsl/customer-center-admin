@@ -60,7 +60,7 @@
                     </div>
                 </div>
                 <div class="search-input-item">
-                    <span class="search-input-item-lable">持续时间：</span>
+                    <span class="search-input-item-lable">持续时间(h):</span>
                     <Input
                         @keypress.native="utils.inLimit.int"
                         @keyup.native="utils.inLimit.int"
@@ -73,7 +73,7 @@
                     </Input>
                 </div>
                 <div class="search-input-item">
-                    <span class="search-input-item-lable">响应时间：</span>
+                    <span class="search-input-item-lable">响应时间(h):</span>
                     <Input
                         @keypress.native="utils.inLimit.int"
                         @keyup.native="utils.inLimit.int"
