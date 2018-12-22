@@ -89,7 +89,7 @@ export default {
             });
         },
         formatTimeAction(time) {
-            return formatTime(time);
+            return formatTime(time,'YYYY-MM-DD HH:mm:ss');
         },
         getWorkSheetTypeValue(key) {
             return getArrValue(this.$store.state.workSheet.workSheetType, key);
