@@ -144,7 +144,7 @@
                     <p v-else>二维码</p>
                 </div>
                 <div class="qr-code-btn">
-                    <Button @click="getQrcode">
+                    <Button @click="getQrcode()">
                         <Icon type="md-sync"/>刷新二维码
                     </Button>
                 </div>
@@ -232,7 +232,8 @@ export default {
         return {
             bindOrderOrBillList: "bindOrder", // "billList", //
             bindModal: false,
-            sixiId:'',// 当前登陆人 四喜ID
+            sixiId: "", // 当前登陆人 四喜ID
+            bindAccountData: {},
             addContacts: {
                 loading: true,
                 bool: false,
@@ -660,9 +661,11 @@ export default {
         // 绑定微信
         bindAccount(row) {
             this.bindModal = true;
-            this.getQrcode(row);
+            this.bindAccountData = row;
+            this.getQrcode();
         },
-        getQrcode(row) {
+        getQrcode() {
+            let row = this.bindAccountData;
             if (!row.id) {
                 this.$Modal.warning({
                     title: "生成二维码",
@@ -670,22 +673,21 @@ export default {
                         "注册码异常，请截图给管理员，以便快捷修复错误！内容：<br>" +
                         JSON.stringify(row)
                 });
-                return;
+                // return;
             }
-            let sixiId = this.sixiId
+            let sixiId = this.sixiId;
 
             if (!sixiId) {
                 this.$Modal.warning({
                     title: "生成二维码",
-                    content:
-                        "操作人信息异常，请重新登陆后再尝试操作！"
+                    content: "操作人信息异常，请重新登陆后再尝试操作！"
                 });
                 return;
             }
             getQRCodeUrl({
                 regId: row.id,
                 type: "BINDING_PHONE",
-                sixiId:sixiId
+                sixiId: sixiId
             }).then(res => {
                 if (res.status != 200) {
                     return this.$Message.error({
@@ -798,8 +800,8 @@ export default {
         // 获取数据
         this.getList();
     },
-    mounted(){
-         this.getSixiId();
+    mounted() {
+        this.getSixiId();
         this.sixiId = this.$store.state.user.sixiId;
     }
 };
