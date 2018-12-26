@@ -34,6 +34,13 @@
                 </Input>
             </Card>
         </Modal>
+
+        <Modal v-model="isShowEditWorkOrderRemark" @on-ok="editWorkOrderRemarkAction" title="工单备注">
+            <Card class="md-card">
+                <textarea style="width:100%;height:150px;" type="text" v-model="info.remark">
+                </textarea>
+            </Card>
+        </Modal>
     </div>
 </template>
 
@@ -45,7 +52,7 @@ import {
     getWorkSheetInfoData,
     againEvaluate
 } from "@/api/admin/workSheet/workSheet";
-import { editWorkOrderTitle } from "@/api/admin/workSheet/workOrder";
+import { editWorkOrderTitle, editWorkOrderRemark, editWorkOrderLabel } from "@/api/admin/workSheet/workOrder";
 import { getEvaluateInfo } from "@/api/admin/evaluate/dimension";
 import evaluateItem from "_c/admin/evaluate-item";
 import { formatTime } from "@/libs/util/time";
@@ -57,10 +64,67 @@ export default {
     },
     methods: {
         ...mapMutations(["setWorkSheetBaseInfo"]),
-        eventCallback(type) {
-            if (type == 1) {
-                this.isShowEditWorkOrderTitle = true;
+        eventCallback(event) {
+            console.log(event);
+
+            switch (event.type) {
+                case "setTitle":
+                    this.isShowEditWorkOrderTitle = true;
+                    break;
+                case "setRemark":
+                    this.isShowEditWorkOrderRemark = true;
+                    break;
+                    case "setLabel":
+                    this.editWorkOrderLabelAction(event.val)
+                    break;
             }
+        },
+        async editWorkOrderRemarkAction(){
+            if(this.info.remark.length >= 200){
+                  this.$Modal.error({
+                    title: "修改备注",
+                    content: "工单备注不能多于200个字符"
+                });
+                return;
+            }
+
+             let res = await editWorkOrderRemark({
+                id: this.info.id,
+                remark: this.info.remark
+            });
+
+            if (res.status !== 200) {
+                this.$Modal.error({
+                    title: "修改备注",
+                    content: res.msg
+                });
+                return;
+            }
+            
+            this.getWorkSheetInfo();
+            this.$Modal.success({
+                title: "修改备注",
+                content: "修改成功"
+            });
+        },
+         async editWorkOrderLabelAction(label){
+             let res = await editWorkOrderLabel({
+                id: this.info.id,
+                label: label
+            });
+
+            if (res.status !== 200) {
+                this.$Modal.error({
+                    title: "修改标签",
+                    content: res.msg
+                });
+                return;
+            }
+            this.getWorkSheetInfo();
+            this.$Modal.success({
+                title: "修改标签",
+                content: "修改成功"
+            });
         },
         async editWorkOrderTitleAction() {
             if (this.info.title.length <= 3) {
@@ -89,7 +153,7 @@ export default {
             });
         },
         formatTimeAction(time) {
-            return formatTime(time,'YYYY-MM-DD HH:mm:ss');
+            return formatTime(time, "YYYY-MM-DD HH:mm:ss");
         },
         getWorkSheetTypeValue(key) {
             return getArrValue(this.$store.state.workSheet.workSheetType, key);
@@ -130,8 +194,8 @@ export default {
                             item.userName + "(" + item.departmentName + ")，";
                     }
                 });
-            if(joinStr != ""){
-                joinStr = joinStr.slice(0,-1);
+            if (joinStr != "") {
+                joinStr = joinStr.slice(0, -1);
             }
             let executorUser = "";
             if (this.info.executorUser && this.info.executorUser.userName) {
@@ -192,24 +256,40 @@ export default {
                         title: "参与者：",
                         value: joinStr
                     },
+                    // {
+                    //     title: "负责人：",
+                    //     value: leadingUser
+                    // }
                     {
-                        title: "负责人：",
-                        value: leadingUser
+                        title: "测试工单：",
+                        value: this.info.label,
+                        btnSty: "radio",
+                        eventType: "setLabel",
+                        list: [
+                            {
+                                key: 2,
+                                value: "是"
+                            },
+                            {
+                                key: 1,
+                                value: "否"
+                            }
+                        ]
                     }
                 ],
                 [
                     {
                         title: "工单标题：",
                         value: this.info.title,
-                        eventType: 1
+                        btnSty: "a",
+                        eventType: "setTitle"
                     },
                     {
-                        title: "",
-                        value: ""
-                    },
-                    {
-                        title: "",
-                        value: ""
+                        title: "备注：",
+                        value:this.info.remark,
+                        eventType: "setRemark",
+                        btnSty: "a",
+                        col: 3
                     }
                 ]
             ];
@@ -335,6 +415,7 @@ export default {
     data() {
         return {
             isShowEditWorkOrderTitle: false,
+            isShowEditWorkOrderRemark:false,
             cunstomInfo: [],
             workOrderInfo: [],
             evaluateList: [],

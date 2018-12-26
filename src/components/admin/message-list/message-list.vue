@@ -3,107 +3,157 @@
         <myaudio :src="audioModelPath" v-model="isShowAudioModel"></myaudio>
         <myvideo :videoParams="videoParams" v-model="isShowVideoModel"></myvideo>
         <template v-for="item in data">
-            <Card :key="'message_'+item.id" class="md-card message">
-                <div class="flex message-bottom">
-                    <div class="flex-left">
-                        <span>{{getMessageTitle(item.sign,item.userVo)}}</span>
+            <div :key="'message_'+item.id">
+                <Card class="md-card message">
+                    <div class="flex message-bottom">
+                        <div class="flex-left">
+                            <span>{{getMessageTitle(item.sign,item.userVo)}}</span>
+                        </div>
+                        <div class="flex-right">{{formatTimeData(item.createAt)}}</div>
                     </div>
-                    <div class="flex-right">{{formatTimeData(item.createAt)}}</div>
-                </div>
-                <!-- 普通消息 -->
-                <div class="message-counter" v-if="item.record">
-                    <span
-                        v-if="item.eventType != 0 && item.type != 8"
-                    >【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span>
-                    <span v-if="item.type == 8">【 语音备注 】</span>
-                    <span v-html="item.record"></span>
-                </div>
-                <div
-                    class="message-counter"
-                    v-if="item.eventType == 1 && item.remark"
-                >【 备注 】 {{item.remark}}</div>
-                <!-- 链接 -->
-                <div class="message-counter" v-if="item.type == 6">
-                    【
-                    <a
-                        stylet="color:#2db7f5;"
-                        target="_blank"
-                        :href="item.enclosure"
-                    >链接：{{item.enclosure}}</a>】
-                </div>
-                <div class="flex message-bottom">
-                    <div class="flex-left flex message-group">
-                        <!-- 图片 -->
-                        <template v-if="item.type == 2">
-                            <div class="flex-left item img pic">
-                                <!-- <a class="link" target="_blank" :href="$FILE(item.enclosure)"> -->
-                                <a
-                                    class="link"
-                                    @click="setShowImgModalData($FILE(item.enclosure))"
-                                    href="javascript:;"
-                                >
-                                    <img :src="$FILE(item.enclosure)">
-                                </a>
-                            </div>
-                        </template>
-                        <!-- 音乐 -->
-                        <template v-if="item.type == 3">
-                            <div class="flex-left item img pic">
-                                <a
-                                    class="link"
-                                    @click="setAudioModelPath($FILE(item.enclosure))"
-                                    href="javascript:;"
-                                >
-                                    <img :src="$CDN('/default_audio.png')">
-                                </a>
-                            </div>
-                        </template>
-                        <!-- 视频 -->
-                        <template v-if="item.type == 5">
-                            <div class="flex-left item img pic">
-                                <a
-                                    class="link"
-                                    @click="setVideoModelPath($FILE(item.enclosure))"
-                                    href="javascript:;"
-                                >
-                                    <img :src="$CDN('/default_video.png')">
-                                </a>
-                            </div>
-                        </template>
-                        <!-- 语音 -->
-                        <template v-if="item.type == 8">
-                            <div class="flex-left item img pic">
-                                <a
-                                    class="link"
-                                    @click="setAudioModelPath($FILE(item.enclosure))"
-                                    href="javascript:;"
-                                >
-                                    <img :src="$CDN('/default_audio.png')">
-                                </a>
-                            </div>
-                        </template>
+                    <!-- 普通消息 -->
+                    <div class="message-counter" v-if="item.record">
+                        <span
+                            v-if="item.eventType != 0 && item.type != 8"
+                        >【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span>
+                        <span v-if="item.type == 8">【 语音备注 】</span>
+                        <span v-html="item.record"></span>
                     </div>
-                    <div class="flex-right btn-group move-down">
-                        <Button
-                            style="display:none;"
-                            v-if="item.enclosure"
-                            @click="downloadFiles(item)"
-                            type="primary"
-                            class="btn"
-                            icon="ios-cloud-download"
-                            ghost
-                        >下载附件</Button>
-                        <Button
-                            v-if="item.eventType == 1 && isExectorId"
-                            @click="editRemarkModal(item)"
-                            type="warning"
-                            class="btn"
-                            icon="ios-brush"
-                            ghost
-                        >编辑摘要</Button>
+                    <div
+                        class="message-counter"
+                        v-if="item.eventType == 1 && item.remark"
+                    >【 备注 】 {{item.remark}}</div>
+                    <!-- 链接 -->
+                    <div class="message-counter" v-if="item.type == 6">
+                        【
+                        <a
+                            stylet="color:#2db7f5;"
+                            target="_blank"
+                            :href="item.enclosure"
+                        >链接：{{item.enclosure}}</a>】
                     </div>
-                </div>
-            </Card>
+
+                    <div class="flex message-bottom">
+                        <div class="flex-left flex message-group">
+                            <!-- 图片 -->
+                            <template v-if="item.type == 2">
+                                <div class="flex-left item img pic">
+                                    <!-- <a class="link" target="_blank" :href="$FILE(item.enclosure)"> -->
+                                    <a
+                                        class="link"
+                                        @click="setShowImgModalData($FILE(item.enclosure))"
+                                        href="javascript:;"
+                                    >
+                                        <img :src="$FILE(item.enclosure)">
+                                    </a>
+                                </div>
+                            </template>
+                            <!-- 音乐 -->
+                            <template v-if="item.type == 3">
+                                <div class="flex-left item img pic">
+                                    <a
+                                        class="link"
+                                        @click="setAudioModelPath($FILE(item.enclosure))"
+                                        href="javascript:;"
+                                    >
+                                        <img :src="$CDN('/default_audio.png')">
+                                    </a>
+                                </div>
+                            </template>
+                            <!-- 视频 -->
+                            <template v-if="item.type == 5">
+                                <div class="flex-left item img pic">
+                                    <a
+                                        class="link"
+                                        @click="setVideoModelPath($FILE(item.enclosure))"
+                                        href="javascript:;"
+                                    >
+                                        <img :src="$CDN('/default_video.png')">
+                                    </a>
+                                </div>
+                            </template>
+                            <!-- 语音 -->
+                            <template v-if="item.type == 8">
+                                <div class="flex-left item img pic">
+                                    <a
+                                        class="link"
+                                        @click="setAudioModelPath($FILE(item.enclosure))"
+                                        href="javascript:;"
+                                    >
+                                        <img :src="$CDN('/default_audio.png')">
+                                    </a>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="flex-right btn-group move-down">
+                            <Button
+                                style="display:none;"
+                                v-if="item.enclosure"
+                                @click="downloadFiles(item)"
+                                type="primary"
+                                class="btn"
+                                icon="ios-cloud-download"
+                                ghost
+                            >下载附件</Button>
+                            <Button
+                                v-if="item.eventType == 1 && isExectorId"
+                                @click="editRemarkModal(item)"
+                                type="warning"
+                                class="btn"
+                                icon="ios-brush"
+                                ghost
+                            >编辑摘要</Button>
+                        </div>
+                    </div>
+                </Card>
+
+                <Card :key="'message_'+item.id" class="md-card message">
+                    <div class="flex message-bottom">
+                        <div class="flex-left">
+                            <span>客户:</span>
+                            <span>张三丰（函谷）</span>
+                        </div>
+                        <div class="flex-right">{{formatTimeData(item.createAt)}}</div>
+                    </div>
+                    <!-- 工单动态 -->
+                    <div class="message-counter">
+                        <P>{{item.record}}</P>
+                    </div>
+
+                    <div class="message-counter">
+                        <P>{{item.record}}</P>
+                        <P>工单类型：{{getWorkSheetTypeValue(item.workType)}}</P>
+                        <P>
+                            执行人：{{item.ExecutorInfo.userName}}
+                            <span
+                                v-if="item.ExecutorInfo.departmentName"
+                            >（{{item.ExecutorInfo.departmentName}}）</span>
+                        </P>
+                    </div>
+
+                    <div class="message-counter">
+                        <p>{{item.record}}</p>
+                        <P>
+                            被移交人：{{item.TransferredUser.userName}}
+                            <span
+                                v-if="item.TransferredUser.departmentName"
+                            >（{{item.TransferredUser.departmentName}}）</span>
+                        </P>
+                        <P>拒绝原因：{{item.remark}}</P>
+                    </div>
+
+                    <div class="message-counter">
+                        <p>{{item.record}}</p>
+                        <P>
+                            移交人：{{item.TransferredUser.userName}}
+                            <span
+                                v-if="item.TransferredUser.departmentName"
+                            >（{{item.TransferredUser.departmentName}}）</span>
+                        </P>
+                        <P>拒绝原因：{{item.remark}}</P>
+                    </div>
+                </Card>
+            </div>
         </template>
         <Modal
             v-model="isShowRemarkModal"
@@ -226,6 +276,9 @@ export default {
             console.log("video", path);
             this.isShowVideoModel = true;
             this.videoParams.src = path;
+        },
+        getWorkSheetTypeValue(key) {
+            return getArrValue(this.$store.state.workSheet.workSheetType, key);
         }
     },
     data() {

@@ -9,7 +9,7 @@ const storedimensionListKey = "dimensionList";
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-24 18:49:48
+ * @Last Modified time: 2018-12-24 19:19:53
  * @explanatory:  store demo
  */
 export default {
