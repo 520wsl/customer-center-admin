@@ -15,6 +15,14 @@
             <div slot="extra">
                 <div v-if="isHaveUserId">
                     <a
+                        v-if="isdDirector"
+                        @click="joinCasebase"
+                        href="javascript:;"
+                        class="md-card-btn-warning"
+                    >
+                        <Icon type="md-hammer"></Icon>加入案例库
+                    </a>
+                    <a
                         v-if="current == 0 && isExectorId"
                         @click="setWorkSheetProcessing(2)"
                         href="javascript:;"
@@ -47,6 +55,32 @@
                 </ButtonGroup>
             </div>
         </Card>
+        <Modal v-model="caseParams.bool" footer-hide title="加入案例库" width="700" :mask-closable="false">
+            <Card class="md-card">
+                <Button type="primary" @click="addCase.bool = true">新创建案例</Button>
+                <div class="casebase-list">
+                    <Table :columns="caseParams.columns" :show-header="false" :data="caseParams.list" @on-selection-change="tableSelect"></Table>
+                </div>
+                <div class="casebase-list">
+                    <Page :pageNum="caseParams.pageNum" :pageSize="caseParams.pageSize" :count="caseParams.count" @pageCurrentChange="pageCurrentChange" @pageSizeChange="pageSizeChange"></Page>
+                </div>
+                <div class="modal-btn">
+                    <Button class="btn" type="primary" @click="submitCase">提交</Button>
+                    <Button class="btn" type="default" @click="caseParams.bool = false">取消</Button>
+                </div>
+            </Card>
+        </Modal>
+        <Modal v-model="addCase.bool" footer-hide title="案例名称" :mask-closable="false">
+            <Card class="md-card">
+                <div>
+                    <Input v-model="addCase.caseName" placeholder="请输入案例名称"></Input>
+                </div>
+                <div class="modal-btn">
+                    <Button class="btn" type="primary" @click="createCase">提交</Button>
+                    <Button class="btn" type="default" @click="addCase.bool = false">取消</Button>
+                </div>
+            </Card>
+        </Modal>
         <router-view></router-view>
         <Modal v-model="modal.bool" footer-hide title="工单指派" mask-closable>
             <Card class="md-card">
@@ -92,13 +126,21 @@
 </template>
 
 <script>
+import Page from "_c/admin/page";
 import { mapMutations, mapState, mapActions } from "vuex";
 import { getArrValue } from "@/libs/tools";
 import {
     getWorkSheetInfoData,
     setWorkSheetProcessingState,
     assignWorksheet
+    
 } from "@/api/admin/workSheet/workSheet";
+import {
+    createWorkOrderCase,
+    joinWorkOrderCase,
+    getWorkOrderCaseListData,
+    getIsDirector
+} from "@/api/admin/case/case";
 import { getstaffListData } from "@/api/admin/custom/custom";
 import { getSuperiorLeader } from "@/api/admin/department/department";
 import { formatTime } from "@/libs/util/time";
@@ -106,7 +148,8 @@ import "./index.less";
 import Department from "_c/public/department";
 export default {
     components:{
-        Department
+        Department,
+        Page
     },
     computed: {
         isShowStatus() {
@@ -150,7 +193,7 @@ export default {
         ...mapActions(["getSixiId"]),     
         getUserInfo(data) {
             console.log(data)
-        },    
+        },
         assignPersonnel() {
             this.modal.bool = true;
             this.getPersonalList();
@@ -324,6 +367,94 @@ export default {
                     )
                 }
             ];
+        },
+        // 提交加入案例库
+        submitCase() {
+            if(this.caseParams.selection.length == 0){
+                this.$Modal.error({
+                    title: "加入案例库",
+                    content: "请选择需要加入的案例库"
+                });
+                return;
+            }
+            let caseLibraryId = [];
+            this.caseParams.selection.forEach(item=>{
+                caseLibraryId.push(item.id)
+            })
+            let params={
+                workOrderId: this.info.id || "",
+                caseLibraryId
+            }
+            joinWorkOrderCase(params).then(res=>{
+                if(res.status != 200){
+                    this.$Modal.error({
+                        title: "加入案例库",
+                        content: res.msg
+                    });
+                    return;  
+                }
+                this.caseParams.selection = [];
+            })
+        },
+        // 创建案例库
+        createCase() {
+            let caseName = this.addCase.caseName || "";
+            if(!caseName){
+                this.$Modal.error({
+                    title: "创建案例库",
+                    content: "请输入案例名称"
+                });
+                return;
+            }
+            createWorkOrderCase({caseName}).then(res=>{
+                if(res.status != 200){
+                    this.$Modal.error({
+                        title: "创建案例库",
+                        content: res.msg
+                    });
+                    return;
+                }
+                this.addCase.caseName = "";
+                this.caseParams.pageNum = 1;
+                this.getCaseList();
+            })
+        },
+        tableSelect(selection) {
+            this.caseParams.selection = selection;
+        },
+        getCaseList() {
+            let params = this.caseParams || { pageSize: 10, pageNum: 1 };
+            getWorkOrderCaseListData(params).then(res=>{
+                if(res.status != 200){
+                    this.$Modal.error({
+                        title: "案例库列表",
+                        content: res.msg
+                    });
+                    return;
+                }
+                this.caseParams.list = res.data.list || [];
+                this.caseParams.count = res.data.count || 0;
+            })
+        },
+        joinCasebase() {
+            this.caseParams.bool = true;
+            this.getCaseList();
+        },
+        pageCurrentChange(pageNum) {
+            this.caseParams.pageNum = pageNum;
+            this.getCaseList();
+        },
+        pageSizeChange(pageSize) {
+            this.caseParams.pageSize = pageSize;
+            this.caseParams.pageNum = 1;
+            this.getCaseList();
+        },
+        judgeIsdDirector() {
+            getIsDirector().then(res=>{
+                if(res.status == 200){
+                    this.isdDirector = res.data || false;
+                }
+            })
         }
     },
     data() {
@@ -334,6 +465,30 @@ export default {
             sixiId: "",
             status: {
                 list: []
+            },
+            addCase: {
+                bool: false,
+                caseName: ''
+            },
+            isdDirector: false,
+            caseParams: {
+                bool: false,
+                selection: [],
+                // list: [{id:1,name:"1"},{id:2,name:"2"},{id:3,name:"3"},{id:4,name:"4"}],
+                list: [],
+                columns: [
+                    {
+                       type: "selection",
+                       width: 50
+                    },
+                    {
+                        key: "name",
+                        title: "案例名称"
+                    }
+                ],
+                pageSize: 10,
+                pageNum: 1,
+                count: 0
             },
             modal: {
                 bool: false,
@@ -354,6 +509,7 @@ export default {
         this.getWorkSheetInfo();
         this.getSixiId();
         this.sixiId = this.$store.state.user.sixiId;
+        this.judgeIsdDirector()
     }
 };
 </script>
