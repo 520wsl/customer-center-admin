@@ -1,6 +1,14 @@
 <template>
     <div>
         <Card class="md-card">
+            <div class="flex">
+                <div class="flex-left">
+                    <h3>案例名称：{{name}}</h3>
+                </div>
+                <div class="flex-right">
+                    <Button @click="isShowEditWorkOrderInfoName = true" type="success" ghost>修改</Button>
+                </div>
+            </div>
             <div class="search-con flex">
                 <div class="search-input-item">
                     <span class="search-input-item-lable">客户名称：</span>
@@ -84,34 +92,13 @@
                         <span></span>
                     </Input>
                 </div>
-                <!-- <div class="search-input-item">
-                    <span>用户手机号码：</span>
-                    <Input class="search-input" v-model="params.telephone" placeholder="请输入手机号">
-                    <span></span>
-                    </Input>
-                </div>-->
-                <!-- <div class="search-input-item">
-                    <span class="search-input-item-lable">切换客服：</span>
-                    <Department
-                        class="search-input"
-                        width="200"
-                        :get-user-info="getUserInfo"
-                        :loading-user="true"
-                        v-model="params.customerIdList"
-                    ></Department>
-                </div> -->
-                <div class="search-input-item">
-                    <Checkbox v-model="params.isRead">新消息</Checkbox>
-                    <Checkbox v-model="params.execute">执行者</Checkbox>
-                    <Checkbox v-model="params.partake">我参与的</Checkbox>
-                </div>
                 <div class="search-btn flex-right">
                     <Button @click="search" type="primary">搜索</Button>
                 </div>
             </div>
         </Card>
         <Card class="md-card">
-            <Table :data="workOrderList" @on-sort-change="sortChange" :columns="columns" border></Table>
+            <Table :data="workOrderList" :columns="columns" border></Table>
         </Card>
         <Card class="md-card">
             <page
@@ -122,15 +109,18 @@
                 @pageSizeChange="pageSizeChange"
             ></page>
         </Card>
-        <Modal
-            v-model="isSaveWorkOrderAction"
-            width="400px;"
-            class="again-evaluate"
-            title="发起工单"
-            :mask-closable="false"
-            @on-ok="saveWorkOrderAction"
-        >
-            <span class="text">确定是否发起工单？</span>
+        <Modal v-model="isShowEditWorkOrderInfoName" title="修改案例名称">
+            <Card class="md-card">
+                <p>
+                    <Input v-model="name">
+                        <span></span>
+                    </Input>
+                </p>
+            </Card>
+            <div slot="footer">
+                <Button @click="isShowEditWorkOrderInfoName = false" style="margin-left: 8px">取消</Button>
+                <Button @click="editWorkOrderCaseInfoNameAction" type="primary">保存</Button>
+            </div>
         </Modal>
     </div>
 </template>
@@ -141,14 +131,16 @@ Vue.prototype.utils = utils;
 import { mapState, mapActions } from "vuex";
 import { formatInitTime, startTime, endTime } from "@/libs/util/time";
 import Page from "_c/admin/page";
-// import Department from "_c/public/department";
-import { getWorkSheetListData } from "@/api/admin/workSheet/workSheet";
-import { saveWorkOrder } from "@/api/admin/workSheet/workOrder";
+import {
+    getWorkOrderCaseInfoData,
+    delWorkOrderCaseInfoData,
+    editWorkOrderCaseInfoName
+} from "@/api/admin/case/case";
 import utils from "@/libs/util/public";
 import "./index.less";
 export default {
     components: {
-        Page,
+        Page
         // Department
     },
     computed: {
@@ -169,10 +161,12 @@ export default {
     },
     data() {
         return {
-            isSaveWorkOrderAction: false,
+            isShowEditWorkOrderInfoName: false,
             videoModel: true,
-            saveWorkOrderActionData: {},
+            name: "",
             params: {
+                // 案例库ID
+                caseLibraryId: "",
                 // 客户名称
                 companyName: "",
                 // 工单编号
@@ -191,18 +185,6 @@ export default {
                 durationHour: "",
                 // 响应时间
                 responseHour: "",
-                // 是否新消息
-                isRead: false,
-                // 是否是我执行
-                execute: false,
-                // 是否我参与 1:我参与 默认为空
-                partake: true,
-                // 排序规则 0:创建时间 1:结束时间 2:持续时间
-                sortType: 0,
-                // 正序倒序规则 0:倒序 1:正序
-                sort: 0,
-                // 手机号
-                telephone: "",
                 // 分页参数
                 pageNum: 1,
                 pageSize: 10,
@@ -236,11 +218,6 @@ export default {
                         }
                     }
                 },
-                // {
-                //     title: "用户手机",
-                //     align: "center",
-                //     key: "cellphone"
-                // },
                 {
                     title: "微信昵称",
                     align: "center",
@@ -250,7 +227,6 @@ export default {
                     title: "创建时间",
                     align: "center",
                     width: 130,
-                    sortable: "custom",
                     key: "startTime",
                     render: (h, params) => {
                         const format = "YYYY-MM-DD HH:mm:ss";
@@ -264,7 +240,6 @@ export default {
                     title: "结束时间",
                     align: "center",
                     width: 130,
-                    sortable: "custom",
                     key: "finishTime",
                     render: (h, params) => {
                         const format = "YYYY-MM-DD HH:mm:ss";
@@ -278,7 +253,6 @@ export default {
                     title: "持续时间",
                     align: "center",
                     width: 130,
-                    sortable: "custom",
                     key: "durationStr",
                     render: (h, params) => {
                         return h("span", params.row.durationStr);
@@ -292,112 +266,32 @@ export default {
                     }
                 },
                 {
-                    title: "状态",
-                    align: "center",
-                    render: (h, params) => {
-                        const statusList = this.statusList.filter(item => {
-                            return item.key == params.row.type;
-                        });
-                        if (statusList.length > 0) {
-                            if (params.row.type == 1) {
-                                return h(
-                                    "span",
-                                    { style: { color: "red" } },
-                                    statusList[0]["value"]
-                                );
-                            }
-                            return h("span", statusList[0]["value"]);
-                        } else {
-                            return h("span", "");
-                        }
-                    }
-                },
-                {
-                    title: "新消息",
-                    align: "center",
-                    render: (h, params) => {
-                        if (!params.row.isRead) {
-                            return h("span", "有");
-                        } else {
-                            return h("span", "无");
-                        }
-                    }
-                },
-                {
-                    title: "责任人",
-                    align: "center",
-                    render: (h, params) => {
-                        const user = params.row.userVo || {};
-                        const name = user.userName || "";
-                        const departmentName = user.departmentName
-                            ? "(" + user.departmentName + ")"
-                            : "";
-                        return h("span", name + departmentName);
-                    }
-                },
-                {
                     title: "操作",
-                    align: "center",
                     render: (h, params) => {
                         let btnGroup = [];
-                        let query = params.row;
-                        // if (
-                        //     (query.type == 3 && query.isSend) ||
-                        //     (query.type == 4 && query.isSend)
-                        // ) {
-                        //     btnGroup.push(
-                        //         h(
-                        //             "a",
-                        //             {
-                        //                 style: {
-                        //                     color: "#2d8cf0",
-                        //                     display: "block",
-                        //                     margin: "5px"
-                        //                 },
-                        //                 on: {
-                        //                     click: () => {
-                        //                         this.isSaveWorkOrderAction = true;
-                        //                         this.saveWorkOrderActionData = {
-                        //                             workOrderType:
-                        //                                 query.workType,
-                        //                             context: "客服发起...",
-                        //                             mobile: query.mobile,
-                        //                             companySixiId:
-                        //                                 query.companyId,
-                        //                             companyName:
-                        //                                 query.companyName,
-                        //                             customerSixiId:
-                        //                                 query.sixiId,
-                        //                             wechatNickname:
-                        //                                 query.wechatNickname,
-                        //                             sponsorType: 1
-                        //                         };
-                        //                     }
-                        //                 }
-                        //             },
-                        //             "发起工单"
-                        //         )
-                        //     );
-                        // }
+
                         btnGroup.push(
                             h(
-                                "a",
+                                "Button",
                                 {
+                                    props: {
+                                        type: "primary",
+                                        size: "small",
+                                        ghost: true
+                                    },
                                     style: {
-                                        color: "#2d8cf0",
-                                        display: "block",
                                         margin: "5px"
                                     },
                                     on: {
                                         click: () => {
                                             let name = "workOrder-info-service";
-                                            if (
-                                                this.$route.name ==
-                                                "wx-workOrder-list"
-                                            ) {
-                                                name =
-                                                    "wx-workOrder-info-service";
-                                            }
+                                            // if (
+                                            //     this.$route.name ==
+                                            //     "wx-workOrder-list"
+                                            // ) {
+                                            //     name =
+                                            //         "wx-workOrder-info-service";
+                                            // }
                                             this.$router.push({
                                                 name,
                                                 query: {
@@ -409,7 +303,43 @@ export default {
                                         }
                                     }
                                 },
-                                "查看工单"
+                                "查看案例"
+                            )
+                        );
+
+                        btnGroup.push(
+                            h(
+                                "Poptip",
+                                {
+                                    props: {
+                                        confirm: true,
+                                        title: "你确定要删除吗?"
+                                    },
+
+                                    on: {
+                                        "on-ok": () => {
+                                            this.delWorkOrderCase(
+                                                params.row.id
+                                            );
+                                        }
+                                    }
+                                },
+                                [
+                                    h(
+                                        "Button",
+                                        {
+                                            props: {
+                                                type: "error",
+                                                size: "small",
+                                                ghost: true
+                                            },
+                                            style: {
+                                                margin: "5px"
+                                            }
+                                        },
+                                        "删除"
+                                    )
+                                ]
                             )
                         );
 
@@ -421,66 +351,6 @@ export default {
     },
     methods: {
         ...mapActions(["getSixiId"]),
-        getUserInfo(data) {
-            console.log(data);
-        },
-        async saveWorkOrderAction() {
-            let res = await saveWorkOrder({ ...this.saveWorkOrderActionData });
-            console.log(res);
-            if (res.status !== 200) {
-                this.$Modal.error({
-                    title: "发起工单",
-                    content: res.msg
-                });
-                return;
-            }
-            this.isSaveWorkOrderAction = false;
-            this.search();
-            this.$Modal.success({
-                title: "发起工单",
-                content: "发起成功"
-            });
-        },
-        sortChange(column) {
-            // 创建时间升序
-            const key = column.key;
-            const order = column.order;
-            if (key === "startTime" && order === "asc") {
-                this.params.sortType = 0;
-                this.params.sort = 1;
-                this.getList();
-            }
-            // 创建时间降序序
-            if (key === "startTime" && order === "desc") {
-                this.params.sortType = 0;
-                this.params.sort = 0;
-                this.getList();
-            }
-            // 持续时间升序
-            if (key === "durationStr" && order === "asc") {
-                this.params.sortType = 2;
-                this.params.sort = 1;
-                this.getList();
-            }
-            // 持续时间降序序
-            if (key === "durationStr" && order === "desc") {
-                this.params.sortType = 2;
-                this.params.sort = 0;
-                this.getList();
-            }
-            // 结束时间升序
-            if (key === "finishTime" && order === "asc") {
-                this.params.sortType = 1;
-                this.params.sort = 1;
-                this.getList();
-            }
-            // 结束时间降序序
-            if (key === "finishTime" && order === "desc") {
-                this.params.sortType = 1;
-                this.params.sort = 0;
-                this.getList();
-            }
-        },
         // 查询数据 分页页码重置
         sleectTemplateList(pageNum) {
             this.params.pageNum = pageNum;
@@ -518,7 +388,7 @@ export default {
                           ]
                         : ""
             };
-            let res = await getWorkSheetListData(data);
+            let res = await getWorkOrderCaseInfoData(data);
             if (res.status !== 200) {
                 this.$Modal.error({
                     title: "工单列表",
@@ -530,15 +400,47 @@ export default {
             this.params.pageNum = res.data.num || 1;
             this.params.pageSize = res.data.size || 10;
             this.params.count = res.data.count || 0;
+        },
+        async delWorkOrderCase(workSheetId) {
+            let res = await delWorkOrderCaseInfoData({ workSheetId });
+            res.catch(error => {
+                this.$Modal.error({
+                    title: "删除案例工单",
+                    content: error.msg
+                });
+                return;
+            });
+            this.$Modal.success({
+                title: "删除案例工单",
+                content: "删除成功"
+            });
+        },
+        async editWorkOrderCaseInfoNameAction() {
+            let res = await editWorkOrderCaseInfoName({
+                caseLibraryId: this.params.caseLibraryId,
+                name: this.name
+            });
+
+            res.catch(error => {
+                this.$Modal.error({
+                    title: "修改案例名称",
+                    content: error.msg
+                });
+                return;
+            });
+            this.isShowEditWorkOrderInfoName = false;
+            this.$Modal.success({
+                title: "修改案例名称",
+                content: "修改成功"
+            });
         }
     },
     created() {
-        // if (this.$route.query.sixiId) {
-        //     this.params.sixiId = this.$route.query.sixiId;
-        // } else {
-        //     this.getSixiId();
-        //     this.params.sixiId = this.$store.state.user.sixiId;
-        // }
+        console.log(this.$route);
+        this.name = this.$route.query.name || "";
+        this.params.caseLibraryId = this.$route.params.id || "";
+    },
+    mounted() {
         this.getList();
     }
 };
