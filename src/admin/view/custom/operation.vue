@@ -152,7 +152,7 @@ export default {
                         }
                     }
                 ],
-                caseData: [{id:1213,name:2222,accesssType:true}]
+                caseData: []
                 }
             
         };
