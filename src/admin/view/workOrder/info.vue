@@ -509,6 +509,7 @@ export default {
         this.getWorkSheetInfo();
         this.getSixiId();
         this.sixiId = this.$store.state.user.sixiId;
+        this.judgeIsdDirector()
     }
 };
 </script>
