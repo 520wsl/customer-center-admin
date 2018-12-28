@@ -45,3 +45,41 @@ export const delWorkOrderCaseInfoData = ({ workSheetId }) => {
 export const editWorkOrderCaseInfoName = ({ caseLibraryId, name }) => {
 	return post("/case/update", { caseLibraryId, name });
 };
+// 创建案例库
+export const createWorkOrderCase = ({ caseName }) => {
+	return post("/case/create", {
+		caseName
+	});
+};
+// 加入案例库
+export const joinWorkOrderCase = ({ workOrderId, caseLibraryId }) => {
+	return post("/case/join", {
+        workOrderId,
+        caseLibraryId
+	});
+};
+// 发送案例库列表
+export const getWorkOrderSendCaseList = ({ customerSixiId }) => {
+	return post("/case/send/list", {
+        customerSixiId
+	});
+};
+// 发送案例
+export const senWorkOrderdCase = ({ id, hour, minute }) => {
+	return post("/case/sendcase", {
+        id,
+        hour,
+        minute
+	});
+};
+// 停止访问案例库
+export const sotpVisitCase = ({ customerSixiId, caseLibraryId }) => {
+	return post("/case/sotpvisit", {
+        customerSixiId,
+        caseLibraryId
+	});
+};
+// 是否总监
+export const getIsDirector = () => {
+	return post("/staff/department/director", {});
+};
