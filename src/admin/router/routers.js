@@ -358,6 +358,43 @@ export default [
 		]
 	},
 	{
+		path: "/wx/case",
+		name: "wx-case",
+		meta: {
+			icon: "ios-stats",
+			title: "案例库"
+		},
+		component: Main1,
+		children: [
+			{
+				path: "workOrderCaseList",
+				name: "wx-case-workOrderCaseList",
+				meta: {
+					icon: "ios-stats",
+					title: "工单案例库"
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/case/workOrderCaseList")
+					)
+			},
+			{
+				path: "workOrderCaseInfo/:id?",
+				name: "wx-case-workOrderCaseInfo",
+				meta: {
+					icon: "ios-stats",
+					title: "案例工单列表",
+					hideInMenu: true,
+					notCache: true
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/case/workOrderCaseInfo")
+					)
+			}
+		]
+	},
+	{
 		path: "/wx/workOrder",
 		name: "wx-workOrder",
 		meta: {
