@@ -200,6 +200,12 @@ export default {
         },
         // 发送案例给客户
         sureSentCase() {
+            if(!this.caseModal.hour){
+                this.caseModal.hour = 0;
+            }
+            if(!this.caseModal.minute){
+                this.caseModal.minute = 0;
+            }
             if(this.caseModal.hour == 0 && this.caseModal.minute ==0){
                 this.$Modal.error({
                     title: "发送案例",
