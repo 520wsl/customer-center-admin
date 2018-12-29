@@ -75,6 +75,7 @@
                         title: "删除工单案例库",
                         content: "删除成功"
                     });
+                    this.sleectTemplateList(1)
                 }).catch(error => {
                     this.$Modal.error({
                         title: "删除工单案例库",
