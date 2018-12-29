@@ -144,6 +144,7 @@ export default {
                                     return;
                                 }
                                 commit("setIsDirector", result.data || false);
+                                data.isDirector = result.data || false;
                                 commit("setUserInfoStoreage", data);
                             })
 							resolve(res);

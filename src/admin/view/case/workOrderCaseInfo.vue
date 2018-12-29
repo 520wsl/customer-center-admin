@@ -289,13 +289,13 @@
                                         on: {
                                             click: () => {
                                                 let name = "workOrder-info-service";
-                                                // if (
-                                                //     this.$route.name ==
-                                                //     "wx-workOrder-list"
-                                                // ) {
-                                                //     name =
-                                                //         "wx-workOrder-info-service";
-                                                // }
+                                                if (
+                                                    this.$route.name ==
+                                                    "wx-case-workOrderCaseInfo"
+                                                ) {
+                                                    name =
+                                                        "wx-workOrder-info-service";
+                                                }
                                                 this.$router.push({
                                                     name,
                                                     query: {
