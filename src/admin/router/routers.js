@@ -365,7 +365,7 @@ export default [
 				hideInMenu: true,
 			title: "案例库"
 		},
-		component: Main1,
+		component: parentView,
 		children: [
 			{
 				path: "workOrderCaseList",
