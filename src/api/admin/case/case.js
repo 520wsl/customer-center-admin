@@ -45,7 +45,7 @@ export const getWorkOrderCaseInfoData = ({
         caseLibraryId,
         companyName,
         identifier,
-        // workType,
+        workType,
         startTime,
         endTime,
         timeType,
@@ -57,9 +57,10 @@ export const getWorkOrderCaseInfoData = ({
 };
 
 // 删除案例库中的工单
-export const delWorkOrderCaseInfoData = ({workSheetId}) => {
+export const delWorkOrderCaseInfoData = ({workSheetId, caseLibraryId}) => {
     return post("/case/delete/order", {
-        workSheetId
+        workSheetId,
+        caseLibraryId
     });
 };
 
