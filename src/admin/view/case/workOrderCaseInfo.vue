@@ -376,7 +376,7 @@
                 this.params.pageNum = 1;
                 this.getList();
             },
-            async getList() {
+            getList() {
                 const data = {
                     ...this.params,
                     startTime: this.params.startTime
@@ -395,51 +395,49 @@
                                 ]
                             : ""
                 };
-                let res = await getWorkOrderCaseInfoData(data);
-                if (res.status !== 200) {
+                getWorkOrderCaseInfoData(data).then(res => {
+                    this.workOrderList = res.data.list || [];
+                    this.params.pageNum = res.data.num || 1;
+                    this.params.pageSize = res.data.size || 10;
+                    this.params.count = res.data.count || 0;
+                }).catch(error => {
                     this.$Modal.error({
                         title: "工单列表",
-                        content: res.msg
+                        content: error.msg
                     });
-                }
-
-                this.workOrderList = res.data.list || [];
-                this.params.pageNum = res.data.num || 1;
-                this.params.pageSize = res.data.size || 10;
-                this.params.count = res.data.count || 0;
+                })
             },
-            async delWorkOrderCase(workSheetId) {
-                let res = await delWorkOrderCaseInfoData({workSheetId});
-                res.catch(error => {
+            delWorkOrderCase(workSheetId) {
+                delWorkOrderCaseInfoData({workSheetId}).then(res => {
+                    this.$Modal.success({
+                        title: "删除案例工单",
+                        content: "删除成功"
+                    });
+                }).catch(error => {
                     this.$Modal.error({
                         title: "删除案例工单",
                         content: error.msg
                     });
-                    return;
-                });
-                this.$Modal.success({
-                    title: "删除案例工单",
-                    content: "删除成功"
-                });
-            },
-            async editWorkOrderCaseInfoNameAction() {
-                let res = await editWorkOrderCaseInfoName({
-                    caseLibraryId: this.params.caseLibraryId,
-                    name: this.name
                 });
 
-                res.catch(error => {
+            },
+            editWorkOrderCaseInfoNameAction() {
+                editWorkOrderCaseInfoName({
+                    caseLibraryId: this.params.caseLibraryId,
+                    name: this.name
+                }).then(res => {
+                    this.isShowEditWorkOrderInfoName = false;
+                    this.$Modal.success({
+                        title: "修改案例名称",
+                        content: "修改成功"
+                    });
+                }).catch(error => {
                     this.$Modal.error({
                         title: "修改案例名称",
                         content: error.msg
                     });
-                    return;
                 });
-                this.isShowEditWorkOrderInfoName = false;
-                this.$Modal.success({
-                    title: "修改案例名称",
-                    content: "修改成功"
-                });
+
             }
         },
         created() {
