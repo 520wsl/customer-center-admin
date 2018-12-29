@@ -422,6 +422,14 @@
 
             },
             editWorkOrderCaseInfoNameAction() {
+                if(this.name.length <= 0 || this.name.length >40){
+                     this.$Modal.success({
+                        title: "修改案例名称",
+                        content: "案例名称请控制在1-40个字符内"
+                    });
+                     return ;
+                }
+
                 editWorkOrderCaseInfoName({
                     caseLibraryId: this.params.caseLibraryId,
                     name: this.name
