@@ -52,23 +52,23 @@ export const getWorkOrderCaseInfoData = ({
         caseLibraryId,
         companyName,
         identifier,
-        workType,
-        handleType,
+        // workType,
+        // handleType,
         startTime,
         endTime,
         // timeType,
         durationHour,
         responseHour,
-        isRead,
-        execute,
-        partake,
-        sortType,
-        sort,
-        telephone,
+        // isRead,
+        // execute,
+        // partake,
+        // sortType,
+        // sort,
+        // telephone,
         pageNum,
         pageSize,
-        count,
-        customerId
+        // count,
+        // customerId
     });
 };
 
