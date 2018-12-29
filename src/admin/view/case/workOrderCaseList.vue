@@ -20,7 +20,7 @@
         getWorkOrderCaseListData,
         delWorkOrderCaseListData
     } from "@/api/admin/case/case";
-    import { mapState, mapActions } from "vuex";
+    import {mapState, mapActions} from "vuex";
     import {formatTime} from "@/libs/util/time";
     import Page from "_c/admin/page";
 
@@ -105,13 +105,14 @@
                                         on: {
                                             click: () => {
                                                 let name = "case-workOrderCaseInfo";
-                                                if(this.$route.name == "wx-case-workOrderCaseList"){
+                                                if (this.$route.name == "wx-case-workOrderCaseList") {
                                                     name = "wx-case-workOrderCaseInfo"
                                                 }
                                                 this.$router.push({
                                                     name,
-                                                    params: {
-                                                        id: params.row.id
+                                                    query: {
+                                                        id: params.row.id,
+                                                        name: params.row.name
                                                     }
                                                 });
                                             }
@@ -198,15 +199,13 @@
                                         on: {
                                             click: () => {
                                                 let name = "case-workOrderCaseInfo";
-                                                if(this.$route.name == "wx-case-workOrderCaseList"){
+                                                if (this.$route.name == "wx-case-workOrderCaseList") {
                                                     name = "wx-case-workOrderCaseInfo"
                                                 }
                                                 this.$router.push({
                                                     name,
-                                                    params: {
-                                                        id: params.row.id
-                                                    },
                                                     query: {
+                                                        id: params.row.id,
                                                         name: params.row.name
                                                     }
                                                 });

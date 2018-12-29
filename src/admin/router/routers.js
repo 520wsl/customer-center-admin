@@ -342,7 +342,7 @@ export default [
 					)
 			},
 			{
-				path: "workOrderCaseInfo/:id?",
+				path: "workOrderCaseInfo",
 				name: "case-workOrderCaseInfo",
 				meta: {
 					icon: "ios-stats",
@@ -362,6 +362,7 @@ export default [
 		name: "wx-case",
 		meta: {
 			icon: "ios-stats",
+				hideInMenu: true,
 			title: "案例库"
 		},
 		component: Main1,
@@ -371,7 +372,9 @@ export default [
 				name: "wx-case-workOrderCaseList",
 				meta: {
 					icon: "ios-stats",
+						hideInMenu: true,
 					title: "工单案例库"
+
 				},
 				component: r =>
 					require.ensure([], () =>
@@ -379,7 +382,7 @@ export default [
 					)
 			},
 			{
-				path: "workOrderCaseInfo/:id?",
+				path: "workOrderCaseInfo",
 				name: "wx-case-workOrderCaseInfo",
 				meta: {
 					icon: "ios-stats",
