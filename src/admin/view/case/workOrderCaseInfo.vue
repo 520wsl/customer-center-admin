@@ -307,7 +307,7 @@
                                             }
                                         }
                                     },
-                                    "查看案例"
+                                    "查看工单"
                                 )
                             );
                             if (this.isDirector()) {
@@ -451,7 +451,7 @@
         created() {
             console.log(this.$route);
             this.name = this.$route.query.name || "";
-            this.params.caseLibraryId = this.$route.params.id || "";
+            this.params.caseLibraryId = this.$route.query.id || "";
         },
         mounted() {
             this.getList();
