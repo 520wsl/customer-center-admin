@@ -73,7 +73,7 @@
         <Modal v-model="addCase.bool" footer-hide title="案例名称" :mask-closable="false">
             <Card class="md-card">
                 <div>
-                    <Input v-model="addCase.caseName" placeholder="请输入案例名称"></Input>
+                    <Input v-model="addCase.caseName" :maxlength="40" placeholder="请输入案例名称"></Input>
                 </div>
                 <div class="modal-btn">
                     <Button class="btn" type="primary" @click="createCase">提交</Button>
