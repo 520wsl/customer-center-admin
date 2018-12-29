@@ -397,6 +397,11 @@ export default {
                 this.$Message.success(res.msg);
                 this.caseParams.bool = false;
                 this.caseParams.selection = [];
+            }).catch(error => {
+                this.$Modal.error({
+                    title: "加入案例库",
+                    content: error.msg
+                });
             })
         },
         // 创建案例库
@@ -421,6 +426,11 @@ export default {
                 this.addCase.caseName = "";
                 this.caseParams.pageNum = 1;
                 this.getCaseList();
+            }).catch(error => {
+                this.$Modal.error({
+                    title: "新增案例库",
+                    content: error.msg
+                });
             })
         },
         tableSelect(selection) {
@@ -438,6 +448,11 @@ export default {
                 }
                 this.caseParams.list = res.data.list || [];
                 this.caseParams.count = res.data.count || 0;
+            }).catch(error => {
+                this.$Modal.error({
+                    title: "案例库列表",
+                    content: error.msg
+                });
             })
         },
         joinCasebase() {

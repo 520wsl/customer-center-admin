@@ -236,6 +236,11 @@ export default {
                 }
                 this.caseModalRest();
                 this.$Message.success("发送成功");
+            }).catch(error => {
+                this.$Modal.error({
+                    title: "发送案例",
+                    content: error.msg
+                });
             })
         },
         getSexValue(type) {
@@ -258,6 +263,11 @@ export default {
                             return;
                         }
                         this.sendCase()
+                    }).catch(error => {
+                        this.$Modal.error({
+                            title: "停止访问",
+                            content: error.msg
+                        });
                     });
 				},
 				onCancel: () => {}
@@ -283,6 +293,11 @@ export default {
                     })
                 })
                 this.caseModal.caseData = caseLibraryVoList || [];
+            }).catch(error => {
+                this.$Modal.error({
+                    title: "发送案例库列表",
+                    content: error.msg
+                });
             })
         },
         // 微信解绑
