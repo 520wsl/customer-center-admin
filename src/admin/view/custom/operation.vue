@@ -182,6 +182,13 @@ export default {
         // 点击下一步
         nextStep() {
             if(this.caseModal.chooseCase){
+                if(this.caseModal.caseitem && this.caseModal.caseitem.workOrderNum == 0){
+                    this.$Modal.error({
+                        title: "发送案例",
+                        content: "该案例库为空，请重新选择！"
+                    });
+                    return;  
+                }
                 this.caseModal.step = 2;
             } else {
                 this.$Modal.error({
