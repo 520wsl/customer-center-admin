@@ -37,16 +37,6 @@
                         >{{item.value}}
                         </Option>
                     </Select>
-                    <Select class="search-col" placeholder="工单状态" v-model="params.handleType">
-                        <Option :value="-1">工单状态</Option>
-                        <!-- <Option v-for="(item,index) in statusList" :key="index" :value="item.key">{{item.value}}</Option> -->
-                        <Option
-                                v-for="(item,index) in searchStatusList"
-                                :key="index"
-                                :value="item.key"
-                        >{{item.value}}
-                        </Option>
-                    </Select>
                 </div>
                 <div class="search-input-item">
                     <Select class="search-col" style="width:120px;" v-model="params.timeType">
@@ -408,11 +398,13 @@
                 })
             },
             delWorkOrderCase(workSheetId) {
-                delWorkOrderCaseInfoData({workSheetId}).then(res => {
+                let caseLibraryId = this.params.caseLibraryId
+                delWorkOrderCaseInfoData({workSheetId, caseLibraryId}).then(res => {
                     this.$Modal.success({
                         title: "删除案例工单",
                         content: "删除成功"
                     });
+                    this.search()
                 }).catch(error => {
                     this.$Modal.error({
                         title: "删除案例工单",
