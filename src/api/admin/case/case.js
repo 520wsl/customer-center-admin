@@ -56,7 +56,7 @@ export const getWorkOrderCaseInfoData = ({
         // handleType,
         startTime,
         endTime,
-        // timeType,
+        timeType,
         durationHour,
         responseHour,
         // isRead,
