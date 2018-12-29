@@ -52,10 +52,10 @@ export const createWorkOrderCase = ({ caseName }) => {
 	});
 };
 // 加入案例库
-export const joinWorkOrderCase = ({ workOrderId, caseLibraryId }) => {
+export const joinWorkOrderCase = ({ workOrderId, caseLibraryList }) => {
 	return post("/case/join", {
         workOrderId,
-        caseLibraryId
+        caseLibraryList
 	});
 };
 // 发送案例库列表
@@ -65,11 +65,12 @@ export const getWorkOrderSendCaseList = ({ customerSixiId }) => {
 	});
 };
 // 发送案例
-export const senWorkOrderdCase = ({ id, hour, minute }) => {
+export const senWorkOrderdCase = ({ id, hour, minute, customerSixiId }) => {
 	return post("/case/sendcase", {
         id,
         hour,
-        minute
+        minute,
+        customerSixiId
 	});
 };
 // 停止访问案例库
