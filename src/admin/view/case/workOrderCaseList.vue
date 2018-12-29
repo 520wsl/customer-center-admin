@@ -104,8 +104,12 @@
                                         },
                                         on: {
                                             click: () => {
+                                                let name = "case-workOrderCaseInfo";
+                                                if(this.$route.name == "wx-case-workOrderCaseList"){
+                                                    name = "wx-case-workOrderCaseInfo"
+                                                }
                                                 this.$router.push({
-                                                    name: "case-workOrderCaseInfo",
+                                                    name,
                                                     params: {
                                                         id: params.row.id
                                                     }
@@ -193,8 +197,12 @@
                                         },
                                         on: {
                                             click: () => {
+                                                let name = "case-workOrderCaseInfo";
+                                                if(this.$route.name == "wx-case-workOrderCaseList"){
+                                                    name = "wx-case-workOrderCaseInfo"
+                                                }
                                                 this.$router.push({
-                                                    name: "case-workOrderCaseInfo",
+                                                    name,
                                                     params: {
                                                         id: params.row.id
                                                     },
