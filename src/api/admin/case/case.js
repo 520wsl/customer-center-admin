@@ -52,10 +52,10 @@ export const createWorkOrderCase = ({ caseName }) => {
 	});
 };
 // 加入案例库
-export const joinWorkOrderCase = ({ workOrderId, caseLibraryId }) => {
+export const joinWorkOrderCase = ({ workOrderId, caseLibraryList }) => {
 	return post("/case/join", {
         workOrderId,
-        caseLibraryId
+        caseLibraryList
 	});
 };
 // 发送案例库列表

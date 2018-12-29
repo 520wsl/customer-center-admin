@@ -378,13 +378,13 @@ export default {
                 });
                 return;
             }
-            let caseLibraryId = [];
+            let caseLibraryList = [];
             this.caseParams.selection.forEach(item=>{
-                caseLibraryId.push(item.id)
+                caseLibraryList.push(item.id)
             })
             let params={
                 workOrderId: this.info.id || "",
-                caseLibraryId
+                caseLibraryList
             }
             joinWorkOrderCase(params).then(res=>{
                 if(res.status != 200){
@@ -394,6 +394,8 @@ export default {
                     });
                     return;  
                 }
+                this.$Message.success(res.msg);
+                this.caseParams.bool = false;
                 this.caseParams.selection = [];
             })
         },
