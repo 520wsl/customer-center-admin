@@ -8,9 +8,9 @@
             <div slot="title">客户信息</div>
             <tables :data="cunstomInfo"></tables>
         </Card>
-        <Card class="md-card" v-if="evaluateList.length != 0 && isExectorId()">
+        <Card class="md-card" v-if="evaluateList.length != 0">
             <div slot="title" class="flex">客户评价
-                <Button type="primary" class="flex-right" @click="clickAgianEvaluate">重新评价</Button>
+                <Button  v-if="isExectorId()" type="primary" class="flex-right" @click="clickAgianEvaluate">重新评价</Button>
             </div>
             <Card v-for="(item,index) in evaluateList" :key="'evaluate_'+index">
                 <div slot="title">评价时间：{{formatTimeAction(item.createAt)}}</div>
