@@ -1,4 +1,5 @@
 import { logout, sentLoginCodeData } from "@/api/admin/qywechatProxy/user";
+import { getIsDirector } from "@/api/admin/case/case"
 import { getUserInfoData } from "@/api/admin/user/user";
 import { setToken, getToken } from "@/libs/util";
 import { setStore, getStore } from "@/libs/util/storeage";
@@ -26,6 +27,9 @@ export default {
 		storeageUserInfoKey: storeageUserInfoKey
 	},
 	mutations: {
+        setIsDirector(state, isDirector) {
+            state.userInfo.isDirector = isDirector;
+        },
 		setUserInfo(state, userInfo) {
 			state.userInfo = userInfo;
 		},
@@ -132,7 +136,16 @@ export default {
 							commit("setUserInfo", data);
 							commit("setUserInfoStoreage", data);
 							// commit("setAccess", data.permissions);
-							commit("setHasGetInfo", true);
+                            commit("setHasGetInfo", true);
+                            getIsDirector().then(result=>{
+                                if (!result.status) {
+                                    console.error("[debug]:getIsDirector", result);
+                                    resolve(result);
+                                    return;
+                                }
+                                commit("setIsDirector", result.data || false);
+                                commit("setUserInfoStoreage", data);
+                            })
 							resolve(res);
 						})
 						.catch(err => {

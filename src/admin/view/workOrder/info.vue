@@ -15,7 +15,7 @@
             <div slot="extra">
                 <div v-if="isHaveUserId">
                     <a
-                        v-if="isdDirector"
+                        v-if="isDirector"
                         @click="joinCasebase"
                         href="javascript:;"
                         class="md-card-btn-warning"
@@ -185,7 +185,8 @@ export default {
             return false;
         },
         ...mapState({
-			staffTagIdList: state => state.custom.staffTagIdList
+            staffTagIdList: state => state.custom.staffTagIdList,
+            isDirector: state => state.user.userInfo.isDirector || false
 		}),
     },
     methods: {
@@ -377,13 +378,13 @@ export default {
                 });
                 return;
             }
-            let caseLibraryId = [];
+            let caseLibraryList = [];
             this.caseParams.selection.forEach(item=>{
-                caseLibraryId.push(item.id)
+                caseLibraryList.push(item.id)
             })
             let params={
                 workOrderId: this.info.id || "",
-                caseLibraryId
+                caseLibraryList
             }
             joinWorkOrderCase(params).then(res=>{
                 if(res.status != 200){
@@ -393,6 +394,8 @@ export default {
                     });
                     return;  
                 }
+                this.$Message.success(res.msg);
+                this.caseParams.bool = false;
                 this.caseParams.selection = [];
             })
         },
@@ -414,6 +417,7 @@ export default {
                     });
                     return;
                 }
+                this.addCase.bool = false;
                 this.addCase.caseName = "";
                 this.caseParams.pageNum = 1;
                 this.getCaseList();
@@ -448,13 +452,6 @@ export default {
             this.caseParams.pageSize = pageSize;
             this.caseParams.pageNum = 1;
             this.getCaseList();
-        },
-        judgeIsdDirector() {
-            getIsDirector().then(res=>{
-                if(res.status == 200){
-                    this.isdDirector = res.data || false;
-                }
-            })
         }
     },
     data() {
@@ -470,7 +467,6 @@ export default {
                 bool: false,
                 caseName: ''
             },
-            isdDirector: false,
             caseParams: {
                 bool: false,
                 selection: [],
@@ -509,7 +505,6 @@ export default {
         this.getWorkSheetInfo();
         this.getSixiId();
         this.sixiId = this.$store.state.user.sixiId;
-        this.judgeIsdDirector()
     }
 };
 </script>
