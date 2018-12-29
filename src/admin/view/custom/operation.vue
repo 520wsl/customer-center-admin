@@ -210,7 +210,8 @@ export default {
             let params = {
                 id: this.caseModal.caseitem.id,
                 hour: this.caseModal.hour,
-                minute: this.caseModal.minute
+                minute: this.caseModal.minute,
+                customerSixiId: this.row.customerSixiId
             }
             senWorkOrderdCase(params).then(res=>{
                 if(res.status != 200){

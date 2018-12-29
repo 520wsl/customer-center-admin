@@ -65,11 +65,12 @@ export const getWorkOrderSendCaseList = ({ customerSixiId }) => {
 	});
 };
 // 发送案例
-export const senWorkOrderdCase = ({ id, hour, minute }) => {
+export const senWorkOrderdCase = ({ id, hour, minute, customerSixiId }) => {
 	return post("/case/sendcase", {
         id,
         hour,
-        minute
+        minute,
+        customerSixiId
 	});
 };
 // 停止访问案例库
