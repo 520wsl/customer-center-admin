@@ -35,164 +35,206 @@ import { mapState, mapActions } from "vuex";
 // import setServiceSatff from "./setServiceSatff";
 import "./index.less";
 export default {
-	data() {
-		return {
-			loading: false,
-			// 批量设置开关
-			setStaffModal: false,
-			// 批量设置的开关
-			ids: "",
-			params: {
-				pageNum: 1,
-				pageSize: 10,
-				select: 1,
-				keyword: "",
-				count: 0
-			},
-			keyWordTypeData: [
-				{
-					key: 1,
-					title: "客户名称"
-				},
-				{
-					key: 2,
-					title: "店铺账号"
-				},
-				{
-					key: 3,
-					title: "手机号"
-				}
-			],
-			columns: [
-				{
-					type: "selection"
-				},
-				{
-					title: "客户名称",
-					keyWord: true,
-					align: "center",
-					key: "name",
-					render: (h, params) => {
-						return h(
-							"span",
-							{
-								attrs: {
-									style: "color:#72ACE3;cursor:pointer;"
-								},
-								on: {
-									click: () => {
+    data() {
+        return {
+            loading: false,
+            // 批量设置开关
+            setStaffModal: false,
+            // 批量设置的开关
+            ids: "",
+            params: {
+                pageNum: 1,
+                pageSize: 10,
+                select: 1,
+                keyword: "",
+                count: 0
+            },
+            keyWordTypeData: [
+                {
+                    key: 1,
+                    title: "客户名称"
+                },
+                {
+                    key: 2,
+                    title: "店铺账号"
+                },
+                {
+                    key: 3,
+                    title: "手机号"
+                }
+            ],
+            columns: [
+                {
+                    type: "selection"
+                },
+                {
+                    title: "客户名称",
+                    keyWord: true,
+                    align: "center",
+                    key: "name",
+                    render: (h, params) => {
+                        let customerName = "";
+                        if (params.row.name) {
+                            customerName = params.row.name.slice(0, 2) + "***" + params.row.name.slice(5);
+                        }
+                        return h(
+                            "span",
+                            {
+                                attrs: {
+                                    style: "color:#72ACE3;cursor:pointer;"
+                                },
+                                on: {
+                                    click: () => {
                                         let name = "custom-info";
                                         if(this.$route.name == "wx-custom-list"){
                                             name = "wx-custom-info"
                                         }
-										this.$router.push({
-											name,
-											query: {
-												sixiId: params.row.sixiId,
-												userName: params.row.name
-											}
-										});
-									}
-								}
-							},
-							params.row.name
-						);
-					}
-				},
-				{
-					title: "店铺网址",
-					keyWord: true,
-					align: "center",
-					key: "url",
-					render: (h, params) => {
+                                        this.$router.push({
+                                            name,
+                                            query: {
+                                                sixiId: params.row.sixiId,
+                                                userName: params.row.name
+                                            }
+                                        });
+                                    }
+                                }
+                            },
+                            customerName
+                        );
+                    }
+                },
+                {
+                    title: "店铺网址",
+                    keyWord: true,
+                    align: "center",
+                    key: "url",
+                    render: (h, params) => {
                         let url = params.row.url || "";
-                        if( !url.startWith("http") && url != "" ){
+                        // 当url为空
+                        if( url == "" ){
+                            return h("span",{},"");
+                        }
+                        if( url.indexOf("http") == -1 && url != "" ){
                             url = "http://" + url;
                         }
-						return h(
-							"a",
-							{
-								attrs: {
-									href: url,
-									target: "_blank",
-									style: "color:#72ACE3",
-									title: params.row.name
-								}
-							},
-							params.row.url
-						);
-					}
-				},
-				{
-					title: "店铺账号",
-					keyWord: true,
-					align: "center",
-					key: "account"
-				},
-				{
-					title: "微信昵称",
-					keyWord: true,
-					align: "center",
-					key: "wechatNickName"
-				},
-				{
-					title: "手机号",
-					keyWord: true,
-					align: "center",
-					key: "mobile"
-				}
-			],
-			customList: []
-		};
-	},
-	// 注释批量设置人员
-	// components: { Page, setServiceSatff },
+                        let firstIndex = url.indexOf("://") + 3;
+                        let lastPointIndex = url.lastIndexOf(".") == -1 ? url.length : url.lastIndexOf(".");
+                        let lastIndex = lastPointIndex;
+                        if(url.lastIndexOf(".1688") != -1){
+                            lastIndex = url.lastIndexOf(".1688");
+                        } else {
+                            lastIndex = url.lastIndexOf(".com") == -1 ? lastPointIndex : url.lastIndexOf(".com");
+                        }
+                        let showUrl = url.slice(0, firstIndex) + "******" + url.slice(lastIndex)
+                        return h(
+                            "a",
+                            {
+                                attrs: {
+                                    href: url,
+                                    target: "_blank",
+                                    style: "color:#72ACE3",
+                                    title: params.row.name
+                                }
+                            },
+                            showUrl
+                        );
+                    }
+                },
+                {
+                    title: "店铺账号",
+                    keyWord: true,
+                    align: "center",
+                    key: "account",
+                    render: (h, params) => {
+                        let account = ""
+                        if (params.row.account) {
+                            account = "****" + params.row.account.slice(4);
+                        }
+                        return h(
+                            "div",
+                            {},
+                            account
+                        )
+                    }
+                },
+                {
+                    title: "已绑联系人数",
+                    keyWord: true,
+                    align: "center",
+                    key: ""
+                },
+                {
+                    title: "二维码",
+                    keyWord: true,
+                    align: "center",
+                    key: ""
+                },
+                {
+                    title: "联系人微信",
+                    keyWord: true,
+                    align: "center",
+                    key: "wechatNickName",
+                    render: (h, params) => {
+                        let arr = [];
+                        let str = "";
+                        if (arr.length > 2) {
+                            str
+                        }                    
+                        return h("div", {}, str)
+                    }
+                }
+            ],
+            customList: []
+        };
+    },
+    // 注释批量设置人员
+    // components: { Page, setServiceSatff },
     components: { Page },
     computed: {
         ...mapState({
             operator: state => state.user.userInfo.sixiId
         })
     },
-	mounted() {
-		this.getlist();
-	},
-	methods: {
-		getids(el) {
-			this.ids = el.map(el2 => el2.id);
-		},
-		pageCurrentChange(num) {
-			this.params.pageNum = num;
-			this.getlist();
-		},
-		pageSizeChange(num) {
-			this.params.pageSize = num;
-			this.params.pageNum = 1;
-			this.getlist();
-		},
-		getlist() {
-			let params = {};
-			params.pageSize = this.params.pageSize;
-			params.pageNum = this.params.pageNum;
-			params.mobile = "";
-			params.account = "";
+    mounted() {
+        this.getlist();
+    },
+    methods: {
+        getids(el) {
+            this.ids = el.map(el2 => el2.id);
+        },
+        pageCurrentChange(num) {
+            this.params.pageNum = num;
+            this.getlist();
+        },
+        pageSizeChange(num) {
+            this.params.pageSize = num;
+            this.params.pageNum = 1;
+            this.getlist();
+        },
+        getlist() {
+            let params = {};
+            params.pageSize = this.params.pageSize;
+            params.pageNum = this.params.pageNum;
+            params.mobile = "";
+            params.account = "";
             params.companyName = "";
             // 目前先设置为当前登录人的四喜Id
             params.operator = this.$store.state.user.userInfo.sixiId || "";
-			if (this.params.select == 1) {
-				params.companyName = this.params.keyword;
-			} else if (this.params.select == 2) {
-				params.account = this.params.keyword;
-			} else if (this.params.select == 3) {
-				params.mobile = this.params.keyword;
-			}
-			getCustomerListDate(params).then(res => {
-				if (res.status != 200) {
-					return this.$Notice.error({ title: res.msg });
-				}
-				this.params.count = res.data.count || 0;
-				this.customList = res.data.list || [];
-			});
-		}
-	}
+            if (this.params.select == 1) {
+                params.companyName = this.params.keyword;
+            } else if (this.params.select == 2) {
+                params.account = this.params.keyword;
+            } else if (this.params.select == 3) {
+                params.mobile = this.params.keyword;
+            }
+            getCustomerListDate(params).then(res => {
+                if (res.status != 200) {
+                    return this.$Notice.error({ title: res.msg });
+                }
+                this.params.count = res.data.count || 0;
+                this.customList = res.data.list || [];
+            });
+        }
+    }
 };
 </script>

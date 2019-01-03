@@ -126,14 +126,44 @@ export const getWorkcustomerListData = ({
         customerId
     });
 };
-// 工单详情详情--指派工单
+// 工单详情详情--工单移交
 export const assignWorksheet = ({
     workSheetId,
-    executorSixiId
+    sixiId,
+    remark
 }) => {
-    return post("/worksheet/assign", {
+    return post("/worksheet/transfer", {
         workSheetId,
-        executorSixiId
+        sixiId,
+        remark
+    });
+};
+// 工单详情详情--工单移交详情
+export const transferWorksheetInfo = ({
+    workSheetId
+}) => {
+    return post("/worksheet/transfer/detail", {
+        workSheetId
+    });
+};
+// 工单详情详情--工单移交确认
+export const sureTransferWorksheet = ({
+    workSheetId,
+    state,
+    refuseReason
+}) => {
+    return post("/worksheet/transfer/detail", {
+        workSheetId,
+        state,
+        refuseReason
+    });
+};
+// 工单详情详情--工单移交撤回
+export const retractTransferWorksheet = ({
+    workSheetId
+}) => {
+    return post("/worksheet/transfer/back", {
+        workSheetId
     });
 };
 // 再次发送评价通知
@@ -143,4 +173,51 @@ export const againEvaluate = ({
     return post("/worksheet/againevaluate", {
         workSheetId
     });
+};
+
+// 部门工单列表
+export const getLeaderList = ({
+    customerId,
+    identifier,
+    handleType,
+    startTime,
+    endTime,
+    pageNum,
+    pageSize,
+    workType,
+    durationHour,
+    responseHour,
+    companyName,
+    timeType,
+    sortType,
+    sort,
+    departmentId
+}) => {
+    return post("/worksheet/leader/list", {
+        customerId,
+        identifier,
+        handleType,
+        startTime,
+        endTime,
+        pageNum,
+        pageSize,
+        workType,
+        durationHour,
+        responseHour,
+        companyName,
+        timeType,
+        sortType,
+        sort,
+        departmentId
+    });
+};
+
+// 客户权限部门
+export const getLeaderDepartment = () => {
+    return post("/staff/department/leader/list", {});
+};
+
+// 获取部门人员信息
+export const getLeaderDepartmentList = ({ pid }) => {
+    return post("/staff/user/listbypid", { pid });
 };

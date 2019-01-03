@@ -36,7 +36,7 @@
                     <tr>
                         <td class="title">店铺网址：</td>
                         <td>
-                            <a :href="( !info.url.startWith('http') && url != '') ? 'http://' + info.url : info.url " :title="info.name" target="_blank">{{info.url}}</a>
+                            <a :href="companyUrl.targetUrl" :title="info.name" target="_blank">{{companyUrl.showUrl}}</a>
                         </td>
                     </tr>
                 </tbody>
@@ -46,7 +46,12 @@
             </div>-->
             <Tabs type="card" class="tabTable" v-model="bindOrderOrBillList">
                 <TabPane label="已绑定账号" name="bindOrder">
-                    <Button type="primary" style="margin:10px 0 30px;" v-if="isXuKai" @click="addContacts.bool = true;">新增联系人</Button>
+                    <Button
+                        type="primary"
+                        style="margin:10px 0 30px;"
+                        v-if="isXuKai"
+                        @click="addContacts.bool = true;"
+                    >新增联系人</Button>
                     <Table :columns="columns" :data="wechatBindVos" border></Table>
                 </TabPane>
                 <TabPane label="工单列表" name="billList">
@@ -133,26 +138,34 @@
             @on-cancel="getInfo"
         >
             <Card>
-                <p>请客户用微信扫该二维码绑定，二维码有效期2分钟</p>
+                <p>请客户用微信扫该二维码绑定，二维码有效期15分钟</p>
                 <div class="qr-code">
                     <img v-if="qrData.codeUrl" :src="qrData.codeUrl" alt="微信二维码" title="微信二维码">
                     <p v-else>二维码</p>
                 </div>
                 <div class="qr-code-btn">
-                    <Button @click="getQrcode">
+                    <Button @click="getQrcode()">
                         <Icon type="md-sync"/>刷新二维码
                     </Button>
                 </div>
             </Card>
         </Modal>
-        <Modal v-model="addContacts.bool" @on-ok="addContactsNumber()" :loading="addContacts.loading" :mask-closable="false" title="新增">
+        <Modal
+            v-model="addContacts.bool"
+            @on-ok="addContactsNumber()"
+            :loading="addContacts.loading"
+            :mask-closable="false"
+            title="新增"
+        >
             <Card class="md-card">
                 <table class="tab">
                     <tbody>
                         <tr>
                             <td class="title">称呼:</td>
                             <td>
-                                <Input class="wid" v-model="addContacts.callName"><span></span></Input>
+                                <Input class="wid" v-model="addContacts.callName">
+                                    <span></span>
+                                </Input>
                             </td>
                         </tr>
                         <tr>
@@ -178,7 +191,9 @@
                         <tr>
                             <td class="title">手机号:</td>
                             <td>
-                                <Input class="wid" v-model="addContacts.mobile" maxlength="11"><span></span></Input>
+                                <Input class="wid" v-model="addContacts.mobile" :maxlength="11">
+                                    <span></span>
+                                </Input>
                             </td>
                         </tr>
                     </tbody>
@@ -217,7 +232,9 @@ export default {
         return {
             bindOrderOrBillList: "bindOrder", // "billList", //
             bindModal: false,
-            addContacts:{
+            sixiId: "", // 当前登陆人 四喜ID
+            bindAccountData: {},
+            addContacts: {
                 loading: true,
                 bool: false,
                 callName: "",
@@ -281,17 +298,21 @@ export default {
                                     )
                                 ]
                             );
-                        }else{
-                            return h('div',{
-                                attrs:{
-                                    style: "color:#2d8cf0;cursor:pointer;"
-                                },
-                                on:{
-                                    click:()=>{
-                                        this.bindAccount(params.row);
+                        } else {
+                            return h(
+                                "div",
+                                {
+                                    attrs: {
+                                        style: "color:#2d8cf0;cursor:pointer;"
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.bindAccount(params.row);
+                                        }
                                     }
-                                }
-                            },"绑定微信")
+                                },
+                                "绑定微信"
+                            );
                         }
                     }
                 },
@@ -299,7 +320,7 @@ export default {
                     title: "手机号",
                     key: "角色",
                     render: (h, params) => {
-                        if(!params.row.mobile) return;
+                        if (!params.row.mobile) return;
                         return h("div", [
                             h("span", hidePhone(params.row.mobile)),
                             h(
@@ -322,8 +343,11 @@ export default {
                 {
                     title: "操作",
                     render: (h, params) => {
-                        let bool = params.row.wechatNickname !== null && params.row.wechatNickname !== undefined && params.row.wechatNickname !== '';
-                        console.log(this.info.wechatBindVos);
+                        let bool =
+                            params.row.wechatNickname !== null &&
+                            params.row.wechatNickname !== undefined &&
+                            params.row.wechatNickname !== "";
+                        // console.log(this.info.wechatBindVos);
                         return h(operation, {
                             props: {
                                 row: params.row,
@@ -340,7 +364,7 @@ export default {
                                 //     this.bindAccount(data.customerSixiId);
                                 // }
                             }
-                        });                       
+                        });
                     }
                 }
             ],
@@ -500,15 +524,17 @@ export default {
                                 on: {
                                     click: () => {
                                         let name = "workOrder-info-service";
-                                        if(this.$route.name == "wx-custom-info"){
-                                            name = "wx-workOrder-info-service"
+                                        if (
+                                            this.$route.name == "wx-custom-info"
+                                        ) {
+                                            name = "wx-workOrder-info-service";
                                         }
-                                        this.$router.push({    
+                                        this.$router.push({
                                             name,
                                             query: {
                                                 workSheetId: params.row.id,
                                                 companyName:
-                                                    params.row.companyName,
+                                                    params.row.companyName
                                             }
                                         });
                                     }
@@ -533,7 +559,11 @@ export default {
                 sixiId: "",
                 type: "BINDING_PHONE"
             },
-            qrData: {}
+            qrData: {},
+            companyUrl:{
+                showUrl: "",
+                targetUrl: ""
+            }
         };
     },
     computed: {
@@ -556,27 +586,34 @@ export default {
             operator: state => state.user.userInfo.sixiId
         }),
         // 判断当前登录的人员是否为续开人员
-        isXuKai:function() {
+        isXuKai: function() {
             // let arr = ["16", "36", "71", "121", "151", "158", "172", "173", "175"];
             // let departmentId = this.$store.state.user.userInfo.department || "";
-            let arr = this.info && this.info.staffVos || [];
-            let staffSixiId = this.$store.state.user.sixiId || '';
+            let arr = (this.info && this.info.staffVos) || [];
+            let staffSixiId = this.$store.state.user.userInfo.sixiId || "";
+            // if( !staffSixiId ){
+            //     this.getUserInfo();
+            // }
             let bool = false;
-            arr.forEach(item=>{
-                if(item.staffSixiId == staffSixiId && item.staffTagId == 2){
+            arr.forEach(item => {
+                if (
+                    item.staffSixiId == staffSixiId &&
+                    (item.staffTagId == 2 || item.staffTagId == 3)
+                ) {
                     bool = true;
                 }
-            })
+            });
             return bool;
         }
     },
     methods: {
+        ...mapActions(["getSixiId"]),
         getSexValue(type) {
             return getSexValue(type);
         },
         // 新增联系人
         addContactsNumber() {
-            if(this.addContacts.callName == ""){
+            if (this.addContacts.callName == "") {
                 this.$Modal.error({
                     title: "提示",
                     content: "称呼不可为空！"
@@ -584,10 +621,13 @@ export default {
                 this.addContacts.loading = false;
                 return;
             }
-            if (this.addContacts.mobile && !(/^\d{11}$/.test(this.addContacts.mobile))) {
+            if (
+                this.addContacts.mobile &&
+                !/^\d{11}$/.test(this.addContacts.mobile)
+            ) {
                 this.$Modal.error({
                     title: "提示",
-                    content: '请输入11位手机号'
+                    content: "请输入11位手机号"
                 });
                 this.addContacts.loading = false;
                 return;
@@ -602,7 +642,7 @@ export default {
                 callName: this.addContacts.callName,
                 operator: this.operator,
                 customerSixiId: ""
-            }
+            };
             updateBindInfo(param).then(
                 res => {
                     if (res.status !== 200) {
@@ -625,13 +665,33 @@ export default {
         // 绑定微信
         bindAccount(row) {
             this.bindModal = true;
-            this.getQrcode(row);
+            this.bindAccountData = row;
+            this.getQrcode();
         },
-        getQrcode(row) {
-            console.log("row", row)
+        getQrcode() {
+            let row = this.bindAccountData;
+            if (!row.id) {
+                this.$Modal.warning({
+                    title: "生成二维码",
+                    content:
+                        "注册码异常，请截图给管理员，以便快捷修复错误！内容：<br>" +
+                        JSON.stringify(row)
+                });
+                // return;
+            }
+            let sixiId = this.sixiId;
+
+            if (!sixiId) {
+                this.$Modal.warning({
+                    title: "生成二维码",
+                    content: "操作人信息异常，请重新登陆后再尝试操作！"
+                });
+                return;
+            }
             getQRCodeUrl({
                 regId: row.id,
-                type: "BINDING_PHONE"
+                type: "BINDING_PHONE",
+                sixiId: sixiId
             }).then(res => {
                 if (res.status != 200) {
                     return this.$Message.error({
@@ -641,6 +701,27 @@ export default {
                 this.qrData = res.data;
                 this.getInfo();
             });
+        },
+        setUrl(companyUrl){
+            let url = companyUrl || "";
+            // 当url为空
+            if( url == "" ){
+                return;
+            }
+            if( url.indexOf("http") == -1 && url != "" ){
+                url = "http://" + url;
+            }
+            let firstIndex = url.indexOf("://") + 3;
+            let lastPointIndex = url.lastIndexOf(".") == -1 ? url.length : url.lastIndexOf(".");
+            let lastIndex = lastPointIndex;
+            if(url.lastIndexOf(".1688") != -1){
+                lastIndex = url.lastIndexOf(".1688");
+            } else {
+                lastIndex = url.lastIndexOf(".com") == -1 ? lastPointIndex : url.lastIndexOf(".com");
+            }
+            let showUrl = url.slice(0, firstIndex) + "******" + url.slice(lastIndex)
+            this.companyUrl.showUrl = showUrl;
+            this.companyUrl.targetUrl = url;
         },
         getInfo() {
             getCustomerInfoData(this.params).then(res => {
@@ -657,6 +738,7 @@ export default {
                     this.customList = [obj];
                 }
                 this.info = res.data;
+                this.setUrl(res.data.url)
                 this.info.provinceName = res.data.provinceName || "";
                 this.info.cityName = res.data.cityName || "";
                 // 已绑定信息
@@ -675,7 +757,6 @@ export default {
             });
         },
         unBind() {
-            // console.log(this.info.openId);
             setWechatUntied({ openId: this.info.openId }).then(res => {
                 if (res.status != 200) {
                     return this.$Message.error({
@@ -717,7 +798,6 @@ export default {
             data[data.searchTextType] = data.text;
             data.companyId = this.params.sixiId;
             // 需要处理该对象，时间类型，时间，搜索的文本类型
-            console.log(data);
             let res = await getWorkcustomerListData(data);
             if (res.status !== 200) {
                 this.$Modal.error({
@@ -745,6 +825,10 @@ export default {
         }
         // 获取数据
         this.getList();
+    },
+    mounted() {
+        this.getSixiId();
+        this.sixiId = this.$store.state.user.sixiId;
     }
 };
 </script>

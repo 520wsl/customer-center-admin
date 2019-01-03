@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:13:25
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-05 09:43:32
+ * @Last Modified time: 2018-12-20 14:14:07
  * @explanatory:  config
  */
 export default {
@@ -30,11 +30,20 @@ export default {
 	callPhonePath: "http://127.0.0.1:3366",
 	attachmentPath: "http://wechat-base-images.oss-cn-hangzhou.aliyuncs.com/",
 	enterpriseWeChatConfig: {
-		id: "wx_reg",
-		appid: "ww7dc5f02540a109d3",
-		agentid: "1000003",
-		redirect_uri: "http://work.sixi.com/login",
-		state: "enterpriseWeChat"
+		pro: {
+			id: "wx_reg",
+			appid: "ww7dc5f02540a109d3",
+			agentid: "1000003",
+			redirect_uri: "http://work.sixi.com/login",
+			state: "enterpriseWeChat"
+		},
+		dev: {
+			id: "wx_reg",
+			appid: "ww7dc5f02540a109d3",
+			agentid: "1000003",
+			redirect_uri: "http://work.sixi.com/login",
+			state: "enterpriseWeChat"
+		}
 	},
 	wechatConfig: {
 		debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -45,5 +54,6 @@ export default {
 		jsApiList: [] // 必填，需要使用的JS接口列表 test
 	},
 	storeageUserInfoKey: "userInfo",
-	wechatToPagePath:"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3c0c1aef00b3d175&response_type=code&scope=snsapi_userinfo&state=weChat&connect_redirect=1"
+	wechatToPagePath:
+		"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3c0c1aef00b3d175&response_type=code&scope=snsapi_userinfo&state=weChat&connect_redirect=1"
 };

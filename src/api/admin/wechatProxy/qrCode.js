@@ -7,11 +7,12 @@ function get(url, params) {
 	return api.get(baseUrl + url, params);
 }
 // 微信二维码获取
-export const getQRCodeUrl = ({ type, regId }) => {
+export const getQRCodeUrl = ({ type, regId, sixiId }) => {
 	return post("/qr/code/create", {
 		scene_str: JSON.stringify({
 			regId,
-			type
+			type,
+			sixiId
 		})
 	});
 };

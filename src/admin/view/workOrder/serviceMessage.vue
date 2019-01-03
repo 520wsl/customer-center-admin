@@ -63,10 +63,12 @@
             <Form>
                 <FormItem label>
                     <Input
+                        :disabled="TalkNewsCountdownTimeFormat.length <= 0"
                         v-model="replyParams.content"
                         type="textarea"
                         :autosize="{minRows: 5,maxRows: 30}"
-                        placeholder="请填写回复信息。。。"
+                        :placeholder="replyMsg"
+                        @on-enter="setWorkOrderCustomerServiceStaffReply()"
                     >
                         <span></span>
                     </Input>
@@ -112,7 +114,7 @@
                         style="margin-right:30px;"
                     >倒计时: {{TalkNewsCountdownTimeFormat}} 失效</span>
                     <Button
-                        @click="setWorkOrderCustomerServiceStaffReply"
+                        @click="setWorkOrderCustomerServiceStaffReply()"
                         class="btn"
                         type="success"
                         ghost
@@ -156,6 +158,19 @@
             </Card>
             <div slot="footer">
                 <Button type="primary" @click="addItemTalkNews(1, '拨号')">确认</Button>
+                <Button @click="closeCallPhoneModal">返回</Button>
+            </div>
+        </Modal>
+
+        <Modal v-model="isShowCollectModal" width="600" :title="collect.title">
+            <Card class="md-card">
+                <h3>问候语：</h3>
+                <textarea style="width:100%;" v-model="collect.content" rows="5"></textarea>
+                <!-- <p v-html="collect.pagePath"></p> -->
+                <p>{{collect.message}}</p>
+            </Card>
+            <div slot="footer">
+                <Button type="primary" @click="setReplyParamsContent">确认</Button>
                 <Button @click="closeCallPhoneModal">返回</Button>
             </div>
         </Modal>
@@ -259,6 +274,7 @@ export default {
                 return "";
             }
             let res = getRelativeTime(endTime);
+            this.replyMsg = "请填写回复信息。。。";
             this.TalkNewsCountdownTimeFormat = res;
         },
         async getTalkNewsCountdownTime() {
@@ -292,11 +308,11 @@ export default {
             this.params.pageSize = pageSize;
             this.sleectTalkNewsList(1);
         },
-        async setWorkOrderCustomerServiceStaffReply() {
+        async setWorkOrderCustomerServiceStaffReply(msg) {
             let params = { ...this.replyParams };
             params.customerSixiId = this.info.userId;
             params.workSheetId = this.params.workSheetId;
-
+            params.content = msg || params.content;
             if (!params.content) {
                 this.$Modal.error({
                     title: "客服回复",
@@ -452,6 +468,7 @@ export default {
             let title = "";
             let message = "";
             let content = "";
+            let pagePath = "";
             let wechatNickname =
                 (this.info.customerDetailVo &&
                     this.info.customerDetailVo.callName) ||
@@ -465,21 +482,25 @@ export default {
                     return;
                 case 2:
                     title = "工单联系电话采集";
-                    message = "即将发送客户采集电话号码通知，请确认";
                     url = createToWeChatPagePage(
                         "pageName=billGetPhone&workSheetId=" +
                             this.params.workSheetId
                     );
-                    content =
-                        "请修改工单联系电话！\n\n点击<a target='_blank' href='" +
+                    content = "请修改工单联系电话！";
+                    message = "即向客户发送电话号码采集通知，请确认";
+                    pagePath =
+                        "\n\n点击<a target='_blank' href='" +
                         url +
                         "'>点击修改>></a> \n\n原联系电话：" +
                         this.getEncryptionPhone(this.workOrderPhoneList.mobile);
-                    this.setReplyParamsContent(content);
-                    return;
+                    this.isShowCollectModal = true;
+                    this.collect.title = title;
+                    this.collect.message = message;
+                    this.collect.content = content;
+                    this.collect.pagePath = pagePath;
+                    break;
                 case 3:
                     title = "账号密码采集";
-                    message = "即将发送客户采集账号密码通知，请确认";
                     url = createToWeChatPagePage(
                         "pageName=passwordStore&companySixiId=" +
                             this.info.companyId +
@@ -489,43 +510,81 @@ export default {
                     content =
                         "【 " +
                         wechatNickname +
-                        " 】您好，为了更好的为您提供服务请提交，您店铺的账号密码；\n注意：请不要将账号密码直接回复在聊天窗口 \n\n点击<a target='_blank' href='" +
+                        " 】您好，为了更好的为您提供服务请提交，您店铺的账号密码；\n注意：请不要将账号密码直接回复在聊天窗口";
+                    message = "即将发送客户采集账号密码通知，请确认";
+                    pagePath =
+                        "\n\n点击<a target='_blank' href='" +
                         url +
                         "'>提交阿里店铺账号密码>></a>";
-                    this.setReplyParamsContent(content);
-                    return;
+                    this.isShowCollectModal = true;
+                    this.collect.title = title;
+                    this.collect.message = message;
+                    this.collect.content = content;
+                    this.collect.pagePath = pagePath;
+                    break;
             }
-            // this.$Modal.confirm({
-            //     title: title,
-            //     content: "<p>" + message + "</p>",
-            //     onOk: () => {
-            //         this.addItemTalkNews(eventType, title);
-            //     },
-            //     onCancel: () => {}
-            // });
         },
-        setReplyParamsContent(content) {
-            this.replyParams.content = content;
+        setReplyParamsContent() {
+            let content = this.collect.content || "";
+            let pagePath = this.collect.pagePath || "";
+            let msg = content + pagePath;
+
+            this.isShowCollectModal = false;
+            this.collect.title = "";
+            this.collect.message = "";
+            this.collect.content = "";
+            this.collect.pagePath = "";
+            this.setWorkOrderCustomerServiceStaffReply(msg);
         },
         async callPhone(phone, recordId) {
             let params = {
                 phone,
                 recordId
             };
-            let res = await callPhoneAction({ ...params });
-            if (res.status == 1) {
-                this.editRemarkModal(recordId);
+            let isPading = true;
+            setTimeout(() => {
+                if (isPading) {
+                    this.$Modal.error({
+                        title: "拨号异常：",
+                        content:
+                            "1、请检查呼叫软件是否打开正常! <br> 2、请检查设备是否安装正常！"
+                    });
+                }
+            }, 2000);
+
+            try {
+                let res = await callPhoneAction({ ...params });
+                console.log("拨号：", res);
+                if (res.status == 1) {
+                    this.editRemarkModal(recordId);
+                    isPading = false;
+                    return;
+                }
+            } catch (error) {
+                this.$Modal.error({
+                    title: "拨号异常：",
+                    content:
+                        "1、请检查呼叫软件是否打开正常! <br> 2、请检查设备是否安装正常！"
+                });
+                isPading = false;
             }
-            console.log("拨号：", res);
         }
     },
     data() {
         return {
+            replyMsg: "客户未主动发起对话之前无法进行回复哦!",
             workOrderPhoneList: {
                 mobile: "",
                 phone: ""
             },
+            collect: {
+                title: "",
+                message: "",
+                content: "",
+                pagePath: ""
+            },
             sixiId: "",
+            isShowCollectModal: false,
             setIntervalFunction: "",
             isShowRemarkModal: false,
             isShowCallPhoneModal: false,

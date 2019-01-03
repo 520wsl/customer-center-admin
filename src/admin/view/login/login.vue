@@ -27,11 +27,7 @@ export default {
         LoginForm
     },
     methods: {
-        ...mapActions([
-            "handleLogin",
-            "getUserInfo",
-            "loginScheduler"
-        ]),
+        ...mapActions(["handleLogin", "getUserInfo", "loginScheduler"]),
         // 账号密码登陆流程，暂时没有
         handleSubmit({ userName, password, type }) {
             this.handleLogin({ userName, password, type }).then(res => {
@@ -145,16 +141,30 @@ export default {
         };
     },
     created() {
-        console.log("微信");
+        console.log("微信--pro");
         console.log(
-            "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3c0c1aef00b3d175&redirect_uri=http://work.sixi.com/admin/login&response_type=code&scope=snsapi_userinfo&state=weChat#wechat_redirect"
+            "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3c0c1aef00b3d175&redirect_uri=http://work.sixi.com/admin/login&response_type=code&scope=snsapi_userinfo&state=weChat2#wechat_redirect"
         );
 
-        console.log("企业微信");
+        console.log("企业微信-pro");
         console.log(
-            "https://open.weixin.qq.com/connect/oauth2/authorize?appid=ww7dc5f02540a109d3&redirect_uri=http://work.sixi.com/admin/login&response_type=code&scope=snsapi_base&state=enterpriseWeChat#wechat_redirect"
+            "https://open.weixin.qq.com/connect/oauth2/authorize?appid=ww7dc5f02540a109d3&redirect_uri=http://work.sixi.com/admin/login&response_type=code&scope=snsapi_base&state=enterpriseWeChat2#wechat_redirect"
         );
-        this.EWCConfig = this.$config.enterpriseWeChatConfig;
+
+         console.log("微信-dev");
+        console.log(
+            "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx3c0c1aef00b3d175&redirect_uri=http://work.sixi.com/admin/login&response_type=code&scope=snsapi_userinfo&state=weChat2#wechat_redirect"
+        );
+
+        console.log("企业微信-dev");
+        console.log(
+            "https://open.weixin.qq.com/connect/oauth2/authorize?appid=ww7dc5f02540a109d3&redirect_uri=http://test.work.sixi.com/admin/login&response_type=code&scope=snsapi_base&state=enterpriseWeChat2#wechat_redirect"
+        );
+        console.log("process.env.NODE_ENV:", process.env.NODE_ENV);
+        this.EWCConfig =
+            process.env.NODE_ENV === "development"
+                ? this.$config.enterpriseWeChatConfig.dev
+                : this.$config.enterpriseWeChatConfig.pro;
     },
 
     async mounted() {
