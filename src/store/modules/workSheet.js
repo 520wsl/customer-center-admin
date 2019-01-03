@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-16 18:48:22
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-08 16:39:04
+ * @Last Modified time: 2018-12-25 10:25:45
  * @explanatory:  工单模块
  */
 import { getWorkSheetInfoData } from "@/api/admin/workSheet/workSheet";
@@ -77,6 +77,10 @@ export default {
 			{
 				key: 4,
 				value: "其他类型"
+			},
+			{
+				key: 5,
+				value: "工单动态"
 			}
 		],
 		// 客户角色
