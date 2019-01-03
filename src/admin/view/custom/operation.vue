@@ -182,6 +182,13 @@ export default {
         // 点击下一步
         nextStep() {
             if(this.caseModal.chooseCase){
+                if(this.caseModal.caseitem && this.caseModal.caseitem.workOrderNum == 0){
+                    this.$Modal.error({
+                        title: "发送案例",
+                        content: "该案例库为空，请重新选择！"
+                    });
+                    return;  
+                }
                 this.caseModal.step = 2;
             } else {
                 this.$Modal.error({
@@ -200,6 +207,12 @@ export default {
         },
         // 发送案例给客户
         sureSentCase() {
+            if(!this.caseModal.hour){
+                this.caseModal.hour = 0;
+            }
+            if(!this.caseModal.minute){
+                this.caseModal.minute = 0;
+            }
             if(this.caseModal.hour == 0 && this.caseModal.minute ==0){
                 this.$Modal.error({
                     title: "发送案例",
@@ -223,6 +236,11 @@ export default {
                 }
                 this.caseModalRest();
                 this.$Message.success("发送成功");
+            }).catch(error => {
+                this.$Modal.error({
+                    title: "发送案例",
+                    content: error.msg
+                });
             })
         },
         getSexValue(type) {
@@ -245,6 +263,11 @@ export default {
                             return;
                         }
                         this.sendCase()
+                    }).catch(error => {
+                        this.$Modal.error({
+                            title: "停止访问",
+                            content: error.msg
+                        });
                     });
 				},
 				onCancel: () => {}
@@ -270,6 +293,11 @@ export default {
                     })
                 })
                 this.caseModal.caseData = caseLibraryVoList || [];
+            }).catch(error => {
+                this.$Modal.error({
+                    title: "发送案例库列表",
+                    content: error.msg
+                });
             })
         },
         // 微信解绑

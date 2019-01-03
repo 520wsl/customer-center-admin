@@ -31,18 +31,11 @@ export const getWorkOrderCaseInfoData = ({
                                              companyName,
                                              identifier,
                                              workType,
-                                             handleType,
                                              startTime,
                                              endTime,
                                              timeType,
                                              durationHour,
                                              responseHour,
-                                             isRead,
-                                             execute,
-                                             partake,
-                                             sortType,
-                                             sort,
-                                             telephone,
                                              pageNum,
                                              pageSize,
                                              count,
@@ -53,29 +46,21 @@ export const getWorkOrderCaseInfoData = ({
         companyName,
         identifier,
         workType,
-        handleType,
         startTime,
         endTime,
         timeType,
         durationHour,
         responseHour,
-        isRead,
-        execute,
-        partake,
-        sortType,
-        sort,
-        telephone,
         pageNum,
-        pageSize,
-        count,
-        customerId
+        pageSize
     });
 };
 
 // 删除案例库中的工单
-export const delWorkOrderCaseInfoData = ({workSheetId}) => {
+export const delWorkOrderCaseInfoData = ({workSheetId, caseLibraryId}) => {
     return post("/case/delete/order", {
-        workSheetId
+        workSheetId,
+        caseLibraryId
     });
 };
 

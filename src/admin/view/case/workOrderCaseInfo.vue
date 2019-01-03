@@ -37,16 +37,6 @@
                         >{{item.value}}
                         </Option>
                     </Select>
-                    <Select class="search-col" placeholder="工单状态" v-model="params.handleType">
-                        <Option :value="-1">工单状态</Option>
-                        <!-- <Option v-for="(item,index) in statusList" :key="index" :value="item.key">{{item.value}}</Option> -->
-                        <Option
-                                v-for="(item,index) in searchStatusList"
-                                :key="index"
-                                :value="item.key"
-                        >{{item.value}}
-                        </Option>
-                    </Select>
                 </div>
                 <div class="search-input-item">
                     <Select class="search-col" style="width:120px;" v-model="params.timeType">
@@ -289,13 +279,13 @@
                                         on: {
                                             click: () => {
                                                 let name = "workOrder-info-service";
-                                                // if (
-                                                //     this.$route.name ==
-                                                //     "wx-workOrder-list"
-                                                // ) {
-                                                //     name =
-                                                //         "wx-workOrder-info-service";
-                                                // }
+                                                if (
+                                                    this.$route.name ==
+                                                    "wx-case-workOrderCaseInfo"
+                                                ) {
+                                                    name =
+                                                        "wx-workOrder-info-service";
+                                                }
                                                 this.$router.push({
                                                     name,
                                                     query: {
@@ -307,7 +297,7 @@
                                             }
                                         }
                                     },
-                                    "查看案例"
+                                    "查看工单"
                                 )
                             );
                             if (this.isDirector()) {
@@ -408,11 +398,13 @@
                 })
             },
             delWorkOrderCase(workSheetId) {
-                delWorkOrderCaseInfoData({workSheetId}).then(res => {
+                let caseLibraryId = this.params.caseLibraryId
+                delWorkOrderCaseInfoData({workSheetId, caseLibraryId}).then(res => {
                     this.$Modal.success({
                         title: "删除案例工单",
                         content: "删除成功"
                     });
+                    this.search()
                 }).catch(error => {
                     this.$Modal.error({
                         title: "删除案例工单",
@@ -422,6 +414,14 @@
 
             },
             editWorkOrderCaseInfoNameAction() {
+                if(this.name.length <= 0 || this.name.length >40){
+                     this.$Modal.success({
+                        title: "修改案例名称",
+                        content: "案例名称请控制在1-40个字符内"
+                    });
+                     return ;
+                }
+
                 editWorkOrderCaseInfoName({
                     caseLibraryId: this.params.caseLibraryId,
                     name: this.name
@@ -443,7 +443,7 @@
         created() {
             console.log(this.$route);
             this.name = this.$route.query.name || "";
-            this.params.caseLibraryId = this.$route.params.id || "";
+            this.params.caseLibraryId = this.$route.query.id || "";
         },
         mounted() {
             this.getList();
