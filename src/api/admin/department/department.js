@@ -1,5 +1,5 @@
 import api from "@/libs/api.request";
-const baseUrl = "/staff";
+const baseUrl = "/work-order/staff";
 
 function post(url, params) {
   return api.post(baseUrl + url, params);
@@ -28,3 +28,13 @@ export const getSuperiorLeader = ({ department }) => {
     department
   });
 };
+// 是否是此部门领导
+export const getIsLeader = ({ 
+    sixiId, 
+    departmentId 
+    }) => {
+    return post("/department/isdepartmentleader", {
+        departmentId,
+        sixiId
+    });
+  };

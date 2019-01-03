@@ -4,10 +4,11 @@
       <Button type="primary" size="small" class="mar-l" ghost>解绑</Button>
     </Poptip> -->
         <Button type="primary" size="small" class="mar-l" v-if="isXuKai" @click="modal = true" ghost>编辑联系人</Button>
-        <Button type="primary" size="small" class="mar-l" v-if="isXuKai && row.customerSixiId" @click="delContacts()" ghost>解绑微信</Button>
+        <Button type="primary" size="small" class="mar-l" v-if="isXuKai && row.customerSixiId" @click="untyingWechat()" ghost>解绑微信</Button>
         <Button type="primary" size="small" class="mar-l" v-if="isShow" @click="getMobilePhone()" ghost>采集电话</Button>
         <Button type="primary" size="small" class="mar-l" v-if="isShow" @click="getAccountPassword()" ghost>采集账号密码</Button>
         <Button type="primary" size="small" class="mar-l" v-if="row.customerSixiId" @click="sendCase" ghost>发送案例</Button>
+        <Button type="primary" size="small" class="mar-l" v-if="isXuKai && !row.customerSixiId" @click="delContacts()" ghost>删除联系人</Button>
         <!-- <Button type="primary" size="small" class="mar-l" @click="getStartWorkorder()" ghost>发起工单</Button> -->
         <!-- <Button type="primary" size="small" class="mar-l" v-if="!row.wechatNickname" @click="bindAccount()" ghost>绑定微信</Button> -->
         <Modal v-model="modal" @on-ok="edit()" :loading="loading" :mask-closable="false" title="编辑">
@@ -352,29 +353,39 @@ export default {
                 title: "删除联系人",
                 content: "<p>" + "删除之后不可恢复，请谨慎操作" + "</p>",
                 onOk: () => {
-                    // let params = {
-                    //     sex: this.row.sex || "",
-                    //     customerSixiId: this.row.customerSixiId || "",
-                    //     callName: this.row.callName || "",
-                    //     mobile: this.row.mobile || "",
-                    //     role: this.row.role || "",
-                    //     id: this.row.id || "",
-                    //     deletedAt: (new Date()).getTime(),
-                    //     operator: this.operator,
-                    //     companySixiId: this.companySixiId || ""
-                    // };
-                    // console.log(params)
-                    // updateBindInfo(params).then(res => {
-                    //     if (res.status !== 200) {
-                    //         this.$Modal.error({
-                    //             title: "提示",
-                    //             content: res.msg
-                    //         });
-                    //         return;
-                    //     }
-                    //     this.$emit("callFun");
-                    // },
-                    // error => { });
+                    let params = {
+                        sex: this.row.sex || "",
+                        customerSixiId: this.row.customerSixiId || "",
+                        callName: this.row.callName || "",
+                        mobile: this.row.mobile || "",
+                        role: this.row.role || "",
+                        id: this.row.id || "",
+                        deletedAt: (new Date()).getTime(),
+                        operator: this.operator,
+                        companySixiId: this.companySixiId || ""
+                    };
+                    console.log(params)
+                    updateBindInfo(params).then(res => {
+                        if (res.status !== 200) {
+                            this.$Modal.error({
+                                title: "提示",
+                                content: res.msg
+                            });
+                            return;
+                        }
+                        this.$emit("callFun");
+                    },
+                    error => { });
+                },
+                onCancel: () => { }
+            });
+        },
+        // 微信解绑
+        untyingWechat() {
+            this.$Modal.confirm({
+                title: "微信解绑",
+                content: "<p>" + "解绑之后不可恢复，请谨慎操作" + "</p>",
+                onOk: () => {
                     this.cancelBind();
                 },
                 onCancel: () => { }
