@@ -43,12 +43,18 @@
             },
             // 微信 登录相关 API 环境校验
             WwLogin() {
-                getQyWxLoginConfig().then(res => {
-                    window.WwLogin(res.data);
-                }).catch(error => {
-                    console.log('企业微信登录配置获取失败', error)
-                })
-
+                // getQyWxLoginConfig().then(res => {
+                //     window.WwLogin(res.data);
+                // }).catch(error => {
+                //     console.log('企业微信登录配置获取失败', error)
+                // })
+                window.WwLogin({
+                    id: this.EWCConfig.id,
+                    appid: this.EWCConfig.appid,
+                    agentid: this.EWCConfig.agentid,
+                    redirect_uri: this.EWCConfig.redirect_uri,
+                    state: this.EWCConfig.state
+                });
             },
             // 登录成功后 跳到默认页面
             skipToDefaultPage(name) {
