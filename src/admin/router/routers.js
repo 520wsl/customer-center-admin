@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-10 11:54:10
+ * @Last Modified time: 2018-12-26 15:26:59
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -69,7 +69,8 @@ export default [
 							hideInMenu: true,
 							icon: "ios-stats",
 							// title: "工单详情基本信息",
-							title: route => `${route.query.companyName}-工单详情基本信息`,
+							title: route =>
+								`${route.query.companyName}-工单详情基本信息`,
 							notCache: true
 						},
 						component: r =>
@@ -84,7 +85,8 @@ export default [
 							hideInMenu: true,
 							icon: "ios-stats",
 							// title: "工单详情服务信息",
-							title: route => `${route.query.companyName}-工单详情服务信息`,
+							title: route =>
+								`${route.query.companyName}-工单详情服务信息`,
 							notCache: true
 						},
 						component: r =>
@@ -254,7 +256,7 @@ export default [
 					)
 			}
 		]
-    },
+	},
 	{
 		path: "/custom",
 		name: "custom",
@@ -293,16 +295,16 @@ export default [
 					)
 			}
 		]
-    },
-    {
-        path: "/departmentWorkOrder",
+	},
+	{
+		path: "/departmentWorkOrder",
 		name: "departmentWorkOrder",
 		meta: {
 			// showAlways: true,
 			icon: "ios-stats",
 			title: "工单"
-        },
-        component: Main1,
+		},
+		component: Main1,
 		children: [
 			{
 				path: "list",
@@ -313,11 +315,88 @@ export default [
 				},
 				component: r =>
 					require.ensure([], () =>
-                        require("@/admin/view/workOrder/leaderList")
+						require("@/admin/view/workOrder/leaderList")
 					)
 			}
 		]
-    },
+	},
+	{
+		path: "/case",
+		name: "case",
+		meta: {
+			icon: "ios-stats",
+			title: "案例库"
+		},
+		component: Main1,
+		children: [
+			{
+				path: "workOrderCaseList",
+				name: "case-workOrderCaseList",
+				meta: {
+					icon: "ios-stats",
+					title: "工单案例库"
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/case/workOrderCaseList")
+					)
+			},
+			{
+				path: "workOrderCaseInfo",
+				name: "case-workOrderCaseInfo",
+				meta: {
+					icon: "ios-stats",
+					title: "案例工单列表",
+					hideInMenu: true,
+					notCache: true
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/case/workOrderCaseInfo")
+					)
+			}
+		]
+	},
+	{
+		path: "/wx/case",
+		name: "wx-case",
+		meta: {
+			icon: "ios-stats",
+				hideInMenu: true,
+			title: "案例库"
+		},
+		component: parentView,
+		children: [
+			{
+				path: "workOrderCaseList",
+				name: "wx-case-workOrderCaseList",
+				meta: {
+					icon: "ios-stats",
+						hideInMenu: true,
+					title: "工单案例库"
+
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/case/workOrderCaseList")
+					)
+			},
+			{
+				path: "workOrderCaseInfo",
+				name: "wx-case-workOrderCaseInfo",
+				meta: {
+					icon: "ios-stats",
+					title: "案例工单列表",
+					hideInMenu: true,
+					notCache: true
+				},
+				component: r =>
+					require.ensure([], () =>
+						require("@/admin/view/case/workOrderCaseInfo")
+					)
+			}
+		]
+	},
 	{
 		path: "/wx/workOrder",
 		name: "wx-workOrder",
@@ -342,8 +421,8 @@ export default [
 					require.ensure([], () =>
 						require("@/admin/view/workOrder/list")
 					)
-            },
-            {
+			},
+			{
 				path: "leaderList",
 				name: "wx-workOrder-leaderList",
 				meta: {

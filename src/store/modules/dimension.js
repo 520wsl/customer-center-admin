@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com 
  * @Date: 2018-11-16 18:48:05 
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-06 11:26:57
+ * @Last Modified time: 2018-12-24 19:28:54
  * @explanatory:  授权模块
  */
 import { setStore, getStore, removeStore } from "@/libs/util/storeage";
@@ -21,14 +21,15 @@ export default {
 	actions: {
 		async getDimensionList({ commit }) {
 			let store = getStore(storeKey);
-
-			if (!store) {
+			if (!store || store.length <= 0) {
 				let res = await getDimensionListData();
 				if (res.status !== 200) {
 					console.error("getDimensionListData 获取维度列表", res.msg);
 					return;
 				}
 				setStore(storeKey, res.data);
+				commit("setDimensionListData", res.data);
+				return
 			}
 			commit("setDimensionListData", JSON.parse(store));
 		}
