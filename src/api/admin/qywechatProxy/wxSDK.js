@@ -17,3 +17,8 @@ export const getQyWxJSSDKConfig = ({ url }) => {
 // export const getQyWxJSSDKConfig = ({ url }) => {
 // 	return axios.get("https://qywx.n.yumc.pw/api/jsapi/config?url="+url);
 // };
+
+// 企业微信  获取 微信 登录 config 配置
+export const getQyWxLoginConfig = () => {
+	return post("/user/config");
+};
