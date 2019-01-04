@@ -207,7 +207,8 @@ import "./index.less";
 import {
     getCustomerInfoData,
     setWechatUntied,
-    updateBindInfo
+    updateBindInfo,
+    setSendQRcord
 } from "@/api/admin/custom/custom";
 import {
     workSheet,
@@ -699,6 +700,10 @@ export default {
                     });
                 }
                 this.qrData = res.data;
+                // 获取二维码后修改是否发送了二维码
+                setSendQRcord({id: row.id}).then(res=>{
+                   console.log(res) 
+                })
                 this.getInfo();
             });
         },

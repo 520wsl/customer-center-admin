@@ -152,7 +152,7 @@ export const sureTransferWorksheet = ({
     state,
     refuseReason
 }) => {
-    return post("/worksheet/transfer/detail", {
+    return post("/worksheet/transfer/confirm", {
         workSheetId,
         state,
         refuseReason

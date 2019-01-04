@@ -4,11 +4,23 @@
             <p slot="title">客户列表</p>
             <div class="search-con search-con-top">
                 <Select v-model="params.select" class="search-col">
-                    <Option v-for="item in keyWordTypeData" :key="`search-col-${item.key}`" :value="item.key">{{ item.title }}</Option>
+                    <Option v-for="item in keyWordTypeData" :key="`search-col-${item.key}`" :value="item.key">{{ item.value }}</Option>
                 </Select>
                 <Input v-model="params.keyword" placeholder="输入关键字搜索" class="search-input">
                 <span></span>
                 </Input>
+                <div class="search-item">
+                    <span>联系人：</span>
+                    <Select v-model="params.binding" class="search-col">
+                        <Option v-for="item in contactsList" :key="`search-col-${item.key}`" :value="item.key">{{ item.value }}</Option>
+                    </Select>
+                </div>
+                <div class="search-item">
+                    <span>二维码：</span>
+                    <Select v-model="params.sendCode" class="search-col">
+                        <Option v-for="item in QRcodeList" :key="`search-col-${item.key}`" :value="item.key">{{ item.value }}</Option>
+                    </Select>
+                </div>
                 <Button @click="getlist" class="search-btn" type="primary">
                     <Icon type="search" />&nbsp;&nbsp;搜索
                 </Button>
@@ -47,26 +59,48 @@ export default {
                 pageSize: 10,
                 select: 1,
                 keyword: "",
-                count: 0
+                count: 0,
+                binding: 0,
+                sendCode: 1
             },
+            contactsList: [
+                {
+                    key: 0,
+                    value: "未绑定"
+                },
+                {
+                    key: 1,
+                    value: "已绑定"
+                },
+            ],
+            QRcodeList: [
+                {
+                    key: 1,
+                    value: "已发"
+                },
+                {
+                    key: 0,
+                    value: "未发"
+                },
+            ],
             keyWordTypeData: [
                 {
                     key: 1,
-                    title: "客户名称"
+                    value: "客户名称"
                 },
                 {
                     key: 2,
-                    title: "店铺账号"
+                    value: "店铺账号"
                 },
                 {
                     key: 3,
-                    title: "手机号"
+                    value: "手机号"
                 }
             ],
             columns: [
-                {
-                    type: "selection"
-                },
+                // {
+                //     type: "selection"
+                // },
                 {
                     title: "客户名称",
                     keyWord: true,
@@ -86,7 +120,7 @@ export default {
                                 on: {
                                     click: () => {
                                         let name = "custom-info";
-                                        if(this.$route.name == "wx-custom-list"){
+                                        if (this.$route.name == "wx-custom-list") {
                                             name = "wx-custom-info"
                                         }
                                         this.$router.push({
@@ -111,16 +145,16 @@ export default {
                     render: (h, params) => {
                         let url = params.row.url || "";
                         // 当url为空
-                        if( url == "" ){
-                            return h("span",{},"");
+                        if (url == "") {
+                            return h("span", {}, "");
                         }
-                        if( url.indexOf("http") == -1 && url != "" ){
+                        if (url.indexOf("http") == -1 && url != "") {
                             url = "http://" + url;
                         }
                         let firstIndex = url.indexOf("://") + 3;
                         let lastPointIndex = url.lastIndexOf(".") == -1 ? url.length : url.lastIndexOf(".");
                         let lastIndex = lastPointIndex;
-                        if(url.lastIndexOf(".1688") != -1){
+                        if (url.lastIndexOf(".1688") != -1) {
                             lastIndex = url.lastIndexOf(".1688");
                         } else {
                             lastIndex = url.lastIndexOf(".com") == -1 ? lastPointIndex : url.lastIndexOf(".com");
@@ -150,37 +184,56 @@ export default {
                         if (params.row.account) {
                             account = "****" + params.row.account.slice(4);
                         }
-                        return h(
-                            "div",
-                            {},
-                            account
-                        )
+                        return h("div", { attrs: { class: params.row.className } }, account);
                     }
                 },
                 {
                     title: "已绑联系人数",
                     keyWord: true,
                     align: "center",
-                    key: ""
+                    key: "bindingNum",
+                    render: (h, params) => {
+                        return h("span", { attrs: { class: params.row.className } }, params.row.bindingNum);
+                    }
                 },
                 {
                     title: "二维码",
                     keyWord: true,
                     align: "center",
-                    key: ""
+                    key: "sendCode",
+                    render: (h, params) => {
+                        let sendCode = params.row.sendCode || "";
+                        let sendCodeStatus = "";
+                        this.QRcodeList.forEach(item => {
+                            if (item.key == sendCode) {
+                                sendCodeStatus = item.value;
+                            }
+                        })
+                        return h("span", { attrs: { class: params.row.className } }, sendCodeStatus);
+                    }
                 },
                 {
                     title: "联系人微信",
                     keyWord: true,
                     align: "center",
-                    key: "wechatNickName",
+                    key: "wechatNickNames",
                     render: (h, params) => {
-                        let arr = [];
-                        let str = "";
+                        let arr = params.row.wechatNickNames || [];
+                        let nameArr = [];
                         if (arr.length > 2) {
-                            str
-                        }                    
-                        return h("div", {}, str)
+                            nameArr = [
+                                h("div", {}, arr[0]),
+                                h("div", {}, arr[1]),
+                                h("div", {}, '...')
+                            ];
+                        } else if (arr.length == 0) {
+                            nameArr = [h("div", {}, '/')];
+                        } else {
+                            arr.forEach(item => {
+                                nameArr.push(h("div", {}, item));
+                            })
+                        }
+                        return h("div", { attrs: { class: params.row.className } }, nameArr);
                     }
                 }
             ],
@@ -220,6 +273,8 @@ export default {
             params.companyName = "";
             // 目前先设置为当前登录人的四喜Id
             params.operator = this.$store.state.user.userInfo.sixiId || "";
+            params.binding = this.params.binding;
+            params.sendCode = this.params.sendCode;
             if (this.params.select == 1) {
                 params.companyName = this.params.keyword;
             } else if (this.params.select == 2) {
@@ -232,7 +287,15 @@ export default {
                     return this.$Notice.error({ title: res.msg });
                 }
                 this.params.count = res.data.count || 0;
-                this.customList = res.data.list || [];
+                let list = res.data.list || [];
+                list.forEach(item => {
+                    if (item.bindingNum == 0) {
+                        item.className = "red";
+                    } else {
+                        item.className = "";
+                    }
+                })
+                this.customList = list;
             });
         }
     }

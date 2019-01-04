@@ -462,6 +462,7 @@ export default {
                 return;
             }
             this.info = res.data;
+            this.getTransferWorksheetInfo();
             this.stepsType(res.data);
             this.setWorkSheetBaseInfo(res.data);
         },
@@ -692,7 +693,6 @@ export default {
         this.getWorkSheetInfo();
         this.getSixiId();
         this.sixiId = this.$store.state.user.userInfo.sixiId;
-        this.getTransferWorksheetInfo();
         this.getIsLeader()
     }
 };
