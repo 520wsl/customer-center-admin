@@ -78,8 +78,8 @@
                     </div>
                     <div class="casebase-item">
                         <span>设置有效期：</span>
-                        <InputNumber :min="0" :step="1" :precision="0" v-model="caseModal.hour"></InputNumber>小时
-                        <InputNumber :max="59" :min="0" :step="1" :precision="0" v-model="caseModal.minute"></InputNumber>分钟
+                        <!-- <InputNumber :min="0" :step="1" :precision="0" v-model="caseModal.hour"></InputNumber>小时 -->
+                        <InputNumber :max="60" :min="0" :step="1" :precision="0" v-model="caseModal.minute"></InputNumber>分钟
                     </div>
                     <div class="casebase-tip">
                         有效期过后链接便会失效，如需要可以重新发送案例
