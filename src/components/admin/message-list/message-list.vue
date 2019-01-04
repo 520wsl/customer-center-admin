@@ -1,10 +1,14 @@
 <template>
     <div>
         <myaudio :src="audioModelPath" v-model="isShowAudioModel"></myaudio>
+
         <myvideo :videoParams="videoParams" v-model="isShowVideoModel"></myvideo>
+
         <template v-for="item in data">
+
             <div :key="'message_'+item.id">
-                <Card class="md-card message">
+
+                <Card v-if="item.eventType !== 5" class="md-card message">
                     <div class="flex message-bottom">
                         <div class="flex-left">
                             <span>{{getMessageTitle(item.sign,item.userVo)}}</span>
@@ -110,54 +114,128 @@
                     </div>
                 </Card>
 
-                <Card :key="'message_'+item.id" class="md-card message">
-                    <div class="flex message-bottom">
-                        <div class="flex-left">
-                            <span>客户:</span>
-                            <span>张三丰（函谷）</span>
+                <!-- 工单动态 -->
+                <Card v-if="item.eventType === 5" :key="'message_'+item.id" class="md-card message">
+
+                    <!--创建工单-->
+                    <template v-if="item.dynamicType === 1">
+
+                        <div class="flex message-bottom">
+                            <div class="flex-left">
+                                <span>{{getMessageTitle(item.sign,item.executorInfo)}}</span>
+                            </div>
+                            <div class="flex-right">{{formatTimeData(item.createAt)}}</div>
                         </div>
-                        <div class="flex-right">{{formatTimeData(item.createAt)}}</div>
-                    </div>
-                    <!-- 工单动态 -->
-                    <div class="message-counter">
-                        <P>{{item.record}}</P>
-                    </div>
 
-                    <div class="message-counter">
-                        <P>{{item.record}}</P>
-                        <P>工单类型：{{getWorkSheetTypeValue(item.workType)}}</P>
-                        <P>
-                            执行人：{{item.executorInfo.userName}}
-                            <span
-                                    v-if="item.executorInfo.departmentName"
-                            >（{{item.executorInfo.departmentName}}）</span>
-                        </P>
-                    </div>
+                        <div class="message-counter">
+                            <p><span>【 工单动态 】</span> {{item.record}}</P>
+                            <P>工单类型：{{getWorkSheetTypeValue(item.workType)}}</P>
+                            <P>
+                                执行人：{{item.executorInfo.userName}}
+                                <span
+                                        v-if="item.executorInfo.departmentName"
+                                >（{{item.executorInfo.departmentName}}）</span>
+                            </P>
+                        </div>
 
-                    <div class="message-counter">
-                        <p>{{item.record}}</p>
-                        <P>
-                            被移交人：{{item.transferredUser.userName}}
-                            <span
-                                    v-if="item.transferredUser.departmentName"
-                            >（{{item.transferredUser.departmentName}}）</span>
-                        </P>
-                        <P>拒绝原因：{{item.remark}}</P>
-                    </div>
+                    </template>
 
-                    <div class="message-counter">
-                        <p>{{item.record}}</p>
-                        <P>
-                            移交人：{{item.transferredUser.userName}}
-                            <span
-                                    v-if="item.transferredUser.departmentName"
-                            >（{{item.transferredUser.departmentName}}）</span>
-                        </P>
-                        <P>拒绝原因：{{item.remark}}</P>
-                    </div>
+                    <!--工单移交申请-->
+                    <template v-else-if="item.dynamicType === 3">
+
+                        <div class="flex message-bottom">
+                            <div class="flex-left">
+                                <span>{{getMessageTitle(item.sign,item.executorInfo)}}</span>
+                            </div>
+                            <div class="flex-right">{{formatTimeData(item.createAt)}}</div>
+                        </div>
+
+                        <div class="message-counter">
+                            <p><span>【 工单动态 】</span> {{item.record}}</p>
+                            <P>
+                                被移交人：{{item.transferredUser.userName}}
+                                <span
+                                        v-if="item.transferredUser.departmentName"
+                                >（{{item.transferredUser.departmentName}}）</span>
+                            </P>
+                            <P>备注：{{item.remark}}</P>
+                        </div>
+
+                    </template>
+
+                    <!--拒绝工单移交申请-->
+                    <template v-else-if="item.dynamicType === 5">
+
+                        <div class="flex message-bottom">
+                            <div class="flex-left">
+                                <span>{{getMessageTitle(item.sign,item.executorInfo)}}</span>
+                            </div>
+                            <div class="flex-right">{{formatTimeData(item.createAt)}}</div>
+                        </div>
+
+                        <div class="message-counter">
+                            <p><span>【 工单动态 】</span>  {{item.record}}</p>
+                            <P>
+                                移交人：{{item.transferredUser.userName}}
+                                <span
+                                        v-if="item.transferredUser.departmentName"
+                                >（{{item.transferredUser.departmentName}}）</span>
+                            </P>
+                            <P>拒绝原因：{{item.remark}}</P>
+                        </div>
+                    </template>
+
+                    <!--工单评价-->
+                    <template v-else-if="item.dynamicType === 7">
+
+                        <div class="flex message-bottom">
+                            <div class="flex-left">
+                                <span>客户 ：</span>
+                            </div>
+                            <div class="flex-right">{{formatTimeData(item.createAt)}}</div>
+                        </div>
+
+                        <div class="message-counter">
+                            <P><span>【 工单动态 】</span>  {{item.record}}</P>
+                        </div>
+
+                    </template>
+
+                    <!--接受工单移交申请-->
+                    <template v-else-if="item.dynamicType === 4">
+
+                        <div class="flex message-bottom">
+                            <div class="flex-left">
+                               <span>{{getMessageTitle(item.sign,item.transferredUser)}}</span>
+                            </div>
+                            <div class="flex-right">{{formatTimeData(item.createAt)}}</div>
+                        </div>
+
+                        <div class="message-counter">
+                            <P><span>【 工单动态 】</span>  {{item.record}}</P>
+                        </div>
+
+                    </template>
+
+                    <!--工单受理、撤回工单移交申请、工单完结、工单评价-->
+                    <template v-else>
+
+                        <div class="flex message-bottom">
+                            <div class="flex-left">
+                                <span>{{getMessageTitle(item.sign,item.executorInfo)}}</span>
+                            </div>
+                            <div class="flex-right">{{formatTimeData(item.createAt)}}</div>
+                        </div>
+
+                        <div class="message-counter">
+                            <P><span>【 工单动态 】</span>  {{item.record}}</P>
+                        </div>
+
+                    </template>
                 </Card>
             </div>
         </template>
+
         <Modal
                 v-model="isShowRemarkModal"
                 width="900"
@@ -174,6 +252,7 @@
                 <Button type="primary" @click="updateItemTalkNews">提交</Button>
             </div>
         </Modal>
+
         <Modal footer-hide v-model="isShowImgModal" width="600">
             <card class="md-card pic">
                 <img :src="imgPath">
