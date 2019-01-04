@@ -15,7 +15,7 @@
             <div slot="extra">
                 <div v-if="isHaveUserId">
                     <a
-                        v-if="info && info.handleType == 0 && (isExectorId || isLeader)"
+                        v-if="isDirector && info && info.handleType == 4"
                         @click="joinCasebase"
                         href="javascript:;"
                         class="md-card-btn-warning"
@@ -289,6 +289,7 @@ export default {
                         }
                         this.checkTransferModal = false;
                         this.$Modal.remove();
+                        this.getWorkSheetInfo();
                     }).catch(res=>{
                         this.$Modal.error({
                             title: "工单移交撤回",
@@ -336,6 +337,7 @@ export default {
                     });
                     return;
                 }
+                this.getWorkSheetInfo();
                 this.transferModal.bool = false;
             })
             
