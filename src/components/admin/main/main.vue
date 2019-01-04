@@ -24,7 +24,7 @@
                 </div>
             </side-menu>
         </Sider>
-        <Layout>
+        <Layout style="min-width: 900px;">
             <Header class="header-con">
                 <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
                     <user :user-avator="userAvator" :user-name="userName"/>
