@@ -55,6 +55,10 @@ export default {
 			{
 				key: 4,
 				value: "已评价"
+            },
+            {
+				key: 5,
+				value: "移交中"
 			}
 		],
 		workSheetEventType: [
