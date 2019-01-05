@@ -27,7 +27,7 @@
         >
             <span class="text">确定是否追加评价？</span>
         </Modal>
-        <Modal v-model="isShowEditWorkOrderTitle" @on-ok="editWorkOrderTitleAction" title="工单标题">
+        <Modal v-model="isShowEditWorkOrderTitle" @on-ok="editWorkOrderTitleAction" title="工单主题">
             <Card class="md-card">
                 <Input type="text" v-model="info.title">
                 <span></span>
@@ -67,9 +67,7 @@
             ...mapActions(["getSixiId"]),
             ...mapMutations(["setWorkSheetBaseInfo"]),
             isExectorId() {
-                let executorId =
-                    this.$store.state.workSheet.workSheetBaseInfo.executorId ==
-                    this.sixiId;
+                let executorId = this.$store.state.workSheet.workSheetBaseInfo.executorId === this.sixiId;
                 return executorId
             },
             eventCallback(event) {
@@ -484,6 +482,8 @@
             this.workSheetId = this.$route.query.workSheetId;
         },
         mounted() {
+            this.getSixiId();
+            this.sixiId = this.$store.state.user.userInfo.sixiId;
             this.getWorkSheetInfo();
         }
     };

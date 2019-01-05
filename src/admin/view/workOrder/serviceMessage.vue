@@ -220,11 +220,8 @@
                 return false;
             },
             isExectorId() {
-                let executorId =
-                    this.$store.state.workSheet.workSheetBaseInfo.executorId ==
-                    this.sixiId;
-                let ishandleType =
-                    this.info.handleType == 3 || this.info.handleType == 4;
+                let executorId = this.$store.state.workSheet.workSheetBaseInfo.executorId === this.sixiId;
+                let ishandleType = this.info.handleType === 3 || this.info.handleType === 4;
                 return executorId && !ishandleType;
             }
         },
@@ -648,6 +645,7 @@
         mounted() {
             this.getWorkSheetInfo();
             this.getSixiId();
+            this.sixiId = this.$store.state.user.userInfo.sixiId;
             this.sixiId = this.$store.state.user.sixiId;
         }
     };
