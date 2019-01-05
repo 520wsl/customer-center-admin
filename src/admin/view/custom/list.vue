@@ -43,6 +43,7 @@
 import Page from "_c/admin/page";
 import { getCustomerListDate } from "@/api/admin/custom/custom";
 import { mapState, mapActions } from "vuex";
+import { trim } from "@/libs/tools"
 // 注释批量设置人员
 // import setServiceSatff from "./setServiceSatff";
 import "./index.less";
@@ -60,10 +61,14 @@ export default {
                 select: 1,
                 keyword: "",
                 count: 0,
-                binding: 0,
-                sendCode: 1
+                binding: -1,
+                sendCode: -1
             },
             contactsList: [
+                {
+                    key: -1,
+                    value: "全部"
+                },
                 {
                     key: 0,
                     value: "未绑定"
@@ -74,6 +79,10 @@ export default {
                 },
             ],
             QRcodeList: [
+                {
+                    key: -1,
+                    value: "全部"
+                },
                 {
                     key: 1,
                     value: "已发"
@@ -275,6 +284,7 @@ export default {
             params.operator = this.$store.state.user.userInfo.sixiId || "";
             params.binding = this.params.binding;
             params.sendCode = this.params.sendCode;
+            this.params.keyword = trim(this.params.keyword);
             if (this.params.select == 1) {
                 params.companyName = this.params.keyword;
             } else if (this.params.select == 2) {
@@ -289,7 +299,7 @@ export default {
                 this.params.count = res.data.count || 0;
                 let list = res.data.list || [];
                 list.forEach(item => {
-                    if (item.bindingNum == 0) {
+                    if (item.bindingNum && item.bindingNum == 0) {
                         item.className = "red";
                     } else {
                         item.className = "";
