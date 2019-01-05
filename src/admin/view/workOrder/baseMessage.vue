@@ -254,53 +254,77 @@
                             title: "工单持续时间：",
                             value: this.info.durationStr
                         }
-                    ],
-                    [
-                        {
-                            title: "执行人：",
-                            value: executorUser
-                        },
-                        {
-                            title: "参与者：",
-                            value: joinStr
-                        },
-                        // {
-                        //     title: "负责人：",
-                        //     value: leadingUser
-                        // }
-                        {
-                            title: "测试工单：",
-                            value: this.info.label,
-                            btnSty: "radio",
-                            eventType: "setLabel",
-                            list: [
-                                {
-                                    key: 2,
-                                    value: "是"
-                                },
-                                {
-                                    key: 1,
-                                    value: "否"
-                                }
-                            ]
-                        }
-                    ],
-                    [
-                        {
-                            title: "工单标题：",
-                            value: this.info.title,
-                            btnSty: "a",
-                            eventType: "setTitle"
-                        },
-                        {
-                            title: "备注：",
-                            value: this.info.remark,
-                            eventType: "setRemark",
-                            btnSty: "a",
-                            col: 3
-                        }
                     ]
                 ];
+                if (this.isExectorId()) {
+
+                    workOrderInfo.push([
+                            {
+                                title: "执行人：",
+                                value: executorUser
+                            },
+                            {
+                                title: "参与者：",
+                                value: joinStr
+                            },
+                            {
+                                title: "测试工单：",
+                                value: this.info.label,
+                                btnSty: "radio",
+                                eventType: "setLabel",
+                                list: [
+                                    {
+                                        key: 2,
+                                        value: "是"
+                                    },
+                                    {
+                                        key: 1,
+                                        value: "否"
+                                    }
+                                ]
+                            }
+                        ],
+                        [
+                            {
+                                title: "工单标题：",
+                                value: this.info.title,
+                                btnSty: "a",
+                                eventType: "setTitle"
+                            },
+                            {
+                                title: "备注：",
+                                value: this.info.remark,
+                                eventType: "setRemark",
+                                btnSty: "a",
+                                col: 3
+                            }
+                        ])
+                } else {
+                    workOrderInfo.push([
+                            {
+                                title: "执行人：",
+                                value: executorUser
+                            },
+                            {
+                                title: "参与者：",
+                                value: joinStr
+                            },
+                            {
+                                title: "测试工单：",
+                                value: this.info.label == 2 ? '是':'否'
+                            }
+                        ],
+                        [
+                            {
+                                title: "工单标题：",
+                                value: this.info.title
+                            },
+                            {
+                                title: "备注：",
+                                value: this.info.remark
+                            }
+                        ])
+                }
 
                 this.workOrderInfo = workOrderInfo;
             },
