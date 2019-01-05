@@ -465,7 +465,11 @@ export default {
             }
             this.info = res.data;
             this.getTransferWorksheetInfo();
-            this.stepsType(res.data);  
+            if (res.data.handleType == 5) {
+                this.stepsType(res.data, res.data.oldHandleType || 0);
+            } else {
+                this.stepsType(res.data, res.data.handleType);  
+            }
             this.setWorkSheetBaseInfo(res.data);
         },
         async getPersonalList() {
@@ -481,15 +485,14 @@ export default {
             }
             this.modal.personList = res.data || [];
         },
-        stepsType(data) {
+        stepsType(data, handleType) {
             // let handleType = this.$store.state.workSheet.workSheetBaseInfo
             // 	.handleType;
 
             let type = 0;
-            switch (data.handleType) {
+            switch (handleType) {
                 case 0:
                 case 1:
-                case 5:
                     type = 0;
                     break;
                 case 2:
@@ -501,7 +504,6 @@ export default {
                 case 4:
                     type = 3;
                     break;   
-
             }
             this.current = type;
             this.status.list = [
