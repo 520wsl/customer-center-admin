@@ -43,6 +43,7 @@ import {
 	delTemplateData
 } from "@/api/admin/evaluate/template";
 import "./index.less";
+import { trim } from "@/libs/tools";
 export default {
 	components: {
 		Page
@@ -206,7 +207,8 @@ export default {
 			});
 		},
 		async getTemplateList() {
-			this.loading = true;
+            this.loading = true;
+            this.params.keyword = trim(this.params.keyword);
 			let res = await getTemplateListData({ ...this.params });
 			console.log("getTemplateList", res);
 			this.loading = false;
