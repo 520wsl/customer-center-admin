@@ -147,6 +147,7 @@ import Page from "_c/admin/page";
 import { getLeaderList, getLeaderDepartment, getLeaderDepartmentList } from "@/api/admin/workSheet/workSheet";
 import { saveWorkOrder } from "@/api/admin/workSheet/workOrder";
 import utils from "@/libs/util/public";
+import { trim } from "@/libs/tools";
 import "./index.less";
 export default {
     components: {
@@ -551,6 +552,7 @@ export default {
             })
         },
         async getList() {
+            this.params.companyName = trim(this.params.companyName);
             const data = {
                 ...this.params,
                 startTime: this.params.startTime

@@ -149,7 +149,7 @@
     import {saveWorkOrder} from "@/api/admin/workSheet/workOrder";
     import utils from "@/libs/util/public";
     import "./index.less";
-
+    import { trim } from "@/libs/tools";
     export default {
         components: {
             Page,
@@ -504,6 +504,7 @@
                 this.getList();
             },
             async getList() {
+                this.params.companyName = trim(this.params.companyName);
                 const data = {
                     ...this.params,
                     startTime: this.params.startTime

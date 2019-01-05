@@ -376,3 +376,17 @@ export const objEqual = (obj1, obj2) => {
 	/* eslint-disable-next-line */ else
 		return !keysArr1.some(key => obj1[key] != obj2[key]);
 };
+
+/**
+ * @param {srting} str 传入的字符串
+ * @returns {srting} 传入的字符串去除左右两端空格
+ */
+export const trim = (str) => {
+	if(typeof str != "string"){
+        return "";
+    }
+    if(str == ""){
+        return "";
+    }
+    return str.replace(/(^\s*)|(\s*$)/g, "");
+};

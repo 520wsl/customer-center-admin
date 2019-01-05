@@ -51,6 +51,7 @@
 <script>
 import Page from "_c/admin/page";
 import "./index.less";
+import { trim } from "@/libs/tools";
 import Department from "_c/public/department";
 import { mapState, mapActions } from "vuex";
 import { getWorkEvaluateListData } from "@/api/admin/evaluate/dimension";
@@ -310,6 +311,9 @@ export default {
             } else {
                 this.params.executorId = "";
             }
+            this.params.inputIdentifier = trim(this.params.inputIdentifier);
+            this.params.identifier = trim(this.params.identifier);
+            this.params.companyName = trim(this.params.companyName);
             let params = JSON.parse(JSON.stringify(this.params))
             params.timeMin = params.timeMin ? startTime(params.timeMin, "x") : "";
             params.timeMax = params.timeMax ? endTime(params.timeMax, "x") : "";
