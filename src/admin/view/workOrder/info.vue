@@ -337,7 +337,7 @@ export default {
                     });
                     return;
                 }
-                this.getWorkSheetInfo();
+                this.getWorkSheetInfo();              
                 this.transferModal.bool = false;
             })
             
@@ -465,7 +465,7 @@ export default {
             }
             this.info = res.data;
             this.getTransferWorksheetInfo();
-            this.stepsType(res.data);
+            this.stepsType(res.data);  
             this.setWorkSheetBaseInfo(res.data);
         },
         async getPersonalList() {
@@ -500,7 +500,8 @@ export default {
                     break;
                 case 4:
                     type = 3;
-                    break;           
+                    break;   
+
             }
             this.current = type;
             this.status.list = [
