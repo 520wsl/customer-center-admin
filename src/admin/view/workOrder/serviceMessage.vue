@@ -342,10 +342,10 @@
                     return;
                 }
 
-                this.$Modal.success({
-                    title: "客服回复",
-                    content: "回复成功"
-                });
+                // this.$Modal.success({
+                //     title: "客服回复",
+                //     content: "回复成功"
+                // });
                 this.replyParams.content = "";
                 this.remarkParams.customerSixiId = "";
                 this.getTalkNewsList();
