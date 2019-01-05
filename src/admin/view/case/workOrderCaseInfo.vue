@@ -213,7 +213,7 @@
                         }
                     },
                     {
-                        title: "微信昵称",
+                        title: "客户昵称",
                         align: "center",
                         key: "wechatNickname"
                     },

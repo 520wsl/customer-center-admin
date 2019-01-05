@@ -457,7 +457,9 @@ export default [
 						meta: {
 							hideInMenu: true,
 							icon: "ios-stats",
-							title: "工单详情基本信息",
+							// title: "工单详情基本信息",
+                            title: route =>
+								`${route.query.companyName}-工单详情基本信息`,
 							notCache: true,
 							noLogin: true
 						},
@@ -472,7 +474,9 @@ export default [
 						meta: {
 							hideInMenu: true,
 							icon: "ios-stats",
-							title: "工单详情服务信息",
+							// title: "工单详情服务信息",
+                            title: route =>
+								`${route.query.companyName}-工单详情服务信息`,
 							notCache: true,
 							noLogin: true
 						},

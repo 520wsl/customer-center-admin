@@ -7,25 +7,36 @@
  */
 import config from "@/config";
 import api from "@/libs/api.request";
+
 const baseUrl = config.callPhonePath;
+
 function post(url, params) {
-	return api.post(baseUrl + url, params);
+    return api.post(baseUrl + url, params);
 }
+
 function get(url, params) {
-	return api.get(baseUrl + url, params);
+    return api.get(baseUrl + url, params);
 }
 
 // 工单详情详情--基本信息
 export const callPhoneAction = ({
-	phone,
-	callback = "cb_callout",
-	recordId
-}) => {
-	return api.jsonp(
-		baseUrl +
-			"/callout?phone=" +
-			phone +
-			"&&callback=cb_callout&&recordId=" +
-			recordId
-	);
+                                    phone,
+                                    callback = "cb_callout",
+                                    recordId
+                                }) => {
+    return api.jsonp(
+        baseUrl +
+        "/callout?phone=" +
+        phone +
+        "&&callback=cb_callout&&recordId=" +
+        recordId
+    );
+};
+
+// 工单详情详情--获取当前账号
+export const AccountStatus = () => {
+    return api.jsonp(
+        baseUrl +
+        "/AccountStatus?callback=cb_account"
+    );
 };

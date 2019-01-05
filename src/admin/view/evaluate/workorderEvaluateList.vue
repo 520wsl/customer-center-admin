@@ -195,7 +195,7 @@ export default {
                     }
                 },
                 {
-                    title: "微信昵称",
+                    title: "客户昵称",
                     key: "wechatNickname",
                     align: "center"
                 },
