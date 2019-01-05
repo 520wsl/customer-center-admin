@@ -354,7 +354,7 @@
                             ""
                     });
                     cunstomInfo[0].push({
-                        title: "微信昵称：",
+                        title: "客户昵称：",
                         value: this.info.wechatNickname || ""
                     });
                 } else {
@@ -363,7 +363,7 @@
                         value: ""
                     });
                     cunstomInfo[0].push({
-                        title: "微信昵称：",
+                        title: "客户昵称：",
                         value: ""
                     });
                 }

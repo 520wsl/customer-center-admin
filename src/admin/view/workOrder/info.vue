@@ -434,7 +434,7 @@ export default {
                     message = "工单确认成功";
                     break;
                 case 3:
-                    message = "工单已完结";
+                    message = "工单待评价";
                     break;
             }
             let res = await setWorkSheetProcessingState({ ...params });
@@ -505,18 +505,18 @@ export default {
             this.current = type;
             this.status.list = [
                 {
-                    title: "待处理",
+                    title: "待受理",
                     component: formatTime(data.createAt, "YYYY-MM-DD HH:mm:ss")
                 },
                 {
-                    title: "处理中",
+                    title: "受理中",
                     component: formatTime(
                         data.confirmTime,
                         "YYYY-MM-DD HH:mm:ss"
                     )
                 },
                 {
-                    title: "已完结",
+                    title: "待评价",
                     component: formatTime(
                         data.finishTime,
                         "YYYY-MM-DD HH:mm:ss"

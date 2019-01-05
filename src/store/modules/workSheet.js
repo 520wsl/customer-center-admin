@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-16 18:48:22
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-25 10:25:45
+ * @Last Modified time: 2019-01-05 13:49:42
  * @explanatory:  工单模块
  */
 import { getWorkSheetInfoData } from "@/api/admin/workSheet/workSheet";
@@ -38,19 +38,19 @@ export default {
 		workSheetHandleType: [
 			{
 				key: 0,
-				value: "待处理"
+				value: "待受理"
 			},
 			{
 				key: 1,
-				value: "已超时"
+				value: "待受理"
 			},
 			{
 				key: 2,
-				value: "处理中"
+				value: "受理中"
 			},
 			{
 				key: 3,
-				value: "已完结"
+				value: "待评价"
 			},
 			{
 				key: 4,
