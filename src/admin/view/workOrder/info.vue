@@ -23,7 +23,7 @@
                         <Icon type="md-hammer"></Icon>加入案例库
                     </a>
                     <a
-                        v-if="current == 0 && isExectorId && info.handleType != 5"
+                        v-if="current == 0 && (isExectorId || isLeader) && info.handleType != 5"
                         @click="setWorkSheetProcessing(2)"
                         href="javascript:;"
                         class="md-card-btn-warning"
@@ -290,6 +290,8 @@ export default {
                         this.checkTransferModal = false;
                         this.$Modal.remove();
                         this.getWorkSheetInfo();
+                        // 页面刷新
+                        history.go(0);
                     }).catch(res=>{
                         this.$Modal.error({
                             title: "工单移交撤回",
@@ -316,8 +318,8 @@ export default {
                 departmentId
             }
             getIsLeader(params).then(res=>{
-                if(res.status != 200){
-                    this.isLeader = res.data || false;
+                if(res.status == 200){
+                    this.isLeader = res.data;
                 }
             })
         },
@@ -342,6 +344,8 @@ export default {
                 }
                 this.getWorkSheetInfo();              
                 this.transferModal.bool = false;
+                // 页面刷新
+                history.go(0);
             })
             
         },
@@ -453,6 +457,8 @@ export default {
                 content: message
             });
             this.getWorkSheetInfo();
+            // 页面刷新
+            history.go(0);
         },
         async getWorkSheetInfo() {
             let res = await getWorkSheetInfoData({
