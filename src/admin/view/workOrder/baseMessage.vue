@@ -135,8 +135,8 @@
             async editWorkOrderTitleAction() {
                 if (this.info.title.length <= 3) {
                     this.$Modal.error({
-                        title: "修改工单标题",
-                        content: "工单标题不能少于四个字符"
+                        title: "修改工单主题",
+                        content: "工单主题不能少于四个字符"
                     });
                     return;
                 }
@@ -147,14 +147,14 @@
 
                 if (res.status !== 200) {
                     this.$Modal.error({
-                        title: "修改工单标题",
+                        title: "修改工单主题",
                         content: res.msg
                     });
                     return;
                 }
                 this.getWorkSheetInfo();
                 this.$Modal.success({
-                    title: "修改工单标题",
+                    title: "修改工单主题",
                     content: "修改成功"
                 });
             },
@@ -284,7 +284,7 @@
                         ],
                         [
                             {
-                                title: "工单标题：",
+                                title: "工单主题：",
                                 value: this.info.title,
                                 btnSty: "a",
                                 eventType: "setTitle"
@@ -314,7 +314,7 @@
                         ],
                         [
                             {
-                                title: "工单标题：",
+                                title: "工单主题：",
                                 value: this.info.title
                             },
                             {
