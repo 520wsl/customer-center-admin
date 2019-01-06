@@ -453,7 +453,9 @@ export default {
                             }
                             this.getWorkSheetInfo();
                             // 页面刷新
-                            history.go(0);
+                            setTimeout(()=>{
+                                history.go(0);
+                            },2000)
                         })
                     },
                     onCancel: () => { }
