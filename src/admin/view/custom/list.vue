@@ -61,7 +61,7 @@ export default {
                 select: 1,
                 keyword: "",
                 count: 0,
-                binding: -1,
+                binding: 0,
                 sendCode: -1
             },
             contactsList: [
