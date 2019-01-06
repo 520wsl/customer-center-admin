@@ -47,7 +47,7 @@
                         <Icon type="md-hammer"></Icon>查看移交
                     </a>
                     <a
-                        v-if="info && (info.handleType == 0 || info.handleType == 2) && (isExectorId || isLeader)"
+                        v-if="info && (info.handleType == 0 || info.handleType == 1 || info.handleType == 2) && (isExectorId || isLeader)"
                         @click="assignPersonnel"
                         href="javascript:;"
                         class="md-card-btn-warning"
