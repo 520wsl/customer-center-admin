@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class="search-input-item">
-                    <span>责任人：</span>
+                    <span>执行人：</span>
                     <Department class="search-input-item" :loading-user="true" width="200" :get-user-info="getUserInfo" v-model="params.customerIdList"></Department>
                 </div>
                 <div class="search-btn flex-right">
@@ -184,7 +184,7 @@ export default {
                     }
                 },
                 {
-                    title: "责任人",
+                    title: "执行人",
                     align: "center",
                     render: (h, params) => {
                         let str = "";
