@@ -131,7 +131,7 @@
     } from "@/api/admin/case/case";
     import utils from "@/libs/util/public";
     import "./index.less";
-
+    import { trim } from "@/libs/tools";
     export default {
         components: {
             Page
@@ -213,7 +213,7 @@
                         }
                     },
                     {
-                        title: "微信昵称",
+                        title: "客户昵称",
                         align: "center",
                         key: "wechatNickname"
                     },
@@ -367,6 +367,7 @@
                 this.getList();
             },
             getList() {
+                this.params.companyName = trim(this.params.companyName);
                 const data = {
                     ...this.params,
                     startTime: this.params.startTime

@@ -1,5 +1,5 @@
 import api from "@/libs/api.request";
-const baseUrl = "/customer";
+const baseUrl = "/work-order/customer";
 
 function post(url, params) {
     return api.post(baseUrl + url, params);
@@ -16,7 +16,9 @@ export const getCustomerListDate = ({
     account,
     companyName,
     operator,
-    callName = ""
+    callName = "",
+    sendCode,
+    binding
 }) => {
     return post("/company/listbysearch", {
         pageSize,
@@ -25,7 +27,9 @@ export const getCustomerListDate = ({
         account,
         companyName,
         operator,
-        callName
+        callName,
+        sendCode,
+        binding
     });
 };
 // 客户详情
@@ -108,5 +112,13 @@ export const setcompanystaff = ({
 }) => {
     return post("/customer/update", {
         staffSetListFormList
+    });
+};
+// 是否发送了二维码
+export const setSendQRcord = ({
+    id
+}) => {
+    return post("/wechat/sendqrcord", {
+        id
     });
 };

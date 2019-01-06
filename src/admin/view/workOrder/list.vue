@@ -149,7 +149,7 @@
     import {saveWorkOrder} from "@/api/admin/workSheet/workOrder";
     import utils from "@/libs/util/public";
     import "./index.less";
-
+    import { trim } from "@/libs/tools";
     export default {
         components: {
             Page,
@@ -246,7 +246,7 @@
                     //     key: "cellphone"
                     // },
                     {
-                        title: "微信昵称",
+                        title: "客户昵称",
                         align: "center",
                         key: "wechatNickname"
                     },
@@ -303,13 +303,13 @@
                                 return item.key == params.row.type;
                             });
                             if (statusList.length > 0) {
-                                if (params.row.type == 1) {
-                                    return h(
-                                        "span",
-                                        {style: {color: "red"}},
-                                        statusList[0]["value"]
-                                    );
-                                }
+                                // if (params.row.type == 1) {
+                                //     return h(
+                                //         "span",
+                                //         {style: {color: "red"}},
+                                //         statusList[0]["value"]
+                                //     );
+                                // }
                                 return h("span", statusList[0]["value"]);
                             } else {
                                 return h("span", "");
@@ -504,6 +504,7 @@
                 this.getList();
             },
             async getList() {
+                this.params.companyName = trim(this.params.companyName);
                 const data = {
                     ...this.params,
                     startTime: this.params.startTime

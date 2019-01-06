@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-17 09:49:21
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-10 10:26:48
+ * @Last Modified time: 2018-12-25 09:39:12
  * @explanatory:  工单详情 基本信息
  */
 import api from "@/libs/api.request";
@@ -61,10 +61,27 @@ export const saveWorkOrder = ({
 		sponsorType
 	});
 };
-// 修改工单标题
+// 修改工单主题
 export const editWorkOrderTitle = ({ title, id }) => {
 	return post("/workorder/updatetitle", {
 		title,
+		id
+	});
+};
+
+// 修改工单备注
+export const editWorkOrderRemark = ({ remark, id }) => {
+	return post("/workorder/updateremark", {
+		remark,
+		id
+	});
+};
+
+
+// 修改工单标签
+export const editWorkOrderLabel = ({ label, id }) => {
+	return post("/workorder/updatelabel", {
+		label,
 		id
 	});
 };

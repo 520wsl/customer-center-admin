@@ -101,7 +101,7 @@ export default {
                     //   alert("【wx JS-SDK】：wx.invoke --*****：", res);
                     //   alert(JSON.stringify(res));
                     if (res.err_msg != "openDefaultBrowser:ok") {
-                        //错误处理
+                        //错误受理
                     }
                 }
             );

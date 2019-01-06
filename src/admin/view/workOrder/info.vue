@@ -23,7 +23,7 @@
                         <Icon type="md-hammer"></Icon>加入案例库
                     </a>
                     <a
-                        v-if="current == 0 && isExectorId"
+                        v-if="current == 0 && (isExectorId || isLeader) && info.handleType != 5"
                         @click="setWorkSheetProcessing(2)"
                         href="javascript:;"
                         class="md-card-btn-warning"
@@ -31,15 +31,31 @@
                         <Icon type="md-hammer"></Icon>工单受理
                     </a>
                     <a
-                        v-if="current == 1 && isExectorId" 
-                        @click="assignPersonnel"
+                        v-if="info && info.handleType == 5 && (transferInfo && transferInfo.coverTransferSixiId == sixiId)"
+                        @click="transfer"
                         href="javascript:;"
-                        class="md-card-btn-info"
+                        class="md-card-btn-warning"
                     >
-                        <Icon type="md-create"></Icon>指派
+                        <Icon type="md-hammer"></Icon>移交确认
                     </a>
                     <a
-                        v-if="current == 1 && isExectorId"
+                        v-if="info && info.handleType == 5 && (transferInfo && transferInfo.transferSixiId == sixiId)"
+                        @click="checkTransfer"
+                        href="javascript:;"
+                        class="md-card-btn-warning"
+                    >
+                        <Icon type="md-hammer"></Icon>查看移交
+                    </a>
+                    <a
+                        v-if="info && (info.handleType == 0 || info.handleType == 1 || info.handleType == 2) && (isExectorId || isLeader)"
+                        @click="assignPersonnel"
+                        href="javascript:;"
+                        class="md-card-btn-warning"
+                    >
+                        <Icon type="md-create"></Icon>移交
+                    </a>
+                    <a
+                        v-if="current == 1 && isExectorId && info.handleType != 5"
                         @click="setWorkSheetProcessing(3)"
                         href="javascript:;"
                         class="md-card-btn-success"
@@ -82,7 +98,7 @@
             </Card>
         </Modal>
         <router-view></router-view>
-        <Modal v-model="modal.bool" footer-hide title="工单指派" mask-closable>
+        <Modal v-model="modal.bool" footer-hide title="工单移交" :mask-closable="false">
             <Card class="md-card">
                 <!-- <RadioGroup v-model="modal.index">
                     <table class="tab">
@@ -110,15 +126,68 @@
                     <Department :loading-user="true" width="200" :get-user-info="getUserInfo"  v-model="modal.customerIdList"></Department>
                 </RadioGroup>
                 <!-- 本期不做 -->
-                <div v-if="false">
-                    <h3>客服记录</h3>
-                    <Input type="textarea">
+                <div style="margin-top:20px;">
+                    <div>备注</div>
+                    <Input type="textarea" v-model="modal.remark" :maxlength="400">
                     <span></span>
                     </Input>
                 </div>
                 <div class="modal-btn">
                     <Button class="btn" type="primary" @click="subAssign">提交</Button>
                     <Button class="btn" type="default" @click="modal.bool = false">取消</Button>
+                </div>
+            </Card>
+        </Modal>
+        <Modal v-model="transferModal.bool" footer-hide title="移交确认" :mask-closable="false">
+            <Card class="md-card">
+                <div class="info">
+                    <div class="info-item">
+                        <b>移交人：</b>
+                        <span>{{transferInfo.transferUserName+"("+transferInfo.transferUserDepartmentName+")"}}</span>
+                    </div>
+                    <div class="info-item">
+                        <b>被移交人：</b>
+                        <span>{{transferInfo.coverTransferUserName+"("+transferInfo.coverTransferDepartmentName+")"}}</span>
+                    </div>
+                    <div class="info-item">
+                        <b>备注：</b>
+                        <span>{{transferInfo.remark}}</span>
+                    </div>
+                </div>
+                <div class="transfer-btn">
+                    <RadioGroup class="radio" v-model="transferModal.state">
+                        <Radio :label="1">接受</Radio>
+                        <Radio :label="2">拒绝</Radio>
+                    </RadioGroup>
+                    <Button class="btn" type="primary" @click="sureTransfer">确认</Button>
+                </div>
+                <div v-if="transferModal.state == 2" class="info">
+                    <div class="info-item">
+                        <b>拒绝原因：</b>
+                        <Input type="textarea" v-model="transferModal.refuseReason" :maxlength="400"></Input>
+                    </div>
+                </div>
+            </Card>
+        </Modal>
+        <Modal v-model="checkTransferModal" footer-hide title="工单移交" :mask-closable="false">
+            <Card class="md-card">
+                <div class="info">
+                    <div class="info-item">
+                        <b>移交人：</b>
+                        <span>{{transferInfo.transferUserName+"("+transferInfo.transferUserDepartmentName+")"}}</span>
+                    </div>
+                    <div class="info-item">
+                        <b>被移交人：</b>
+                        <span>{{transferInfo.coverTransferUserName+"("+transferInfo.coverTransferDepartmentName+")"}}</span>
+                    </div>
+                    <div class="info-item">
+                        <b>备注：</b>
+                        <span>{{transferInfo.remark}}</span>
+                    </div>
+                </div>
+                <div class="btn-group" style="text-align:right;">
+                    <Button class="btn" type="primary" @click="retract">撤回</Button>
+                    <Button class="btn" @click="checkTransferModal = false">返回</Button>
                 </div>
             </Card>
         </Modal>
@@ -132,7 +201,10 @@ import { getArrValue } from "@/libs/tools";
 import {
     getWorkSheetInfoData,
     setWorkSheetProcessingState,
-    assignWorksheet
+    assignWorksheet,
+    transferWorksheetInfo,
+    sureTransferWorksheet,
+    retractTransferWorksheet
     
 } from "@/api/admin/workSheet/workSheet";
 import {
@@ -142,7 +214,7 @@ import {
     getIsDirector
 } from "@/api/admin/case/case";
 import { getstaffListData } from "@/api/admin/custom/custom";
-import { getSuperiorLeader } from "@/api/admin/department/department";
+import { getSuperiorLeader, getIsLeader } from "@/api/admin/department/department";
 import { formatTime } from "@/libs/util/time";
 import "./index.less";
 import Department from "_c/public/department";
@@ -195,6 +267,95 @@ export default {
         getUserInfo(data) {
             console.log(data)
         },
+        // 撤回移交
+        retract() {
+            this.$Modal.confirm({
+                title: '工单移交',
+                content: '请确认是否撤回该工单？',
+                loading: true,
+                onOk: () => {
+                    // setTimeout(() => {
+                    //     this.$Modal.remove();
+                    //     this.$Message.info('Asynchronously close the dialog box');
+                    // }, 2000);
+                    let workSheetId = this.info.id || "";
+                    retractTransferWorksheet({workSheetId}).then(res=>{
+                        if(res.status!==200){
+                            this.$Modal.error({
+                                title: "工单移交撤回",
+                                content: res.msg
+                            });
+                            return;
+                        }
+                        this.checkTransferModal = false;
+                        this.$Modal.remove();
+                        this.getWorkSheetInfo();
+                    }).catch(res=>{
+                        this.$Modal.error({
+                            title: "工单移交撤回",
+                            content: res.msg
+                        });  
+                        this.$Modal.remove();
+                        this.checkTransferModal = false;
+                    })
+                }
+            });
+        },
+        // 点击查看移交
+        checkTransfer() {
+            this.checkTransferModal = true;
+            // this.getTransferWorksheetInfo();
+        },
+        // 是否领导
+        getIsLeader() { 
+            let params = {
+                sixiId: this.$store.state.user.userInfo.sixiId || "",
+                departmentId: this.info.executorUser.department || ""
+            }
+            getIsLeader(params).then(res=>{
+                if(res.status == 200){
+                    this.isLeader = res.data;
+                }
+            })
+        },
+        // 点击移交确认
+        transfer() {
+            this.transferModal.bool = true;
+            // this.getTransferWorksheetInfo();
+        },
+        sureTransfer() {
+            let params = {
+                workSheetId: this.info.id || "",
+                state: this.transferModal.state || 1,
+                refuseReason: this.transferModal.state == 2 ? this.transferModal.refuseReason : ""
+            }
+            sureTransferWorksheet(params).then(res=>{
+                if(res.status != 200){
+                    this.$Modal.error({
+                        title: "工单移交确认",
+                        content: res.msg
+                    });
+                    return;
+                }
+                this.getWorkSheetInfo();              
+                this.transferModal.bool = false;
+            })
+            
+        },
+        // 获取移交信息
+        getTransferWorksheetInfo(){
+            let workSheetId = this.info.id || "";
+            transferWorksheetInfo({workSheetId}).then(res=>{
+                if(res.status != 200){
+                    this.$Modal.error({
+                        title: "工单移交",
+                        content: res.msg
+                    });
+                    return;  
+                }
+                this.transferInfo = res.data || {};
+            })
+        },
         assignPersonnel() {
             this.modal.bool = true;
             this.getPersonalList();
@@ -207,30 +368,31 @@ export default {
             this.modal.superiorLeaderList = res.data || [];
         },
         subAssign() {
-            let executorSixiId = "";
+            let sixiId = "";
             if(this.modal.type == '1'){
-                executorSixiId = this.modal.relateService
+                sixiId = this.modal.relateService
             } else if(this.modal.type == '2'){
-                executorSixiId = this.modal.superiorLeaderSixiId
+                sixiId = this.modal.superiorLeaderSixiId
             } else if(this.modal.type == '3'){
                 let arr = this.modal.customerIdList
-                executorSixiId = arr[arr.length-1]
+                sixiId = arr[arr.length-1]
             } else {
                 this.$Modal.error({
-                    title: "人员指派",
+                    title: "人员移交",
                     content: "请选择指派人员类型"
                 });
                 return;
             }
             let params = {
                 workSheetId: this.info.id,
-                executorSixiId
+                sixiId,
+                remark: this.modal.remark
             };
             assignWorksheet(params).then(res => {
                 console.log(res);
                 if (res.status != 200) {
                     this.$Modal.error({
-                        title: "人员指派",
+                        title: "人员移交",
                         content: res.msg
                     });
                     return;
@@ -272,22 +434,48 @@ export default {
                     message = "工单确认成功";
                     break;
                 case 3:
-                    message = "工单已完结";
+                    message = "工单待评价";
                     break;
             }
-            let res = await setWorkSheetProcessingState({ ...params });
-            if (res.status !== 200) {
-                this.$Modal.error({
-                    title: "工单状态修改",
-                    content: res.msg
+            // 工单设为完结 页面刷新
+            if (handleType == 3) {
+                this.$Modal.confirm({
+                    title: "工单完结",
+                    content: "<p>" + "完结之后不可恢复，请谨慎操作" + "</p>",
+                    onOk: () => {
+                        setWorkSheetProcessingState({ ...params }).then(res=>{
+                            if (res.status !== 200) {
+                                this.$Modal.error({
+                                    title: "工单状态修改",
+                                    content: res.msg
+                                });
+                                return;
+                            }
+                            this.getWorkSheetInfo();
+                            // 页面刷新
+                            setTimeout(()=>{
+                                history.go(0);
+                            },2000)
+                        })
+                    },
+                    onCancel: () => { }
                 });
-                return;
+            // 其他情况页面不刷新
+            } else {
+                let res = await setWorkSheetProcessingState({ ...params });
+                if (res.status !== 200) {
+                    this.$Modal.error({
+                        title: "工单状态修改",
+                        content: res.msg
+                    });
+                    return;
+                }
+                this.$Modal.success({
+                    title: "工单状态修改",
+                    content: message
+                });
+                this.getWorkSheetInfo();
             }
-            this.$Modal.success({
-                title: "工单状态修改",
-                content: message
-            });
-            this.getWorkSheetInfo();
         },
         async getWorkSheetInfo() {
             let res = await getWorkSheetInfoData({
@@ -302,7 +490,13 @@ export default {
                 return;
             }
             this.info = res.data;
-            this.stepsType(res.data);
+            this.getIsLeader()
+            this.getTransferWorksheetInfo();
+            if (res.data.handleType == 5) {
+                this.stepsType(res.data, res.data.oldHandleType || 0);
+            } else {
+                this.stepsType(res.data, res.data.handleType);  
+            }
             this.setWorkSheetBaseInfo(res.data);
         },
         async getPersonalList() {
@@ -318,15 +512,13 @@ export default {
             }
             this.modal.personList = res.data || [];
         },
-        stepsType(data) {
+        stepsType(data, handleType) {
             // let handleType = this.$store.state.workSheet.workSheetBaseInfo
             // 	.handleType;
 
             let type = 0;
-            switch (data.handleType) {
+            switch (handleType) {
                 case 0:
-                    type = 0;
-                    break;
                 case 1:
                     type = 0;
                     break;
@@ -338,23 +530,23 @@ export default {
                     break;
                 case 4:
                     type = 3;
-                    break;
+                    break;   
             }
             this.current = type;
             this.status.list = [
                 {
-                    title: "待处理",
+                    title: "待受理",
                     component: formatTime(data.createAt, "YYYY-MM-DD HH:mm:ss")
                 },
                 {
-                    title: "处理中",
+                    title: "受理中",
                     component: formatTime(
                         data.confirmTime,
                         "YYYY-MM-DD HH:mm:ss"
                     )
                 },
                 {
-                    title: "已完结",
+                    title: "待评价",
                     component: formatTime(
                         data.finishTime,
                         "YYYY-MM-DD HH:mm:ss"
@@ -471,6 +663,17 @@ export default {
     },
     data() {
         return {
+            // 是否领导
+            isLeader: false,
+            checkTransferModal: false,
+            //移交详情
+            transferInfo: {},
+            // 移交弹窗
+            transferModal:{
+                bool: false,
+                state: 1,
+                refuseReason: ""
+            },
             current: 0,
             info: {},
             workSheetId: 0,
@@ -501,6 +704,7 @@ export default {
                 pageNum: 1,
                 count: 0
             },
+            // 移交弹窗信息
             modal: {
                 bool: false,
                 personList: [],
@@ -509,7 +713,8 @@ export default {
                 relateService: '',
                 customerIdList: [],
                 superiorLeaderSixiId: "",
-                superiorLeaderList: []
+                superiorLeaderList: [],
+                remark: ""
             }
         };
     },
@@ -519,7 +724,7 @@ export default {
     mounted() {
         this.getWorkSheetInfo();
         this.getSixiId();
-        this.sixiId = this.$store.state.user.sixiId;
+        this.sixiId = this.$store.state.user.userInfo.sixiId;
     }
 };
 </script>

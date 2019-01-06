@@ -36,7 +36,7 @@
                     <tr>
                         <td class="title">店铺网址：</td>
                         <td>
-                            <a :href="info.url" :title="info.name" target="_blank">{{info.url}}</a>
+                            <a :href="companyUrl.targetUrl" :title="info.name" target="_blank">{{companyUrl.showUrl}}</a>
                         </td>
                     </tr>
                 </tbody>
@@ -207,7 +207,8 @@ import "./index.less";
 import {
     getCustomerInfoData,
     setWechatUntied,
-    updateBindInfo
+    updateBindInfo,
+    setSendQRcord
 } from "@/api/admin/custom/custom";
 import {
     workSheet,
@@ -238,7 +239,7 @@ export default {
                 loading: true,
                 bool: false,
                 callName: "",
-                sex: 0,
+                sex: 1,
                 role: 1,
                 mobile: ""
             },
@@ -559,7 +560,11 @@ export default {
                 sixiId: "",
                 type: "BINDING_PHONE"
             },
-            qrData: {}
+            qrData: {},
+            companyUrl:{
+                showUrl: "",
+                targetUrl: ""
+            }
         };
     },
     computed: {
@@ -695,8 +700,33 @@ export default {
                     });
                 }
                 this.qrData = res.data;
+                // 获取二维码后修改是否发送了二维码
+                setSendQRcord({id: row.id}).then(res=>{
+                   console.log(res) 
+                })
                 this.getInfo();
             });
+        },
+        setUrl(companyUrl){
+            let url = companyUrl || "";
+            // 当url为空
+            if( url == "" ){
+                return;
+            }
+            if( url.indexOf("http") == -1 && url != "" ){
+                url = "http://" + url;
+            }
+            let firstIndex = url.indexOf("://") + 3;
+            let lastPointIndex = url.lastIndexOf(".") == -1 ? url.length : url.lastIndexOf(".");
+            let lastIndex = lastPointIndex;
+            if(url.lastIndexOf(".1688") != -1){
+                lastIndex = url.lastIndexOf(".1688");
+            } else {
+                lastIndex = url.lastIndexOf(".com") == -1 ? lastPointIndex : url.lastIndexOf(".com");
+            }
+            let showUrl = url.slice(0, firstIndex) + "******" + url.slice(lastIndex)
+            this.companyUrl.showUrl = showUrl;
+            this.companyUrl.targetUrl = url;
         },
         getInfo() {
             getCustomerInfoData(this.params).then(res => {
@@ -713,6 +743,7 @@ export default {
                     this.customList = [obj];
                 }
                 this.info = res.data;
+                this.setUrl(res.data.url)
                 this.info.provinceName = res.data.provinceName || "";
                 this.info.cityName = res.data.cityName || "";
                 // 已绑定信息

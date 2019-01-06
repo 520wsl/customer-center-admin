@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-17 09:49:21
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-11-29 10:27:58
+ * @Last Modified time: 2019-01-05 13:40:20
  * @explanatory:  工单详情 基本信息
  */
 import api from "@/libs/api.request";
@@ -25,8 +25,8 @@ export const getWorkSheetInfoData = ({
     });
 };
 
-// 工单详情  设置工单 处理 状态
-// handleType  处理状态 0:待处理 1:已超时 2:工单确认 3:设为完结 4:已评价
+// 工单详情  设置工单 受理 状态
+// handleType  受理状态 0:待受理 1:已超时 2:工单确认 3:设为完结 4:已评价
 export const setWorkSheetProcessingState = ({
     workSheetId,
     handleType
@@ -126,14 +126,44 @@ export const getWorkcustomerListData = ({
         customerId
     });
 };
-// 工单详情详情--指派工单
+// 工单详情详情--工单移交
 export const assignWorksheet = ({
     workSheetId,
-    executorSixiId
+    sixiId,
+    remark
 }) => {
-    return post("/worksheet/assign", {
+    return post("/worksheet/transfer", {
         workSheetId,
-        executorSixiId
+        sixiId,
+        remark
+    });
+};
+// 工单详情详情--工单移交详情
+export const transferWorksheetInfo = ({
+    workSheetId
+}) => {
+    return post("/worksheet/transfer/detail", {
+        workSheetId
+    });
+};
+// 工单详情详情--工单移交确认
+export const sureTransferWorksheet = ({
+    workSheetId,
+    state,
+    refuseReason
+}) => {
+    return post("/worksheet/transfer/confirm", {
+        workSheetId,
+        state,
+        refuseReason
+    });
+};
+// 工单详情详情--工单移交撤回
+export const retractTransferWorksheet = ({
+    workSheetId
+}) => {
+    return post("/worksheet/transfer/back", {
+        workSheetId
     });
 };
 // 再次发送评价通知

@@ -10,7 +10,7 @@
         </Card>
         <Card class="md-card" v-if="evaluateList.length != 0">
             <div slot="title" class="flex">客户评价
-                <Button  v-if="isExectorId()" type="primary" class="flex-right" @click="clickAgianEvaluate">重新评价</Button>
+                <Button v-if="isExectorId()" type="primary" class="flex-right" @click="clickAgianEvaluate">重新评价</Button>
             </div>
             <Card v-for="(item,index) in evaluateList" :key="'evaluate_'+index">
                 <div slot="title">评价时间：{{formatTimeAction(item.createAt)}}</div>
@@ -27,11 +27,18 @@
         >
             <span class="text">确定是否追加评价？</span>
         </Modal>
-        <Modal v-model="isShowEditWorkOrderTitle" @on-ok="editWorkOrderTitleAction" title="工单标题">
+        <Modal v-model="isShowEditWorkOrderTitle" @on-ok="editWorkOrderTitleAction" title="工单主题">
             <Card class="md-card">
                 <Input type="text" v-model="info.title">
                 <span></span>
                 </Input>
+            </Card>
+        </Modal>
+
+        <Modal v-model="isShowEditWorkOrderRemark" @on-ok="editWorkOrderRemarkAction" title="工单备注">
+            <Card class="md-card">
+                <textarea style="width:100%;height:150px;" type="text" v-model="info.remark">
+                </textarea>
             </Card>
         </Modal>
     </div>
@@ -45,7 +52,7 @@
         getWorkSheetInfoData,
         againEvaluate
     } from "@/api/admin/workSheet/workSheet";
-    import {editWorkOrderTitle} from "@/api/admin/workSheet/workOrder";
+    import {editWorkOrderTitle, editWorkOrderRemark, editWorkOrderLabel} from "@/api/admin/workSheet/workOrder";
     import {getEvaluateInfo} from "@/api/admin/evaluate/dimension";
     import evaluateItem from "_c/admin/evaluate-item";
     import {formatTime} from "@/libs/util/time";
@@ -60,21 +67,76 @@
             ...mapActions(["getSixiId"]),
             ...mapMutations(["setWorkSheetBaseInfo"]),
             isExectorId() {
-                let executorId =
-                    this.$store.state.workSheet.workSheetBaseInfo.executorId ==
-                    this.sixiId;
+                let executorId = this.$store.state.workSheet.workSheetBaseInfo.executorId === this.sixiId;
                 return executorId
             },
-            eventCallback(type) {
-                if (type == 1) {
-                    this.isShowEditWorkOrderTitle = true;
+            eventCallback(event) {
+                console.log(event);
+
+                switch (event.type) {
+                    case "setTitle":
+                        this.isShowEditWorkOrderTitle = true;
+                        break;
+                    case "setRemark":
+                        this.isShowEditWorkOrderRemark = true;
+                        break;
+                    case "setLabel":
+                        this.editWorkOrderLabelAction(event.val)
+                        break;
                 }
+            },
+            async editWorkOrderRemarkAction() {
+                if (this.info.remark.length >= 200) {
+                    this.$Modal.error({
+                        title: "修改备注",
+                        content: "工单备注不能多于200个字符"
+                    });
+                    return;
+                }
+
+                let res = await editWorkOrderRemark({
+                    id: this.info.id,
+                    remark: this.info.remark
+                });
+
+                if (res.status !== 200) {
+                    this.$Modal.error({
+                        title: "修改备注",
+                        content: res.msg
+                    });
+                    return;
+                }
+
+                this.getWorkSheetInfo();
+                this.$Modal.success({
+                    title: "修改备注",
+                    content: "修改成功"
+                });
+            },
+            async editWorkOrderLabelAction(label) {
+                let res = await editWorkOrderLabel({
+                    id: this.info.id,
+                    label: label
+                });
+
+                if (res.status !== 200) {
+                    this.$Modal.error({
+                        title: "修改标签",
+                        content: res.msg
+                    });
+                    return;
+                }
+                this.getWorkSheetInfo();
+                this.$Modal.success({
+                    title: "修改标签",
+                    content: "修改成功"
+                });
             },
             async editWorkOrderTitleAction() {
                 if (this.info.title.length <= 3) {
                     this.$Modal.error({
-                        title: "修改工单标题",
-                        content: "工单标题不能少于四个字符"
+                        title: "修改工单主题",
+                        content: "工单主题不能少于四个字符"
                     });
                     return;
                 }
@@ -85,19 +147,19 @@
 
                 if (res.status !== 200) {
                     this.$Modal.error({
-                        title: "修改工单标题",
+                        title: "修改工单主题",
                         content: res.msg
                     });
                     return;
                 }
                 this.getWorkSheetInfo();
                 this.$Modal.success({
-                    title: "修改工单标题",
+                    title: "修改工单主题",
                     content: "修改成功"
                 });
             },
             formatTimeAction(time) {
-                return formatTime(time, 'YYYY-MM-DD HH:mm:ss');
+                return formatTime(time, "YYYY-MM-DD HH:mm:ss");
             },
             getWorkSheetTypeValue(key) {
                 return getArrValue(this.$store.state.workSheet.workSheetType, key);
@@ -190,61 +252,80 @@
                             title: "工单持续时间：",
                             value: this.info.durationStr
                         }
-                    ],
-                    [
-                        {
-                            title: "执行人：",
-                            value: executorUser
-                        },
-                        {
-                            title: "参与者：",
-                            value: joinStr
-                        },
-                        {
-                            title: "负责人：",
-                            value: leadingUser
-                        }
-                    ],
+                    ]
                 ];
                 if (this.isExectorId()) {
-                    workOrderInfo.push(
-                        [
+
+                    workOrderInfo.push([
                             {
-                                title: "工单标题：",
-                                value: this.info.title,
-                                eventType: 1
+                                title: "执行人：",
+                                value: executorUser
                             },
                             {
-                                title: "",
-                                value: ""
+                                title: "参与者：",
+                                value: joinStr
                             },
                             {
-                                title: "",
-                                value: ""
+                                title: "测试工单：",
+                                value: this.info.label,
+                                btnSty: "radio",
+                                eventType: "setLabel",
+                                list: [
+                                    {
+                                        key: 1,
+                                        value: "是"
+                                    },
+                                    {
+                                        key: 0,
+                                        value: "否"
+                                    }
+                                ]
                             }
-                        ]
-                    )
-                } else {
-                    workOrderInfo.push(
+                        ],
                         [
                             {
-                                title: "工单标题：",
+                                title: "工单主题：",
+                                value: this.info.title,
+                                btnSty: "a",
+                                eventType: "setTitle"
+                            },
+                            {
+                                title: "备注：",
+                                value: this.info.remark,
+                                eventType: "setRemark",
+                                btnSty: "a",
+                                col: 3
+                            }
+                        ])
+                } else {
+                    workOrderInfo.push([
+                            {
+                                title: "执行人：",
+                                value: executorUser
+                            },
+                            {
+                                title: "参与者：",
+                                value: joinStr
+                            },
+                            {
+                                title: "测试工单：",
+                                value: this.info.label == 0 ? '否':'是'
+                            }
+                        ],
+                        [
+                            {
+                                title: "工单主题：",
                                 value: this.info.title
                             },
                             {
-                                title: "",
-                                value: ""
-                            },
-                            {
-                                title: "",
-                                value: ""
+                                title: "备注：",
+                                value: this.info.remark
                             }
-                        ]
-                    )
+                        ])
                 }
+
                 this.workOrderInfo = workOrderInfo;
-            }
-            ,
+            },
             // 设置 客户信息
             setCunstomInfo() {
                 let phone =
@@ -271,7 +352,7 @@
                             ""
                     });
                     cunstomInfo[0].push({
-                        title: "微信昵称：",
+                        title: "客户昵称：",
                         value: this.info.wechatNickname || ""
                     });
                 } else {
@@ -280,7 +361,7 @@
                         value: ""
                     });
                     cunstomInfo[0].push({
-                        title: "微信昵称：",
+                        title: "客户昵称：",
                         value: ""
                     });
                 }
@@ -358,8 +439,7 @@
                     });
                     return;
                 }
-            }
-            ,
+            },
             clickAgianEvaluate() {
                 this.modal = true;
             }
@@ -368,6 +448,7 @@
             return {
                 sixiId: "",
                 isShowEditWorkOrderTitle: false,
+                isShowEditWorkOrderRemark: false,
                 cunstomInfo: [],
                 workOrderInfo: [],
                 evaluateList: [],
@@ -402,7 +483,7 @@
         },
         mounted() {
             this.getSixiId();
-            this.sixiId = this.$store.state.user.sixiId;
+            this.sixiId = this.$store.state.user.userInfo.sixiId;
             this.getWorkSheetInfo();
         }
     };

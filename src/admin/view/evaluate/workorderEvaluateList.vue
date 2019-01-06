@@ -51,6 +51,7 @@
 <script>
 import Page from "_c/admin/page";
 import "./index.less";
+import { trim } from "@/libs/tools";
 import Department from "_c/public/department";
 import { mapState, mapActions } from "vuex";
 import { getWorkEvaluateListData } from "@/api/admin/evaluate/dimension";
@@ -194,7 +195,7 @@ export default {
                     }
                 },
                 {
-                    title: "微信昵称",
+                    title: "客户昵称",
                     key: "wechatNickname",
                     align: "center"
                 },
@@ -310,6 +311,9 @@ export default {
             } else {
                 this.params.executorId = "";
             }
+            this.params.inputIdentifier = trim(this.params.inputIdentifier);
+            this.params.identifier = trim(this.params.identifier);
+            this.params.companyName = trim(this.params.companyName);
             let params = JSON.parse(JSON.stringify(this.params))
             params.timeMin = params.timeMin ? startTime(params.timeMin, "x") : "";
             params.timeMax = params.timeMax ? endTime(params.timeMax, "x") : "";
@@ -317,12 +321,12 @@ export default {
             params.timeMax = formatTime(parseInt(params.timeMax))
             let res = await getWorkEvaluateListData(params)
 
-            let list = res.data.content || []
+            let list = res.data.list || []
             list.forEach(item => {
                 item._expanded = false;
             })
             this.list = list;
-            this.params.count = res.data.totalElements || 0;
+            this.params.count = res.data.count || 0;
         },
         getUserInfo(data) {
             console.log(data)

@@ -33,15 +33,15 @@ export default {
 		pro: {
 			id: "wx_reg",
 			appid: "ww7dc5f02540a109d3",
-			agentid: "1000003",
-			redirect_uri: "http://work.sixi.com/login",
+			agentid: "1000006",
+			redirect_uri: "http://test.work.sixi.com/admin/login",
 			state: "enterpriseWeChat"
 		},
 		dev: {
 			id: "wx_reg",
 			appid: "ww7dc5f02540a109d3",
-			agentid: "1000003",
-			redirect_uri: "http://work.sixi.com/login",
+			agentid: "1000006",
+			redirect_uri: "http://test.work.sixi.com/admin/login",
 			state: "enterpriseWeChat"
 		}
 	},
