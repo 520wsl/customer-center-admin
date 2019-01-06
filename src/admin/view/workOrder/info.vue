@@ -290,8 +290,6 @@ export default {
                         this.checkTransferModal = false;
                         this.$Modal.remove();
                         this.getWorkSheetInfo();
-                        // 页面刷新
-                        history.go(0);
                     }).catch(res=>{
                         this.$Modal.error({
                             title: "工单移交撤回",
@@ -341,8 +339,6 @@ export default {
                 }
                 this.getWorkSheetInfo();              
                 this.transferModal.bool = false;
-                // 页面刷新
-                history.go(0);
             })
             
         },
@@ -441,21 +437,47 @@ export default {
                     message = "工单待评价";
                     break;
             }
-            let res = await setWorkSheetProcessingState({ ...params });
-            if (res.status !== 200) {
-                this.$Modal.error({
-                    title: "工单状态修改",
-                    content: res.msg
+            // 工单设为完结 页面刷新
+            if (handleType == 3) {
+                this.$Modal.confirm({
+                    title: "工单完结",
+                    content: "<p>" + "完结之后不可恢复，请谨慎操作" + "</p>",
+                    onOk: () => {
+                        setWorkSheetProcessingState({ ...params }).then(res=>{
+                            if (res.status !== 200) {
+                                this.$Modal.error({
+                                    title: "工单状态修改",
+                                    content: res.msg
+                                });
+                                return;
+                            }
+                            this.$Modal.success({
+                                title: "工单状态修改",
+                                content: message
+                            });
+                            this.getWorkSheetInfo();
+                            // 页面刷新
+                            history.go(0);
+                        })
+                    },
+                    onCancel: () => { }
                 });
-                return;
+            // 其他情况页面不刷新
+            } else {
+                let res = await setWorkSheetProcessingState({ ...params });
+                if (res.status !== 200) {
+                    this.$Modal.error({
+                        title: "工单状态修改",
+                        content: res.msg
+                    });
+                    return;
+                }
+                this.$Modal.success({
+                    title: "工单状态修改",
+                    content: message
+                });
+                this.getWorkSheetInfo();
             }
-            this.$Modal.success({
-                title: "工单状态修改",
-                content: message
-            });
-            this.getWorkSheetInfo();
-            // 页面刷新
-            history.go(0);
         },
         async getWorkSheetInfo() {
             let res = await getWorkSheetInfoData({
