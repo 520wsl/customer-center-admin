@@ -451,10 +451,6 @@ export default {
                                 });
                                 return;
                             }
-                            this.$Modal.success({
-                                title: "工单状态修改",
-                                content: message
-                            });
                             this.getWorkSheetInfo();
                             // 页面刷新
                             history.go(0);
