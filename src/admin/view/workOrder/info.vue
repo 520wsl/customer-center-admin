@@ -23,7 +23,7 @@
                         <Icon type="md-hammer"></Icon>加入案例库
                     </a>
                     <a
-                        v-if="current == 0 && isExectorId"
+                        v-if="current == 0 && isExectorId && info.handleType != 5"
                         @click="setWorkSheetProcessing(2)"
                         href="javascript:;"
                         class="md-card-btn-warning"
