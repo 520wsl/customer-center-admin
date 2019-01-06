@@ -310,12 +310,9 @@ export default {
         },
         // 是否领导
         getIsLeader() { 
-            let departmentIdArr = this.$store.state.user.userInfo.department ? this.$store.state.user.userInfo.department.split(",") : [];
-            // 去部门ID的最小值 即最大部门
-            let departmentId = Math.min.apply(Math,departmentIdArr) + "";
             let params = {
                 sixiId: this.$store.state.user.userInfo.sixiId || "",
-                departmentId
+                departmentId: this.info.executorUser.department || ""
             }
             getIsLeader(params).then(res=>{
                 if(res.status == 200){
@@ -473,6 +470,7 @@ export default {
                 return;
             }
             this.info = res.data;
+            this.getIsLeader()
             this.getTransferWorksheetInfo();
             if (res.data.handleType == 5) {
                 this.stepsType(res.data, res.data.oldHandleType || 0);
@@ -707,7 +705,6 @@ export default {
         this.getWorkSheetInfo();
         this.getSixiId();
         this.sixiId = this.$store.state.user.userInfo.sixiId;
-        this.getIsLeader()
     }
 };
 </script>
