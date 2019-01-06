@@ -321,12 +321,12 @@ export default {
             params.timeMax = formatTime(parseInt(params.timeMax))
             let res = await getWorkEvaluateListData(params)
 
-            let list = res.data.content || []
+            let list = res.data.list || []
             list.forEach(item => {
                 item._expanded = false;
             })
             this.list = list;
-            this.params.count = res.data.totalElements || 0;
+            this.params.count = res.data.count || 0;
         },
         getUserInfo(data) {
             console.log(data)
