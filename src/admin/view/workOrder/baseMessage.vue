@@ -27,7 +27,7 @@
         >
             <span class="text">确定是否追加评价？</span>
         </Modal>
-        <Modal v-model="isShowEditWorkOrderTitle" @on-ok="editWorkOrderTitleAction" title="工单标题">
+        <Modal v-model="isShowEditWorkOrderTitle" @on-ok="editWorkOrderTitleAction" title="工单主题">
             <Card class="md-card">
                 <Input type="text" v-model="info.title">
                 <span></span>
@@ -67,9 +67,7 @@
             ...mapActions(["getSixiId"]),
             ...mapMutations(["setWorkSheetBaseInfo"]),
             isExectorId() {
-                let executorId =
-                    this.$store.state.workSheet.workSheetBaseInfo.executorId ==
-                    this.sixiId;
+                let executorId = this.$store.state.workSheet.workSheetBaseInfo.executorId === this.sixiId;
                 return executorId
             },
             eventCallback(event) {
@@ -274,11 +272,11 @@
                                 eventType: "setLabel",
                                 list: [
                                     {
-                                        key: 2,
+                                        key: 1,
                                         value: "是"
                                     },
                                     {
-                                        key: 1,
+                                        key: 0,
                                         value: "否"
                                     }
                                 ]
@@ -311,7 +309,7 @@
                             },
                             {
                                 title: "测试工单：",
-                                value: this.info.label == 2 ? '是':'否'
+                                value: this.info.label == 0 ? '是':'否'
                             }
                         ],
                         [
@@ -484,6 +482,8 @@
             this.workSheetId = this.$route.query.workSheetId;
         },
         mounted() {
+            this.getSixiId();
+            this.sixiId = this.$store.state.user.userInfo.sixiId;
             this.getWorkSheetInfo();
         }
     };
