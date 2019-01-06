@@ -309,7 +309,7 @@
                             },
                             {
                                 title: "测试工单：",
-                                value: this.info.label == 0 ? '是':'否'
+                                value: this.info.label == 0 ? '否':'是'
                             }
                         ],
                         [
