@@ -55,7 +55,7 @@
                         <Icon type="md-create"></Icon>移交
                     </a>
                     <a
-                        v-if="current == 1 && isExectorId"
+                        v-if="current == 1 && isExectorId && info.handleType != 5"
                         @click="setWorkSheetProcessing(3)"
                         href="javascript:;"
                         class="md-card-btn-success"
