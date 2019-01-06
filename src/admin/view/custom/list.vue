@@ -193,7 +193,7 @@ export default {
                         if (params.row.account) {
                             account = "****" + params.row.account.slice(4);
                         }
-                        return h("div", { attrs: { class: params.row.className } }, account);
+                        return h("div", {}, account);
                     }
                 },
                 {
@@ -218,7 +218,7 @@ export default {
                                 sendCodeStatus = item.value;
                             }
                         })
-                        return h("span", { attrs: { class: params.row.className } }, sendCodeStatus);
+                        return h("span", {}, sendCodeStatus);
                     }
                 },
                 {
@@ -242,7 +242,7 @@ export default {
                                 nameArr.push(h("div", {}, item));
                             })
                         }
-                        return h("div", { attrs: { class: params.row.className } }, nameArr);
+                        return h("div", {}, nameArr);
                     }
                 }
             ],
@@ -299,7 +299,8 @@ export default {
                 this.params.count = res.data.count || 0;
                 let list = res.data.list || [];
                 list.forEach(item => {
-                    if (item.bindingNum && item.bindingNum == 0) {
+                    if ((item.bindingNum && item.bindingNum == 0) || !item.bindingNum) {
+                        item.bindingNum = 0;
                         item.className = "red";
                     } else {
                         item.className = "";
