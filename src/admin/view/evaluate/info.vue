@@ -123,7 +123,7 @@
                                 :min="0"
                                 :step="1"
                                 :precision="0"
-                                v-model="numberData.isBad"
+                                v-model="numberData.badMax"
                         >
                             <span></span>
                         </InputNumber>
@@ -169,7 +169,7 @@
                 numberData: {
                     maxNum: 5,
                     isHalf: "1",
-                    isBad: 0
+                    badMax: 0
                 },
                 itemDimension: {
                     index: -1,
@@ -178,7 +178,7 @@
                     showType: "",
                     maxNum: 5,
                     isHalf: "1",
-                    isBad: 0,
+                    badMax: 0,
                     id: 0,
                     evaluateType: "评分",
                     evaluateName: "",
@@ -424,7 +424,7 @@
             ...mapMutations(["closeTag"]),
             ...mapActions(["getDimensionList"]),
             numberDataOk() {
-                if (this.numberData.maxNum < this.numberData.isBad) {
+                if (this.numberData.maxNum < this.numberData.badMax) {
                     this.$Modal.error({
                         title: "保存评分配置",
                         content: "预警值不能大于满分值"
@@ -436,7 +436,7 @@
                 if (dimensionContent.length > 0) {
                     dimensionContent = dimensionContent.map(item => {
                         if (item.type === "number") {
-                            item.otherAttribute.isBad = this.numberData.isBad;
+                            item.otherAttribute.badMax = this.numberData.badMax;
                             item.otherAttribute.maxNum = this.numberData.maxNum;
                             item.otherAttribute.isHalf = this.numberData.isHalf;
                         }
@@ -524,8 +524,8 @@
                 params.otherAttribute.maxNum = parseInt(
                     params.otherAttribute.maxNum
                 );
-                params.otherAttribute.isBad = parseInt(
-                    params.otherAttribute.isBad
+                params.otherAttribute.badMax = parseInt(
+                    params.otherAttribute.badMax
                 );
 
                 if (params.otherAttribute.isHalf == null) {
@@ -548,7 +548,7 @@
                     showType: params.otherAttribute.showType,
                     maxNum: params.otherAttribute.maxNum,
                     isHalf: params.otherAttribute.isHalf,
-                    isBad: params.otherAttribute.isBad,
+                    badMax: params.otherAttribute.badMax,
                     id: params.id,
                     evaluateType: params.evaluateType,
                     evaluateName: params.evaluateName,
@@ -643,7 +643,7 @@
                         dimensionData.tagList = [];
                         dimensionData.value = "";
                         dimensionData.maxNum = parseInt(this.numberData.maxNum)
-                        dimensionData.isBad = parseInt(this.numberData.isBad)
+                        dimensionData.badMax = parseInt(this.numberData.badMax)
                         dimensionData.isHalf = this.numberData.isHalf
                         break;
                     case "radio":
@@ -667,7 +667,7 @@
                         break;
                 }
                 dimensionData.maxNum = parseInt(dimensionData.maxNum);
-                dimensionData.isBad = parseInt(dimensionData.isBad)
+                dimensionData.badMax = parseInt(dimensionData.badMax)
 
                 itemDimensionData = {
                     tagList: dimensionData.tagList,
@@ -677,7 +677,7 @@
                         showType: dimensionData.showType,
                         maxNum: dimensionData.maxNum,
                         isHalf: dimensionData.isHalf,
-                        isBad: dimensionData.isBad,
+                        badMax: dimensionData.badMax,
                     },
                     id: dimensionData.id,
                     evaluateName: dimensionData.evaluateName,
@@ -705,7 +705,7 @@
                     showType: "",
                     maxNum: 10,
                     isHalf: "1",
-                    isBad: 0,
+                    badMax: 0,
                     id: 0,
                     evaluateType: "评分",
                     evaluateName: "",
