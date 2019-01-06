@@ -272,11 +272,11 @@
                                 eventType: "setLabel",
                                 list: [
                                     {
-                                        key: 2,
+                                        key: 1,
                                         value: "是"
                                     },
                                     {
-                                        key: 1,
+                                        key: 0,
                                         value: "否"
                                     }
                                 ]
@@ -309,7 +309,7 @@
                             },
                             {
                                 title: "测试工单：",
-                                value: this.info.label == 2 ? '是':'否'
+                                value: this.info.label == 0 ? '是':'否'
                             }
                         ],
                         [
