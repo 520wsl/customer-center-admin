@@ -330,7 +330,7 @@ export default {
                     }
                 },
                 {
-                    title: "责任人",
+                    title: "执行人",
                     align: "center",
                     render: (h, params) => {
                         const user = params.row.userVo || {};
