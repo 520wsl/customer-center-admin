@@ -307,10 +307,13 @@ export default {
             // this.getTransferWorksheetInfo();
         },
         // 是否领导
-        getIsLeader() {
+        getIsLeader() { 
+            let departmentIdArr = this.$store.state.user.userInfo.department ? this.$store.state.user.userInfo.department.split(",") : [];
+            // 去部门ID的最小值 即最大部门
+            let departmentId = Math.min.apply(Math,departmentIdArr) + "";
             let params = {
                 sixiId: this.$store.state.user.userInfo.sixiId || "",
-                departmentId: this.$store.state.user.userInfo.department || ""
+                departmentId
             }
             getIsLeader(params).then(res=>{
                 if(res.status != 200){
