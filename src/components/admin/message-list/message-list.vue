@@ -128,7 +128,7 @@
                         </div>
 
                         <div class="message-counter">
-                            <p><span>【 工单动态 】</span> {{item.record}}</P>
+                            <p><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span> {{item.record}}</P>
                             <P>工单类型：{{getWorkSheetTypeValue(item.workType)}}</P>
                             <P>
                                 执行人：{{item.executorInfo.userName}}
@@ -151,7 +151,7 @@
                         </div>
 
                         <div class="message-counter">
-                            <p><span>【 工单动态 】</span> {{item.record}}</p>
+                            <p><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span> {{item.record}}</p>
                             <P>
                                 被移交人：{{item.transferredUser.userName}}
                                 <span
@@ -174,7 +174,7 @@
                         </div>
 
                         <div class="message-counter">
-                            <p><span>【 工单动态 】</span>  {{item.record}}</p>
+                            <p><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span>  {{item.record}}</p>
                             <P>
                                 移交人：{{item.transferredUser.userName}}
                                 <span
@@ -196,7 +196,7 @@
                         </div>
 
                         <div class="message-counter">
-                            <P><span>【 工单动态 】</span>  {{item.record}}</P>
+                            <P><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span>  {{item.record}}</P>
                         </div>
 
                     </template>
@@ -212,7 +212,7 @@
                         </div>
 
                         <div class="message-counter">
-                            <P><span>【 工单动态 】</span>  {{item.record}}</P>
+                            <P><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span>  {{item.record}}</P>
                         </div>
 
                     </template>
@@ -228,7 +228,7 @@
                         </div>
 
                         <div class="message-counter">
-                            <P><span>【 工单动态 】</span>  {{item.record}}</P>
+                            <P><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span>  {{item.record}}</P>
                         </div>
 
                     </template>
