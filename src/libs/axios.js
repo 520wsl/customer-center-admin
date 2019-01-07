@@ -189,7 +189,7 @@ class HttpRequest {
             error => {
                 let msg =
                     (error.response.data && error.response.data.msg) ||
-                    (error.response.data && error.response.data.error) ||
+                    (error.response.data && JSON.stringify(error.response.data)) ||
                     "";
                 this.setResponse(
                     error.response.status,
