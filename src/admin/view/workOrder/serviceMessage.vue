@@ -434,7 +434,8 @@
             async addItemTalkNews(eventType, title) {
                 let params = {
                     workOrderStatus: this.info.handleType,
-                    userSixiId: this.info.userId,
+                    // userSixiId: this.info.userId, // 后端要求传 当前操作人 sixiId
+                    userSixiId: this.sixiId,
                     workSheetId: this.info.id,
                     eventType
                 };
@@ -569,24 +570,24 @@
                     //     if (status[4] !== "1") {
                     //         return;
                     //     }
-                        isShow = false;
+                    isShow = false;
 
-                        setTimeout(() => {
-                            if (isPading) {
-                                this.$Modal.error({
-                                    title: "拨号异常：",
-                                    content:
-                                        "拨号软件：<br>1、请检查呼叫软件是否打开正常! <br> 2、请检查设备是否安装正常！<br>"
-                                });
-                            }
-                        }, 2000);
-
-                        let res = await callPhoneAction({...params});
-                        console.log("拨号：", res);
-                        if (res.status === 1) {
-                            this.editRemarkModal(recordId);
-                            isPading = false;
+                    setTimeout(() => {
+                        if (isPading) {
+                            this.$Modal.error({
+                                title: "拨号异常：",
+                                content:
+                                    "拨号软件：<br>1、请检查呼叫软件是否打开正常! <br> 2、请检查设备是否安装正常！<br>"
+                            });
                         }
+                    }, 2000);
+
+                    let res = await callPhoneAction({...params});
+                    console.log("拨号：", res);
+                    if (res.status === 1) {
+                        this.editRemarkModal(recordId);
+                        isPading = false;
+                    }
                     // }
                 } catch (error) {
                     this.$Modal.error({
