@@ -176,7 +176,7 @@
             </Card>
             <div slot="footer">
                 <Button type="primary" @click="setReplyParamsContent">确认</Button>
-                <Button @click="closeCallPhoneModal">返回</Button>
+                <Button @click="closeShowCollectModal">返回</Button>
             </div>
         </Modal>
     </div>
@@ -239,6 +239,10 @@
             closeCallPhoneModal() {
                 this.remarkParams.mobile = "";
                 this.isShowCallPhoneModal = false;
+            },
+            closeShowCollectModal() {
+                this.collect.content = "";
+                this.isShowCollectModal = false;
             },
             async getWorkOrderPhoneList(workSheetId, companySixiId) {
                 console.log(workSheetId, companySixiId);
