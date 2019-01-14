@@ -29,11 +29,19 @@ export default {
 			{
 				key: 5,
 				value: "运营"
-			}
+			},
 			// {
 			// 	key: 6,
 			// 	value: "新开工单"
-			// }
+            // },
+            {
+                key: 9,
+				value: "建议"
+            },
+            {
+                key: 10,
+				value: "投诉"
+            }
 		],
 		workSheetHandleType: [
 			{
