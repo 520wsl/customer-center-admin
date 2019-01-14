@@ -10,7 +10,7 @@ function get(url, params) {
     return api.get(baseUrl + url, params);
 }
 
-// 案例库列表
+// 案例库列表（视图1）
 export const getWorkOrderCaseListData = ({pageSize, pageNum}) => {
     return post("/case/list", {
         pageSize,
@@ -55,6 +55,36 @@ export const getWorkOrderCaseInfoData = ({
         pageSize
     });
 };
+
+// 查看案例库（视图2）
+export const getWorkOrderCaseListData2 = ({
+                                              companyName,
+                                              identifier,
+                                              workType,
+                                              startTime,
+                                              endTime,
+                                              timeType,
+                                              durationHour,
+                                              responseHour,
+                                              pageNum,
+                                              cName,
+                                              pageSize
+                                          }) => {
+    return post("/case/database/list", {
+        companyName,
+        identifier,
+        workType,
+        startTime,
+        endTime,
+        timeType,
+        durationHour,
+        responseHour,
+        pageNum,
+        cName,
+        pageSize
+    });
+};
+
 
 // 删除案例库中的工单
 export const delWorkOrderCaseInfoData = ({workSheetId, caseLibraryId}) => {
