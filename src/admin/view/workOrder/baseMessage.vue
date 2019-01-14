@@ -309,7 +309,7 @@
                             },
                             {
                                 title: "测试工单：",
-                                value: this.info.label == 0 ? '否':'是'
+                                value: this.info.label == 0 ? '否' : '是'
                             }
                         ],
                         [
@@ -439,6 +439,10 @@
                     });
                     return;
                 }
+                this.$Modal.success({
+                    title: "重新评价",
+                    content: res.msg
+                });
             },
             clickAgianEvaluate() {
                 this.modal = true;

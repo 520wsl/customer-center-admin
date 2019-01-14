@@ -1,6 +1,13 @@
 <template>
     <div>
         <Card class="md-card">
+            <div class="flex">
+                <div class="flex-right">
+                    <Button @click="checkView" type="warning" ghost>切换视图</Button>
+                </div>
+            </div>
+        </Card>
+        <Card class="md-card">
             <Table border :columns="columns1" :loading="loading" :data="list"></Table>
         </Card>
         <Card class="md-card">
@@ -66,8 +73,6 @@
                     });
                     return;
                 });
-
-
             },
             async delWorkOrderCaseList(caseLibraryId) {
                 delWorkOrderCaseListData({caseLibraryId}).then(res => {
@@ -83,6 +88,15 @@
                     });
                 });
 
+            },
+            checkView() {
+                let name = "case-workOrderCaseList2";
+                if (this.$route.name == "wx-case-workOrderCaseList") {
+                    name = "wx-case-workOrderCaseList2"
+                }
+                this.$router.push({
+                    name: name
+                })
             }
         },
         data() {

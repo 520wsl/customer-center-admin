@@ -149,7 +149,8 @@
     import {saveWorkOrder} from "@/api/admin/workSheet/workOrder";
     import utils from "@/libs/util/public";
     import "./index.less";
-    import { trim } from "@/libs/tools";
+    import {trim} from "@/libs/tools";
+
     export default {
         components: {
             Page,
@@ -253,7 +254,7 @@
                     {
                         title: "创建时间",
                         align: "center",
-                        width: 130,
+                        // width: 130,
                         sortable: "custom",
                         key: "startTime",
                         render: (h, params) => {
@@ -267,7 +268,7 @@
                     {
                         title: "结束时间",
                         align: "center",
-                        width: 130,
+                        // width: 130,
                         sortable: "custom",
                         key: "finishTime",
                         render: (h, params) => {
@@ -281,7 +282,7 @@
                     {
                         title: "持续时间",
                         align: "center",
-                        width: 130,
+                        // width: 130,
                         sortable: "custom",
                         key: "durationStr",
                         render: (h, params) => {
@@ -342,68 +343,38 @@
                     {
                         title: "操作",
                         align: "center",
+                        width: 120,
                         render: (h, params) => {
                             let btnGroup = [];
                             let query = params.row;
-                            // if (
-                            //     (query.type == 3 && query.isSend) ||
-                            //     (query.type == 4 && query.isSend)
-                            // ) {
-                            //     btnGroup.push(
-                            //         h(
-                            //             "a",
-                            //             {
-                            //                 style: {
-                            //                     color: "#2d8cf0",
-                            //                     display: "block",
-                            //                     margin: "5px"
-                            //                 },
-                            //                 on: {
-                            //                     click: () => {
-                            //                         this.isSaveWorkOrderAction = true;
-                            //                         this.saveWorkOrderActionData = {
-                            //                             workOrderType:
-                            //                                 query.workType,
-                            //                             context: "客服发起...",
-                            //                             mobile: query.mobile,
-                            //                             companySixiId:
-                            //                                 query.companyId,
-                            //                             companyName:
-                            //                                 query.companyName,
-                            //                             customerSixiId:
-                            //                                 query.sixiId,
-                            //                             wechatNickname:
-                            //                                 query.wechatNickname,
-                            //                             sponsorType: 1
-                            //                         };
-                            //                     }
-                            //                 }
-                            //             },
-                            //             "发起工单"
-                            //         )
-                            //     );
-                            // }
                             btnGroup.push(
                                 h(
-                                    "a",
+                                    "Button",
                                     {
+                                        props: {
+                                            type: "primary",
+                                            size: "small",
+                                            ghost: true
+                                        },
                                         style: {
-                                            color: "#2d8cf0",
-                                            display: "block",
                                             margin: "5px"
                                         },
                                         on: {
                                             click: () => {
-                                                let name = "workOrder-info-service";
-                                                if (
-                                                    this.$route.name ==
-                                                    "wx-workOrder-list"
-                                                ) {
-                                                    name =
-                                                        "wx-workOrder-info-service";
+                                                if (this.$route.name == "wx-workOrder-list") {
+                                                    let routeData = this.$router.resolve({
+                                                        name:'wx-workOrder-info-service',
+                                                        query: {
+                                                            workSheetId: params.row.id,
+                                                            companyName:
+                                                            params.row.companyName
+                                                        }
+                                                    });
+                                                    window.open(routeData.href, '_blank');
+                                                    return
                                                 }
                                                 this.$router.push({
-                                                    name,
+                                                    name: "workOrder-info-service",
                                                     query: {
                                                         workSheetId: params.row.id,
                                                         companyName:
