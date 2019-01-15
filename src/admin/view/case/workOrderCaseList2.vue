@@ -177,8 +177,16 @@
                     {title: "工单编号", align: "center", key: "identifier"},
                     {
                         title: "客户名称",
+                        keyWord: true,
                         align: "center",
-                        key: "companyName"
+                        key: "companyName",
+                        render: (h, params) => {
+                            let customerName = "";
+                            if (params.row.companyName) {
+                                customerName = params.row.companyName.slice(0, 2) + "***" + params.row.companyName.slice(5);
+                            }
+                            return h("span", {}, customerName);
+                        }
                     },
                     {
                         title: "案例库",
