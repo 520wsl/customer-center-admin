@@ -27,12 +27,8 @@ export const getLoginSettingDate = ({
   });
 };
 // 清空
-export const empty = ({
-  companyList
-}) => {
-  return post("/staff/ali/empty", {
-    companyList
-  });
+export const empty = ({companyList}) => {
+  return post("/staff/ali/empty", {   companyList });
 };
 // 设置状态
 export const changeStatus = ({
