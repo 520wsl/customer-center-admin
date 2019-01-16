@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="header">
-      <span class="ww">旺旺多开管理端</span>
-      <!-- v-if="item.key != 1&&sixiId != '1010115268518365'" -->
+      <!-- <span class="ww">旺旺多开管理端</span> -->
+      <!-- v-if="item.key != 1&&(sixiId != '1010115268518365' || sixiId != '1010118657191180')" -->
       <RadioGroup v-model="content.type" @on-change="pageInit" type="button" size="large">
         <!-- eslint-disable-next-line -->
         <Radio v-for="item in typeList" :key="item.key" :label=item.key>{{item.value}}</Radio>
@@ -29,26 +29,32 @@ export default {
       ]
     }
   },
-  watch: {
-    '$route.name' (val, old) {
-      console.log('watch', this.$route.name, this.content.type)
-      if (val == 'login-list') {
-        this.content.type = '0'
-      } else if (val == 'login-setting') {
-        this.content.type = '1'
-      }
-    }
-  },
   mounted () {
-    this.pageInit(this.content.type)
+    let val = this.$route.name
+    if (val == 'wwOpensManager-login-list' || val == 'wx-wwOpensManager-login-list') {
+      this.content.type = '0'
+    } else if (val == 'wwOpensManager-login-setting' || val == 'wx-wwOpensManager-login-setting') {
+      this.content.type = '1'
+    }
   },
   methods: {
     pageInit (type) {
-      console.log('pageInit', this.$route.name, this.content.type)
       if (type == '0') {
-        this.$router.push({ name: 'login-list' })
+        if (this.$route.name == "wwOpensManager-login-setting") {
+          this.$router.push({ name: 'wwOpensManager-login-list' })
+        } else {
+          let routeData = this.$router.resolve({ name: 'wx-wwOpensManager-login-list' });
+          window.open(routeData.href, '_blank');
+        }
+        this.content.type = '0'
       } else if (type == '1') {
-        this.$router.push({ name: 'login-setting' })
+        if (this.$route.name == "wwOpensManager-login-list") {
+          this.$router.push({ name: 'wwOpensManager-login-setting' })
+        } else {
+          let routeData = this.$router.resolve({ name: 'wx-wwOpensManager-login-setting' });
+          window.open(routeData.href, '_blank');
+        }
+        this.content.type = '1'
       }
     }
   }
