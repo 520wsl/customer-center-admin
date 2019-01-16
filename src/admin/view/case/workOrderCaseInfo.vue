@@ -131,7 +131,8 @@
     } from "@/api/admin/case/case";
     import utils from "@/libs/util/public";
     import "./index.less";
-    import { trim } from "@/libs/tools";
+    import {trim} from "@/libs/tools";
+
     export default {
         components: {
             Page
@@ -190,8 +191,16 @@
                 columns: [
                     {
                         title: "客户名称",
+                        keyWord: true,
                         align: "center",
-                        key: "companyName"
+                        key: "companyName",
+                        render: (h, params) => {
+                            let customerName = "";
+                            if (params.row.companyName) {
+                                customerName = params.row.companyName.slice(0, 2) + "***" + params.row.companyName.slice(5);
+                            }
+                            return h("span", {}, customerName);
+                        }
                     },
                     {
                         title: "工单编号",
@@ -415,12 +424,12 @@
 
             },
             editWorkOrderCaseInfoNameAction() {
-                if(this.name.length <= 0 || this.name.length >40){
-                     this.$Modal.success({
+                if (this.name.length <= 0 || this.name.length > 40) {
+                    this.$Modal.success({
                         title: "修改案例名称",
                         content: "案例名称请控制在1-40个字符内"
                     });
-                     return ;
+                    return;
                 }
 
                 editWorkOrderCaseInfoName({

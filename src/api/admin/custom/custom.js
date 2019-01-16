@@ -18,6 +18,7 @@ export const getCustomerListDate = ({
     operator,
     callName = "",
     sendCode,
+    companyType,
     binding
 }) => {
     return post("/company/listbysearch", {
@@ -29,6 +30,7 @@ export const getCustomerListDate = ({
         operator,
         callName,
         sendCode,
+        companyType,
         binding
     });
 };
