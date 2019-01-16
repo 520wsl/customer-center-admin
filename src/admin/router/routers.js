@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-01-16 09:16:16
+ * @Last Modified time: 2019-01-16 09:32:21
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -518,150 +518,105 @@ export default [
         ]
     },
     {
-        path: "/wx/custom",
-        name: "wx-custom",
-        meta: {
+      path: "/wx/custom",
+      name: "wx-custom",
+      meta: {
+        icon: "ios-stats",
+        title: "客户",
+        hideInMenu: true,
+        notCache: true,
+        noLogin: true
+      },
+      component: parentView,
+      children: [
+        {
+          path: "list",
+          name: "wx-custom-list",
+          meta: {
             icon: "ios-stats",
-            title: "客户",
+            title: "客户列表",
             hideInMenu: true,
             notCache: true,
             noLogin: true
+          },
+          component: r =>
+            require.ensure([], () =>
+              require("@/admin/view/custom/list")
+            )
         },
-        component: parentView,
-        children: [
-            {
-                path: "list",
-                name: "wx-custom-list",
+        {
+          path: "info",
+          name: "wx-custom-info",
+          meta: {
+            icon: "ios-stats",
+            title: "客户详情",
+            beforeCloseName: "before_close_normal",
+            hideInMenu: true,
+            notCache: true,
+            noLogin: true
+          },
+          component: r =>
+            require.ensure([], () =>
+              require("@/admin/view/custom/info")
+            )
+        }
+      ]
+    },
+    {
+      path: "/wwOpensManager",
+      name: "wwOpensManager",
+      meta: {
+        icon: "ios-stats",
+        title: "旺旺多开管理端"
+      },
+      component: Main1,
+      redirect: {
+        name: 'login-list'
+      },
+      children: [
+        {
+          path: "/",
+          name: "wwOpensManagerList",
+          meta: {
+            icon: "ios-stats",
+            title: "旺旺多开管理端",
+            hideInMenu: true,
+            notCache: true,
+            noLogin: true
+          },
+          component: r =>
+            require.ensure([], () =>
+              require("@/admin/view/wwOpensManager/index")
+            ),
+            children: [
+              {
+                path: "loginList",
+                name: "login-list",
                 meta: {
-                    icon: "ios-stats",
-                    title: "客户列表",
-                    hideInMenu: true,
-                    notCache: true,
-                    noLogin: true
+                  icon: "ios-stats",
+                  title: "登录列表",
+                  notCache: true
                 },
                 component: r =>
-                    require.ensure([], () =>
-                        require("@/admin/view/custom/list")
-                    )
-            },
-            {
-                path: "info",
-                name: "wx-custom-info",
+                  require.ensure([], () =>
+                    require("@/admin/view/wwOpensManager/loginList")
+                  )
+              },
+              {
+                path: "loginSetting",
+                name: "login-setting",
                 meta: {
-                    icon: "ios-stats",
-                    title: "客户详情",
-                    beforeCloseName: "before_close_normal",
-                    hideInMenu: true,
-                    notCache: true,
-                    noLogin: true
+                  icon: "ios-stats",
+                  title: "登录设置",
+                  notCache: true
                 },
                 component: r =>
-                    require.ensure([], () =>
-                        require("@/admin/view/custom/info")
-                    )
-            }
-        ]
-    },
-	{
-		path: "/wx/custom",
-		name: "wx-custom",
-		meta: {
-			icon: "ios-stats",
-			title: "客户",
-			hideInMenu: true,
-			notCache: true,
-			noLogin: true
-		},
-		component: parentView,
-		children: [
-			{
-				path: "list",
-				name: "wx-custom-list",
-				meta: {
-					icon: "ios-stats",
-					title: "客户列表",
-					hideInMenu: true,
-					notCache: true,
-					noLogin: true
-				},
-				component: r =>
-					require.ensure([], () =>
-						require("@/admin/view/custom/list")
-					)
-			},
-			{
-				path: "info",
-				name: "wx-custom-info",
-				meta: {
-					icon: "ios-stats",
-					title: "客户详情",
-					beforeCloseName: "before_close_normal",
-					hideInMenu: true,
-					notCache: true,
-					noLogin: true
-				},
-				component: r =>
-					require.ensure([], () =>
-						require("@/admin/view/custom/info")
-					)
-			}
-		]
-  },
-  {
-		path: "/wwOpensManager",
-		name: "wwOpensManager",
-		meta: {
-			icon: "ios-stats",
-      title: "旺旺多开管理端"
-		},
-    component: Main1,
-    redirect: {
-      name: 'login-list'
-    },
-		children: [
-      {
-				path: "/",
-				name: "wwOpensManagerList",
-				meta: {
-					icon: "ios-stats",
-          title: "旺旺多开管理端",
-          hideInMenu: true,
-          notCache: true,
-          noLogin: true
-        },
-				component: r =>
-					require.ensure([], () =>
-						require("@/admin/view/wwOpensManager/index")
-          ),
-          children: [
-            {
-              path: "loginList",
-              name: "login-list",
-              meta: {
-                icon: "ios-stats",
-                title: "登录列表",
-                notCache: true
-              },
-              component: r =>
-                require.ensure([], () =>
-                  require("@/admin/view/wwOpensManager/loginList")
-                )
-            },
-            {
-              path: "loginSetting",
-              name: "login-setting",
-              meta: {
-                icon: "ios-stats",
-                title: "登录设置",
-                notCache: true
-              },
-              component: r =>
-                require.ensure([], () =>
-                  require("@/admin/view/wwOpensManager/loginSetting")
-                )
-            }
-          ]
-			},		
+                  require.ensure([], () =>
+                    require("@/admin/view/wwOpensManager/loginSetting")
+                  )
+              }
+            ]
+        }
 		]
 	}
 ];
