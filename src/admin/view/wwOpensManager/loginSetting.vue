@@ -202,10 +202,10 @@ export default {
     getList () {
       this.checkList = [];
       let params = this.deepClone(this.params);
-      params.staffSixiId = params.staffSixiId[params.staffSixiId.length - 1] || ''
+      params.staffSixiId = params.staffSixiId[params.staffSixiId.length - 1] || this.sixiId
       wwOpensManagerLoginSettingListDate(params).then(res => {
         if (res.status != 200) {
-          return this.$Notice.error({ title: res.msg });
+          return this.$Modal.error({ title: "登录列表", content: res.msg });
         }
         this.params.count = res.data.total || 0;
         this.list = res.data.list || [];
@@ -240,7 +240,7 @@ export default {
           this.getList();
           return
         }
-        return this.$Notice.error({ title: res.msg });
+        this.$Modal.error({ title: "设置状态", content: res.msg });
       });
     },
     //清空
@@ -255,16 +255,13 @@ export default {
       }).then(() => {
         wwOpensManagerLoginSettingEmptyData({ companyList: this.checkList }).then(res => {
           if (res.status != 200) {
-            return this.$Notice.error({ title: res.msg });
+            return this.$Modal.error({ title: "清空", content: res.msg });
           }
           this.$message({ type: 'success', message: '清空成功' });
           this.getList()
         });
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消'
-        });
+        this.$message({ type: 'info', message: '已取消' });
       });
     },
     /**添加登录人 */
@@ -288,9 +285,7 @@ export default {
     },
     changeCheckList (data) {
       let arr = []
-      data.map((i) => {
-        arr.push(i.companySixiId)
-      })
+      data.map((i) => { arr.push(i.companySixiId) })
       this.checkList = arr
     },
     getResult (arr = [], id = '', find = 'id', result = 'value') {

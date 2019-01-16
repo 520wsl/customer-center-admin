@@ -138,7 +138,7 @@ export default {
           align: 'center',
           render: (h, params) => {
             let isI = this.getResult(params.row.staffVoList, this.sixiId, 'staffSixiId', 'staffName')
-            console.log(params.row.status != 1, isI == '', this.LoggedList[params.row.aliAccount], params.row.status == 2 || isI == '' || this.LoggedList[params.row.aliAccount])
+            console.log(params.row.status != 1, isI == '', this.LoggedList[params.row.aliAccount], this.loginDisabled, params.row.status != 1 || isI == '' || this.LoggedList[params.row.aliAccount] != undefined || this.loginDisabled)
             let disable = (params.row.status != 1 || isI == '' || this.LoggedList[params.row.aliAccount] != undefined || this.loginDisabled)
             return h('Button', {
               props: {
@@ -161,7 +161,6 @@ export default {
     }
   },
   mounted () {
-    this.getLoginList()
     this.getList()
   },
   methods: {
@@ -169,19 +168,20 @@ export default {
     getLoginList () {
       wwOpensManagerLoginListLoginList().then(res => {
         if (res.status != 200) {
-          return this.$Notice.error({ title: res.msg });
+          return this.$Modal.error({ title: "已登录列表", content: res.msg });
         }
         this.LoggedList = res.data
       });
     },
     /**列表 */
-    getList () {
+    async getList () {
+      await this.getLoginList()
       this.checkList = [];
       let params = this.deepClone(this.params);
-      params.staffSixiId = params.staffSixiId[params.staffSixiId.length - 1] || ''
-      wwOpensManagerLoginListDate(params).then(res => {
+      params.staffSixiId = params.staffSixiId[params.staffSixiId.length - 1] || this.sixiId
+      await wwOpensManagerLoginListDate(params).then(res => {
         if (res.status != 200) {
-          return this.$Notice.error({ title: res.msg });
+          return this.$Modal.error({ title: "登录列表", content: res.msg });
         }
         this.params.count = res.data.total || 0;
         this.list = res.data.list || [];
@@ -213,10 +213,7 @@ export default {
           this.SaveRoad(value)
         });
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '取消输入'
-        });
+        this.$message({ type: 'info', message: '取消输入' });
       });
     },
     /**批量登录 */
@@ -225,10 +222,10 @@ export default {
       if (wwOpensManagerQnRoad && wwOpensManagerQnRoad[this.sixiId]) {
         var resData = [];
         await wwOpensManagerLoginListBatchLogin({ accountList: data }).then(res => {
-          if (res.status != 200) {
-            return this.$Notice.error({ title: res.msg });
+          if (res.status == 200) {
+            return resData = res.data
           }
-          resData = res.data
+          this.$Modal.error({ title: "批量登录", content: res.msg });
         });
         let value = wwOpensManagerQnRoad[this.sixiId]
         await wwOpensManagerLoginListSetpath({ path: value }).then(res => {
@@ -245,10 +242,7 @@ export default {
         }).then(() => {
           this.openSetting(data);
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          });
+          this.$message({ type: 'info', message: '已取消' });
         });
       }
 
@@ -257,15 +251,16 @@ export default {
     async forLogin (resData) {
       for (let i of resData) {
         this.loginDisabled = true
-        this.$Notice.error({ title: '程序自动登录中，请勿操作鼠标', duration: 20 });
+        this.$Modal.warning({ title: "自动登录", content: "程序自动登录中，请勿操作鼠标!" });
         let [username, password] = [i.account, i.password]
         await wwOpensManagerLoginListLogin({ username, password }).then(res => {
           this.loginDisabled = false;
-          if (res.status != 200) {
-            return this.$Notice.error({ title: res.msg });
+          if (res.status == 200) {
+            this.getList()
+            this.$Modal.remove()
+            return;
           }
-          this.getList()
-          return this.$Notice.destroy()
+          this.$Modal.error({ title: "自动登录", content: res.msg });
         });
       }
     },
@@ -278,7 +273,7 @@ export default {
         wwOpensManagerQnRoad[sixiId] = data
         localStorage.setItem('wwOpensManagerQnRoad', JSON.stringify(wwOpensManagerQnRoad))
       } else {
-        this.$message({ type: 'error', message: '未登录或登录已过期，请重新登录后重试！' });
+        this.$Modal.warning({ title: "服务器错误", content: "未登录或登录已过期，请重新登录后重试！" });
       }
     },
     /* 选中的公司id */
