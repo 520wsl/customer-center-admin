@@ -47,8 +47,8 @@
 import Department from "_c/public/department";
 import Page from "_c/admin/page";
 import "./loginList.less";
-import { getLoginListDate, batchLogin } from "@/api/admin/wwOpensManager/loginList";
-import { setpath, login, loginList } from "@/api/admin/wwOpensManager/qnLogin";
+import { wwOpensManagerLoginListDate, wwOpensManagerLoginListBatchLogin } from "@/api/admin/wwOpensManager/loginList";
+import { wwOpensManagerLoginListSetpath, wwOpensManagerLoginListLogin, wwOpensManagerLoginListLoginList } from "@/api/admin/wwOpensManager/qnLogin";
 export default {
   components: { Page, Department },
   data () {
@@ -167,7 +167,7 @@ export default {
   methods: {
     /**获取已登录列表 */
     getLoginList () {
-      loginList().then(res => {
+      wwOpensManagerLoginListLoginList().then(res => {
         if (res.status != 200) {
           return this.$Notice.error({ title: res.msg });
         }
@@ -179,7 +179,7 @@ export default {
       this.checkList = [];
       let params = this.deepClone(this.params);
       params.staffSixiId = params.staffSixiId[params.staffSixiId.length - 1] || ''
-      getLoginListDate(params).then(res => {
+      wwOpensManagerLoginListDate(params).then(res => {
         if (res.status != 200) {
           return this.$Notice.error({ title: res.msg });
         }
@@ -207,7 +207,7 @@ export default {
         confirmButtonText: '保存',
         cancelButtonText: '取消',
       }).then(({ value }) => {
-        setpath({ path: value }).then(res => {
+        wwOpensManagerLoginListSetpath({ path: value }).then(res => {
           if (res.status != 200) { return this.$Notice.error({ title: '请检查您输入的路径是否正确！' }); }
           this.$message({ type: 'success', message: '你的千牛客户端安装路径是: ' + value });
           this.SaveRoad(value)
@@ -224,14 +224,14 @@ export default {
       let wwOpensManagerQnRoad = JSON.parse(localStorage.getItem('wwOpensManagerQnRoad'))
       if (wwOpensManagerQnRoad && wwOpensManagerQnRoad[this.sixiId]) {
         var resData = [];
-        await batchLogin({ accountList: data }).then(res => {
+        await wwOpensManagerLoginListBatchLogin({ accountList: data }).then(res => {
           if (res.status != 200) {
             return this.$Notice.error({ title: res.msg });
           }
           resData = res.data
         });
         let value = wwOpensManagerQnRoad[this.sixiId]
-        await setpath({ path: value }).then(res => {
+        await wwOpensManagerLoginListSetpath({ path: value }).then(res => {
           if (res.status != 200) { return this.$Notice.error({ title: '请检查您输入的路径是否正确！' }); }
           this.$message({ type: 'success', message: '你的千牛客户端安装路径是: ' + value });
           this.SaveRoad(value)
@@ -259,7 +259,7 @@ export default {
         this.loginDisabled = true
         this.$Notice.error({ title: '程序自动登录中，请勿操作鼠标', duration: 20 });
         let [username, password] = [i.account, i.password]
-        await login({ username, password }).then(res => {
+        await wwOpensManagerLoginListLogin({ username, password }).then(res => {
           this.loginDisabled = false;
           if (res.status != 200) {
             return this.$Notice.error({ title: res.msg });

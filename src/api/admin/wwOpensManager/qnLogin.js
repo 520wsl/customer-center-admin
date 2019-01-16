@@ -9,7 +9,7 @@ function get (url, params) {
   return api.get(baseUrl + url, params);
 }
 // 设置路径
-export const setpath = ({
+export const wwOpensManagerLoginListSetpath = ({
   path
 }) => {
   return post("/setpath", {
@@ -17,7 +17,7 @@ export const setpath = ({
   });
 };
 //登录千牛客户端
-export const login = ({
+export const wwOpensManagerLoginListLogin = ({
   username, password
 }) => {
   return post("/login", {
@@ -25,7 +25,7 @@ export const login = ({
   });
 };
 //登录列表
-export const loginList = () => {
+export const wwOpensManagerLoginListLoginList = () => {
   return get("/list");
 };
-//关闭客户端
+

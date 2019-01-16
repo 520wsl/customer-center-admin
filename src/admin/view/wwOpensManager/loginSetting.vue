@@ -5,7 +5,7 @@
         <p slot="title">登录设置</p>
         <div class="search-con search-con-top">
           <div class="search-item">
-            <Select v-model="params.select" class="search-col">
+            <Select v-model="params.type" class="search-col">
               <Option v-for="item in keyWordTypeData" :key="`search-col-${item.key}`" :value="item.key">{{ item.value }}</Option>
             </Select>
             <Input v-model="params.keyword" placeholder="输入关键字搜索" class="search-input">
@@ -14,13 +14,13 @@
           </div>
           <div class="search-item">
             状态：
-            <Select v-model="params.select" class="search-col">
+            <Select v-model="params.status" class="search-col">
               <Option v-for="item in statusList" :key="`search-col-${item.key}`" :value="item.key">{{ item.value }}</Option>
             </Select>
           </div>
           <div class="search-item">
             旺旺登录人：
-            <Department class="search-col" :loading-user="true" width="200" :get-user-info="getUserInfo" v-model="params.customerIdList"></Department>
+            <Department class="search-col" :loading-user="true" width="200" :get-user-info="getUserInfo" v-model="params.staffSixiId"></Department>
           </div>
           <div class="search-btn flex-right">
             <Button @click="getList" type="primary">搜索</Button>
@@ -31,7 +31,7 @@
       <Card class="md-card">
         <p style="margin: 0 10px 10px">
           选中客户：
-          <Button @click="changeStatusData()" type="primary" style="margin-right:10px">批量设置状态</Button>
+          <Button @click="wwOpensManagerLoginSettingStatusModal()" type="primary" style="margin-right:10px">批量设置状态</Button>
           <Button @click="Empty" type="primary" style="margin-right:10px">批量清空旺旺登录人</Button>
           <Button @click="addLoginer()" type="primary">批量添加旺旺登录人</Button>
         </p>
@@ -48,7 +48,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editChangeStatus({companyList:checkList ,status:loginStatus})">确 定</el-button>
+        <el-button type="primary" @click="wwOpensManagerLoginSettingSeteStatusData({companyList:checkList ,status:loginStatus})">确 定</el-button>
       </span>
     </el-dialog>
     <div v-if="showModal">
@@ -61,7 +61,7 @@ import Department from "_c/public/department";
 import Page from "_c/admin/page";
 import "./loginSetting.less";
 import batchSetupModal from "_c/admin/batch-setup-modal";
-import { getLoginSettingDate, empty, changeStatus, setLOginer } from "@/api/admin/wwOpensManager/loginSetting";
+import { wwOpensManagerLoginSettingListDate, wwOpensManagerLoginSettingEmptyData, wwOpensManagerLoginSettingSetStatus } from "@/api/admin/wwOpensManager/loginSetting";
 export default {
   components: { Page, Department, batchSetupModal },
   data () {
@@ -160,7 +160,7 @@ export default {
                     "on-change": type => {
                       let status = type ? 1 : 2;
                       let data = { status, companyList: params.row.companySixiId }
-                      this.editChangeStatus(data)
+                      this.wwOpensManagerLoginSettingSeteStatusData(data)
                     }
                   }
                 },
@@ -203,7 +203,7 @@ export default {
       this.checkList = [];
       let params = this.deepClone(this.params);
       params.staffSixiId = params.staffSixiId[params.staffSixiId.length - 1] || ''
-      getLoginSettingDate(params).then(res => {
+      wwOpensManagerLoginSettingListDate(params).then(res => {
         if (res.status != 200) {
           return this.$Notice.error({ title: res.msg });
         }
@@ -224,7 +224,7 @@ export default {
       console.log(data)
     },
     /**批量设置状态弹窗 */
-    changeStatusData (data) {
+    wwOpensManagerLoginSettingStatusModal (data) {
       if (!data && this.checkList.length == 0) {
         return this.$Notice.error({ title: "请选择公司！" });
       } else {
@@ -232,8 +232,8 @@ export default {
       }
     },
     /**批量设置状态 */
-    editChangeStatus (data) {
-      changeStatus({ ...data }).then(res => {
+    wwOpensManagerLoginSettingSeteStatusData (data) {
+      wwOpensManagerLoginSettingSetStatus({ ...data }).then(res => {
         if (res.status == 200) {
           this.dialogVisible = false
           this.$message({ type: 'success', message: '设置状态成功' });
@@ -253,7 +253,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        empty({ companyList: this.checkList }).then(res => {
+        wwOpensManagerLoginSettingEmptyData({ companyList: this.checkList }).then(res => {
           if (res.status != 200) {
             return this.$Notice.error({ title: res.msg });
           }
