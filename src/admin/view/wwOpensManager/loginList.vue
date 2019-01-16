@@ -35,7 +35,10 @@
           <div class="search-btn flex-right">
             <Button @click="getList" ghost type="primary" style="margin-right:10px">搜索</Button>
             <Button @click="openSetting" type="success" ghost> 设置千牛客户端目录</Button>
-            <i class="el-icon-question" @click="settingHelpModal"></i>
+            <Icon type="help-circled"></Icon>
+            <span @click="settingHelpModal" class="question" title="设置千牛客户端路径帮助文档">
+              <Icon type="md-help-circle" />
+            </span>
           </div>
         </div>
       </Card>
@@ -321,7 +324,13 @@ export default {
       this.checkList = arr
     },
     settingHelpModal () {
-
+      let url = this.$CDN('/demo_0.png')
+      this.$Modal.confirm({
+        title: '设置千牛客户端路径帮助文档',
+        width: 1300,
+        closable: true,
+        content: `<img src=${url} alt="设置千牛客户端路径帮助文档">`
+      })
     },
     getResult (arr = [], id = '', find = 'id', result = 'value') {
       let value = '';

@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-01-16 17:24:47
+ * @Last Modified time: 2019-01-16 17:40:44
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -580,6 +580,7 @@ export default [
         meta: {
           icon: "ios-stats",
           title: "登录列表",
+          hideInMenu: true,
           notCache: true
         },
         component: r =>
@@ -593,6 +594,7 @@ export default [
         meta: {
           icon: "ios-stats",
           title: "登录设置",
+          hideInMenu: true,
           notCache: true
         },
         component: r =>
@@ -621,6 +623,7 @@ export default [
         meta: {
           icon: "ios-stats",
           title: "登录列表",
+          hideInMenu: true,
           notCache: true
         },
         component: r =>
@@ -634,6 +637,7 @@ export default [
         meta: {
           icon: "ios-stats",
           title: "登录设置",
+          hideInMenu: true,
           notCache: true
         },
         component: r =>
