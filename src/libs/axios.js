@@ -1,8 +1,8 @@
 /*
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 15:32:18
- * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-27 14:35:33
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2019-01-15 13:49:24
  * @explanatory:  axios 接口封装
  */
 import axios from "axios";
@@ -15,7 +15,7 @@ class HttpRequest {
     getInsideConfig() {
         const config = {
             baseURL: this.baseUrl,
-            timeout: 10000,
+            timeout: 40000,
             responseType: "json",
             headers: {
                 "If-Modified-Since": 0,
