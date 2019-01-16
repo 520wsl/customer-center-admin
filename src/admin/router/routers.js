@@ -2,7 +2,7 @@
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-01-16 14:48:45
+ * @Last Modified time: 2019-01-16 17:24:47
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -575,47 +575,30 @@ export default [
     },
     children: [
       {
-        path: "/",
-        name: "wwOpensManagerList",
+        path: "loginList",
+        name: "wwOpensManager-login-list",
         meta: {
           icon: "ios-stats",
-          title: "旺旺多开",
-          hideInMenu: true,
-          notCache: true,
-          noLogin: true
+          title: "登录列表",
+          notCache: true
         },
         component: r =>
           require.ensure([], () =>
-            require("@/admin/view/wwOpensManager/index")
-          ),
-        children: [
-          {
-            path: "loginList",
-            name: "wwOpensManager-login-list",
-            meta: {
-              icon: "ios-stats",
-              title: "登录列表",
-              notCache: true
-            },
-            component: r =>
-              require.ensure([], () =>
-                require("@/admin/view/wwOpensManager/loginList")
-              )
-          },
-          {
-            path: "loginSetting",
-            name: "wwOpensManager-login-setting",
-            meta: {
-              icon: "ios-stats",
-              title: "登录设置",
-              notCache: true
-            },
-            component: r =>
-              require.ensure([], () =>
-                require("@/admin/view/wwOpensManager/loginSetting")
-              )
-          }
-        ]
+            require("@/admin/view/wwOpensManager/loginList")
+          )
+      },
+      {
+        path: "loginSetting",
+        name: "wwOpensManager-login-setting",
+        meta: {
+          icon: "ios-stats",
+          title: "登录设置",
+          notCache: true
+        },
+        component: r =>
+          require.ensure([], () =>
+            require("@/admin/view/wwOpensManager/loginSetting")
+          )
       }
     ]
   },
@@ -633,47 +616,30 @@ export default [
     },
     children: [
       {
-        path: "/",
-        name: "wx-wwOpensManagerList",
+        path: "loginList",
+        name: "wx-wwOpensManager-login-list",
         meta: {
           icon: "ios-stats",
-          title: "旺旺多开",
-          hideInMenu: true,
-          notCache: true,
-          noLogin: true
+          title: "登录列表",
+          notCache: true
         },
         component: r =>
           require.ensure([], () =>
-            require("@/admin/view/wwOpensManager/index")
-          ),
-        children: [
-          {
-            path: "loginList",
-            name: "wx-wwOpensManager-login-list",
-            meta: {
-              icon: "ios-stats",
-              title: "登录列表",
-              notCache: true
-            },
-            component: r =>
-              require.ensure([], () =>
-                require("@/admin/view/wwOpensManager/loginList")
-              )
-          },
-          {
-            path: "loginSetting",
-            name: "wx-wwOpensManager-login-setting",
-            meta: {
-              icon: "ios-stats",
-              title: "登录设置",
-              notCache: true
-            },
-            component: r =>
-              require.ensure([], () =>
-                require("@/admin/view/wwOpensManager/loginSetting")
-              )
-          }
-        ]
+            require("@/admin/view/wwOpensManager/loginList")
+          )
+      },
+      {
+        path: "loginSetting",
+        name: "wx-wwOpensManager-login-setting",
+        meta: {
+          icon: "ios-stats",
+          title: "登录设置",
+          notCache: true
+        },
+        component: r =>
+          require.ensure([], () =>
+            require("@/admin/view/wwOpensManager/loginSetting")
+          )
       }
     ]
   }
