@@ -1,5 +1,6 @@
+import config from "@/config";
 import api from "@/libs/api.request";
-const baseUrl = "http://127.0.0.1:2335";
+const baseUrl = config.qnLogin;
 
 function post (url, params) {
   return api.post(baseUrl + url, params);

@@ -9,7 +9,7 @@
           <div class="flex-right">
             <ButtonGroup>
               <Button type="info">登录列表</Button>
-              <Button @click="pageInit" type="info" ghost>登录设置</Button>
+              <Button @click="pageInit" type="info" v-if="sixiId == 1185807881287500799 || sixiId == 1010118657191180 || sixiId ==1010115827418090" ghost>登录设置</Button>
             </ButtonGroup>
           </div>
         </div>
@@ -243,7 +243,7 @@ export default {
           this.$message({ type: 'success', message: '你的千牛客户端安装路径是: ' + value });
           this.SaveRoad(value)
         }).catch(err => {
-          this.$Modal.error({ title: "已登录列表", content: err.msg });
+          this.$Modal.error({ title: "设置千牛路径", content: err.msg });
         });
       }).catch(() => {
         this.$message({ type: 'info', message: '取消输入' });
