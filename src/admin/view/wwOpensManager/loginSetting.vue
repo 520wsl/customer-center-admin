@@ -48,7 +48,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="changeStatusData({companyList:checkList ,status:loginStatus})">确 定</el-button>
+        <el-button type="primary" @click="editChangeStatus({companyList:checkList ,status:loginStatus})">确 定</el-button>
       </span>
     </el-dialog>
     <div v-if="showModal">
@@ -160,7 +160,7 @@ export default {
                     "on-change": type => {
                       let status = type ? 1 : 2;
                       let data = { status, companyList: params.row.companySixiId }
-                      this.changeStatusData(data)
+                      this.editChangeStatus(data)
                     }
                   }
                 },
@@ -223,21 +223,25 @@ export default {
     getUserInfo (data) {
       console.log(data)
     },
-    /**批量设置状态 */
+    /**批量设置状态弹窗 */
     changeStatusData (data) {
       if (!data && this.checkList.length == 0) {
         return this.$Notice.error({ title: "请选择公司！" });
       } else {
-        this.dialogVisible = true;
-        changeStatus({ ...data }).then(res => {
-          if (res.status == 200) {
-            this.dialogVisible = false
-            this.$message({ type: 'success', message: '设置状态成功' });
-            this.getList();
-          }
-          return this.$Notice.error({ title: res.msg });
-        });
+        this.dialogVisible = true
       }
+    },
+    /**批量设置状态 */
+    editChangeStatus (data) {
+      changeStatus({ ...data }).then(res => {
+        if (res.status == 200) {
+          this.dialogVisible = false
+          this.$message({ type: 'success', message: '设置状态成功' });
+          this.getList();
+          return
+        }
+        return this.$Notice.error({ title: res.msg });
+      });
     },
     //清空
     Empty () {
