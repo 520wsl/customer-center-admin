@@ -9,7 +9,7 @@ function get (url, params) {
   return api.get(baseUrl + url, params);
 }
 // 列表
-export const getLoginSettingDate = ({
+export const wwOpensManagerLoginSettingListDate = ({
   pageSize,
   pageNum,
   keyword,
@@ -27,11 +27,11 @@ export const getLoginSettingDate = ({
   });
 };
 // 清空
-export const empty = ({companyList}) => {
-  return post("/staff/ali/empty", {   companyList });
+export const wwOpensManagerLoginSettingEmptyData = ({ companyList }) => {
+  return post("/staff/ali/empty", { companyList });
 };
 // 设置状态
-export const changeStatus = ({
+export const wwOpensManagerLoginSettingSetStatus = ({
   status,
   companyList
 }) => {
@@ -40,13 +40,4 @@ export const changeStatus = ({
     companyList
   });
 };
-// 设置登录人
-export const setLOginer = ({
-  peopleList,
-  companyList
-}) => {
-  return post("/staff/ali/set", {
-    companyList,
-    peopleList
-  });
-};
+

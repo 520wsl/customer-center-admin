@@ -9,7 +9,7 @@ function get (url, params) {
   return api.get(baseUrl + url, params);
 }
 // 列表
-export const getLoginListDate = ({
+export const wwOpensManagerLoginListDate = ({
   pageSize,
   pageNum,
   keyword,
@@ -27,7 +27,7 @@ export const getLoginListDate = ({
   });
 };
 //批量登录
-export const batchLogin = ({
+export const wwOpensManagerLoginListBatchLogin = ({
   accountList
 }) => {
   return post("/company/ali/login", {
