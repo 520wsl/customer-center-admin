@@ -2,7 +2,17 @@
   <div>
     <div class="header">
       <Card class="md-card">
-        <p slot="title">登录设置</p>
+        <div class="flex">
+          <div class="flex-left">
+            <p slot="title">登录设置</p>
+          </div>
+          <div class="flex-right">
+            <ButtonGroup>
+              <Button @click="pageInit" type="info" ghost>登录列表</Button>
+              <Button type="info">登录设置</Button>
+            </ButtonGroup>
+          </div>
+        </div>
         <div class="search-con search-con-top">
           <div class="search-item">
             <Select v-model="params.type" class="search-col">
@@ -23,7 +33,7 @@
             <Department class="search-col" :loading-user="true" width="200" :get-user-info="getUserInfo" v-model="params.staffSixiId"></Department>
           </div>
           <div class="search-btn flex-right">
-            <Button @click="getList" type="primary">搜索</Button>
+            <Button @click="getList" ghost type="primary">搜索</Button>
           </div>
         </div>
       </Card>
@@ -31,9 +41,9 @@
       <Card class="md-card">
         <p style="margin: 0 10px 10px">
           选中客户：
-          <Button @click="wwOpensManagerLoginSettingStatusModal()" type="primary" style="margin-right:10px">批量设置状态</Button>
-          <Button @click="Empty" type="primary" style="margin-right:10px">批量清空旺旺登录人</Button>
-          <Button @click="addLoginer()" type="primary">批量添加旺旺登录人</Button>
+          <Button @click="wwOpensManagerLoginSettingStatusModal()" ghost type="primary" style="margin-right:10px">批量设置状态</Button>
+          <Button @click="Empty" type="primary" ghost style="margin-right:10px">批量清空旺旺登录人</Button>
+          <Button @click="addLoginer()" ghost type="primary">批量添加旺旺登录人</Button>
         </p>
         <Table :columns="columns" :data="list" border class="table" @on-selection-change="changeCheckList"></Table>
       </Card>
@@ -66,6 +76,9 @@ export default {
   components: { Page, Department, batchSetupModal },
   data () {
     return {
+      headerParams: {
+        type: '0'
+      },
       dialogVisible: false,
       loginStatus: '1',
       sixiId: this.$store.state.user.userInfo.sixiId,
@@ -175,6 +188,7 @@ export default {
           render: (h, params) => {
             return h('Button', {
               props: {
+                ghost: true,
                 size: 'small',
                 type: 'primary',
               },
@@ -199,16 +213,25 @@ export default {
     this.getList()
   },
   methods: {
+    pageInit () {
+      if (this.$route.name == "wwOpensManager-login-setting") {
+        this.$router.push({ name: 'wwOpensManager-login-list' })
+      } else {
+        this.$router.push({ name: 'wx-wwOpensManager-login-list' })
+      }
+    },
     getList () {
       this.checkList = [];
       let params = this.deepClone(this.params);
-      params.staffSixiId = params.staffSixiId[params.staffSixiId.length - 1] || this.sixiId
+      params.staffSixiId = params.staffSixiId[params.staffSixiId.length - 1] || ''
       wwOpensManagerLoginSettingListDate(params).then(res => {
         if (res.status != 200) {
           return this.$Modal.error({ title: "登录列表", content: res.msg });
         }
         this.params.count = res.data.total || 0;
         this.list = res.data.list || [];
+      }).catch(err => {
+        this.$Modal.error({ title: "登录列表", content: err.msg });
       });
     },
     pageCurrentChange (pageNum) {
@@ -241,6 +264,8 @@ export default {
           return
         }
         this.$Modal.error({ title: "设置状态", content: res.msg });
+      }).catch(err => {
+        this.$Modal.error({ title: "设置状态", content: err.msg });
       });
     },
     //清空
@@ -259,6 +284,8 @@ export default {
           }
           this.$message({ type: 'success', message: '清空成功' });
           this.getList()
+        }).catch(err => {
+          this.$Modal.error({ title: "清空", content: err.msg });
         });
       }).catch(() => {
         this.$message({ type: 'info', message: '已取消' });

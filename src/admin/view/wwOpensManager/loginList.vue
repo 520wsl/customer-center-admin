@@ -2,7 +2,17 @@
   <div>
     <div class="header">
       <Card class="md-card">
-        <p slot="title">登录列表</p>
+        <div class="flex">
+          <div class="flex-left">
+            <p slot="title">登录列表</p>
+          </div>
+          <div class="flex-right">
+            <ButtonGroup>
+              <Button type="info">登录列表</Button>
+              <Button @click="pageInit" type="info" ghost>登录设置</Button>
+            </ButtonGroup>
+          </div>
+        </div>
         <div class="search-con search-con-top">
           <div class="search-item">
             <Select v-model="params.type" class="search-col">
@@ -23,8 +33,12 @@
             <Department class="search-col" :loading-user="true" width="200" :get-user-info="getUserInfo" v-model="params.staffSixiId"></Department>
           </div>
           <div class="search-btn flex-right">
-            <Button @click="getList" type="primary" style="margin-right:10px">搜索</Button>
-            <Button @click="openSetting">设置千牛客户端目录</Button>
+            <Button @click="getList" ghost type="primary" style="margin-right:10px">搜索</Button>
+            <Button @click="openSetting" type="success" ghost> 设置千牛客户端目录</Button>
+            <Icon type="help-circled"></Icon>
+            <span @click="settingHelpModal" class="question" title="设置千牛客户端路径帮助文档">
+              <Icon type="md-help-circle" />
+            </span>
           </div>
         </div>
       </Card>
@@ -32,7 +46,7 @@
       <Card class="md-card">
         <p style="margin: 0 10px 10px">
           选中客户：
-          <Button @click="goLogin(checkList)" :disabled="loginDisabled" type="primary" style="margin-right:10px">批量登录旺旺</Button>
+          <Button @click="goLogin(checkList)" :disabled="loginDisabled" ghost type="primary" style="margin-right:10px">批量登录旺旺</Button>
         </p>
         <Table :columns="columns" :data="list" border class="table" @on-selection-change="changeCheckList"></Table>
       </Card>
@@ -44,6 +58,7 @@
   </div>
 </template>
 <script>
+import { setStore, getStore } from "@/libs/util/storeage";
 import Department from "_c/public/department";
 import Page from "_c/admin/page";
 import "./loginList.less";
@@ -53,6 +68,9 @@ export default {
   components: { Page, Department },
   data () {
     return {
+      headerParams: {
+        type: 2
+      },
       sixiId: this.$store.state.user.userInfo.sixiId,
       loginDisabled: false,
       params: {
@@ -138,10 +156,10 @@ export default {
           align: 'center',
           render: (h, params) => {
             let isI = this.getResult(params.row.staffVoList, this.sixiId, 'staffSixiId', 'staffName')
-            console.log(params.row.status != 1, isI == '', this.LoggedList[params.row.aliAccount], this.loginDisabled, params.row.status != 1 || isI == '' || this.LoggedList[params.row.aliAccount] != undefined || this.loginDisabled)
             let disable = (params.row.status != 1 || isI == '' || this.LoggedList[params.row.aliAccount] != undefined || this.loginDisabled)
             return h('Button', {
               props: {
+                ghost: true,
                 size: 'small',
                 type: 'primary',
                 disabled: disable
@@ -164,6 +182,13 @@ export default {
     this.getList()
   },
   methods: {
+    pageInit (type) {
+      if (this.$route.name == "wwOpensManager-login-list") {
+        this.$router.push({ name: 'wwOpensManager-login-setting' })
+      } else {
+        this.$router.push({ name: 'wx-wwOpensManager-login-setting' })
+      }
+    },
     /**获取已登录列表 */
     getLoginList () {
       wwOpensManagerLoginListLoginList().then(res => {
@@ -171,6 +196,10 @@ export default {
           return this.$Modal.error({ title: "已登录列表", content: res.msg });
         }
         this.LoggedList = res.data
+      }).catch(err => {
+        if (err.status != 200) {
+          return this.$Modal.error({ title: "已登录列表", content: err });
+        }
       });
     },
     /**列表 */
@@ -185,6 +214,8 @@ export default {
         }
         this.params.count = res.data.total || 0;
         this.list = res.data.list || [];
+      }).catch(err => {
+        this.$Modal.error({ title: "登录列表", content: err.msg });
       });
     },
     /**分页 */
@@ -211,6 +242,8 @@ export default {
           if (res.status != 200) { return this.$Notice.error({ title: '请检查您输入的路径是否正确！' }); }
           this.$message({ type: 'success', message: '你的千牛客户端安装路径是: ' + value });
           this.SaveRoad(value)
+        }).catch(err => {
+          this.$Modal.error({ title: "已登录列表", content: err.msg });
         });
       }).catch(() => {
         this.$message({ type: 'info', message: '取消输入' });
@@ -218,7 +251,7 @@ export default {
     },
     /**批量登录 */
     async goLogin (data) {
-      let wwOpensManagerQnRoad = JSON.parse(localStorage.getItem('wwOpensManagerQnRoad'))
+      let wwOpensManagerQnRoad = JSON.parse(getStore('wwOpensManagerQnRoad'))
       if (wwOpensManagerQnRoad && wwOpensManagerQnRoad[this.sixiId]) {
         var resData = [];
         await wwOpensManagerLoginListBatchLogin({ accountList: data }).then(res => {
@@ -226,12 +259,16 @@ export default {
             return resData = res.data
           }
           this.$Modal.error({ title: "批量登录", content: res.msg });
+        }).catch(err => {
+          this.$Modal.error({ title: "批量登录", content: err.msg });
         });
         let value = wwOpensManagerQnRoad[this.sixiId]
         await wwOpensManagerLoginListSetpath({ path: value }).then(res => {
           if (res.status != 200) { return this.$Notice.error({ title: '请检查您输入的路径是否正确！' }); }
           this.$message({ type: 'success', message: '你的千牛客户端安装路径是: ' + value });
           this.SaveRoad(value)
+        }).catch(err => {
+          this.$Modal.error({ title: "批量登录", content: err.msg });
         });
         await this.forLogin(resData)
       } else {
@@ -252,8 +289,8 @@ export default {
       for (let i of resData) {
         this.loginDisabled = true
         this.$Modal.warning({ title: "自动登录", content: "程序自动登录中，请勿操作鼠标!" });
-        let [username, password] = [i.account, i.password]
-        await wwOpensManagerLoginListLogin({ username, password }).then(res => {
+        let [username, password, iv] = [i.account, i.password, i.iv]
+        await wwOpensManagerLoginListLogin({ username, password, iv }).then(res => {
           this.loginDisabled = false;
           if (res.status == 200) {
             this.getList()
@@ -261,6 +298,8 @@ export default {
             return;
           }
           this.$Modal.error({ title: "自动登录", content: res.msg });
+        }).catch(err => {
+          this.$Modal.error({ title: "自动登录", content: err.msg });
         });
       }
     },
@@ -269,9 +308,9 @@ export default {
     SaveRoad (data) {
       let sixiId = this.$store.state.user.userInfo.sixiId
       if (sixiId) {
-        let wwOpensManagerQnRoad = JSON.parse(localStorage.getItem('wwOpensManagerQnRoad')) || {};
+        let wwOpensManagerQnRoad = JSON.parse(getStore('wwOpensManagerQnRoad')) || {};
         wwOpensManagerQnRoad[sixiId] = data
-        localStorage.setItem('wwOpensManagerQnRoad', JSON.stringify(wwOpensManagerQnRoad))
+        setStore('wwOpensManagerQnRoad', JSON.stringify(wwOpensManagerQnRoad))
       } else {
         this.$Modal.warning({ title: "服务器错误", content: "未登录或登录已过期，请重新登录后重试！" });
       }
@@ -283,6 +322,15 @@ export default {
         arr.push(i.aliAccount)
       })
       this.checkList = arr
+    },
+    settingHelpModal () {
+      let url = this.$CDN('/demo_0.png')
+      this.$Modal.confirm({
+        title: '设置千牛客户端路径帮助文档',
+        width: 1300,
+        closable: true,
+        content: `<img src=${url} alt="设置千牛客户端路径帮助文档">`
+      })
     },
     getResult (arr = [], id = '', find = 'id', result = 'value') {
       let value = '';
