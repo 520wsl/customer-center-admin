@@ -19,10 +19,10 @@ export const wwOpensManagerLoginListSetpath = ({
 };
 //登录千牛客户端
 export const wwOpensManagerLoginListLogin = ({
-  username, password
+  username, password, iv
 }) => {
   return post("/login", {
-    username, password
+    username, password, iv
   });
 };
 //登录列表
