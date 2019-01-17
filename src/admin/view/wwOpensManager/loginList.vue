@@ -64,7 +64,7 @@ import Page from "_c/admin/page";
 import "./loginList.less";
 import { wwOpensManagerLoginListDate, wwOpensManagerLoginListBatchLogin } from "@/api/admin/wwOpensManager/loginList";
 import { wwOpensManagerLoginSettingQX } from "@/api/admin/wwOpensManager/searchPerson";
-import { wwOpensManagerLoginListSetpath, wwOpensManagerLoginListLogin, wwOpensManagerLoginListLoginList } from "@/api/admin/wwOpensManager/qnLogin";
+import { wwOpensManagerLoginListSetpath, wwOpensManagerLoginListLogin, wwOpensManagerLoginListLoginList, wwOpensManagerLoginListLoginInfo } from "@/api/admin/wwOpensManager/qnLogin";
 export default {
   components: { Page, Department },
   data () {
@@ -75,6 +75,7 @@ export default {
       QX: false,
       sixiId: this.$store.state.user.userInfo.sixiId,
       loginDisabled: false,
+      isLoginInfo: false,
       params: {
         type: '1',
         status: -1,
@@ -183,6 +184,16 @@ export default {
   mounted () {
     this.getQX()
     this.getList()
+    this.loginInfo()
+    setTimeout(() => {
+      if (!this.isLoginInfo) {
+        this.$Modal.error({
+          title: "自动登录",
+          content: "自动登录软件：<br>1、请检查自动登录软件是否打开正常! <br>"
+        });
+      }
+    }, 2000)
+
   },
   methods: {
     getQX () {
@@ -231,6 +242,12 @@ export default {
       }).catch(err => {
         this.$Modal.error({ title: "登录列表", content: err.msg });
       });
+    },
+    // 登录插件是否开启
+    loginInfo () {
+      wwOpensManagerLoginListLoginInfo().then(res => {
+        this.isLoginInfo = true
+      })
     },
     /**分页 */
     pageCurrentChange (pageNum) {
@@ -303,20 +320,9 @@ export default {
         this.loginDisabled = true
         this.$Modal.warning({ title: "自动登录", content: "程序自动登录中，请勿操作鼠标!" });
         let [username, password, iv] = [i.account, i.password, i.iv]
-        let isShow = true;
-        setTimeout(() => {
-          if (isShow) {
-            this.$Modal.error({
-              title: "自动登录",
-              content:
-                "自动登录软件：<br>1、请检查自动登录软件是否打开正常! <br>"
-            });
-          }
-        }, 2000);
         await wwOpensManagerLoginListLogin({ username, password, iv }).then(res => {
           this.loginDisabled = false;
           if (res.status == 200) {
-            isShow = false;
             this.getList()
             this.$Modal.remove()
             return;

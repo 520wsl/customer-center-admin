@@ -29,4 +29,8 @@ export const wwOpensManagerLoginListLogin = ({
 export const wwOpensManagerLoginListLoginList = () => {
   return get("/list");
 };
+//判断登录插件是否开启
+export const wwOpensManagerLoginListLoginInfo = () => {
+  return get("/info");
+};
 
