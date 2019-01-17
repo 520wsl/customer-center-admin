@@ -42,8 +42,9 @@
         <p style="margin: 0 10px 10px">
           选中客户：
           <Button @click="wwOpensManagerLoginSettingStatusModal()" ghost type="primary" style="margin-right:10px">批量设置状态</Button>
-          <Button @click="Empty" type="primary" ghost style="margin-right:10px">批量清空旺旺登录人</Button>
-          <Button @click="addLoginer()" ghost type="primary">批量添加旺旺登录人</Button>
+          <!-- 功能暂时注释--后期会开放，需求人--杨外飞 -->
+          <!-- <Button @click="Empty" type="primary" ghost style="margin-right:10px">批量清空旺旺登录人</Button>
+          <Button @click="addLoginer()" ghost type="primary">批量添加旺旺登录人</Button> -->
         </p>
         <Table :columns="columns" :data="list" border class="table" @on-selection-change="changeCheckList"></Table>
       </Card>
@@ -72,6 +73,7 @@ import Page from "_c/admin/page";
 import "./loginSetting.less";
 import batchSetupModal from "_c/admin/batch-setup-modal";
 import { wwOpensManagerLoginSettingListDate, wwOpensManagerLoginSettingEmptyData, wwOpensManagerLoginSettingSetStatus } from "@/api/admin/wwOpensManager/loginSetting";
+import { wwOpensManagerLoginSettingQX } from "@/api/admin/wwOpensManager/searchPerson";
 export default {
   components: { Page, Department, batchSetupModal },
   data () {
@@ -79,6 +81,7 @@ export default {
       headerParams: {
         type: '0'
       },
+      QX: false,
       dialogVisible: false,
       loginStatus: '1',
       sixiId: this.$store.state.user.userInfo.sixiId,
@@ -181,38 +184,54 @@ export default {
             ])
           }
         },
-        {
-          title: '操作',
-          key: 'name',
-          align: 'center',
-          render: (h, params) => {
-            return h('Button', {
-              props: {
-                ghost: true,
-                size: 'small',
-                type: 'primary',
-              },
-              on: {
-                click: () => {
-                  let data = {
-                    companyList: [params.row.companySixiId],
-                    peopleList: params.row.staffVoList,
-                  }
-                  this.addLoginer(data)
-                }
-              }
-            }, '设置旺旺登录人')
-          }
-        },
+        //  功能暂时注释--后期会开放，需求人--杨外飞 
+        // {
+        //   title: '操作',
+        //   key: 'name',
+        //   align: 'center',
+        //   render: (h, params) => {
+        //     return h('Button', {
+        //       props: {
+        //         ghost: true,
+        //         size: 'small',
+        //         type: 'primary',
+        //       },
+        //       on: {
+        //         click: () => {
+        //           let data = {
+        //             companyList: [params.row.companySixiId],
+        //             peopleList: params.row.staffVoList,
+        //           }
+        //           this.addLoginer(data)
+        //         }
+        //       }
+        //     }, '设置旺旺登录人')
+        //   }
+        // },
       ],
       checkList: [],
       list: []
     }
   },
   mounted () {
+    this.getQX()
     this.getList()
   },
   methods: {
+    getQX () {
+      wwOpensManagerLoginSettingQX().then(res => {
+        if (res.status == 200) {
+          let data = this.getResult(res.data, 1, 'id', 'desc')
+          return this.QX = data[1] ? true : false
+        }
+        this.$Modal.error({
+          title: "登录设置页面权限", content: res.msg,
+          onOK: () => { this.pageInit() }
+        })
+      }).catch(err => {
+        this.$Modal.error({ title: "登录设置页面权限", content: err });
+      });
+    },
     pageInit () {
       if (this.$route.name == "wwOpensManager-login-setting") {
         this.$router.push({ name: 'wwOpensManager-login-list' })

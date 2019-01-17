@@ -9,7 +9,7 @@
           <div class="flex-right">
             <ButtonGroup>
               <Button type="info">登录列表</Button>
-              <Button @click="pageInit" type="info" v-if="sixiId == 1185807881287500799 || sixiId == 1010118657191180 || sixiId ==1010115827418090" ghost>登录设置</Button>
+              <Button @click="pageInit" type="info" v-if="QX" ghost>登录设置</Button>
             </ButtonGroup>
           </div>
         </div>
@@ -63,6 +63,7 @@ import Department from "_c/public/department";
 import Page from "_c/admin/page";
 import "./loginList.less";
 import { wwOpensManagerLoginListDate, wwOpensManagerLoginListBatchLogin } from "@/api/admin/wwOpensManager/loginList";
+import { wwOpensManagerLoginSettingQX } from "@/api/admin/wwOpensManager/searchPerson";
 import { wwOpensManagerLoginListSetpath, wwOpensManagerLoginListLogin, wwOpensManagerLoginListLoginList } from "@/api/admin/wwOpensManager/qnLogin";
 export default {
   components: { Page, Department },
@@ -71,6 +72,7 @@ export default {
       headerParams: {
         type: 2
       },
+      QX: false,
       sixiId: this.$store.state.user.userInfo.sixiId,
       loginDisabled: false,
       params: {
@@ -179,9 +181,21 @@ export default {
     }
   },
   mounted () {
+    this.getQX()
     this.getList()
   },
   methods: {
+    getQX () {
+      wwOpensManagerLoginSettingQX().then(res => {
+        if (res.status == 200) {
+          let data = this.getResult(res.data, 1, 'id', 'desc')
+          return this.QX = data[1] ? true : false
+        }
+        this.$Modal.error({ title: "登录设置页面权限", content: res.msg })
+      }).catch(err => {
+        this.$Modal.error({ title: "登录设置页面权限", content: err });
+      });
+    },
     pageInit (type) {
       if (this.$route.name == "wwOpensManager-login-list") {
         this.$router.push({ name: 'wwOpensManager-login-setting' })
@@ -282,7 +296,6 @@ export default {
           this.$message({ type: 'info', message: '已取消' });
         });
       }
-
     },
     /**循环异步登录 */
     async forLogin (resData) {

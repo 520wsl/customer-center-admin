@@ -21,3 +21,7 @@ export const getAliStaffList = ({
         name
     });
 };
+//获取权限
+export const wwOpensManagerLoginSettingQX = () => {
+  return post("/user/ali/permission");
+};
