@@ -222,12 +222,18 @@ export default {
       wwOpensManagerLoginSettingQX().then(res => {
         if (res.status == 200) {
           let data = this.getResult(res.data, 1, 'id', 'desc')
-          return this.QX = data[1] ? true : false
+          if (data == '') {
+            this.$Modal.error({
+              title: "登录设置页面权限", content: '您暂无权限',
+              onOK:()=>{
+                this.pageInit()
+              }
+            })
+          }
+          return this.QX = data ? true : false
         }
-        this.$Modal.error({
-          title: "登录设置页面权限", content: res.msg,
-          onOK: () => { this.pageInit() }
-        })
+        this.$Modal.error({ title: "登录设置页面权限", content: res.msg });
+
       }).catch(err => {
         this.$Modal.error({ title: "登录设置页面权限", content: err });
       });
