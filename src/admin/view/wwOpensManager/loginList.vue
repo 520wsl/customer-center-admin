@@ -303,15 +303,27 @@ export default {
         this.loginDisabled = true
         this.$Modal.warning({ title: "自动登录", content: "程序自动登录中，请勿操作鼠标!" });
         let [username, password, iv] = [i.account, i.password, i.iv]
+        let isShow = true;
+        setTimeout(() => {
+          if (isShow) {
+            this.$Modal.error({
+              title: "自动登录",
+              content:
+                "自动登录软件：<br>1、请检查自动登录软件是否打开正常! <br>"
+            });
+          }
+        }, 2000);
         await wwOpensManagerLoginListLogin({ username, password, iv }).then(res => {
           this.loginDisabled = false;
           if (res.status == 200) {
+            isShow = false;
             this.getList()
             this.$Modal.remove()
             return;
           }
           this.$Modal.error({ title: "自动登录", content: res.msg });
         }).catch(err => {
+          setTimeout()
           this.$Modal.error({ title: "自动登录", content: err.msg });
         });
       }
