@@ -106,7 +106,7 @@ export default {
         },
         {
           key: 2,
-          value: "禁止登陆"
+          value: "禁止登录"
         }
       ],
       columns: [
@@ -274,7 +274,7 @@ export default {
           this.$message({ type: 'success', message: '你的千牛客户端安装路径是: ' + value });
           this.SaveRoad(value)
         }).catch(err => {
-          this.$Modal.error({ title: "设置千牛路径", content: err.msg });
+          this.$Modal.error({ title: "设置千牛路径", content: err.msg || '设置失败，请检查路径是否正确' });
         });
       }).catch(() => {
         this.$message({ type: 'info', message: '取消输入' });

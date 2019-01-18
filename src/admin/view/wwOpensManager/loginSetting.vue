@@ -118,7 +118,7 @@ export default {
         },
         {
           key: 2,
-          value: "禁止登陆"
+          value: "禁止登录"
         }
       ],
       checked: true,
