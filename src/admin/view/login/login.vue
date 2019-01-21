@@ -1,13 +1,41 @@
 <template>
-    <div class="login" :style="'background-image: url('+$CDN('/login-bg.png')+')'">
-        <div class="login-con">
-            <Card icon="log-in" title="欢迎登录" :bordered="false">
-                <div class="form-con" v-if="false">
-                    <login-form @on-success-valid="handleSubmit"></login-form>
-                    <p class="login-tip">输入任意用户名和密码即可</p>
-                </div>
-                <div id="wx_reg"></div>
-            </Card>
+    <div class="login" style="background-color: #fff;">
+        <div v-if="this.$route.params.loginType == 'sso'" class="login"
+             style="width: 450px;margin:auto;padding-top: 200px;text-align: center;">
+            <img width="250" height="250" :src="$CDN('/start-loading.gif')">
+            <h1>
+                <Icon type="logo-chrome"/>
+                <span>  登入认证中......</span>
+            </h1>
+            <!--<h1 style="color:red;">-->
+                <!--<Icon type="md-rainy"/>-->
+                <!--<span>  认证失败！</span>-->
+                <!--<div style="font-size: 18px">-->
+                    <!--<p>Code过期</p>-->
+                <!--</div>-->
+            <!--</h1>-->
+            <!--<h1 style="color: green;">-->
+                <!--<Icon type="md-sunny"/>-->
+                <!--<span>  认证成功！</span>-->
+            <!--</h1>-->
+            <!--<h1 style="color: orange;">-->
+                <!--<Icon type="md-warning"/>-->
+                <!--<span>  警告！</span>-->
+                <!--<div style="font-size: 18px">-->
+                    <!--<p>非法操作</p>-->
+                <!--</div>-->
+            <!--</h1>-->
+        </div>
+        <div v-else class="login" :style="'background-image: url('+$CDN('/login-bg.png')+')'">
+            <div class="login-con">
+                <Card icon="log-in" title="欢迎登录" :bordered="false">
+                    <div class="form-con" v-if="false">
+                        <login-form @on-success-valid="handleSubmit"></login-form>
+                        <p class="login-tip">输入任意用户名和密码即可</p>
+                    </div>
+                    <div id="wx_reg"></div>
+                </Card>
+            </div>
         </div>
     </div>
 </template>
@@ -16,6 +44,7 @@
     import LoginForm from "_c/admin/login-form";
     import {mapActions} from "vuex";
     import {sentLoginCodeData} from "@/api/admin/user/user";
+    import {ssoLogin} from "@/api/admin/user/sso";
     import {
         getWxJSSDKConfig,
         getWxSnsapiUserInfoData
@@ -103,7 +132,17 @@
             let route = this.$route;
             let query = route.query;
             let codeData = query.code || "";
+
             let stateData = query.state || "enterpriseWeChat";
+            if (route.params.loginType === 'sso') {
+                console.log('单点登陆')
+                stateData = 'sso'
+            } else {
+                let loginPathInfo = await ssoLogin();
+                if (loginPathInfo.data) {
+                    window.location.href = loginPathInfo.data
+                }
+            }
             if (!codeData && !stateData) {
                 return;
             }
