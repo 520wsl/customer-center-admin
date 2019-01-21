@@ -1,8 +1,8 @@
 /*
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:13:25
- * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-20 14:14:07
+ * @Last Modified by: mikey.zhaopeng
+ * @Last Modified time: 2019-01-16 18:48:37
  * @explanatory:  config
  */
 export default {
@@ -27,7 +27,8 @@ export default {
 	/**
 	 * 客户端调起 路径配置
 	 */
-	callPhonePath: "http://127.0.0.1:3366",
+  callPhonePath: "http://127.0.0.1:3366",
+  qnLogin: "http://127.0.0.1:2335",
 	attachmentPath: "http://wechat-base-images.oss-cn-hangzhou.aliyuncs.com/",
 	enterpriseWeChatConfig: {
 		pro: {
