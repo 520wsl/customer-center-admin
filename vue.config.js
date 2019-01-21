@@ -11,15 +11,15 @@ module.exports = {
     // 这里写你调用接口的基础路径，来解决跨域，如果设置了代理，那你本地开发环境的axios的baseUrl要写为 '' ，即空字符串
     devServer: {
         proxy: {
-            // "/api/work-order": {
-            // 	// 卢坤鹏
-            // 	// target: "http://172.30.34.241:8202/",
-            // 	// 刘英楠
-            // 	target: "http://172.30.34.109:8202/",
-            // 	changeOrigin: true,
-            // 	pathRewrite: {
-            // 		"^/api/work-order": ""
-            // 	}
+            // "/api/work-order/": {
+            //     // 卢坤鹏
+            //     target: "http://172.30.34.241:8202/",
+            //     // 刘英楠
+            //     // target: "http://172.30.34.109:8202/",
+            //     changeOrigin: true,
+            //     pathRewrite: {
+            //         "/api/work-order/": ""
+            //     }
             // },
             // "/api/evaluate": {
             // 	// target: "http://172.30.34.78:8201/",

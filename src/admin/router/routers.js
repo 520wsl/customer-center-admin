@@ -139,7 +139,7 @@ export default [
         ]
     },
     {
-        path: "/login",
+        path: "/login/:loginType?",
         name: "login",
         meta: {
             title: "Login-登录",
