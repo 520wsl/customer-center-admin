@@ -128,7 +128,7 @@
         },
 
         async mounted() {
-            this.WwLogin();
+            // this.WwLogin();
             let route = this.$route;
             let query = route.query;
             let codeData = query.code || "";
@@ -138,7 +138,7 @@
                 console.log('单点登陆')
                 stateData = 'sso'
             } else {
-                let loginPathInfo = await ssoLogin({host:window.location.href});
+                let loginPathInfo = await ssoLogin({host: window.location.href});
                 window.location.href = loginPathInfo
                 // if (loginPathInfo.data) {
                 //     window.location.href = loginPathInfo.data
