@@ -126,7 +126,7 @@
             let stateData = queryData.state || "";
             this.test = queryData.test || false;
             let clientId = 'workorderqy'
-            let pathname = '/admin/wx/workOrde'
+            let pathname = '/admin/wx/workOrder'
 
             this.QYWXLogin();
 
