@@ -11,7 +11,7 @@ function get(url, params) {
 }
 
 function getRedirectUri() {
-    return window.location.host + '/admin/login/sso'
+    return 'http://'+window.location.host + '/admin/login/sso'
 }
 
 export const ssoCode = ({code}) => {
