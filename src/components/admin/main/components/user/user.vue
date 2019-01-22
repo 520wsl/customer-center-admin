@@ -33,11 +33,12 @@ export default {
             switch (name) {
                 case "logout":
                     localStorage.departmentData = '';
-                    this.handleLogOut().then(() => {
-                        this.$router.push({
-                            name: "login"
-                        });
-                    });
+                    this.handleLogOut()
+                    // .then(() => {
+                    //     this.$router.push({
+                    //         name: "login"
+                    //     });
+                    // });
                     break;
             }
         }
