@@ -11,22 +11,21 @@ function get(url, params) {
 }
 
 function getRedirectUri() {
-    return 'http://'+window.location.host + '/admin/login/sso'
+    return window.location.href
 }
 
-export const ssoCode = ({code}) => {
+export const ssoCode = ({code, clientId}) => {
     let redirectUri = getRedirectUri()
-    return post("/code", {code, redirectUri});
+    return post("/code", {code, redirectUri, clientId});
 };
-export const ssoLogin = () => {
+export const ssoLogin = ({clientId}) => {
     let redirectUri = getRedirectUri()
-    console.log(redirectUri)
-    return '/api' + baseUrl + '/login?redirectUri=' + redirectUri
+    return '/api' + baseUrl + '/login?redirectUri=' + redirectUri + '&clientId=' + clientId
 };
 
-export const ssoLoginOut = () => {
+export const ssoLoginOut = ({clientId}) => {
     let redirectUri = getRedirectUri()
-    return '/api' + baseUrl + '/loginout?redirectUri=' + redirectUri
+    return '/api' + baseUrl + '/loginout?redirectUri=' + redirectUri + '&clientId=' + clientId
 };
 
 

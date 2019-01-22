@@ -12,7 +12,7 @@ const storedimensionListKey = "dimensionList";
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2018-12-24 19:19:53
+ * @Last Modified time: 2019-01-22 17:58:57
  * @explanatory:  store demo
  */
 export default {
@@ -72,7 +72,7 @@ export default {
             commit("setUserInfo", "");
             commit("setUserInfoStoreage", "");
             setStore(storedimensionListKey, "");
-            window.location.href = ssoLoginOut()
+            window.location.href = ssoLoginOut({clientId:'workorder'})
             // return new Promise((resolve, reject) => {
             //     // logout()
             //     //     .then(() => {
@@ -107,12 +107,10 @@ export default {
                 commit("setSixiId", userInfo && userInfo.sixiId);
                 return;
             }
-            let res2 = "";
-            res2 = await dispatch("getUserInfo");
-            if (res2.status !== 200) {
-                console.error("[debug]:getUserInfo", res2);
-                return false;
-            }
+            setTimeout(()=>{
+               dispatch("getUserInfo");
+            },2000)
+           
             return true;
         },
         // 获取用户相关信息
@@ -172,7 +170,7 @@ export default {
         },
         async loginScheduler(
             {dispatch, state, commit},
-            {codeData, stateData}
+            {codeData, stateData,clientId}
         ) {
             console.log("【debug】loginScheduler ** codeData：", codeData);
             console.log("【debug】loginScheduler ** stateData：", stateData);
@@ -195,7 +193,7 @@ export default {
                     case "weChat":
                         break;
                     case  "sso":
-                        res = await ssoCode({code: codeData});
+                        res = await ssoCode({code: codeData,clientId});
                         res2 = await dispatch("getUserInfo");
                         if (res2.status !== 200) {
                             console.error("[debug]:getUserInfo", res2);
