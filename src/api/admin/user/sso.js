@@ -10,12 +10,23 @@ function get(url, params) {
     return api.get(baseUrl + url, params);
 }
 
+function getRedirectUri() {
+    return window.location.host + '/admin/login/sso'
+}
+
 export const ssoCode = ({code}) => {
-    return post("/code", {code});
+    let redirectUri = getRedirectUri()
+    return post("/code", {code, redirectUri});
 };
 export const ssoLogin = () => {
-    return '/api' + baseUrl + '/login'
-    // return post("/login");
+    let redirectUri = getRedirectUri()
+    console.log(redirectUri)
+    return '/api' + baseUrl + '/login?redirectUri=' + redirectUri
+};
+
+export const ssoLoginOut = () => {
+    let redirectUri = getRedirectUri()
+    return '/api' + baseUrl + '/loginout?redirectUri=' + redirectUri
 };
 
 

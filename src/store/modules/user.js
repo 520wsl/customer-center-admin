@@ -1,7 +1,7 @@
 import {logout, sentLoginCodeData} from "@/api/admin/qywechatProxy/user";
 import {getIsDirector} from "@/api/admin/case/case"
 import {getUserInfoData} from "@/api/admin/user/user";
-import {ssoLogin,ssoCode} from "@/api/admin/user/sso";
+import {ssoLogin,ssoCode,ssoLoginOut} from "@/api/admin/user/sso";
 import {setToken, getToken} from "@/libs/util";
 import {setStore, getStore} from "@/libs/util/storeage";
 import config from "@/config";
@@ -68,23 +68,28 @@ export default {
         },
         // 退出登录
         handleLogOut({state, commit}) {
-            return new Promise((resolve, reject) => {
-                logout()
-                    .then(() => {
-                        commit("setSixiId", "");
-                        commit("setUserInfo", "");
-                        commit("setUserInfoStoreage", "");
-                        setStore(storedimensionListKey, "");
-                        resolve();
-                    })
-                    .catch(err => {
-                        reject(err);
-                    });
-                //   如果你的退出登录无需请求接口，则可以直接使用下面三行代码而无需使用logout调用接口
-                // commit("setToken", "");
-                // commit("setAccess", []);
-                // resolve();
-            });
+            commit("setSixiId", "");
+            commit("setUserInfo", "");
+            commit("setUserInfoStoreage", "");
+            setStore(storedimensionListKey, "");
+            window.location.href = ssoLoginOut()
+            // return new Promise((resolve, reject) => {
+            //     // logout()
+            //     //     .then(() => {
+            //     //         commit("setSixiId", "");
+            //     //         commit("setUserInfo", "");
+            //     //         commit("setUserInfoStoreage", "");
+            //     //         setStore(storedimensionListKey, "");
+            //     //         resolve();
+            //     //     })
+            //     //     .catch(err => {
+            //     //         reject(err);
+            //     //     });
+            //     //   如果你的退出登录无需请求接口，则可以直接使用下面三行代码而无需使用logout调用接口
+            //     // commit("setToken", "");
+            //     // commit("setAccess", []);
+            //     // resolve();
+            // });
         },
         async getUserInfoAction({dispatch, state, commit}) {
             let userInfo = JSON.parse(getStore(state.storeageUserInfoKey));
