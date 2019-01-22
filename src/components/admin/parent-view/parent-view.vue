@@ -116,6 +116,7 @@ export default {
         let codeData = queryData.code || "";
         let stateData = queryData.state || "";
         this.test = queryData.test || false;
+        let clientId = 'workorderqy'
 
         this.QYWXLogin();
 
@@ -126,6 +127,7 @@ export default {
         let res = await this.loginScheduler({
             codeData,
             stateData,
+            clientId,
             route: this.$route
         });
 

@@ -1,6 +1,6 @@
 <template>
     <div class="login" style="background-color: #fff;">
-        <div v-if="this.$route.params.loginType == 'sso'" class="login"
+        <div class="login"
              style="width: 450px;margin:auto;padding-top: 200px;text-align: center;">
             <img width="250" height="250" :src="$CDN('/start-loading.gif')">
             <h1>
@@ -26,17 +26,17 @@
             <!--</div>-->
             <!--</h1>-->
         </div>
-        <div v-else class="login" :style="'background-image: url('+$CDN('/login-bg.png')+')'">
-            <div class="login-con">
-                <Card icon="log-in" title="欢迎登录" :bordered="false">
-                    <div class="form-con" v-if="false">
-                        <login-form @on-success-valid="handleSubmit"></login-form>
-                        <p class="login-tip">输入任意用户名和密码即可</p>
-                    </div>
-                    <div id="wx_reg"></div>
-                </Card>
-            </div>
-        </div>
+        <!--<div v-else class="login" :style="'background-image: url('+$CDN('/login-bg.png')+')'">-->
+        <!--<div class="login-con">-->
+        <!--<Card icon="log-in" title="欢迎登录" :bordered="false">-->
+        <!--<div class="form-con" v-if="false">-->
+        <!--<login-form @on-success-valid="handleSubmit"></login-form>-->
+        <!--<p class="login-tip">输入任意用户名和密码即可</p>-->
+        <!--</div>-->
+        <!--<div id="wx_reg"></div>-->
+        <!--</Card>-->
+        <!--</div>-->
+        <!--</div>-->
     </div>
 </template>
 
@@ -56,7 +56,7 @@
 
     export default {
         components: {
-            LoginForm
+            // LoginForm
         },
         methods: {
             ...mapActions(["handleLogin", "getUserInfo", "loginScheduler"]),
@@ -132,24 +132,17 @@
             let route = this.$route;
             let query = route.query;
             let codeData = query.code || "";
+            let clientId = 'workorder'
 
-            let stateData = query.state || "enterpriseWeChat";
-            if (route.params.loginType === 'sso') {
-                console.log('单点登陆')
-                stateData = 'sso'
-            } else {
-                let loginPathInfo = await ssoLogin({host: window.location.href});
-                window.location.href = loginPathInfo
-                // if (loginPathInfo.data) {
-                //     window.location.href = loginPathInfo.data
-                // }
-            }
+            let stateData = query.state || "";
             if (!codeData && !stateData) {
+                window.location.href = await ssoLogin({clientId});
                 return;
             }
             let res = await this.loginScheduler({
                 codeData,
                 stateData,
+                clientId,
                 route: this.$route
             });
             console.log("code登录", res);
