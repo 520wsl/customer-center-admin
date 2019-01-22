@@ -11,7 +11,7 @@ function get(url, params) {
 }
 
 function getRedirectUri() {
-    return window.location.href
+    return window.document.location.origin+window.document.location.pathname
 }
 
 export const ssoCode = ({code, clientId}) => {
