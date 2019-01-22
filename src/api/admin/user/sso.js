@@ -10,21 +10,21 @@ function get(url, params) {
     return api.get(baseUrl + url, params);
 }
 
-function getRedirectUri() {
-    return window.document.location.origin+window.document.location.pathname
+function getRedirectUri({pathname}) {
+    return window.document.location.origin + pathname
 }
 
-export const ssoCode = ({code, clientId}) => {
-    let redirectUri = getRedirectUri()
+export const ssoCode = ({code, clientId, pathname}) => {
+    let redirectUri = getRedirectUri({pathname})
     return post("/code", {code, redirectUri, clientId});
 };
-export const ssoLogin = ({clientId}) => {
-    let redirectUri = getRedirectUri()
+export const ssoLogin = ({clientId, pathname}) => {
+    let redirectUri = getRedirectUri({pathname})
     return '/api' + baseUrl + '/login?redirectUri=' + redirectUri + '&clientId=' + clientId
 };
 
-export const ssoLoginOut = ({clientId}) => {
-    let redirectUri = getRedirectUri()
+export const ssoLoginOut = ({clientId, pathname}) => {
+    let redirectUri = getRedirectUri({pathname})
     return '/api' + baseUrl + '/loginout?redirectUri=' + redirectUri + '&clientId=' + clientId
 };
 
