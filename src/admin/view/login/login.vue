@@ -138,7 +138,7 @@
                 console.log('单点登陆')
                 stateData = 'sso'
             } else {
-                let loginPathInfo = await ssoLogin();
+                let loginPathInfo = await ssoLogin({host:window.location.href});
                 window.location.href = loginPathInfo
                 // if (loginPathInfo.data) {
                 //     window.location.href = loginPathInfo.data
