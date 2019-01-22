@@ -8,22 +8,22 @@
                 <span>  登入认证中......</span>
             </h1>
             <!--<h1 style="color:red;">-->
-                <!--<Icon type="md-rainy"/>-->
-                <!--<span>  认证失败！</span>-->
-                <!--<div style="font-size: 18px">-->
-                    <!--<p>Code过期</p>-->
-                <!--</div>-->
+            <!--<Icon type="md-rainy"/>-->
+            <!--<span>  认证失败！</span>-->
+            <!--<div style="font-size: 18px">-->
+            <!--<p>Code过期</p>-->
+            <!--</div>-->
             <!--</h1>-->
             <!--<h1 style="color: green;">-->
-                <!--<Icon type="md-sunny"/>-->
-                <!--<span>  认证成功！</span>-->
+            <!--<Icon type="md-sunny"/>-->
+            <!--<span>  认证成功！</span>-->
             <!--</h1>-->
             <!--<h1 style="color: orange;">-->
-                <!--<Icon type="md-warning"/>-->
-                <!--<span>  警告！</span>-->
-                <!--<div style="font-size: 18px">-->
-                    <!--<p>非法操作</p>-->
-                <!--</div>-->
+            <!--<Icon type="md-warning"/>-->
+            <!--<span>  警告！</span>-->
+            <!--<div style="font-size: 18px">-->
+            <!--<p>非法操作</p>-->
+            <!--</div>-->
             <!--</h1>-->
         </div>
         <div v-else class="login" :style="'background-image: url('+$CDN('/login-bg.png')+')'">
@@ -139,9 +139,10 @@
                 stateData = 'sso'
             } else {
                 let loginPathInfo = await ssoLogin();
-                if (loginPathInfo.data) {
-                    window.location.href = loginPathInfo.data
-                }
+                window.location.href = loginPathInfo
+                // if (loginPathInfo.data) {
+                //     window.location.href = loginPathInfo.data
+                // }
             }
             if (!codeData && !stateData) {
                 return;
