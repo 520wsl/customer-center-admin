@@ -12,7 +12,7 @@ const storedimensionListKey = "dimensionList";
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-08 10:50:44
  * @Last Modified by: Mad Dragon
- * @Last Modified time: 2019-01-22 17:58:57
+ * @Last Modified time: 2019-01-22 18:56:02
  * @explanatory:  store demo
  */
 export default {
@@ -67,12 +67,12 @@ export default {
             commit("setUserName", {a: 1, b: 2});
         },
         // 退出登录
-        handleLogOut({state, commit}) {
+        handleLogOut({state, commit}, {clientId,pathname}) {
             commit("setSixiId", "");
             commit("setUserInfo", "");
             commit("setUserInfoStoreage", "");
             setStore(storedimensionListKey, "");
-            window.location.href = ssoLoginOut({clientId:'workorder'})
+            window.location.href = ssoLoginOut({clientId,pathname})
             // return new Promise((resolve, reject) => {
             //     // logout()
             //     //     .then(() => {
@@ -170,7 +170,7 @@ export default {
         },
         async loginScheduler(
             {dispatch, state, commit},
-            {codeData, stateData,clientId}
+            {codeData, stateData,clientId,pathname}
         ) {
             console.log("【debug】loginScheduler ** codeData：", codeData);
             console.log("【debug】loginScheduler ** stateData：", stateData);
@@ -193,7 +193,7 @@ export default {
                     case "weChat":
                         break;
                     case  "sso":
-                        res = await ssoCode({code: codeData,clientId});
+                        res = await ssoCode({code: codeData,clientId,pathname});
                         res2 = await dispatch("getUserInfo");
                         if (res2.status !== 200) {
                             console.error("[debug]:getUserInfo", res2);

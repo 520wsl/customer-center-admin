@@ -133,18 +133,22 @@
             let query = route.query;
             let codeData = query.code || "";
             let clientId = 'workorder'
+            let pathname = '/admin/login'
 
             let stateData = query.state || "";
             if (!codeData && !stateData) {
-                window.location.href = await ssoLogin({clientId});
+                window.location.href = await ssoLogin({clientId, pathname});
                 return;
             }
             let res = await this.loginScheduler({
-                codeData,
-                stateData,
-                clientId,
-                route: this.$route
-            });
+                    codeData,
+                    stateData,
+                    clientId,
+                    pathname,
+                    route:
+                    this.$route
+                })
+            ;
             console.log("code登录", res);
             if (res) {
                 this.skipToDefaultPage();
