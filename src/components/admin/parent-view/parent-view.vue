@@ -1,6 +1,14 @@
 <template>
-    <div>
+    <div style=" width: 100%;height: 100%;background-color: #fff;">
         <Button v-if="test" @click="opendefaultbrowserBtn">用系统浏览器打开</Button>
+        <div v-if="this.$route.name == 'wx-workOrder'" class="login"
+             style="width: 450px;margin:auto;padding-top: 200px;text-align: center;">
+            <img width="250" height="250" :src="$CDN('/start-loading.gif')">
+            <h1>
+                <Icon type="logo-chrome"/>
+                <span>  登入认证中......</span>
+            </h1>
+        </div>
         <router-view/>
     </div>
 </template>
