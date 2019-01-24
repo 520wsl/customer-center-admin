@@ -688,15 +688,15 @@ export default {
             this.caseParams.pageNum = 1;
             this.getCaseList();
         },
-        // 判断当前登录人是否为带我受理 第123级受理人人员
+        // 判断当前登录人是否为待我受理 第123级受理人人员
         getIsAcceptance() {
             let params = {
                 workSheetId: this.workSheetId
             }
-            setWorkSheetProcessingState(params).then(res=>{
+            getWorkorderPendingPerson(params).then(res=>{
                 if(res.status != 200){
                     this.$Modal.error({
-                        title: "工单带我受理人员",
+                        title: "工单待我受理人员",
                         content: res.msg
                     });
                 }
