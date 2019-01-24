@@ -6,6 +6,7 @@
  * @explanatory:  工单详情 基本信息
  */
 import api from "@/libs/api.request";
+
 const baseUrl = "/work-order";
 
 function post(url, params) {
@@ -18,8 +19,8 @@ function get(url, params) {
 
 // 工单详情详情--基本信息
 export const getWorkSheetInfoData = ({
-    workSheetId
-}) => {
+                                         workSheetId
+                                     }) => {
     return post("/worksheet/detail", {
         workSheetId
     });
@@ -56,26 +57,26 @@ export const getWorkorderPendingPerson = ({
 };
 // 工单列表
 export const getWorkSheetListData = ({
-    companyName,
-    identifier,
-    workType,
-    handleType,
-    startTime,
-    endTime,
-    timeType,
-    durationHour,
-    responseHour,
-    isRead,
-    execute,
-    partake,
-    sortType,
-    sort,
-    telephone,
-    pageNum,
-    pageSize,
-    count,
-    customerId
-}) => {
+                                         companyName,
+                                         identifier,
+                                         workType,
+                                         handleType,
+                                         startTime,
+                                         endTime,
+                                         timeType,
+                                         durationHour,
+                                         responseHour,
+                                         isRead,
+                                         execute,
+                                         partake,
+                                         sortType,
+                                         sort,
+                                         telephone,
+                                         pageNum,
+                                         pageSize,
+                                         count,
+                                         customerId
+                                     }) => {
     return post("/worksheet/list", {
         companyName,
         identifier,
@@ -100,27 +101,27 @@ export const getWorkSheetListData = ({
 };
 // 公司工单列表
 export const getWorkcustomerListData = ({
-    companyId,
-    companyName,
-    identifier,
-    workType,
-    handleType,
-    startTime,
-    endTime,
-    timeType,
-    durationHour,
-    responseHour,
-    isRead,
-    execute,
-    partake,
-    sortType,
-    sort,
-    telephone,
-    pageNum,
-    pageSize,
-    count,
-    customerId
-}) => {
+                                            companyId,
+                                            companyName,
+                                            identifier,
+                                            workType,
+                                            handleType,
+                                            startTime,
+                                            endTime,
+                                            timeType,
+                                            durationHour,
+                                            responseHour,
+                                            isRead,
+                                            execute,
+                                            partake,
+                                            sortType,
+                                            sort,
+                                            telephone,
+                                            pageNum,
+                                            pageSize,
+                                            count,
+                                            customerId
+                                        }) => {
     return post("/worksheet/customerlist", {
         companyId,
         companyName,
@@ -146,10 +147,10 @@ export const getWorkcustomerListData = ({
 };
 // 工单详情详情--工单移交
 export const assignWorksheet = ({
-    workSheetId,
-    sixiId,
-    remark
-}) => {
+                                    workSheetId,
+                                    sixiId,
+                                    remark
+                                }) => {
     return post("/worksheet/transfer", {
         workSheetId,
         sixiId,
@@ -158,18 +159,18 @@ export const assignWorksheet = ({
 };
 // 工单详情详情--工单移交详情
 export const transferWorksheetInfo = ({
-    workSheetId
-}) => {
+                                          workSheetId
+                                      }) => {
     return post("/worksheet/transfer/detail", {
         workSheetId
     });
 };
 // 工单详情详情--工单移交确认
 export const sureTransferWorksheet = ({
-    workSheetId,
-    state,
-    refuseReason
-}) => {
+                                          workSheetId,
+                                          state,
+                                          refuseReason
+                                      }) => {
     return post("/worksheet/transfer/confirm", {
         workSheetId,
         state,
@@ -178,16 +179,16 @@ export const sureTransferWorksheet = ({
 };
 // 工单详情详情--工单移交撤回
 export const retractTransferWorksheet = ({
-    workSheetId
-}) => {
+                                             workSheetId
+                                         }) => {
     return post("/worksheet/transfer/back", {
         workSheetId
     });
 };
 // 再次发送评价通知
 export const againEvaluate = ({
-    workSheetId
-}) => {
+                                  workSheetId
+                              }) => {
     return post("/worksheet/againevaluate", {
         workSheetId
     });
@@ -195,22 +196,22 @@ export const againEvaluate = ({
 
 // 部门工单列表
 export const getLeaderList = ({
-    customerId,
-    identifier,
-    handleType,
-    startTime,
-    endTime,
-    pageNum,
-    pageSize,
-    workType,
-    durationHour,
-    responseHour,
-    companyName,
-    timeType,
-    sortType,
-    sort,
-    departmentId
-}) => {
+                                  customerId,
+                                  identifier,
+                                  handleType,
+                                  startTime,
+                                  endTime,
+                                  pageNum,
+                                  pageSize,
+                                  workType,
+                                  durationHour,
+                                  responseHour,
+                                  companyName,
+                                  timeType,
+                                  sortType,
+                                  sort,
+                                  departmentId
+                              }) => {
     return post("/worksheet/leader/list", {
         customerId,
         identifier,
@@ -236,6 +237,31 @@ export const getLeaderDepartment = () => {
 };
 
 // 获取部门人员信息
-export const getLeaderDepartmentList = ({ pid }) => {
-    return post("/staff/user/listbypid", { pid });
+export const getLeaderDepartmentList = ({pid}) => {
+    return post("/staff/user/listbypid", {pid});
 };
+
+// 代我受理 工单列表
+export const getAcceptedListData = ({
+                                        pageSize,
+                                        pageNum,
+                                        companyName,
+                                        identifier,
+                                        workType,
+                                        handleType,
+                                        sponsor,
+                                        timeMin,
+                                        timeMax,
+                                    }) => {
+    return post("/worksheet/get/accepted/list", {
+        pageSize,
+        pageNum,
+        companyName,
+        identifier,
+        workType,
+        handleType,
+        sponsor,
+        timeMin,
+        timeMax,
+    })
+}

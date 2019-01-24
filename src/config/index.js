@@ -1,8 +1,8 @@
 /*
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:13:25
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-01-16 18:48:37
+ * @Last Modified by: Mad Dragon
+ * @Last Modified time: 2019-01-23 17:50:24
  * @explanatory:  config
  */
 export default {
@@ -44,6 +44,16 @@ export default {
 			agentid: "1000006",
 			redirect_uri: "http://test.work.sixi.com/admin/login",
 			state: "enterpriseWeChat"
+		}
+	},
+	ssoConfig:{
+		login:{
+			clientId:'test',
+			pathname:'/admin/login'
+		},
+		qywx:{
+			clientId:'workorderqy',
+			pathname:'/admin/wx/workOrder'
 		}
 	},
 	wechatConfig: {

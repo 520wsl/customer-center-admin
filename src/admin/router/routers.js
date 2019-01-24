@@ -1,8 +1,8 @@
 /*
  * @Author: Mad Dragon 395548460@qq.com
  * @Date: 2018-11-07 22:22:23
- * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2019-01-16 17:40:44
+ * @Last Modified by: Mad Dragon
+ * @Last Modified time: 2019-01-23 17:40:13
  * @explanatory: Routers Config   路由 路径 配置
  */
 /**
@@ -46,6 +46,18 @@ export default [
                 component: r =>
                     require.ensure([], () =>
                         require("@/admin/view/workOrder/list")
+                    )
+            },
+            {
+                path: "taskList",
+                name: "workOrder-task-list",
+                meta: {
+                    icon: "ios-stats",
+                    title: "待我受理"
+                },
+                component: r =>
+                    require.ensure([], () =>
+                        require("@/admin/view/workOrder/taskLists")
                     )
             },
             {

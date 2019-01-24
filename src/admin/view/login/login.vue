@@ -132,8 +132,8 @@
             let route = this.$route;
             let query = route.query;
             let codeData = query.code || "";
-            let clientId = 'workorder'
-            let pathname = '/admin/login'
+            let clientId = this.$config.ssoConfig.login.clientId
+            let pathname = this.$config.ssoConfig.login.pathname
 
             let stateData = query.state || "";
             if (!codeData && !stateData) {

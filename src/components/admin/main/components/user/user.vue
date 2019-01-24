@@ -33,7 +33,7 @@
                 switch (name) {
                     case "logout":
                         localStorage.departmentData = '';
-                        this.handleLogOut({clientId: 'workorder', pathname: '/admin/login'})
+                        this.handleLogOut({clientId:this.$config.ssoConfig.login.clientId, pathname: this.$config.ssoConfig.login.pathname})
                         // .then(() => {
                         //     this.$router.push({
                         //         name: "login"
