@@ -125,8 +125,8 @@
             let codeData = queryData.code || "";
             let stateData = queryData.state || "";
             this.test = queryData.test || false;
-            let clientId = 'workorderqy'
-            let pathname = '/admin/wx/workOrder'
+            let clientId = this.$config.ssoConfig.qywx.clientId
+            let pathname = this.$config.ssoConfig.qywx.pathname
 
             this.QYWXLogin();
 
