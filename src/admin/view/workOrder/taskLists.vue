@@ -59,7 +59,7 @@
                 </div>
                 <div class="search-input-item">
                     <span class="search-input-item-lable">受理人：</span>
-                    <Cascader class="search-input-item" filterable  v-model="params.customerIdList"
+                    <Cascader class="search-input-item" filterable v-model="params.customerIdList"
                               :data="departmentList" @on-change="changeDepartment"></Cascader>
                 </div>
                 <div class="search-btn flex-right">
@@ -309,11 +309,14 @@
                             let query = params.row;
                             btnGroup.push(
                                 h(
-                                    "a",
+                                    "Button",
                                     {
+                                        props: {
+                                            type: "primary",
+                                            size: "small",
+                                            ghost: true
+                                        },
                                         style: {
-                                            color: "#2d8cf0",
-                                            display: "block",
                                             margin: "5px"
                                         },
                                         on: {

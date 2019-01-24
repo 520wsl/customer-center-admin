@@ -520,6 +520,20 @@ export default [
                         )
                 },
                 {
+                    path: "taskList",
+                    name: "wx-workOrder-task-list",
+                    meta: {
+                        icon: "ios-stats",
+                        title: "待我受理",
+                        noLogin: true,
+                        hideInMenu: true,
+                    },
+                    component: r =>
+                        require.ensure([], () =>
+                            require("@/admin/view/workOrder/taskLists")
+                        )
+                },
+                {
                     path: "leaderList",
                     name: "wx-workOrder-leaderList",
                     meta: {
