@@ -15,7 +15,7 @@
             <div slot="extra">
                 <div v-if="isHaveUserId">
                     <a
-                        v-if="isDirector && info && info.handleType == 4"
+                        v-if="isDirector && info && info.handleType == 4 && info.handleType != 6"
                         @click="joinCasebase"
                         href="javascript:;"
                         class="md-card-btn-warning"
@@ -23,7 +23,7 @@
                         <Icon type="md-hammer"></Icon>加入案例库
                     </a>
                     <a
-                        v-if="current == 0 && (isExectorId || isLeader) && info.handleType != 5"
+                        v-if="current == 0 && (isExectorId || isLeader || isAcceptance) && info.handleType != 5 && info.handleType != 6"
                         @click="setWorkSheetProcessing(2)"
                         href="javascript:;"
                         class="md-card-btn-warning"
@@ -31,7 +31,7 @@
                         <Icon type="md-hammer"></Icon>工单受理
                     </a>
                     <a
-                        v-if="info && info.handleType == 5 && (transferInfo && transferInfo.coverTransferSixiId == sixiId)"
+                        v-if="info && info.handleType == 5 && (transferInfo && transferInfo.coverTransferSixiId == sixiId) && info.handleType != 6"
                         @click="transfer"
                         href="javascript:;"
                         class="md-card-btn-warning"
@@ -39,7 +39,7 @@
                         <Icon type="md-hammer"></Icon>移交确认
                     </a>
                     <a
-                        v-if="info && info.handleType == 5 && (transferInfo && transferInfo.transferSixiId == sixiId)"
+                        v-if="info && info.handleType == 5 && (transferInfo && transferInfo.transferSixiId == sixiId) && info.handleType != 6"
                         @click="checkTransfer"
                         href="javascript:;"
                         class="md-card-btn-warning"
@@ -47,7 +47,7 @@
                         <Icon type="md-hammer"></Icon>查看移交
                     </a>
                     <a
-                        v-if="info && (info.handleType == 0 || info.handleType == 1 || info.handleType == 2) && (isExectorId || isLeader)"
+                        v-if="info && (info.handleType <= 2) && (isExectorId || isLeader || (isAcceptance && info.handleType < 2)) && info.handleType != 6"
                         @click="assignPersonnel"
                         href="javascript:;"
                         class="md-card-btn-warning"
@@ -55,7 +55,7 @@
                         <Icon type="md-create"></Icon>移交
                     </a>
                     <a
-                        v-if="current == 1 && isExectorId && info.handleType != 5"
+                        v-if="current == 1 && isExectorId && info.handleType != 5 && info.handleType != 6"
                         @click="setWorkSheetProcessing(3)"
                         href="javascript:;"
                         class="md-card-btn-success"
@@ -100,19 +100,23 @@
         <router-view></router-view>
         <Modal v-model="modal.bool" footer-hide title="工单移交" :mask-closable="false">
             <Card class="md-card">
-                <!-- <RadioGroup v-model="modal.index">
-                    <table class="tab">
-                        <tbody>
-                            <tr v-for="(item,index) in modal.personList" :key="index">
-                                <td class="title2">
-                                    <Radio :value="item.staffSixiId" :label="index"></Radio>
-                                </td>
-                                <td>{{item.staffTag+' : '}}</td>
-                                <td>{{item.staffName+"("+item.department+")"}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </RadioGroup> -->
+                <!-- 暂时不做 -->
+                <!-- <RadioGroup v-model="modal.type" style="margin-bottom:20px">
+                     <Radio label="1">关联客服：</Radio>
+                     <Radio label="2">上级领导：</Radio>
+                     <Radio label="3">其他员工：</Radio>
+                </RadioGroup>
+                <div>
+                    <Select v-model="modal.relateService" style="width:200px" v-if="modal.type == 1" placeholder="请选择关联客服">
+                        <Option v-for='(item,index) in modal.personList' :value="item.staffSixiId" :key="index">{{staffTagIdList[item.staffTagId]}}：{{item.staffName+"("+item.department+")"}}</Option>
+                    </Select>
+                    <Select v-model="modal.superiorLeaderSixiId" style="width:200px" v-if="modal.type == 2"  placeholder="请选择上级领导">
+                            <Option v-for='(item,index) in modal.superiorLeaderList' :value="item.sixiId" :key="index">{{item.userName+"("+item.departmentName+")"}}</Option>
+                        </Select>
+                    <Department v-if="modal.type == 3" style="display:inline-block;" :loading-user="true" width="200" :get-user-info="getUserInfo" @getselect="getSelect" v-model="modal.customerIdList"></Department>
+                    <Button style="margin-left:10px;" type="primary" @click="addChoose">选择</Button>
+                </div> -->
+                
                 <RadioGroup v-model="modal.type" vertical>
                     <Radio label="1">关联客服：</Radio>
                     <Select v-model="modal.relateService" style="width:200px">
@@ -201,6 +205,8 @@ import { getArrValue } from "@/libs/tools";
 import {
     getWorkSheetInfoData,
     setWorkSheetProcessingState,
+    setWorkSheetAcceptance,
+    getWorkorderPendingPerson,
     assignWorksheet,
     transferWorksheetInfo,
     sureTransferWorksheet,
@@ -337,6 +343,28 @@ export default {
                     });
                     return;
                 }
+                // 确认移交 受理工单
+                if(this.transferModal.state == 1){
+                    let params = {
+                        workSheetId: this.info.id
+                    }
+                    setWorkSheetAcceptance({ ...params }).then(res=>{
+                        if (res.status !== 200) {
+                            this.$Modal.error({
+                                title: "工单状态修改",
+                                content: res.msg
+                            });
+                            return;
+                        }
+                        this.getWorkSheetInfo();
+                    }).catch(error=>{
+                        this.$Modal.error({
+                            title: "工单受理",
+                            content: error.msg
+                        });
+                    })
+                    return
+                }
                 this.getWorkSheetInfo();              
                 this.transferModal.bool = false;
             })
@@ -462,7 +490,7 @@ export default {
                 });
             // 其他情况页面不刷新
             } else {
-                let res = await setWorkSheetProcessingState({ ...params });
+                let res = await setWorkSheetAcceptance({ ...params });
                 if (res.status !== 200) {
                     this.$Modal.error({
                         title: "工单状态修改",
@@ -659,12 +687,74 @@ export default {
             this.caseParams.pageSize = pageSize;
             this.caseParams.pageNum = 1;
             this.getCaseList();
-        }
+        },
+        // 判断当前登录人是否为带我受理 第123级受理人人员
+        getIsAcceptance() {
+            let params = {
+                workSheetId: this.workSheetId
+            }
+            setWorkSheetProcessingState(params).then(res=>{
+                if(res.status != 200){
+                    this.$Modal.error({
+                        title: "工单带我受理人员",
+                        content: res.msg
+                    });
+                }
+                let sixiId = this.$store.state.user.userInfo.sixiId || "";
+                let firstPendingPerson = res.data.firstPendingPerson || [];
+                firstPendingPerson.forEach(item=>{
+                    if(sixiId == item){
+                        this.isAcceptance = true;
+                        return;
+                    }
+                })
+                let secondPendingPerson = res.data.secondPendingPerson || [];
+                secondPendingPerson.forEach(item=>{
+                    if(sixiId == item){
+                        this.isAcceptance = true;
+                        return;
+                    }
+                })
+                let thirdPendingPerson = res.data.thirdPendingPerson || [];
+                thirdPendingPerson.forEach(item=>{
+                    if(sixiId == item){
+                        this.isAcceptance = true;
+                        return;
+                    }
+                })
+            }).catch(error=>{
+                this.$Modal.error({
+                    title: "工单带我受理人员",
+                    content: error.msg
+                });  
+            })
+        },
+        // 暂时不做
+        // addChoose() {
+        //     console.log(this.$store.state.department.departmentData)
+        //     let obj = {};
+        //     if(this.modal.type == 1){
+        //         this.modal.personList.forEach( item => {
+        //             if( this.modal.relateService == item.staffSixiId){
+        //                 console.log(item)
+        //                 obj = item;
+        //             }
+        //         })
+        //     }
+        //     this.modal.selectList.forEach(item=>{
+                
+        //     })
+        //     console.log(this.modal)
+        // },
+        // getSelect(obj) {
+        //     console.log(obj)
+        // }
     },
     data() {
         return {
             // 是否领导
             isLeader: false,
+            isAcceptance: false,
             checkTransferModal: false,
             //移交详情
             transferInfo: {},
@@ -714,7 +804,8 @@ export default {
                 customerIdList: [],
                 superiorLeaderSixiId: "",
                 superiorLeaderList: [],
-                remark: ""
+                remark: "",
+                selectList: []
             }
         };
     },
@@ -724,6 +815,7 @@ export default {
     mounted() {
         this.getWorkSheetInfo();
         this.getSixiId();
+        this.getIsAcceptance();
         this.sixiId = this.$store.state.user.userInfo.sixiId;
     }
 };

@@ -26,8 +26,9 @@ export const getUserData = ({
 };
 // 根据执行人部门Id查找上级领导
 export const getSuperiorLeader = ({department}) => {
+    let departmentIdMin = getArrMinNumBer(department);
     return post("/user/assigned", {
-        department
+        department: departmentIdMin
     });
 };
 // 是否是此部门领导
