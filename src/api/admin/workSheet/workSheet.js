@@ -179,10 +179,12 @@ export const sureTransferWorksheet = ({
 };
 // 工单详情详情--工单移交撤回
 export const retractTransferWorksheet = ({
-                                             workSheetId
+                                             workSheetId,
+                                             userId
                                          }) => {
     return post("/worksheet/transfer/back", {
-        workSheetId
+        workSheetId,
+        userId
     });
 };
 // 再次发送评价通知
