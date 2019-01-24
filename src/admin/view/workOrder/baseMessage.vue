@@ -13,7 +13,7 @@
                 <Button v-if="isExectorId()" type="primary" class="flex-right" @click="clickAgianEvaluate">重新评价</Button>
             </div>
             <Card v-for="(item,index) in evaluateList" :key="'evaluate_'+index">
-                <div slot="title">评价时间：{{formatTimeAction(item.createAt)}}</div>
+                <div slot="title">评价时间：{{formatTimeAction(item.createdAt)}}</div>
                 <evaluate-item :evaluateList="item.evaluateContent"></evaluate-item>
             </Card>
         </Card>

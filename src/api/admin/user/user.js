@@ -9,4 +9,3 @@ function get(url, params) {
 export const getUserInfoData = () => {
 	return post("/user/info");
 };
-

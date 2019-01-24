@@ -21,82 +21,71 @@ module.exports = {
             // 		"^/api/work-order": ""
             // 	}
             // },
-      // "/api/evaluate": {
-      // 	// target: "http://172.30.34.78:8201/",
-      // 	// 刘英楠
-      // 	target: "http://172.30.34.109:8202/",
-      // 	changeOrigin: true,
-      // 	pathRewrite: {
-      // 		"^/api/evaluate": ""
-      // 	}
-      // },
-      // "/api/customer": {
-      // // 画饼
-      // // target: "http://172.30.34.13:8080/",
-      // // 刘英楠
-      // // target: "http://172.30.34.109:8202/",
-      // // 陈杰
-      //   target: "http://172.30.34.175:8102/",
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //     "^/api/customer": ""
-      //   }
-      // },
-      // "/api/staff": {
-      //   // 陈杰
-      //   target: "http://172.30.34.175:8110",
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //     "^/api/staff": ""
-      //   }
-      // },
-      // "/api/qr": {
-      // 	target: "https://qmr.n.yumc.pw/",
-      // 	changeOrigin: true,
-      // 	pathRewrite: {
-      // 		"^/api/qr": "/qr"
-      // 	}
-      // },
-      // "/api": {
-      // 	target: "http://192.168.2.230:8090",
-      // 	changeOrigin: true,
-      // 	pathRewrite: {
-      // 		"^/api": ""
-      // 	}
-      // }
-      // "/api/open": {
-      // 	target: "https://wsl.n.yumc.pw",
-      // 	changeOrigin: true,
-      // 	pathRewrite: {
-      // 		"^/api/open": "/api/open"
-      // 	}
-      // },
-      "/api": {
-        target: "http://test.base.internal.sixi.com",
-        changeOrigin: true,
-        pathRewrite: {
-          "^/api": ""
-        }
-      }
+            // "/api/evaluate": {
+            // 	// target: "http://172.30.34.78:8201/",
+            // 	// 刘英楠
+            // 	target: "http://172.30.34.109:8202/",
+            // 	changeOrigin: true,
+            // 	pathRewrite: {
+            // 		"^/api/evaluate": ""
+            // 	}
+            // },
+            // "/api/customer": {
+            // 	// target: "http://172.30.34.13:8080/",
+            // 	// 刘英楠
+            // 	target: "http://172.30.34.109:8202/",
+            // 	changeOrigin: true,
+            // 	pathRewrite: {
+            // 		"^/api/customer": ""
+            // 	}
+            // },
+            // "/api/qr": {
+            // 	target: "https://qmr.n.yumc.pw/",
+            // 	changeOrigin: true,
+            // 	pathRewrite: {
+            // 		"^/api/qr": "/qr"
+            // 	}
+            // },
+            // "/api": {
+            // 	target: "http://192.168.2.230:8090",
+            // 	changeOrigin: true,
+            // 	pathRewrite: {
+            // 		"^/api": ""
+            // 	}
+            // }
+            // "/api/open": {
+            // 	target: "https://wsl.n.yumc.pw",
+            // 	changeOrigin: true,
+            // 	pathRewrite: {
+            // 		"^/api/open": "/api/open"
+            // 	}
+            // },
+            "/api": {
+                target: "http://test.base.internal.sixi.com",
+                changeOrigin: true,
+                pathRewrite: {
+                    "^/api": ""
+                }
+            }
+        },
+        disableHostCheck: true
     },
-    disableHostCheck: true
-  },
-  lintOnSave: true,
-  chainWebpack: config => {
-    config.resolve.alias
-      .set("@", resolve("src")) // key,value自行定义，比如.set('@@', resolve('src/components'))
-      .set("_c", resolve("src/components"))
-      .set("_js", resolve("src/assets/js"));
-  },
-  // 打包时不生成.map文件
-  productionSourceMap: false,
-  pages: {
-    admin: {
-      entry: "src/admin/main.js",
-      template: "public/admin.html",
-      filename: "index.html",
-      title: "admin",
-      chunks: ["chunk-vendors", "chunk-common", "admin"]
+    lintOnSave: true,
+    chainWebpack: config => {
+        config.resolve.alias
+            .set("@", resolve("src")) // key,value自行定义，比如.set('@@', resolve('src/components'))
+            .set("_c", resolve("src/components"))
+            .set("_js", resolve("src/assets/js"));
+    },
+    // 打包时不生成.map文件
+    productionSourceMap: false,
+    pages: {
+        admin: {
+            entry: "src/admin/main.js",
+            template: "public/admin.html",
+            filename: "index.html",
+            title: "admin",
+            chunks: ["chunk-vendors", "chunk-common", "admin"]
+        }
     }
-  }
 };
