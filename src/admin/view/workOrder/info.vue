@@ -284,8 +284,11 @@ export default {
                     //     this.$Modal.remove();
                     //     this.$Message.info('Asynchronously close the dialog box');
                     // }, 2000);
-                    let workSheetId = this.info.id || "";
-                    retractTransferWorksheet({workSheetId}).then(res=>{
+                    let params = {
+                        workSheetId : this.info.id,
+                        userId: this.$store.state.user.userInfo.userId
+                    }
+                    retractTransferWorksheet(params).then(res=>{
                         if(res.status!==200){
                             this.$Modal.error({
                                 title: "工单移交撤回",
