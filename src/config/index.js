@@ -48,7 +48,7 @@ export default {
 	},
 	ssoConfig:{
 		login:{
-			clientId:'test',
+			clientId:'workorder',
 			pathname:'/admin/login'
 		},
 		qywx:{
