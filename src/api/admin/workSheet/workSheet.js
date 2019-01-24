@@ -29,10 +29,10 @@ export const getWorkSheetInfoData = ({
 // 工单详情  设置工单 受理 状态
 // handleType  受理状态 0:待受理 1:已超时 2:工单确认 3:设为完结 4:已评价
 export const setWorkSheetProcessingState = ({
-    workSheetId,
-    handleType,
-    handlerMode = 1
-}) => {
+                                                workSheetId,
+                                                handleType,
+                                                handlerMode = 1
+                                            }) => {
     return post("/worksheet/confirm", {
         workSheetId,
         handleType,
@@ -41,16 +41,16 @@ export const setWorkSheetProcessingState = ({
 };
 // 工单详情  受理工单
 export const setWorkSheetAcceptance = ({
-    workSheetId
-}) => {
+                                           workSheetId
+                                       }) => {
     return post("/worksheet/grabsheet", {
         workSheetId
     });
 };
 // 工单详情  带我受理第一二三级信息
 export const getWorkorderPendingPerson = ({
-    workSheetId
-}) => {
+                                              workSheetId
+                                          }) => {
     return post("/worksheet/accept/list/by/id", {
         workSheetId
     });
@@ -251,9 +251,9 @@ export const getAcceptedListData = ({
                                         identifier,
                                         workType,
                                         handleType,
-                                        sponsor,
-                                        timeMin,
-                                        timeMax,
+                                        startTime,
+                                        endTime,
+    customerId
                                     }) => {
     return post("/worksheet/get/accepted/list", {
         pageSize,
@@ -262,8 +262,8 @@ export const getAcceptedListData = ({
         identifier,
         workType,
         handleType,
-        sponsor,
-        timeMin,
-        timeMax,
+        timeMin: startTime,
+        timeMax: endTime,
+        sponsor:customerId
     })
 }

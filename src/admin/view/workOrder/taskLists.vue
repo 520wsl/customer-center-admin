@@ -41,9 +41,7 @@
                     </Select>
                 </div>
                 <div class="search-input-item">
-                    <Select class="search-col" style="width:120px;" v-model="params.timeType">
-                        <Option :value="0">创建时间</Option>
-                    </Select>
+                    <span class="search-input-item-lable">请求时间：</span>
                     <div class="search-input-item">
                         <DatePicker
                                 class="search-input"
@@ -60,8 +58,8 @@
                     </div>
                 </div>
                 <div class="search-input-item">
-                    <span class="search-input-item-lable">切换部门：</span>
-                    <Cascader class="search-input-item" filterable change-on-select v-model="params.customerIdList"
+                    <span class="search-input-item-lable">受理人：</span>
+                    <Cascader class="search-input-item" filterable v-model="params.customerIdList"
                               :data="departmentList" @on-change="changeDepartment"></Cascader>
                 </div>
                 <div class="search-btn flex-right">
@@ -311,11 +309,14 @@
                             let query = params.row;
                             btnGroup.push(
                                 h(
-                                    "a",
+                                    "Button",
                                     {
+                                        props: {
+                                            type: "primary",
+                                            size: "small",
+                                            ghost: true
+                                        },
                                         style: {
-                                            color: "#2d8cf0",
-                                            display: "block",
                                             margin: "5px"
                                         },
                                         on: {
