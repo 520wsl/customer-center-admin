@@ -29,11 +29,29 @@ export const getWorkSheetInfoData = ({
 // handleType  受理状态 0:待受理 1:已超时 2:工单确认 3:设为完结 4:已评价
 export const setWorkSheetProcessingState = ({
     workSheetId,
-    handleType
+    handleType,
+    handlerMode = 1
 }) => {
     return post("/worksheet/confirm", {
         workSheetId,
-        handleType
+        handleType,
+        handlerMode
+    });
+};
+// 工单详情  受理工单
+export const setWorkSheetAcceptance = ({
+    workSheetId
+}) => {
+    return post("/worksheet/grabsheet", {
+        workSheetId
+    });
+};
+// 工单详情  带我受理第一二三级信息
+export const getWorkorderPendingPerson = ({
+    workSheetId
+}) => {
+    return post("/worksheet/accept/list/by/id", {
+        workSheetId
     });
 };
 // 工单列表
