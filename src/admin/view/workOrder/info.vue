@@ -346,6 +346,7 @@ export default {
                     });
                     return;
                 }
+                this.transferModal.bool = false;
                 // 确认移交 受理工单
                 if(this.transferModal.state == 1){
                     let params = {
@@ -369,7 +370,6 @@ export default {
                     return
                 }
                 this.getWorkSheetInfo();              
-                this.transferModal.bool = false;
             })
             
         },
