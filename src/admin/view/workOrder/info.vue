@@ -367,9 +367,11 @@ export default {
                             content: error.msg
                         });
                     })
-                    return
-                }
-                this.getWorkSheetInfo();              
+                } else {
+                    setTimeout(()=>{
+                        history.go(0);
+                    }, 500)
+                }    
             })
             
         },
@@ -705,23 +707,25 @@ export default {
                         title: "工单待我受理人员",
                         content: res.msg
                     });
+                    return;
                 }
                 let sixiId = this.$store.state.user.userInfo.sixiId || "";
-                let firstPendingPerson = res.data.firstPendingPerson || [];
+                let data = res.data || {}
+                let firstPendingPerson = data.firstPendingPerson || [];
                 firstPendingPerson.forEach(item=>{
                     if(sixiId == item){
                         this.isAcceptance = true;
                         return;
                     }
                 })
-                let secondPendingPerson = res.data.secondPendingPerson || [];
+                let secondPendingPerson = data.secondPendingPerson || [];
                 secondPendingPerson.forEach(item=>{
                     if(sixiId == item){
                         this.isAcceptance = true;
                         return;
                     }
                 })
-                let thirdPendingPerson = res.data.thirdPendingPerson || [];
+                let thirdPendingPerson = data.thirdPendingPerson || [];
                 thirdPendingPerson.forEach(item=>{
                     if(sixiId == item){
                         this.isAcceptance = true;
