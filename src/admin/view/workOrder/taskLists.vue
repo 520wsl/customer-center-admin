@@ -58,7 +58,7 @@
                     </div>
                 </div>
                 <div class="search-input-item">
-                    <span class="search-input-item-lable">受理人：{{params.customerIdList}}}</span>
+                    <span class="search-input-item-lable">受理人：</span>
                     <!--<Cascader class="search-input-item" filterable v-model="params.customerIdList"-->
                               <!--:data="departmentList" @on-change="changeDepartment"></Cascader>-->
                     <Department class="search-input-item" :loading-user="true" width="200"  v-model="params.customerIdList"></Department>
@@ -475,10 +475,10 @@
                 const data = {
                     ...this.params,
                     startTime: this.params.startTime
-                        ? startTime(this.params.startTime, "x")
+                        ? startTime(this.params.startTime)
                         : "",
                     endTime: this.params.endTime
-                        ? endTime(this.params.endTime, "x")
+                        ? endTime(this.params.endTime)
                         : ""
                 };
                 let res = await getAcceptedListData(data);
