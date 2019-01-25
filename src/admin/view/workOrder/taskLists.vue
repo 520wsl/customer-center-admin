@@ -58,9 +58,10 @@
                     </div>
                 </div>
                 <div class="search-input-item">
-                    <span class="search-input-item-lable">受理人：</span>
-                    <Cascader class="search-input-item" filterable v-model="params.customerIdList"
-                              :data="departmentList" @on-change="changeDepartment"></Cascader>
+                    <span class="search-input-item-lable">受理人：{{params.customerIdList}}}</span>
+                    <!--<Cascader class="search-input-item" filterable v-model="params.customerIdList"-->
+                              <!--:data="departmentList" @on-change="changeDepartment"></Cascader>-->
+                    <Department class="search-input-item" :loading-user="true" width="200"  v-model="params.customerIdList"></Department>
                 </div>
                 <div class="search-btn flex-right">
                     <Button @click="search" type="primary">搜索</Button>
@@ -105,11 +106,12 @@
     import utils from "@/libs/util/public";
     import {trim} from "@/libs/tools";
     import "./index.less";
+    import Department from "_c/public/department";
 
     export default {
         components: {
             Page,
-            // Departmen
+           Department
         },
         computed: {
             ...mapState({
@@ -120,7 +122,7 @@
                 },
                 searchStatusList: state => {
                     return [...state.workSheet.workSheetHandleType].filter(item => {
-                        return item.key !== 1;
+                        return item.key == 0 || item.key == 5;
                     });
                 },
                 workSheetType: state => state.workSheet.workSheetType,
@@ -251,7 +253,6 @@
                             let str = ''
                             let user = params.row.firstInfo || [];
                             for (let i = 0, len = user.length; i < len; i++) {
-                                console.log(user[i]['userName'])
                                 let name = ''
                                 let departmentName = ''
                                 name = user[i]['userName'] || "";
@@ -270,7 +271,6 @@
                             let str = ''
                             let user = params.row.secondInfo || [];
                             for (let i = 0, len = user.length; i < len; i++) {
-                                console.log(user[i]['userName'])
                                 let name = ''
                                 let departmentName = ''
                                 name = user[i]['userName'] || "";
@@ -289,7 +289,6 @@
                             let str = ''
                             let user = params.row.thirdInfo || [];
                             for (let i = 0, len = user.length; i < len; i++) {
-                                console.log(user[i]['userName'])
                                 let name = ''
                                 let departmentName = ''
                                 name = user[i]['userName'] || "";
@@ -469,6 +468,9 @@
                 })
             },
             async getList() {
+                if(this.params.customerIdList.length >0){
+                    this.params.customerId =this.params.customerIdList[this.params.customerIdList.length-1]
+                }
                 this.params.companyName = trim(this.params.companyName);
                 const data = {
                     ...this.params,

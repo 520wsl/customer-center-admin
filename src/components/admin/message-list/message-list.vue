@@ -130,7 +130,7 @@
                         <div class="message-counter">
                             <p><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span> {{item.record}}</P>
                             <P>工单类型：{{getWorkSheetTypeValue(item.workType)}}</P>
-                            <P>
+                            <P v-if="item.executorInfo.userName">
                                 执行人：{{item.executorInfo.userName}}
                                 <span
                                         v-if="item.executorInfo.departmentName"
@@ -152,13 +152,13 @@
 
                         <div class="message-counter">
                             <p><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span> {{item.record}}</p>
-                            <P>
+                            <P v-if="item.transferredUser.userName">
                                 被移交人：{{item.transferredUser && item.transferredUser.userName ?item.transferredUser.userName : ''}}
                                 <span
                                         v-if="item.transferredUser && item.transferredUser.departmentName"
                                 >（{{item.transferredUser.departmentName}}）</span>
                             </P>
-                            <P>备注：{{item.remark}}</P>
+                            <P v-if="item.remark">备注：{{item.remark}}</P>
                         </div>
 
                     </template>
@@ -175,13 +175,13 @@
 
                         <div class="message-counter">
                             <p><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span>  {{item.record}}</p>
-                            <P>
+                            <P v-if="item.transferredUser.userName">
                                 移交人：{{item.transferredUser.userName}}
                                 <span
                                         v-if="item.transferredUser.departmentName"
                                 >（{{item.transferredUser.departmentName}}）</span>
                             </P>
-                            <P>拒绝原因：{{item.remark}}</P>
+                            <P v-if="item.remark">拒绝原因：{{item.remark}}</P>
                         </div>
                     </template>
 

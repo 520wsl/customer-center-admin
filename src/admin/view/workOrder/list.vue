@@ -165,7 +165,7 @@
                 },
                 searchStatusList: state => {
                     return [...state.workSheet.workSheetHandleType].filter(item => {
-                        return item.key !== 1;
+                        return item.key !== 1 && item.key !== 6;
                     });
                 },
                 workSheetType: state => state.workSheet.workSheetType,
