@@ -120,7 +120,7 @@
                 },
                 searchStatusList: state => {
                     return [...state.workSheet.workSheetHandleType].filter(item => {
-                        return item.key !== 1;
+                        return item.key == 0 || item.key == 5;
                     });
                 },
                 workSheetType: state => state.workSheet.workSheetType,
