@@ -130,7 +130,7 @@
                         <div class="message-counter">
                             <p><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span> {{item.record}}</P>
                             <P>工单类型：{{getWorkSheetTypeValue(item.workType)}}</P>
-                            <P v-if="item.executorInfo.userName">
+                            <P v-if="item.executorInfo">
                                 执行人：{{item.executorInfo.userName}}
                                 <span
                                         v-if="item.executorInfo.departmentName"
@@ -152,7 +152,7 @@
 
                         <div class="message-counter">
                             <p><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span> {{item.record}}</p>
-                            <P v-if="item.transferredUser.userName">
+                            <P v-if="item.transferredUser">
                                 被移交人：{{item.transferredUser && item.transferredUser.userName ?item.transferredUser.userName : ''}}
                                 <span
                                         v-if="item.transferredUser && item.transferredUser.departmentName"
@@ -175,7 +175,7 @@
 
                         <div class="message-counter">
                             <p><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span>  {{item.record}}</p>
-                            <P v-if="item.transferredUser.userName">
+                            <P v-if="item.transferredUser">
                                 移交人：{{item.transferredUser.userName}}
                                 <span
                                         v-if="item.transferredUser.departmentName"
