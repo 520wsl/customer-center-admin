@@ -698,6 +698,9 @@ export default {
             }
             getWorkorderPendingPerson(params).then(res=>{
                 if(res.status != 200){
+                    if(!this.isExectorId){
+                        return;
+                    }
                     this.$Modal.error({
                         title: "工单待我受理人员",
                         content: res.msg
@@ -726,8 +729,11 @@ export default {
                     }
                 })
             }).catch(error=>{
+                if(!this.isExectorId){
+                    return;
+                }
                 this.$Modal.error({
-                    title: "工单带我受理人员",
+                    title: "工单待我受理人员",
                     content: error.msg
                 });  
             })
