@@ -47,7 +47,7 @@ export const setWorkSheetAcceptance = ({
         workSheetId
     });
 };
-// 工单详情  带我受理第一二三级信息
+// 工单详情  待我受理第一二三级信息
 export const getWorkorderPendingPerson = ({
                                               workSheetId
                                           }) => {
