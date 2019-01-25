@@ -153,9 +153,9 @@
                         <div class="message-counter">
                             <p><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span> {{item.record}}</p>
                             <P v-if="item.transferredUser.userName">
-                                被移交人：{{item.transferredUser.userName}}
+                                被移交人：{{item.transferredUser && item.transferredUser.userName ?item.transferredUser.userName : ''}}
                                 <span
-                                        v-if="item.transferredUser.departmentName"
+                                        v-if="item.transferredUser && item.transferredUser.departmentName"
                                 >（{{item.transferredUser.departmentName}}）</span>
                             </P>
                             <P v-if="item.remark">备注：{{item.remark}}</P>
