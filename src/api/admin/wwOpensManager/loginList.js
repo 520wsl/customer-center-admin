@@ -13,6 +13,7 @@ export const wwOpensManagerLoginListDate = ({
   pageSize,
   pageNum,
   keyword,
+  groupName,
   type,
   staffSixiId,
   status
@@ -21,6 +22,7 @@ export const wwOpensManagerLoginListDate = ({
     pageSize,
     pageNum,
     keyword,
+    groupName,
     type,
     staffSixiId,
     status
@@ -34,5 +36,15 @@ export const wwOpensManagerLoginListBatchLogin = ({
     accountList
   });
 };
-
-
+//分组列表
+export const wwOpensManagerLoginGetGroup = () => {
+  return post("/company/ali/group/list");
+};
+//加入分组
+export const wwOpensManagerLoginSetGroup = ({
+  companySixiIdList, groupName
+}) => {
+  return post("/company/ali/group/set", {
+    companySixiIdList, groupName
+  });
+};
