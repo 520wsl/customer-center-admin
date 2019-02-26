@@ -7,6 +7,8 @@
  */
 import config from "@/config";
 import api from "@/libs/api.request";
+import axios from "axios";
+import {formatTime} from "@/libs/util/time";
 
 const baseUrl = config.callPhonePath;
 
@@ -39,4 +41,24 @@ export const AccountStatus = () => {
         baseUrl +
         "/AccountStatus?callback=cb_account"
     );
+};
+
+// 工单详情详情--获取当前账号
+export const ShowRecordPlay = ({
+                                   account,
+                                   code,
+                                   phone,
+                                   url,
+                                   dur
+                               }) => {
+    let timestamp = formatTime(new Date(), "x");
+    return axios.post(baseUrl + "/ShowRecordPlay?account=" + account + "&timestamp=" + timestamp, {
+        "RecordPlay":
+            {
+                code,
+                phone,
+                url,
+                dur
+            }
+    }, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
 };

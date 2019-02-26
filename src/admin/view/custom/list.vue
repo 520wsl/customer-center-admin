@@ -35,6 +35,11 @@
                         </Option>
                     </Select>
                 </div>
+                <div class="search-item">
+                    <span>服务人员：</span>
+                    <Department class="search-col" :loading-user="true" width="200"
+                                v-model="params.customerIdList"></Department>
+                </div>
                 <Button @click="getlist" class="search-btn" type="primary">
                     <Icon type="search"/>&nbsp;&nbsp;搜索
                 </Button>
@@ -62,6 +67,7 @@
     import {trim} from "@/libs/tools"
     // 注释批量设置人员
     // import setServiceSatff from "./setServiceSatff";
+    import Department from "_c/public/department";
     import "./index.less";
 
     export default {
@@ -80,7 +86,9 @@
                     count: 0,
                     binding: 0,
                     sendCode: -1,
-                    companyType: -1
+                    companyType: -1,
+                    customerId:'',
+                    customerIdList: []
                 },
                 contactsList: [
                     {
@@ -274,6 +282,29 @@
                         }
                     },
                     {
+                        title: "服务人员",
+                        keyWord: true,
+                        align: "left",
+                        width:180,
+                        render: (h, params) => {
+                            let btnGroup = []
+                            for (let i = 0, hei = params.row.list.length; i < hei; i++) {
+                                btnGroup.push(
+                                    h(
+                                        "div",
+                                        {
+                                            style: {
+                                                margin: "5px"
+                                            }
+                                        },
+                                        params.row.list[i]['staffName']+"("+params.row.list[i]['department']+")"
+                                    )
+                                );
+                            }
+                            return h("div", btnGroup);
+                        }
+                    },
+                    {
                         title: "联系人微信",
                         keyWord: true,
                         align: "center",
@@ -303,7 +334,7 @@
         },
         // 注释批量设置人员
         // components: { Page, setServiceSatff },
-        components: {Page},
+        components: {Page, Department},
         computed: {
             ...mapState({
                 operator: state => state.user.userInfo.sixiId
@@ -337,6 +368,9 @@
                 params.binding = this.params.binding;
                 params.sendCode = this.params.sendCode;
                 params.companyType = this.params.companyType;
+                if (this.params.customerIdList.length > 0) {
+                    params.customerId = this.params.customerIdList[this.params.customerIdList.length - 1]
+                }
                 this.params.keyword = trim(this.params.keyword);
                 if (this.params.select == 1) {
                     params.companyName = this.params.keyword;

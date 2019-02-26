@@ -86,22 +86,6 @@
                     <span></span>
                     </Input>
                 </div>
-                <!-- <div class="search-input-item">
-                    <span>用户手机号码：</span>
-                    <Input class="search-input" v-model="params.telephone" placeholder="请输入手机号">
-                    <span></span>
-                    </Input>
-                </div>-->
-                <!-- <div class="search-input-item">
-                    <span class="search-input-item-lable">切换客服：</span>
-                    <Department
-                        class="search-input"
-                        width="200"
-                        :get-user-info="getUserInfo"
-                        :loading-user="true"
-                        v-model="params.customerIdList"
-                    ></Department>
-                </div> -->
                 <div class="search-input-item">
                     <Checkbox v-model="params.isRead">新消息</Checkbox>
                     <Checkbox v-model="params.execute">执行者</Checkbox>
@@ -144,7 +128,7 @@
     import {mapState, mapActions} from "vuex";
     import {formatInitTime, startTime, endTime} from "@/libs/util/time";
     import Page from "_c/admin/page";
-    // import Department from "_c/public/department";
+    import workOrderListItem from "_c/admin/workOrder-list-item/workOrder-list-item.vue";
     import {getWorkSheetListData} from "@/api/admin/workSheet/workSheet";
     import {saveWorkOrder} from "@/api/admin/workSheet/workOrder";
     import utils from "@/libs/util/public";
@@ -152,10 +136,12 @@
     import {trim} from "@/libs/tools";
 
     export default {
+        /* eslint-disable vue/no-unused-components */
         components: {
             Page,
-            // Department
+            workOrderListItem
         },
+        /* eslint-disable vue/no-unused-components */
         computed: {
             ...mapState({
                 searchWorkSheetType: state => {
@@ -218,9 +204,15 @@
                 workOrderList: [],
                 columns: [
                     {
-                        title: "客户名称",
-                        align: "center",
-                        key: "companyName"
+                        type: 'expand',
+                        width: 50,
+                        render: (h, params) => {
+                            return h(workOrderListItem, {
+                                props: {
+                                    row: params.row
+                                }
+                            })
+                        }
                     },
                     {
                         title: "工单编号",
@@ -228,29 +220,35 @@
                         key: "identifier"
                     },
                     {
-                        title: "类型",
+                        title: "客户名称",
                         align: "center",
-                        render: (h, params) => {
-                            const typelist = this.workSheetType.filter(item => {
-                                return item.key == params.row.workType;
-                            });
-                            if (typelist.length > 0) {
-                                return h("span", typelist[0]["value"]);
-                            } else {
-                                return h("span", "");
-                            }
-                        }
+                        key: "companyName"
                     },
+                    //
+                    // {
+                    //     title: "类型",
+                    //     align: "center",
+                    //     render: (h, params) => {
+                    //         const typelist = this.workSheetType.filter(item => {
+                    //             return item.key == params.row.workType;
+                    //         });
+                    //         if (typelist.length > 0) {
+                    //             return h("span", typelist[0]["value"]);
+                    //         } else {
+                    //             return h("span", "");
+                    //         }
+                    //     }
+                    // },
                     // {
                     //     title: "用户手机",
                     //     align: "center",
                     //     key: "cellphone"
                     // },
-                    {
-                        title: "客户昵称",
-                        align: "center",
-                        key: "wechatNickname"
-                    },
+                    // {
+                    //     title: "客户昵称",
+                    //     align: "center",
+                    //     key: "wechatNickname"
+                    // },
                     {
                         title: "创建时间",
                         align: "center",
@@ -296,38 +294,38 @@
                             return h("span", params.row.responseStr);
                         }
                     },
-                    {
-                        title: "状态",
-                        align: "center",
-                        render: (h, params) => {
-                            const statusList = this.statusList.filter(item => {
-                                return item.key == params.row.type;
-                            });
-                            if (statusList.length > 0) {
-                                // if (params.row.type == 1) {
-                                //     return h(
-                                //         "span",
-                                //         {style: {color: "red"}},
-                                //         statusList[0]["value"]
-                                //     );
-                                // }
-                                return h("span", statusList[0]["value"]);
-                            } else {
-                                return h("span", "");
-                            }
-                        }
-                    },
-                    {
-                        title: "新消息",
-                        align: "center",
-                        render: (h, params) => {
-                            if (!params.row.isRead) {
-                                return h("span", "有");
-                            } else {
-                                return h("span", "无");
-                            }
-                        }
-                    },
+                    // {
+                    //     title: "状态",
+                    //     align: "center",
+                    //     render: (h, params) => {
+                    //         const statusList = this.statusList.filter(item => {
+                    //             return item.key == params.row.type;
+                    //         });
+                    //         if (statusList.length > 0) {
+                    //             // if (params.row.type == 1) {
+                    //             //     return h(
+                    //             //         "span",
+                    //             //         {style: {color: "red"}},
+                    //             //         statusList[0]["value"]
+                    //             //     );
+                    //             // }
+                    //             return h("span", statusList[0]["value"]);
+                    //         } else {
+                    //             return h("span", "");
+                    //         }
+                    //     }
+                    // },
+                    // {
+                    //     title: "新消息",
+                    //     align: "center",
+                    //     render: (h, params) => {
+                    //         if (!params.row.isRead) {
+                    //             return h("span", "有");
+                    //         } else {
+                    //             return h("span", "无");
+                    //         }
+                    //     }
+                    // },
                     {
                         title: "执行人",
                         align: "center",
@@ -363,7 +361,7 @@
                                             click: () => {
                                                 if (this.$route.name == "wx-workOrder-list") {
                                                     let routeData = this.$router.resolve({
-                                                        name:'wx-workOrder-info-service',
+                                                        name: 'wx-workOrder-info-service',
                                                         query: {
                                                             workSheetId: params.row.id,
                                                             companyName:
@@ -398,6 +396,14 @@
             ...mapActions(["getSixiId"]),
             getUserInfo(data) {
                 console.log(data);
+            },
+            rowClassName(row, index) {
+                if (index === 1) {
+                    return 'demo-table-info-row';
+                } else if (index === 3) {
+                    return 'demo-table-error-row';
+                }
+                return '';
             },
             async saveWorkOrderAction() {
                 let res = await saveWorkOrder({...this.saveWorkOrderActionData});
@@ -502,7 +508,10 @@
                     });
                 }
 
-                this.workOrderList = res.data.list || [];
+                this.workOrderList = res.data.list.map(item => {
+                    item['_expanded'] = true
+                    return item
+                }) || [];
                 this.params.pageNum = res.data.num || 1;
                 this.params.pageSize = res.data.size || 10;
                 this.params.count = res.data.count || 0;
@@ -519,3 +528,34 @@
         }
     };
 </script>
+<style>
+    /*.rowclass{*/
+    /*background-color: red;*/
+    /*font-size: 30px;*/
+    /*}*/
+    /*.ivu-table .demo-table-info-row td{*/
+    /*background-color: #2db7f5;*/
+    /*color: #fff;*/
+    /*}*/
+    /*.ivu-table .demo-table-error-row td{*/
+    /*background-color: #ff6600;*/
+    /*color: #fff;*/
+    /*}*/
+    /*.ivu-table td.demo-table-info-column{*/
+    /*background-color: #2db7f5;*/
+    /*color: #fff;*/
+    /*}*/
+    /*.ivu-table .demo-table-info-cell-name {*/
+    /*background-color: #2db7f5;*/
+    /*color: #fff;*/
+    /*}*/
+    /*.ivu-table .demo-table-info-cell-age {*/
+    /*background-color: #ff6600;*/
+    /*color: #fff;*/
+    /*}*/
+    /*.ivu-table .demo-table-info-cell-address {*/
+    /*background-color: #187;*/
+    /*color: #fff;*/
+    /*}*/
+
+</style>

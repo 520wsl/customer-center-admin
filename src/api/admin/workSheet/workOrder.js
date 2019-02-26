@@ -6,82 +6,90 @@
  * @explanatory:  工单详情 基本信息
  */
 import api from "@/libs/api.request";
+
 const baseUrl = "/work-order";
 
 function post(url, params) {
-	return api.post(baseUrl + url, params);
+    return api.post(baseUrl + url, params);
 }
 
 function get(url, params) {
-	return api.get(baseUrl + url, params);
+    return api.get(baseUrl + url, params);
 }
 
 // 工单详情--客服回复
 export const setWorkOrderCustomerServiceStaffReplyData = ({
-	content,
-	customerSixiId,
-	resourceType,
-	workSheetId
-}) => {
-	return post("/workorder/reply", {
-		content,
-		customerSixiId,
-		resourceType,
-		workSheetId
-	});
+                                                              content,
+                                                              customerSixiId,
+                                                              resourceType,
+                                                              workSheetId
+                                                          }) => {
+    return post("/workorder/reply", {
+        content,
+        customerSixiId,
+        resourceType,
+        workSheetId
+    });
 };
 
 // 工单详情 -- 手机号列表
-export const getWorkOrderPhoneListData = ({ workSheetId, companySixiId }) => {
-	return post("/workorder/phonelist", {
-		workSheetId,
-		companySixiId
-	});
+export const getWorkOrderPhoneListData = ({workSheetId, companySixiId}) => {
+    return post("/workorder/phonelist", {
+        workSheetId,
+        companySixiId
+    });
 };
 
 // 创建工单
 export const saveWorkOrder = ({
-	workOrderType,
-	context,
-	mobile,
-	companySixiId,
-	companyName,
-	customerSixiId,
-	wechatNickname,
-	sponsorType
-}) => {
-	return post("/workorder/save", {
-		workOrderType,
-		context,
-		mobile,
-		companySixiId,
-		companyName,
-		customerSixiId,
-		wechatNickname,
-		sponsorType
-	});
+                                  workOrderType,
+                                  context,
+                                  mobile,
+                                  companySixiId,
+                                  companyName,
+                                  customerSixiId,
+                                  wechatNickname,
+                                  sponsorType
+                              }) => {
+    return post("/workorder/save", {
+        workOrderType,
+        context,
+        mobile,
+        companySixiId,
+        companyName,
+        customerSixiId,
+        wechatNickname,
+        sponsorType
+    });
 };
 // 修改工单主题
-export const editWorkOrderTitle = ({ title, id }) => {
-	return post("/workorder/updatetitle", {
-		title,
-		id
-	});
+export const editWorkOrderTitle = ({title, id}) => {
+    return post("/workorder/updatetitle", {
+        title,
+        id
+    });
 };
 
 // 修改工单备注
-export const editWorkOrderRemark = ({ remark, id }) => {
-	return post("/workorder/updateremark", {
-		remark,
-		id
-	});
+export const editWorkOrderRemark = ({remark, id}) => {
+    return post("/workorder/updateremark", {
+        remark,
+        id
+    });
 };
 
 
 // 修改工单标签
-export const editWorkOrderLabel = ({ label, id }) => {
-	return post("/workorder/updatelabel", {
-		label,
-		id
-	});
+export const editWorkOrderLabel = ({label, id}) => {
+    return post("/workorder/updatelabel", {
+        label,
+        id
+    });
 };
+
+// 获取电话记录详细信息
+export const getCallInfo = ({talkNewsId}) => {
+    return post("/talknews/callinfo", {
+        talkNewsId
+    })
+}
