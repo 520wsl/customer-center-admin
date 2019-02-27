@@ -39,6 +39,15 @@
                         <a :href="companyUrl.targetUrl" :title="info.name" target="_blank">{{companyUrl.showUrl}}</a>
                     </td>
                 </tr>
+                <tr>
+                    <td class="title">标签：</td>
+                    <td colspan="3" style="overflow:hidden;">
+                        <div style="float:left">
+                            <tag v-for="(item,index) in customTagList" :key="index" type="dot">{{item.tabName}}</tag>
+                        </div>
+                        <Button style="float:right;" @click="showEditTag">编辑标签</Button>
+                    </td>
+                </tr>
                 </tbody>
             </table>
             <!-- <div class="btn-group">
@@ -204,6 +213,35 @@
                 </table>
             </Card>
         </Modal>
+        <Modal
+                v-model="editTag.bool"
+                @on-ok="addCustomTag"
+                :loading="editTag.loading"
+                :mask-closable="false"
+                title="编辑标签"
+                width="680"
+        >
+            <Card class="md-card">
+                <div>
+                    <div>
+                        <Tag v-for="(item,index) in editTag.chooseList" :key="index" type="dot" closable :name="index" @on-close="handleClose">{{item.tabName}}</Tag>
+                    </div>
+                    <div class="flex tag-title">
+                        <span class="flex-left">全部标签：</span>
+                        <Button class="flex-right" type="primary" @click="toTagPage">标签字典</Button>
+                    </div>
+                    <div>
+                        <template v-if="editTag.isShowAll">
+                            <tag v-for="(item,index) in editTag.tagList" :key="index" type="dot" :name="index" @click.native="handleAdd(index)">{{item.tabName}}</tag>
+                        </template>
+                        <template v-else>
+                            <tag v-for="(item,index) in editTag.showTagList" :key="index" type="dot" :name="index" @click.native="handleAdd(index)">{{item.tabName}}</tag>
+                        </template>                      
+                        <div class="tag-showmore" @click="showMore" v-if="editTag.tagList.length > 50 && !editTag.isShowAll">查看更多</div>
+                    </div>
+                </div>
+            </Card>
+        </Modal>
     </div>
 </template>
 <script>
@@ -214,6 +252,11 @@
         updateBindInfo,
         setSendQRcord
     } from "@/api/admin/custom/custom";
+    import {
+        getCustomerTagInfo,
+        addCustomerTag
+    } from "@/api/admin/custom/tag";
+    import { getAllTabList } from "@/api/admin/tabGroup/tab";
     import {
         workSheet,
         getWorkcustomerListData
@@ -240,6 +283,15 @@
                 bindModal: false,
                 sixiId: "", // 当前登陆人 四喜ID
                 bindAccountData: {},
+                customTagList: [],
+                editTag: {
+                    loading: true,
+                    bool: false,
+                    isShowAll: false,
+                    tagList: [],
+                    showTagList: [],
+                    chooseList: []
+                },
                 addContacts: {
                     loading: true,
                     bool: false,
@@ -823,6 +875,115 @@
                 this.billSerrchData.pageNum = res.data.num || 1;
                 this.billSerrchData.pageSize = res.data.size || 10;
                 this.billSerrchData.count = res.data.count || 0;
+            },
+            // 跳转到标签字典页面
+            toTagPage() {
+                let name = 'case-tagGroupList';
+                if(this.$route.name == "wx-custom-info") {
+                    name = 'wx-case-tagGroupList';
+                }
+                this.$router.push({
+                    name
+                })
+            },
+            showEditTag() {
+                this.editTag.bool = true;
+                this.editTag.isShowAll = false;
+                this.editTag.showTagList = [];
+                this.editTag.chooseList = JSON.parse(JSON.stringify(this.customTagList));
+                getAllTabList().then(res => {
+                    if (res.status != 200) {
+                        this.$Modal.error({
+                            title: "获取所有标签",
+                            content: res.msg
+                        });
+                    }
+                    this.editTag.tagList = res.data || [];
+                    if(this.editTag.tagList.length > 50){
+                        this.editTag.tagList.forEach((item,index)=>{
+                            if(index < 50){
+                                this.editTag.showTagList.push(item)
+                            }
+                        })
+                    } else {
+                        this.editTag.showTagList = this.editTag.tagList;
+                    }
+                }).catch(error => {
+                    this.isSaveWorkOrderAction = false;
+                    this.$Modal.error({
+                        title: "获取所有标签",
+                        content: error.response.data.msg
+                    });
+                });
+            },
+            // 删除标签
+            handleClose(event,index) {
+                this.editTag.chooseList.splice(index, 1);
+            },
+            // 添加标签
+            handleAdd(index) {
+                let obj = this.editTag.tagList[index];
+                let bool = true;// 判断是否重复 true 不重复
+                this.editTag.chooseList.forEach(item => {
+                    if(item.id == obj.id){
+                        bool = false;
+                    }
+                })
+                if(bool) {
+                    this.editTag.chooseList.push(obj)
+                }
+                
+            },
+            //  得到客户标签信息
+            getCustomTag() {
+                let params = {
+                    customerSixiId: this.$route.query.sixiId || ''
+                }
+                getCustomerTagInfo(params).then(res => {
+                    if(res.status != 200){
+                        this.$Modal.error({
+                            title: "客户标签",
+                            content: res.msg
+                        });
+                    }
+                    this.customTagList = res.data || [];
+                }).catch(error => {
+                    this.$Modal.error({
+                        title: "客户标签",
+                        content: error.msg
+                    });
+                })
+            },
+            // 查看更多
+            showMore() {
+                this.editTag.isShowAll = true;
+            },
+            addCustomTag() {
+                let tabIds = [];
+                this.editTag.chooseList.forEach(item=>{
+                   tabIds.push(item.id) ;
+                })
+                let params = {
+                    customerSixiId: this.$route.query.sixiId || '',
+                    tabIds
+                }
+                addCustomerTag(params).then(res => {
+                    this.editTag.bool = false;
+                    this.editTag.loading = false;
+                    if(res.status != 200){
+                        this.$Modal.error({
+                            title: "客户添加标签",
+                            content: res.msg
+                        });
+                    }
+                    this.getCustomTag();
+                }).catch(error => {
+                    this.editTag.loading = false;
+                    this.$Modal.error({
+                        title: "客户添加标签",
+                        content: error.msg
+                    });
+                })
             }
             //<!--注释批量设置人员-->
             // setStaff(index, item) {
@@ -839,6 +1000,7 @@
             }
             // 获取数据
             this.getList();
+            this.getCustomTag();
         },
         mounted() {
             this.getSixiId();
