@@ -228,7 +228,7 @@
                     </div>
                     <div class="flex tag-title">
                         <span class="flex-left">全部标签：</span>
-                        <Button class="flex-right" type="primary" @click="toTagPage">标签字典</Button>
+                        <Button class="flex-right" type="primary" v-if="isLeader" @click="toTagPage">标签字典</Button>
                     </div>
                     <div>
                         <template v-if="editTag.isShowAll">
@@ -645,7 +645,14 @@
                 roleList: state => state.custom.roleList,
                 staffTagIdObj: state => state.custom.staffTagIdObj,
                 staffTagIdList: state => state.custom.staffTagIdList,
-                operator: state => state.user.userInfo.sixiId
+                operator: state => state.user.userInfo.sixiId,
+                isLeader: function() {
+                    let position = this.$store.state.user.userInfo.position || '';
+                    if(position.indexOf("经理") >= 0 || position.indexOf("总监") >= 0){
+                        return true
+                    }
+                    return false
+                }
             }),
             // 判断当前登录的人员是否为续开人员
             isXuKai: function () {
