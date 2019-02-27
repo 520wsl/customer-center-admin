@@ -15,7 +15,7 @@
         </div>
         <div class="search-con search-con-top">
           <div class="search-item">
-            <Select v-model="params.type" class="search-col">
+            <Select v-model="params.type" class="search-col" style="width:100px;">
               <Option v-for="item in keyWordTypeData" :key="`search-col-${item.key}`" :value="item.key">{{ item.value }}</Option>
             </Select>
             <Input v-model="params.keyword" placeholder="输入关键字搜索" class="search-input">
@@ -24,8 +24,15 @@
           </div>
           <div class="search-item">
             状态：
-            <Select v-model="params.status" class="search-col">
+            <Select v-model="params.status" class="search-col" style="width:150px;">
               <Option v-for="item in statusList" :key="`search-col-${item.key}`" :value="item.key">{{ item.value }}</Option>
+            </Select>
+          </div>
+          <div class="search-item">
+            分组：
+            <Select v-model="params.groupName" class="search-col" style="width:150px;">
+              <Option value='全部'>全部</Option>
+              <Option v-for="item in groupList" :key="item" :value="item">{{ item }}</Option>
             </Select>
           </div>
           <div class="search-item">
@@ -47,6 +54,7 @@
         <p style="margin: 0 10px 10px">
           选中客户：
           <Button @click="goLogin(checkList)" :disabled="loginDisabled" ghost type="primary" style="margin-right:10px">批量登录旺旺</Button>
+          <Button @click="modalParams.group = true" :disabled="checkJoinList.length == 0" ghost type="primary">加入分组</Button>
         </p>
         <Table :columns="columns" :data="list" border class="table" @on-selection-change="changeCheckList"></Table>
       </Card>
@@ -54,7 +62,21 @@
         <page :pageNum="params.pageNum" :pageSize="params.pageSize" :count="params.count" @pageCurrentChange="pageCurrentChange" @pageSizeChange="pageSizeChange"></page>
       </Card>
     </div>
-
+    <Modal v-model="modalParams.group" width="600">
+      <p slot="header" style="font-size: 26px;color: #333333;height:50px;line-height:50px;letter-spacing: 0;text-align: center;">
+        <span>加入分组</span>
+      </p>
+      <div style="text-align:center;height:60px;padding-top: 15px;font-size: 16px;">
+        请选择分组：
+        <Select v-model="setGroupName" style="width:200px;text-align: left;">
+          <Option v-for="item in groupList" :value="item" :key="item">{{ item }}</Option>
+        </Select>
+      </div>
+      <div slot="footer" style="text-align:center">
+        <Button type="primary" size="large" @click="setGroup">保存</Button>
+        <Button size="large" @click="modalParams.group = false">取消</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 <script>
@@ -62,16 +84,15 @@ import { setStore, getStore } from "@/libs/util/storeage";
 import Department from "_c/public/department";
 import Page from "_c/admin/page";
 import "./loginList.less";
-import { wwOpensManagerLoginListDate, wwOpensManagerLoginListBatchLogin } from "@/api/admin/wwOpensManager/loginList";
+import { wwOpensManagerLoginListDate, wwOpensManagerLoginListBatchLogin, wwOpensManagerLoginGetGroup, wwOpensManagerLoginSetGroup } from "@/api/admin/wwOpensManager/loginList";
 import { wwOpensManagerLoginSettingQX } from "@/api/admin/wwOpensManager/searchPerson";
 import { wwOpensManagerLoginListSetpath, wwOpensManagerLoginListLogin, wwOpensManagerLoginListLoginList, wwOpensManagerLoginListLoginInfo } from "@/api/admin/wwOpensManager/qnLogin";
 export default {
   components: { Page, Department },
   data () {
     return {
-      headerParams: {
-        type: 2
-      },
+      modalParams: { group: false },
+      headerParams: { type: 2 },
       QX: false,
       sixiId: this.$store.state.user.userInfo.sixiId,
       loginDisabled: false,
@@ -81,10 +102,13 @@ export default {
         status: -1,
         keyword: '',
         staffSixiId: [],
+        groupName: '全部',
         pageNum: 1,
         pageSize: 10,
         count: 0,
       },
+      setGroupName: 'A组',
+      groupList: ["A组", "B组", "C组"],
       keyWordTypeData: [
         {
           key: '1',
@@ -154,6 +178,11 @@ export default {
           }
         },
         {
+          title: '分组',
+          key: 'groupName',
+          align: 'center',
+        },
+        {
           title: '操作',
           key: 'name',
           align: 'center',
@@ -177,12 +206,14 @@ export default {
         },
       ],
       checkList: [],
+      checkJoinList: [],
       LoggedList: [],
       list: []
     }
   },
   mounted () {
     this.getQX()
+    this.getGroup()
     this.getList()
     this.loginInfo()
     setTimeout(() => {
@@ -193,7 +224,6 @@ export default {
         });
       }
     }, 2000)
-
   },
   methods: {
     getQX () {
@@ -205,6 +235,32 @@ export default {
         this.$Modal.error({ title: "登录设置页面权限", content: res.msg })
       }).catch(err => {
         this.$Modal.error({ title: "登录设置页面权限", content: err });
+      });
+    },
+    /**获取分组列表 */
+    getGroup () {
+      wwOpensManagerLoginGetGroup().then(res => {
+        if (res.status == 200) { return this.groupList = res.data }
+        this.$Modal.error({ title: "分组集合", content: res.msg })
+      }).catch(err => {
+        this.$Modal.error({ title: "分组集合", content: err });
+      });
+    },
+    /**加入分组列表 */
+    setGroup () {
+      let [companySixiIdList, groupName] = [this.checkJoinList, this.setGroupName]
+      wwOpensManagerLoginSetGroup({ companySixiIdList, groupName }).then(res => {
+        if (res.status == 200) {
+          this.modalParams.group = false
+          this.$Modal.success({ title: "加入分组", content: '已加入分组' })
+          this.checkJoinList = []
+          this.setGroupName = 'A组'
+          this.getList()
+          return
+        }
+        this.$Modal.error({ title: "加入分组", content: res.msg })
+      }).catch(err => {
+        this.$Modal.error({ title: "加入分组", content: err });
       });
     },
     pageInit (type) {
@@ -349,10 +405,13 @@ export default {
     /* 选中的公司id */
     changeCheckList (data) {
       let arr = []
+      let joinArr = []
       data.map((i) => {
         arr.push(i.aliAccount)
+        joinArr.push(i.companySixiId)
       })
       this.checkList = arr
+      this.checkJoinList = joinArr
     },
     settingHelpModal () {
       let url = this.$CDN('/demo_0.png')
