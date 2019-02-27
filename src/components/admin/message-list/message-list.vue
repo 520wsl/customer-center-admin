@@ -42,14 +42,14 @@
                         <div class="flex-left flex message-group">
                             <!-- 图片 -->
                             <template v-if="item.type == 2">
-                                <div class="flex-left item img pic">
+                                <div class="flex-left item img pic" v-for="(item2,index2) in item.enclosureList" :key="'picture'+index2">
                                     <!-- <a class="link" target="_blank" :href="$FILE(item.enclosure)"> -->
                                     <a
                                             class="link"
-                                            @click="setShowImgModalData($FILE(item.enclosure))"
+                                            @click="setShowImgModalData($FILE(item2))"
                                             href="javascript:;"
                                     >
-                                        <img :src="$FILE(item.enclosure)">
+                                        <img :src="$FILE(item2)">
                                     </a>
                                 </div>
                             </template>
@@ -92,8 +92,7 @@
                         </div>
                         <div v-if="item.eventType == 1 " class="flex-right btn-group move-down">
                             <Button
-                                    style="display:none;"
-                                    v-if="item.enclosure"
+                                    v-if="item.enclosure && item.type == 2"
                                     @click="downloadFiles(item)"
                                     type="primary"
                                     class="btn"
@@ -281,7 +280,6 @@
     import {getArrValue} from "@/libs/tools";
     import myaudio from "_c/public/audio";
     import myvideo from "_c/public/video";
-
     export default {
         props: {
             data: {
@@ -364,8 +362,48 @@
                 this.isShowAudioModel = true;
                 this.audioModelPath = path;
             },
-            downloadFiles(item) {
-                window.open(this.$FILE(item.path));
+            downloadFiles(obj) {
+                console.log(obj.enclosureList)
+                for(let i = 0;i<obj.enclosureList.length;i++){
+                    this.sleep(500);
+                    this.download(this.$FILE(obj.enclosureList[i]),obj.id)
+                }
+                // obj.enclosureList.forEach((item,index )=>{
+                //     console.log(index)
+                //     this.sleep(500);
+                //     this.download(this.$FILE(item),obj.id)
+                // })
+                // this.download("http://wechat-base-images.oss-cn-hangzhou.aliyuncs.com/wechat/0d76807c-8de4-4a23-a06e-6e6a45b76b2b",1111)
+            },
+            download(src,id) {
+                console.log(123,id)
+                // let $a = document.createElement('a');
+                // $a.setAttribute("href", src);
+                // $a.setAttribute("download", id + ".jpg");
+            
+                // let evObj = document.createEvent('MouseEvents');
+                // evObj.initMouseEvent( 'click', true, true, window, 0, 0, 0, 0, 0, false, false, true, false, 0, null);
+                // $a.dispatchEvent(evObj);
+                var a = document.createElement('a');
+                a.download = id+".jpg";
+                a.href=src;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                // console.log(123)
+                // var div = document.createElement("div");
+                // div.html = "123"
+                // div.setAttribute("onclick","download("+src+","+id+".jpg,image/jpg)");
+                // div.click();
+                // var x=new XMLHttpRequest();
+                // x.open( "GET", src , true);
+                // x.responseType="blob";
+                // x.onload= function(e){download(e.target.response, id+".png", "image/png");};
+                // x.send();
+                // document.body.removeChild(div);
+            },
+            sleep(d) {
+                for(var t = Date.now();Date.now() - t <= d;);
             },
             // 播放录音
             downloadRedio(item) {

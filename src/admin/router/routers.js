@@ -335,6 +335,34 @@ export default [
                         require.ensure([], () =>
                             require("@/admin/view/custom/info")
                         )
+                },
+                {
+                    path: "tagGroupList",
+                    name: "case-tagGroupList",
+                    meta: {
+                        icon: "ios-stats",
+                        title: "标签字典",
+                        hideInMenu: true,
+                        notCache: true
+                    },
+                    component: r =>
+                        require.ensure([], () =>
+                            require("@/admin/view/tagGroup/tagGroupList")
+                        )
+                },
+                {
+                    path: "tagGroupInfo",
+                    name: "case-tagGroupInfo",
+                    meta: {
+                        icon: "ios-stats",
+                        title: "标签组详情",
+                        hideInMenu: true,
+                        notCache: true
+                    },
+                    component: r =>
+                        require.ensure([], () =>
+                            require("@/admin/view/tagGroup/tagGroupInfo")
+                        )
                 }
             ]
     }
@@ -650,6 +678,36 @@ export default [
                     component: r =>
                         require.ensure([], () =>
                             require("@/admin/view/custom/info")
+                        )
+                },
+                {
+                    path: "tagGroupList",
+                    name: "wx-case-tagGroupList",
+                    meta: {
+                        icon: "ios-stats",
+                        title: "标签字典",
+                        hideInMenu: true,
+                        notCache: true,
+                        noLogin: true
+                    },
+                    component: r =>
+                        require.ensure([], () =>
+                            require("@/admin/view/tagGroup/tagGroupList")
+                        )
+                },
+                {
+                    path: "tagGroupInfo",
+                    name: "wx-case-tagGroupInfo",
+                    meta: {
+                        icon: "ios-stats",
+                        title: "标签组详情",
+                        hideInMenu: true,
+                        notCache: true,
+                        noLogin: true
+                    },
+                    component: r =>
+                        require.ensure([], () =>
+                            require("@/admin/view/tagGroup/tagGroupInfo")
                         )
                 }
             ]
