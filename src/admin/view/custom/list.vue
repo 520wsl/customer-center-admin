@@ -28,17 +28,17 @@
                     </Select>
                 </div>
                 <div class="search-item">
+                    <span>服务人员：</span>
+                    <Department class="search-col" :loading-user="true" width="200"
+                                v-model="params.customerIdList"></Department>
+                </div>
+                <div class="search-item">
                     <span>二维码：</span>
                     <Select v-model="params.sendCode" class="search-col">
                         <Option v-for="item in QRcodeList" :key="`search-col-${item.key}`" :value="item.key">{{
                             item.value }}
                         </Option>
                     </Select>
-                </div>
-                <div class="search-item">
-                    <span>服务人员：</span>
-                    <Department class="search-col" :loading-user="true" width="200"
-                                v-model="params.customerIdList"></Department>
                 </div>
                 <Button @click="getlist" class="search-btn" type="primary">
                     <Icon type="search"/>&nbsp;&nbsp;搜索
