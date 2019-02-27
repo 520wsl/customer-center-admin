@@ -90,7 +90,7 @@
                                 </div>
                             </template>
                         </div>
-                        <div class="flex-right btn-group move-down">
+                        <div v-if="item.eventType == 1 " class="flex-right btn-group move-down">
                             <Button
                                     v-if="item.enclosure && item.type == 2"
                                     @click="downloadFiles(item)"
@@ -99,6 +99,15 @@
                                     icon="ios-cloud-download"
                                     ghost
                             >下载附件
+                            </Button>
+                            <Button
+                                    v-if="item.eventType == 1 "
+                                    @click="downloadRedio(item)"
+                                    type="primary"
+                                    class="btn"
+                                    icon="ios-cloud-download"
+                                    ghost
+                            >播放录音
                             </Button>
                             <Button
                                     v-if="item.eventType == 1 && isExectorId"
@@ -152,7 +161,8 @@
                         <div class="message-counter">
                             <p><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span> {{item.record}}</p>
                             <P v-if="item.transferredUser">
-                                被移交人：{{item.transferredUser && item.transferredUser.userName ?item.transferredUser.userName : ''}}
+                                被移交人：{{item.transferredUser && item.transferredUser.userName
+                                ?item.transferredUser.userName : ''}}
                                 <span
                                         v-if="item.transferredUser && item.transferredUser.departmentName"
                                 >（{{item.transferredUser.departmentName}}）</span>
@@ -173,7 +183,7 @@
                         </div>
 
                         <div class="message-counter">
-                            <p><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span>  {{item.record}}</p>
+                            <p><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span> {{item.record}}</p>
                             <P v-if="item.transferredUser">
                                 移交人：{{item.transferredUser.userName}}
                                 <span
@@ -195,7 +205,7 @@
                         </div>
 
                         <div class="message-counter">
-                            <P><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span>  {{item.record}}</P>
+                            <P><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span> {{item.record}}</P>
                         </div>
 
                     </template>
@@ -205,13 +215,13 @@
 
                         <div class="flex message-bottom">
                             <div class="flex-left">
-                               <span>{{getMessageTitle(item.sign,item.transferredUser)}}</span>
+                                <span>{{getMessageTitle(item.sign,item.transferredUser)}}</span>
                             </div>
                             <div class="flex-right">{{formatTimeData(item.createAt)}}</div>
                         </div>
 
                         <div class="message-counter">
-                            <P><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span>  {{item.record}}</P>
+                            <P><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span> {{item.record}}</P>
                         </div>
 
                     </template>
@@ -227,7 +237,7 @@
                         </div>
 
                         <div class="message-counter">
-                            <P><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span>  {{item.record}}</P>
+                            <P><span>【 {{getWorkSheetEventTypeValue(item.eventType)}} 】</span> {{item.record}}</P>
                         </div>
 
                     </template>
@@ -262,6 +272,10 @@
 <script>
     import {mapMutations, mapState, mapActions} from "vuex";
     import {updateItemTalkNewsData} from "@/api/admin/workSheet/talkNews";
+    import {
+        getCallInfo
+    } from "@/api/admin/workSheet/workOrder";
+    import {ShowRecordPlay} from "@/api/admin/callPhone/callPhone"
     import {formatTime} from "@/libs/util/time";
     import {getArrValue} from "@/libs/tools";
     import myaudio from "_c/public/audio";
@@ -390,6 +404,57 @@
             },
             sleep(d) {
                 for(var t = Date.now();Date.now() - t <= d;);
+            },
+            // 播放录音
+            downloadRedio(item) {
+                if (item.eventType !== 1) {
+                    return
+                }
+                getCallInfo({
+                    talkNewsId: item.id
+                }).then(res => {
+                    console.log(res)
+                    if (res.data.recordUrl.length <= 0) {
+                        this.$Modal.error({
+                            title: "播放录音",
+                            content: '录音地址异常'
+                        });
+                        return
+                    }
+                    let ownerAcc = res.data.ownerAcc
+                    let code = res.data.code
+                    let calledNum = res.data.calledNum
+                    let recordUrl = res.data.recordUrl
+                    let timeLength = res.data.timeLength
+                    let isPading = true;
+
+                    setTimeout(() => {
+                        if (isPading) {
+                            this.$Modal.error({
+                                title: "播放录音异常：",
+                                content:
+                                    "播放录音：<br>1、请检查呼叫软件是否打开正常! <br> 2、请检查设备是否安装正常！<br>"
+                            });
+                        }
+                    }, 2000);
+                    ShowRecordPlay({
+                        account: ownerAcc,
+                        code: code,
+                        phone: calledNum,
+                        url: recordUrl,
+                        dur: timeLength
+                    }).then(res2 => {
+                        let {data} = res2;
+                        console.log(data)
+                        isPading = false;
+                    })
+
+                }).catch(err => {
+                    this.$Modal.error({
+                        title: "播放录音",
+                        content: '录音播放失败'
+                    });
+                });
             },
             setVideoModelPath(path) {
                 console.log("video", path);

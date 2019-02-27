@@ -12,6 +12,7 @@
 		"axios": "^0.18.0",
 		"element-ui": "^2.4.9",
 		"iview": "^3.1.5",
+		"js-base64": "^2.4.9",
 		"js-cookie": "^2.2.0",
 		"less": "^3.8.1",
 		"less-loader": "^4.1.0",
@@ -21,16 +22,17 @@
 		"vue": "^2.5.17",
 		"vue-router": "^3.0.1",
 		"vue-video-player": "^5.0.2",
-		"vuex": "^3.0.1",
-		"js-base64": "^2.4.9"
+		"vuex": "^3.0.1"
 	},
 	"devDependencies": {
 		"@vue/cli-plugin-babel": "^3.1.1",
 		"@vue/cli-plugin-eslint": "^3.1.1",
 		"@vue/cli-service": "^3.1.1",
 		"babel-eslint": "^10.0.1",
+		"bootstrap": "^3.3.0",
 		"eslint": "^5.8.0",
 		"eslint-plugin-vue": "^5.0.0-0",
+		"jquery": "^1.11.3",
 		"vue-template-compiler": "^2.5.17"
 	},
 	"eslintConfig": {

@@ -3,7 +3,7 @@ const path = require("path");
 const resolve = dir => {
   return path.join(__dirname, dir);
 };
-
+const webpack = require("webpack");
 const BASE_URL = process.env.NODE_ENV === "production" ? "/" : "/";
 
 module.exports = {
@@ -87,5 +87,15 @@ module.exports = {
             title: "admin",
             chunks: ["chunk-vendors", "chunk-common", "admin"]
         }
-    }
+    },
+    configureWebpack: {
+        plugins: [
+            new webpack.ProvidePlugin({
+                $: 'jquery',
+                jQuery: 'jquery',
+                'window.jQuery': 'jquery',
+                Popper: ['popper.js', 'default']
+              })
+        ]
+      }
 };

@@ -1,4 +1,5 @@
 import api from "@/libs/api.request";
+
 const baseUrl = "/work-order/customer";
 
 function post(url, params) {
@@ -8,19 +9,21 @@ function post(url, params) {
 function get(url, params) {
     return api.get(baseUrl + url, params);
 }
+
 // 客户列表
 export const getCustomerListDate = ({
-    pageSize,
-    pageNum,
-    mobile,
-    account,
-    companyName,
-    operator,
-    callName = "",
-    sendCode,
-    companyType,
-    binding
-}) => {
+                                        pageSize,
+                                        pageNum,
+                                        mobile,
+                                        account,
+                                        companyName,
+                                        operator,
+                                        callName = "",
+                                        sendCode,
+                                        companyType,
+                                        binding,
+                                        customerId
+                                    }) => {
     return post("/company/listbysearch", {
         pageSize,
         pageNum,
@@ -31,37 +34,38 @@ export const getCustomerListDate = ({
         callName,
         sendCode,
         companyType,
-        binding
+        binding,
+        staffSixiId:customerId
     });
 };
 // 客户详情
 export const getCustomerInfoData = ({
-    sixiId
-}) => {
+                                        sixiId
+                                    }) => {
     return post("/company/detail", {
         sixiId
     });
 };
 // 微信解绑
 export const setWechatUntied = ({
-    id
-}) => {
+                                    id
+                                }) => {
     return post("/wechat/untied", {
         id
     });
 };
 // 客户指派人员列表
 export const getstaffListData = ({
-    customerSixiId
-}) => {
+                                     customerSixiId
+                                 }) => {
     return post("/staff/list", {
         customerSixiId
     });
 };
 // 客户公司列表
 export const getCustomerbymobileList = ({
-    mobile
-}) => {
+                                            mobile
+                                        }) => {
     return post("/customer/getcustomerbymobile", {
         mobile
     });
@@ -69,16 +73,16 @@ export const getCustomerbymobileList = ({
 
 // 编辑已绑定账号
 export const updateBindInfo = ({
-    sex,
-    id,
-    customerSixiId,
-    companySixiId,
-    deletedAt = null,
-    operator,
-    callName,
-    mobile,
-    role
-}) => {
+                                   sex,
+                                   id,
+                                   customerSixiId,
+                                   companySixiId,
+                                   deletedAt = null,
+                                   operator,
+                                   callName,
+                                   mobile,
+                                   role
+                               }) => {
     return post("/customer/update", {
         sex,
         id,
@@ -93,7 +97,7 @@ export const updateBindInfo = ({
 };
 // 批量设置客服人员
 /**
- * 
+ *
  * @param {staffSetListFormList} 设置人员
  * {
       "companySixiId": "1182862037307361279", // 公司id
@@ -107,19 +111,19 @@ export const updateBindInfo = ({
         }
       ]
     }
- * 
+ *
  */
 export const setcompanystaff = ({
-    staffSetListFormList
-}) => {
+                                    staffSetListFormList
+                                }) => {
     return post("/customer/update", {
         staffSetListFormList
     });
 };
 // 是否发送了二维码
 export const setSendQRcord = ({
-    id
-}) => {
+                                  id
+                              }) => {
     return post("/wechat/sendqrcord", {
         id
     });
