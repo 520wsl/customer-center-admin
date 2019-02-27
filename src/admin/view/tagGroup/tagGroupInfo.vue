@@ -121,7 +121,7 @@ export default {
                     render: (h, params) => {
                         let time = params.row.createdAt || ''
                         if (time) {
-                            return h("span", {}, formatTime(time, "YYYY-MM-DD hh-mm-ss"))
+                            return h("span", {}, formatTime(time, "YYYY-MM-DD H:mm:ss"))
                         } else {
                             return h("span", {}, '')
                         }
