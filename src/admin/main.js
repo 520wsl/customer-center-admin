@@ -47,6 +47,7 @@ import {CDN, FILE} from "@/libs/tools";
 import "./index.less";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
+import "bootstrap/dist/css/bootstrap.css";
 
 
 Vue.use(iView);
