@@ -172,12 +172,19 @@
                                     },
                                     on: {
                                         click: () => {
-                                            let name = "custom-info";
                                             if (this.$route.name == "wx-custom-list") {
-                                                name = "wx-custom-info"
+                                                let routeData = this.$router.resolve({
+                                                    name: "wx-custom-info",
+                                                    query: {
+                                                        sixiId: params.row.sixiId,
+                                                        userName: params.row.name
+                                                    }
+                                                });
+                                                window.open(routeData.href, '_blank');
+                                                return;
                                             }
                                             this.$router.push({
-                                                name,
+                                                name: "custom-info",
                                                 query: {
                                                     sixiId: params.row.sixiId,
                                                     userName: params.row.name
