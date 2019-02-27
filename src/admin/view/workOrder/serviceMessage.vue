@@ -405,7 +405,13 @@
                     });
                     return;
                 }
-                this.talkNewsList = res.data.list;
+                let list = res.data.list || [];
+                list.forEach(item=>{
+                    if(item.type == "2"){
+                        item.enclosureList = item.enclosure.split(",");
+                    }
+                })
+                this.talkNewsList = list;
                 this.params.count = res.data.count;
                 console.log("this.info.userId", this.info.userId);
                 if (this.info.userId) {
