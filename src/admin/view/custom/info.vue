@@ -43,7 +43,7 @@
                     <td class="title">标签：</td>
                     <td colspan="3" style="overflow:hidden;">
                         <div style="float:left">
-                            <tag v-for="(item,index) in customTagList" :key="index" type="dot">{{item.tabName}}</tag>
+                            <Tag v-for="(item,index) in customTagList" :key="index" type="dot">{{item.tabName}}</Tag>
                         </div>
                         <Button style="float:right;" @click="showEditTag">编辑标签</Button>
                     </td>
@@ -232,10 +232,10 @@
                     </div>
                     <div>
                         <template v-if="editTag.isShowAll">
-                            <tag v-for="(item,index) in editTag.tagList" :key="index" type="dot" :name="index" @click.native="handleAdd(index)">{{item.tabName}}</tag>
+                            <Tag v-for="(item,index) in editTag.tagList" :color="item.isChoose?'primary':''" :key="index" type="dot" :name="index" @click.native="handleAdd(index)">{{item.tabName}}</Tag>
                         </template>
                         <template v-else>
-                            <tag v-for="(item,index) in editTag.showTagList" :key="index" type="dot" :name="index" @click.native="handleAdd(index)">{{item.tabName}}</tag>
+                            <Tag v-for="(item,index) in editTag.showTagList" :color="item.isChoose?'primary':''" :key="index" type="dot" :name="index" @click.native="handleAdd(index)">{{item.tabName}}</Tag>
                         </template>                      
                         <div class="tag-showmore" @click="showMore" v-if="editTag.tagList.length > 50 && !editTag.isShowAll">查看更多</div>
                     </div>
@@ -908,6 +908,11 @@
                     this.editTag.tagList = res.data || [];
                     if(this.editTag.tagList.length > 50){
                         this.editTag.tagList.forEach((item,index)=>{
+                            this.editTag.chooseList.forEach(el=>{
+                                if(item.id == el.id){
+                                    item.isChoose = true;
+                                }
+                            })
                             if(index < 50){
                                 this.editTag.showTagList.push(item)
                             }
@@ -930,9 +935,15 @@
             // 添加标签
             handleAdd(index) {
                 let obj = this.editTag.tagList[index];
+                if(obj.isChoose){
+                    this.editTag.tagList[index].isChoose = false;
+                } else {
+                    this.editTag.tagList[index].isChoose = true;
+                }
                 let bool = true;// 判断是否重复 true 不重复
-                this.editTag.chooseList.forEach(item => {
+                this.editTag.chooseList.forEach((item,index) => {
                     if(item.id == obj.id){
+                        this.editTag.chooseList.splice(index,1);
                         bool = false;
                     }
                 })
