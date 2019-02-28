@@ -97,7 +97,7 @@
             </div>
         </Card>
         <Card class="md-card">
-            <Table :data="workOrderList" @on-sort-change="sortChange" :columns="columns" border></Table>
+            <Table :data="workOrderList" @on-sort-change="sortChange" :columns="columns"></Table>
         </Card>
         <Card class="md-card">
             <page
