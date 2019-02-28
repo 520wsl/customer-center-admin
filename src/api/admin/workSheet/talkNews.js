@@ -7,6 +7,7 @@
  */
 
 import api from "@/libs/api.request";
+
 const baseUrl = "/work-order";
 
 function post(url, params) {
@@ -19,10 +20,10 @@ function get(url, params) {
 
 // 工单详情--消息记录
 export const getTalkNewsListData = ({
-    workSheetId,
-    pageNum,
-    pageSize
-}) => {
+                                        workSheetId,
+                                        pageNum,
+                                        pageSize
+                                    }) => {
     return post("/talknews/list", {
         workSheetId,
         pageNum,
@@ -32,26 +33,26 @@ export const getTalkNewsListData = ({
 
 // 工单详情 获取倒计时
 export const getTalkNewsCountdownTimeData = ({
-    workSheetId
-}) => {
+                                                 workSheetId
+                                             }) => {
     return post("/talknews/countdown", {
         workSheetId
     });
 };
 /**
  * 工单详情  创建对话记录(信息记录)
- * @param {workOrderStatus} 工单状态 
+ * @param {workOrderStatus} 工单状态
  * @param {userSixiId} 发送给指定人员sixiId(客户个人)
- * @param {workSheetId} 工单id 
- * @param {eventType} 事件类型 1：电话沟通信息记录（当为该类型时此接口会返回一个对话id） 2：发起电话采集请求 3：发起账号密码采集请求 
+ * @param {workSheetId} 工单id
+ * @param {eventType} 事件类型 1：电话沟通信息记录（当为该类型时此接口会返回一个对话id） 2：发起电话采集请求 3：发起账号密码采集请求
  */
 export const addItemTalkNewsData = ({
-    workOrderStatus,
-    userSixiId,
-    workSheetId,
-    eventType,
-    companySixiId
-}) => {
+                                        workOrderStatus,
+                                        userSixiId,
+                                        workSheetId,
+                                        eventType,
+                                        companySixiId
+                                    }) => {
     return post("/talknews/save", {
         workOrderStatus,
         userSixiId,
@@ -63,12 +64,12 @@ export const addItemTalkNewsData = ({
 
 // 更新对话记录
 export const updateItemTalkNewsData = ({
-    id,
-    workOrderId,
-    identifier,
-    record,
-    remark
-}) => {
+                                           id,
+                                           workOrderId,
+                                           identifier,
+                                           record,
+                                           remark
+                                       }) => {
     return post("/talknews/update", {
         id,
         workOrderId,
@@ -76,4 +77,9 @@ export const updateItemTalkNewsData = ({
         record,
         remark
     });
+};
+
+// 删除消息记录
+export const delItemTalkNewsData = ({id}) => {
+    return post("/talknews/delete", {id})
 };
