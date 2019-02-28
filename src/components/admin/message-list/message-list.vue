@@ -417,7 +417,7 @@
                     if (res.data.recordUrl.length <= 0) {
                         this.$Modal.error({
                             title: "播放录音",
-                            content: '录音地址异常'
+                            content: '录音播放失败，请稍后再试！'
                         });
                         return
                     }

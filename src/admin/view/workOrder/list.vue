@@ -217,7 +217,14 @@
                     {
                         title: "工单编号",
                         align: "center",
-                        key: "identifier"
+                        key: "identifier",
+                        render: (h, params) => {
+                            return h("span", {
+                                style: {
+                                    color:"#0085E0"
+                                }
+                            }, params.row.identifier)
+                        }
                     },
                     {
                         title: "客户名称",

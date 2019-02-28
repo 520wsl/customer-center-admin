@@ -5,27 +5,32 @@
             <span class="expand-key">主题: </span>
             <span class="expand-value">{{ row.title }}</span>
             </Col>
-            <Col span="4">
+            <Col span="5">
             <span class="expand-key">类型: </span>
             <span class="expand-value">{{ getWorkSheetTypeValue(row.workType) }}</span>
             </Col>
-            <Col span="6">
-            <span><img class="expand-img" :src="$CDN('/icon_order.png')"></span>
-            <span class="expand-key">留言: </span>
-            <span class="expand-value">{{ row.remark }}</span>
-            </Col>
 
-            <Col span="3">
+
+            <Col span="5">
             <span v-if="!row.isRead"><img class="expand-img" :src="$CDN('/icon_meg.png')"></span>
             <span class="expand-value">{{getWorkSheetHandleTypeValue(row.type)  }}</span>
             </Col>
-            <Col span="5" v-if="row.evaluateInfoVo">
+            <Col span="6" v-if="row.evaluateInfoVo">
             <span v-for="(item,index) in row.evaluateInfoVo.evaluateContent" :key="'item_'+index"
-                  class="expand-value"><span v-if="item.type =='text'"
-                                             class="md-card-btn-warning">{{ item.value }}</span><span
+                  class="expand-value"><span v-if="item.type =='text' && item.value"
+                                             class="md-card-btn-default">{{ item.value }}</span><span
                     v-if="item.type =='radio' || item.type =='check'"><span
-                    v-for="e in item.value" :key="e" class="md-card-btn-warning">{{e}}</span></span></span>
+                    v-for="e in item.value" :key="e" class="md-card-btn-default" v-if="e">{{e}}</span></span></span>
             </Col>
+            <Col span="2">
+            <span><img class="expand-img" :src="$CDN('/icon_meg.png')"></span>
+            <span class="expand-value">新消息</span>
+            </Col>
+            <!--<Col span="6">-->
+            <!--<span><img class="expand-img" :src="$CDN('/icon_order.png')"></span>-->
+            <!--<span class="expand-key">留言: </span>-->
+            <!--<span class="expand-value">{{ row.remark }}</span>-->
+            <!--</Col>-->
         </Row>
     </div>
 </template>
@@ -59,8 +64,11 @@
         margin-right: 5px;
     }
 
-    .md-card-btn-warning {
-        padding: 1px;
+    .md-card-btn-default {
+        padding:2px 5px;
         margin: 2px;
+        border-color: #999;
+        color: #666;
+        border-radius: 0px;
     }
 </style>
