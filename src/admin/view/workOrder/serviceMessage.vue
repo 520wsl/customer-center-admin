@@ -192,7 +192,8 @@
         addItemTalkNewsData,
         getTalkNewsListData,
         getTalkNewsCountdownTimeData,
-        updateItemTalkNewsData
+        updateItemTalkNewsData,
+        delItemTalkNewsData
     } from "@/api/admin/workSheet/talkNews";
     import {callPhoneAction, AccountStatus} from "@/api/admin/callPhone/callPhone";
     import {mapState, mapMutations, mapActions} from "vuex";
@@ -406,8 +407,8 @@
                     return;
                 }
                 let list = res.data.list || [];
-                list.forEach(item=>{
-                    if(item.type == "2"){
+                list.forEach(item => {
+                    if (item.type == "2") {
                         item.enclosureList = item.enclosure.split(",");
                     }
                 })
@@ -550,6 +551,9 @@
                 this.collect.pagePath = "";
                 this.setWorkOrderCustomerServiceStaffReply(msg);
             },
+            async delItemTalkNewsDataAction(id) {
+                await delItemTalkNewsData({id});
+            },
             async callPhone(phone, recordId) {
                 let params = {
                     phone,
@@ -580,6 +584,7 @@
 
                     setTimeout(() => {
                         if (isPading) {
+                            this.delItemTalkNewsDataAction(recordId)
                             this.$Modal.error({
                                 title: "拨号异常：",
                                 content:
