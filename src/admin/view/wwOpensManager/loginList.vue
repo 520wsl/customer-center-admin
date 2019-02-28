@@ -35,7 +35,7 @@
               <Option v-for="item in groupList" :key="item" :value="item">{{ item }}</Option>
             </Select>
           </div>
-          <div class="search-item">
+          <div class="search-item" v-if="false">
             旺旺登录人：
             <Department class="search-col" :loading-user="true" width="200" :get-user-info="getUserInfo" v-model="params.staffSixiId"></Department>
           </div>
