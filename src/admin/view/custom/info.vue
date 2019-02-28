@@ -930,6 +930,12 @@
             },
             // 删除标签
             handleClose(event,index) {
+                let id = this.editTag.chooseList[index].id;
+                this.editTag.tagList.forEach(item=>{
+                    if(item.id == id){
+                        item.isChoose = false;
+                    }
+                })
                 this.editTag.chooseList.splice(index, 1);
             },
             // 添加标签
