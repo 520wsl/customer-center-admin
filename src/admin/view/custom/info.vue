@@ -43,7 +43,7 @@
                     <td class="title">标签：</td>
                     <td colspan="3" style="overflow:hidden;">
                         <div style="float:left">
-                            <tag v-for="(item,index) in customTagList" :key="index" type="dot">{{item.tabName}}</tag>
+                            <Tag v-for="(item,index) in customTagList" :key="index" type="dot">{{item.tabName}}</Tag>
                         </div>
                         <Button style="float:right;" @click="showEditTag">编辑标签</Button>
                     </td>
@@ -228,14 +228,14 @@
                     </div>
                     <div class="flex tag-title">
                         <span class="flex-left">全部标签：</span>
-                        <Button class="flex-right" type="primary" @click="toTagPage">标签字典</Button>
+                        <Button class="flex-right" type="primary" v-if="isLeader" @click="toTagPage">标签字典</Button>
                     </div>
                     <div>
                         <template v-if="editTag.isShowAll">
-                            <tag v-for="(item,index) in editTag.tagList" :key="index" type="dot" :name="index" @click.native="handleAdd(index)">{{item.tabName}}</tag>
+                            <Tag v-for="(item,index) in editTag.tagList" :color="item.isChoose?'primary':''" :key="index" type="dot" :name="index" @click.native="handleAdd(index)">{{item.tabName}}</Tag>
                         </template>
                         <template v-else>
-                            <tag v-for="(item,index) in editTag.showTagList" :key="index" type="dot" :name="index" @click.native="handleAdd(index)">{{item.tabName}}</tag>
+                            <Tag v-for="(item,index) in editTag.showTagList" :color="item.isChoose?'primary':''" :key="index" type="dot" :name="index" @click.native="handleAdd(index)">{{item.tabName}}</Tag>
                         </template>                      
                         <div class="tag-showmore" @click="showMore" v-if="editTag.tagList.length > 50 && !editTag.isShowAll">查看更多</div>
                     </div>
@@ -645,7 +645,14 @@
                 roleList: state => state.custom.roleList,
                 staffTagIdObj: state => state.custom.staffTagIdObj,
                 staffTagIdList: state => state.custom.staffTagIdList,
-                operator: state => state.user.userInfo.sixiId
+                operator: state => state.user.userInfo.sixiId,
+                isLeader: function() {
+                    let position = this.$store.state.user.userInfo.position || '';
+                    if(position.indexOf("经理") >= 0 || position.indexOf("总监") >= 0){
+                        return true
+                    }
+                    return false
+                }
             }),
             // 判断当前登录的人员是否为续开人员
             isXuKai: function () {
@@ -901,6 +908,11 @@
                     this.editTag.tagList = res.data || [];
                     if(this.editTag.tagList.length > 50){
                         this.editTag.tagList.forEach((item,index)=>{
+                            this.editTag.chooseList.forEach(el=>{
+                                if(item.id == el.id){
+                                    item.isChoose = true;
+                                }
+                            })
                             if(index < 50){
                                 this.editTag.showTagList.push(item)
                             }
@@ -918,14 +930,26 @@
             },
             // 删除标签
             handleClose(event,index) {
+                let id = this.editTag.chooseList[index].id;
+                this.editTag.tagList.forEach(item=>{
+                    if(item.id == id){
+                        item.isChoose = false;
+                    }
+                })
                 this.editTag.chooseList.splice(index, 1);
             },
             // 添加标签
             handleAdd(index) {
                 let obj = this.editTag.tagList[index];
+                if(obj.isChoose){
+                    this.editTag.tagList[index].isChoose = false;
+                } else {
+                    this.editTag.tagList[index].isChoose = true;
+                }
                 let bool = true;// 判断是否重复 true 不重复
-                this.editTag.chooseList.forEach(item => {
+                this.editTag.chooseList.forEach((item,index) => {
                     if(item.id == obj.id){
+                        this.editTag.chooseList.splice(index,1);
                         bool = false;
                     }
                 })

@@ -90,7 +90,7 @@
                                 </div>
                             </template>
                         </div>
-                        <div v-if="item.eventType == 1 " class="flex-right btn-group move-down">
+                        <div v-if="item.eventType == 1 || item.type == 2" class="flex-right btn-group move-down">
                             <Button
                                     v-if="item.enclosure && item.type == 2"
                                     @click="downloadFiles(item)"

@@ -48,6 +48,7 @@
 import { getTabGroupList, addTabGroup, updateTabGroup } from "@/api/admin/tabGroup/tab";
 import { formatTime } from "@/libs/util/time";
 import Page from "_c/admin/page";
+import {trim} from "@/libs/tools";
 export default {
     data() {
         return {
@@ -119,7 +120,7 @@ export default {
                     render: (h, params) => {
                         let time = params.row.createdAt || ''
                         if (time) {
-                            return h("span", {}, formatTime(time, "YYYY-MM-DD hh-mm-ss"))
+                            return h("span", {}, formatTime(time, "YYYY-MM-DD H:mm:ss"))
                         } else {
                             return h("span", {}, '')
                         }
@@ -174,6 +175,7 @@ export default {
             this.getList();
         },
         getList() {
+            this.params.tabGroupName = trim(this.params.tabGroupName);
             getTabGroupList(this.params).then(res => {
                 if (res.status != 200) {
                     this.$Modal.error({
@@ -201,9 +203,10 @@ export default {
             }
         },
         addTabGroup() {
+            this.editParams.tabGroupName = trim(this.editParams.tabGroupName);
             if (this.editParams.tabGroupName == "") {
                 this.loading = false;
-                return this.$Modal.warning({ title: "添加标签组", content: "组名称不可为空！" });
+                return this.$Modal.warning({ title: "添加标签组", content: "组名称不可为空或为空格！" });
             }
             // 新增标签组
             if (this.editParams.type == "add") {

@@ -4,7 +4,7 @@
             <p slot="title">标签组详情</p>
             <div class="search-con flex">
                 <div class="search-input-item flex-left" style="padding-top:10px;">
-                    <span class="search-input-item-lable" style="margin-right:10px;">标签组：</span>
+                    <span class="search-input-item-lable" style="width:auto;">标签组：</span>
                     <span style="display: inline-block;margin-right:10px;">{{$route.query.tabGroupName?$route.query.tabGroupName:""}}</span>
                 </div>
                 <div class="search-input-item flex-left">
@@ -59,6 +59,7 @@
 import { getTabList, changeTabStatus, addTab, updateTab } from "@/api/admin/tabGroup/tab";
 import { formatTime } from "@/libs/util/time";
 import Page from "_c/admin/page";
+import {trim} from "@/libs/tools";
 export default {
     data() {
         return {
@@ -121,7 +122,7 @@ export default {
                     render: (h, params) => {
                         let time = params.row.createdAt || ''
                         if (time) {
-                            return h("span", {}, formatTime(time, "YYYY-MM-DD hh-mm-ss"))
+                            return h("span", {}, formatTime(time, "YYYY-MM-DD H:mm:ss"))
                         } else {
                             return h("span", {}, '')
                         }
@@ -210,9 +211,10 @@ export default {
             }
         },
         addTab() {
+            this.editParams.tabName = trim(this.editParams.tabName);
             if (this.editParams.tabName == "") {
                 this.editParams.loading = false;
-                return this.$Modal.warning({ title: "添加标签", content: "标签名称不可为空！" });
+                return this.$Modal.warning({ title: "添加标签", content: "标签名称不可为空或空格！" });
             }
             // 新增标签组
             if (this.editParams.type == "add") {
@@ -285,6 +287,7 @@ export default {
         },
         // 获取标签列表
         getList() {
+            this.params.tabName = trim(this.params.tabName);
             this.loading = true;
             getTabList(this.params).then(res => {
                 this.loading = false;
