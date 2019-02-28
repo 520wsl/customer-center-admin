@@ -918,6 +918,13 @@
                             }
                         })
                     } else {
+                        this.editTag.tagList.forEach((item,index)=>{
+                            this.editTag.chooseList.forEach(el=>{
+                                if(item.id == el.id){
+                                    item.isChoose = true;
+                                }
+                            })
+                        })
                         this.editTag.showTagList = this.editTag.tagList;
                     }
                 }).catch(error => {
