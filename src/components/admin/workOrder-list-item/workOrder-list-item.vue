@@ -20,8 +20,8 @@
             <span v-for="(item,index) in row.evaluateInfoVo.evaluateContent" :key="'item_'+index"
                   class="expand-value"><span v-if="item.type =='text' && item.value"
                                              class="md-card-btn-default">{{ item.value }}</span><span
-                    v-if="item.type =='radio' || item.type =='check'"><span
-                    v-for="e in item.value" :key="e" class="md-card-btn-default" v-if="e">{{e}}</span></span></span>
+                    v-if="item.type =='radio' || item.type =='check'"><span v-for="e in item.value" :key="e"><span
+                     class="md-card-btn-default" v-if="e">{{e}}</span></span></span></span>
             </Col>
             <Col v-if="!row.isRead" span="2">
             <span><img class="expand-img" :src="$CDN('/icon_meg.png')"></span>
