@@ -563,6 +563,7 @@
                 let isPading = true;
                 setTimeout(() => {
                     if (isShow) {
+                        this.delItemTalkNewsDataAction(recordId)
                         this.$Modal.error({
                             title: "环境检测：",
                             content:
