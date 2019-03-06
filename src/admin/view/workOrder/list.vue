@@ -146,12 +146,12 @@
             ...mapState({
                 searchWorkSheetType: state => {
                     return [...state.workSheet.workSheetType].filter(item => {
-                        return item.key !== 0;
+                        return item.key !== 0 ;
                     });
                 },
                 searchStatusList: state => {
                     return [...state.workSheet.workSheetHandleType].filter(item => {
-                        return item.key !== 1 && item.key !== 6;
+                        return item.key !== 1 && item.key !== 0 && item.key !== 6;
                     });
                 },
                 workSheetType: state => state.workSheet.workSheetType,
