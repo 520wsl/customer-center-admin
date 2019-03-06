@@ -15,7 +15,7 @@
             <div slot="extra">
                 <div v-if="isHaveUserId">
                     <a
-                        v-if="isDirector && info && info.handleType == 4 && info.handleType != 6"
+                        v-if="info && info.handleType == 4 && info.handleType != 6"
                         @click="joinCasebase"
                         href="javascript:;"
                         class="md-card-btn-warning"
