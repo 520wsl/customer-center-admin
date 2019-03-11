@@ -179,11 +179,11 @@ export default {
         });
         this.setBreadCrumb(this.$route);
         // 如果当前打开页面不在标签栏中，跳到homeName页
-        if (!this.tagNavList.find(item => item.name === this.$route.name)) {
-            this.$router.push({
-                name: this.$config.homeName
-            });
-        }
+        // if (!this.tagNavList.find(item => item.name === this.$route.name)) {
+        //     this.$router.push({
+        //         name: this.$config.homeName
+        //     });
+        // }
         // 获取列表
         this.$store.dispatch("getDepartmentData");
     }
