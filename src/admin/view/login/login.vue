@@ -167,7 +167,7 @@
                 let query = {};
 
                 if (par) {
-                    queryData = this.method1(decodeURIComponent(window.atob(par)));
+                    query = this.method1(decodeURIComponent(window.atob(par)));
                     console.log("par", par);
                     console.log(
                         "decodeURIComponent(window.atob(par))",
