@@ -8,6 +8,11 @@
             <div slot="title">客户信息</div>
             <tables :data="cunstomInfo"></tables>
         </Card>
+
+        <Card class="md-card">
+            <div slot="title">客服信息</div>
+            <tables :data="customerServiceInfo"></tables>
+        </Card>
         <Card class="md-card" v-if="evaluateList.length != 0">
             <div slot="title" class="flex">客户评价
                 <Button v-if="isExectorId()" type="primary" class="flex-right" @click="clickAgianEvaluate">重新评价</Button>
@@ -189,6 +194,7 @@
             assembleMessage() {
                 this.setWorkOrderInfo();
                 this.setCunstomInfo();
+                this.setCustomerServiceInfo()
             },
             // 设置 工单信息
             setWorkOrderInfo() {
@@ -319,7 +325,8 @@
                             },
                             {
                                 title: "备注：",
-                                value: this.info.remark
+                                value: this.info.remark,
+                                col: 3
                             }
                         ])
                 }
@@ -406,6 +413,18 @@
                 this.cunstomInfo = cunstomInfo;
             }
             ,
+            setCustomerServiceInfo() {
+                let staffTagIdList = this.$store.state.custom.staffTagIdList
+                let companyStaffListVos = this.info.companyStaffListVos
+                let customerServiceInfo = []
+                for (let i = 0, len = companyStaffListVos.length; i < len; i++) {
+                    customerServiceInfo.push([{
+                        title: staffTagIdList[companyStaffListVos[i]['staffTagId']],
+                        value: companyStaffListVos[i]['userVo']['userName'] + '(' + companyStaffListVos[i]['userVo']['departmentName'] + ')'
+                    }])
+                }
+                this.customerServiceInfo = customerServiceInfo
+            },
             // 获取评价详情
             getEvaluateInfo() {
                 getEvaluateInfo(this.info.id, "").then(res => {
@@ -454,6 +473,7 @@
                 isShowEditWorkOrderTitle: false,
                 isShowEditWorkOrderRemark: false,
                 cunstomInfo: [],
+                customerServiceInfo: [],
                 workOrderInfo: [],
                 evaluateList: [],
                 workSheetId: 0,
