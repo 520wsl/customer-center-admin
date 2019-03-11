@@ -91,7 +91,18 @@
                 this.$router.push({
                     name
                 });
-            }
+            },
+            method1(url) {
+                // 使用正则来 两边的参数不可能是 &=? 所以去反集[^&=?]
+                console.log("method1", url);
+                let regex = /([^&=?]+)=([^&=?]+)/g,
+                    obj = {};
+                url.replace(regex, (...arg) => {
+                    obj[arg[1]] = arg[2];
+                });
+                console.log(obj);
+                return obj;
+            },
         },
         data() {
             return {
@@ -130,12 +141,12 @@
         async mounted() {
             // this.WwLogin();
             let route = this.$route;
-            let query = route.query;
-            let codeData = query.code || "";
+            let queryData = route.query;
+            let codeData = queryData.code || "";
             let clientId = this.$config.ssoConfig.login.clientId
             let pathname = this.$config.ssoConfig.login.pathname
 
-            let stateData = query.state || "";
+            let stateData = queryData.state || "";
             if (!codeData && !stateData) {
                 window.location.href = await ssoLogin({clientId, pathname});
                 return;
@@ -149,10 +160,34 @@
                     this.$route
                 })
             ;
-            console.log("code登录", res);
             if (res) {
-                this.skipToDefaultPage();
+                // this.skipToDefaultPage();
+                console.log("code登录", res);
+                let par = queryData.par || "";
+                let query = {};
+
+                if (par) {
+                    queryData = this.method1(decodeURIComponent(window.atob(par)));
+                    console.log("par", par);
+                    console.log(
+                        "decodeURIComponent(window.atob(par))",
+                        decodeURIComponent(window.atob(par))
+                    );
+                    console.log("queryData", query);
+                }
+
+                let pageName = query.pageName || "workOrder-list";
+                if (pageName && pageName !== "workOrder-list") {
+                    this.$router.push({
+                        name: pageName,
+                        query: query
+                    });
+                }
+
+                return;
             }
+            console.log("code登录", res);
+
         }
     };
 </script>
