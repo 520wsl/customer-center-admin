@@ -1,21 +1,21 @@
 <template>
     <Layout style="height: 100%" class="main">
         <Sider
-            hide-trigger
-            collapsible
-            :width="256"
-            :collapsed-width="64"
-            v-model="collapsed"
-            class="left-sider"
-            :style="{overflow: 'hidden'}"
+                hide-trigger
+                collapsible
+                :width="256"
+                :collapsed-width="64"
+                v-model="collapsed"
+                class="left-sider"
+                :style="{overflow: 'hidden'}"
         >
             <side-menu
-                accordion
-                ref="sideMenu"
-                :active-name="$route.name"
-                :collapsed="collapsed"
-                @on-select="turnToPage"
-                :menu-list="menuList"
+                    accordion
+                    ref="sideMenu"
+                    :active-name="$route.name"
+                    :collapsed="collapsed"
+                    @on-select="turnToPage"
+                    :menu-list="menuList"
             >
                 <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
                 <div class="logo-con">
@@ -35,10 +35,10 @@
                 <Layout class="main-layout-con">
                     <div class="tag-nav-wrapper">
                         <tags-nav
-                            :value="$route"
-                            @input="handleClick"
-                            :list="tagNavList"
-                            @on-close="handleCloseTag"
+                                :value="$route"
+                                @input="handleClick"
+                                :list="tagNavList"
+                                @on-close="handleCloseTag"
                         />
                     </div>
                     <Content class="content-wrapper">
@@ -53,139 +53,159 @@
 </template>
 
 <script>
-import SideMenu from "./components/side-menu";
-import HeaderBar from "./components/header-bar";
-import TagsNav from "./components/tags-nav";
-import user from "./components/user";
-import Fullscreen from "./components/fullscreen";
-import { mapMutations, mapActions, mapGetters } from "vuex";
-import { getNewTagList, getNextRoute, routeEqual } from "@/libs/util";
-import routers from "@/admin/router/routers";
-import "./main.less";
-export default {
-    name: "Main",
-    components: {
-        SideMenu,
-        HeaderBar,
-        user,
-        Fullscreen,
-        TagsNav
-    },
-    data() {
-        return {
-            collapsed: false,
-            isFullscreen: false
-        };
-    },
-    computed: {
-        tagNavList() {
-            return this.$store.state.app.tagNavList;
+    import SideMenu from "./components/side-menu";
+    import HeaderBar from "./components/header-bar";
+    import TagsNav from "./components/tags-nav";
+    import user from "./components/user";
+    import Fullscreen from "./components/fullscreen";
+    import {mapMutations, mapActions, mapGetters} from "vuex";
+    import {getNewTagList, getNextRoute, routeEqual} from "@/libs/util";
+    import routers from "@/admin/router/routers";
+    import {getQyWxJSSDKConfig} from "@/api/admin/qywechatProxy/wxSDK";
+    import "./main.less";
+
+    export default {
+        name: "Main",
+        components: {
+            SideMenu,
+            HeaderBar,
+            user,
+            Fullscreen,
+            TagsNav
         },
-        userAvator() {
-            return this.$store.state.user.avatorImgPath;
+        data() {
+            return {
+                collapsed: false,
+                isFullscreen: false
+            };
         },
-        userName() {
-            return this.$store.state.user.userName;
-        },
-        menuList() {
-            return this.$store.getters.menuList;
-        },
-        cacheList() {
-            return [
-                "ParentView",
-                ...(this.tagNavList.length
-                    ? this.tagNavList
-                          .filter(item => !(item.meta && item.meta.notCache))
-                          .map(item => item.name)
-                    : [])
-            ];
-        }
-    },
-    methods: {
-        ...mapMutations([
-            "setBreadCrumb",
-            "setTagNavList",
-            "addTag",
-            "setHomeRoute"
-        ]),
-        ...mapActions(["getUserInfoAction"]),
-        // 获取用户信息
-        getUserInfo() {
-            this.getUserInfoAction();
-        },
-        turnToPage(route) {
-            let { name, params, query } = {};
-            if (typeof route === "string") name = route;
-            else {
-                name = route.name;
-                params = route.params;
-                query = route.query;
+        computed: {
+            tagNavList() {
+                return this.$store.state.app.tagNavList;
+            },
+            userAvator() {
+                return this.$store.state.user.avatorImgPath;
+            },
+            userName() {
+                return this.$store.state.user.userName;
+            },
+            menuList() {
+                return this.$store.getters.menuList;
+            },
+            cacheList() {
+                return [
+                    "ParentView",
+                    ...(this.tagNavList.length
+                        ? this.tagNavList
+                            .filter(item => !(item.meta && item.meta.notCache))
+                            .map(item => item.name)
+                        : [])
+                ];
             }
-            if (name.indexOf("isTurnByHref_") > -1) {
-                window.open(name.split("_")[1]);
-                return;
-            }
-            this.$router.push({
-                name,
-                params,
-                query
-            });
         },
-        handleCollapsedChange(state) {
-            this.collapsed = state;
-        },
-        handleCloseTag(res, type, route) {
-            console.log();
-            if (type === "all") {
-                this.turnToPage(this.$config.homeName);
-            } else if (routeEqual(this.$route, route)) {
-                if (type !== "others") {
-                    const nextRoute = getNextRoute(this.tagNavList, route);
-                    console.log("tagNavList", this.tagNavList);
-                    console.log("route", route);
-                    console.log("nextRoute", nextRoute);
-                    this.$router.push(nextRoute);
+        methods: {
+            ...mapMutations([
+                "setBreadCrumb",
+                "setTagNavList",
+                "addTag",
+                "setHomeRoute"
+            ]),
+            ...mapActions(["getUserInfoAction"]),
+            // 获取用户信息
+            getUserInfo() {
+                this.getUserInfoAction();
+            },
+            turnToPage(route) {
+                let {name, params, query} = {};
+                if (typeof route === "string") name = route;
+                else {
+                    name = route.name;
+                    params = route.params;
+                    query = route.query;
                 }
+                if (name.indexOf("isTurnByHref_") > -1) {
+                    window.open(name.split("_")[1]);
+                    return;
+                }
+                this.$router.push({
+                    name,
+                    params,
+                    query
+                });
+            },
+            handleCollapsedChange(state) {
+                this.collapsed = state;
+            },
+            handleCloseTag(res, type, route) {
+                console.log();
+                if (type === "all") {
+                    this.turnToPage(this.$config.homeName);
+                } else if (routeEqual(this.$route, route)) {
+                    if (type !== "others") {
+                        const nextRoute = getNextRoute(this.tagNavList, route);
+                        console.log("tagNavList", this.tagNavList);
+                        console.log("route", route);
+                        console.log("nextRoute", nextRoute);
+                        this.$router.push(nextRoute);
+                    }
+                }
+                this.setTagNavList(res);
+            },
+            async QYWXLogin() {
+                console.log("route", this.$route);
+                let urlPath = location.href.split("#")[0] || "";
+                let res = await getQyWxJSSDKConfig({
+                    url: urlPath
+                });
+
+                /* eslint-disable no-undef */
+                wx.config(res.data);
+
+                wx.ready(function () {
+                    wx.hideOptionMenu();
+                });
+
+                /* eslint-disable no-undef */
+            },
+            handleClick(item) {
+                this.turnToPage(item);
             }
-            this.setTagNavList(res);
+
         },
-        handleClick(item) {
-            this.turnToPage(item);
-        }
-    },
-    watch: {
-        $route(newRoute) {
-            const { name, query, params, meta } = newRoute;
+        watch: {
+            $route(newRoute) {
+                const {name, query, params, meta} = newRoute;
+                this.addTag({
+                    route: {name, query, params, meta},
+                    type: "push"
+                });
+                this.setBreadCrumb(newRoute);
+                this.setTagNavList(getNewTagList(this.tagNavList, newRoute));
+                this.$refs.sideMenu.updateOpenName(newRoute.name);
+            }
+        },
+        created() {
+            this.getUserInfo();
+        },
+        mounted() {
+            /**
+             * @description 初始化设置面包屑导航和标签导航
+             */
+            this.setTagNavList();
+            this.setHomeRoute(routers);
             this.addTag({
-                route: { name, query, params, meta },
-                type: "push"
+                route: this.$store.state.app.homeRoute
             });
-            this.setBreadCrumb(newRoute);
-            this.setTagNavList(getNewTagList(this.tagNavList, newRoute));
-            this.$refs.sideMenu.updateOpenName(newRoute.name);
+            this.setBreadCrumb(this.$route);
+            this.QYWXLogin();
+            // 如果当前打开页面不在标签栏中，跳到homeName页
+            // if (!this.tagNavList.find(item => item.name === this.$route.name)) {
+            //     this.$router.push({
+            //         name: this.$config.homeName
+            //     });
+            // }
+            // 获取列表
+            this.$store.dispatch("getDepartmentData");
         }
-    },
-    created() {
-        this.getUserInfo();
-    },
-    mounted() {
-        /**
-         * @description 初始化设置面包屑导航和标签导航
-         */
-        this.setTagNavList();
-        this.setHomeRoute(routers);
-        this.addTag({
-            route: this.$store.state.app.homeRoute
-        });
-        this.setBreadCrumb(this.$route);
-        // 如果当前打开页面不在标签栏中，跳到homeName页
-        // if (!this.tagNavList.find(item => item.name === this.$route.name)) {
-        //     this.$router.push({
-        //         name: this.$config.homeName
-        //     });
-        // }
-        // 获取列表
-        this.$store.dispatch("getDepartmentData");
-    }
-};
+    };
 </script>
