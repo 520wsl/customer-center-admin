@@ -19,10 +19,10 @@ export default {
                 key: 2,
                 value: "续开工单"
             },
-            // {
-            // 	key: 3,
-            // 	value: "美工工单"
-            // },
+            {
+                key: 3,
+                value: "美工工单"
+            },
             // {
             // 	key: 4,
             // 	value: "深度运营"

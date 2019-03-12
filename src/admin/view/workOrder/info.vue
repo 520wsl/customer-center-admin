@@ -1,7 +1,7 @@
 <template>
     <div>
         <Card class="md-card" v-if="isShowStatus">
-            <Steps :current="current">
+            <Steps :current="current" v-if="info.handleType != 6">
                 <Step
                     v-for="(item,index) in status.list"
                     :key="index"
@@ -9,6 +9,9 @@
                     :content="item.component"
                 ></Step>
             </Steps>
+            <div v-else>
+                <img style="display:block;margin: auto;width:90px;" :src="$CDN('/rescinded-icon.png')" alt="已撤销" title="已撤销"/>
+            </div>
         </Card>
         <Card class="md-card">
             <div slot="title">当前工单状态：{{getWorkSheetTypeValue(showWorkSheetType)}}</div>
@@ -548,7 +551,7 @@ export default {
         stepsType(data, handleType) {
             // let handleType = this.$store.state.workSheet.workSheetBaseInfo
             // 	.handleType;
-
+            console.log(data, handleType)
             let type = 0;
             switch (handleType) {
                 case 0:

@@ -408,7 +408,7 @@
                                                 let name = "workOrder-info-service";
                                                 if (
                                                     this.$route.name ==
-                                                    "wx-workOrder-leaderList"
+                                                    "wx-departmentWorkOrder-list"
                                                 ) {
                                                     name =
                                                         "wx-workOrder-info-service";
