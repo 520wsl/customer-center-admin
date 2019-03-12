@@ -760,6 +760,34 @@ export default [
                     )
             }
         ]
+    },
+    {
+        path: "/mi",
+        name:
+            "mi",
+        meta:
+            {
+                icon: "ios-stats",
+                title:
+                    "我的"
+            }
+        ,
+        component: Main1,
+        children: [
+            {
+                path: "info",
+                name: "mi-info",
+                meta: {
+                    icon: "ios-stats",
+                    title: "我的喜小帮",
+                    notCache: true
+                },
+                component: r =>
+                    require.ensure([], () =>
+                        require("@/admin/view/mi/miInfo.vue")
+                    )
+            }
+        ]
     }
     ,
     {

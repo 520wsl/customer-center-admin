@@ -573,15 +573,15 @@
                 // }, 2000);
 
                 try {
-
-                    // let resual = await AccountStatus();
-                    // console.log('环境检测', resual)
-                    // if (resual.status === 1) {
-                    //     let status = resual.Info.status.split('|')
-                        // if (status[4] !== "1") {
-                        //     return;
-                        // }
-                        isShow = false;
+                //
+                //     let resual = await AccountStatus();
+                //     console.log('环境检测', resual)
+                //     if (resual.status === 1) {
+                //         let status = resual.Info.status.split('|')
+                //         if (status[4] !== "1") {
+                //             return;
+                //         }
+                //         isShow = false;
 
                         setTimeout(() => {
                             if (isPading) {
