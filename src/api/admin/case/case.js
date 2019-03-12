@@ -137,3 +137,8 @@ export const sotpVisitCase = ({customerSixiId, caseLibraryId}) => {
 export const getIsDirector = () => {
     return post("/staff/department/director", {});
 };
+
+// 是否总监
+export const getIsLeader = () => {
+    return post("/staff/department/leader", {});
+};
