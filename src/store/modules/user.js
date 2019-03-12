@@ -1,5 +1,5 @@
 import {logout, sentLoginCodeData} from "@/api/admin/qywechatProxy/user";
-import {getIsDirector} from "@/api/admin/case/case"
+import {getIsDirector,getIsLeader} from "@/api/admin/case/case"
 import {getUserInfoData} from "@/api/admin/user/user";
 import {ssoLogin,ssoCode,ssoLoginOut} from "@/api/admin/user/sso";
 import {setToken, getToken} from "@/libs/util";
@@ -150,6 +150,16 @@ export default {
                                 }
                                 commit("setIsDirector", result.data || false);
                                 data.isDirector = result.data || false;
+                                commit("setUserInfoStoreage", data);
+                            })
+                             getIsLeader().then(result => {
+                                if (!result.status) {
+                                    console.error("[debug]:getIsLeader", result);
+                                    resolve(result);
+                                    return;
+                                }
+                                commit("getIsLeader", result.data || false);
+                                data.isBigLeader = result.data || false;
                                 commit("setUserInfoStoreage", data);
                             })
                             resolve(res);

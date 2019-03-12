@@ -161,7 +161,6 @@
                 })
             ;
             if (res) {
-                // this.skipToDefaultPage();
                 console.log("code登录", res);
                 let par = queryData.par || "";
                 let query = {};
@@ -174,17 +173,16 @@
                         decodeURIComponent(window.atob(par))
                     );
                     console.log("queryData", query);
-                }
 
-                let pageName = query.pageName || "workOrder-list";
-                if (pageName && pageName !== "workOrder-list") {
+                    let pageName = query.pageName || this.$config.homeName;
                     this.$router.push({
                         name: pageName,
                         query: query
                     });
+                    return;
                 }
+                this.skipToDefaultPage();
 
-                return;
             }
             console.log("code登录", res);
 
