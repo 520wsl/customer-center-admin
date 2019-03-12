@@ -32,6 +32,9 @@ export default {
         setIsDirector(state, isDirector) {
             state.userInfo.isDirector = isDirector;
         },
+        getIsLeader(state, isBigLeader) {
+            state.userInfo.isBigLeader = isBigLeader;
+        },
         setUserInfo(state, userInfo) {
             state.userInfo = userInfo;
         },
