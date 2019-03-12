@@ -563,7 +563,7 @@ export default [
                 },
                 {
                     path: "leaderList",
-                    name: "wx-workOrder-leaderList",
+                    name: "wx-departmentWorkOrder-list",
                     meta: {
                         hideInMenu: true,
                         icon: "ios-stats",
