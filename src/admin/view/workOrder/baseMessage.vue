@@ -418,10 +418,12 @@
                 let companyStaffListVos = this.info.companyStaffListVos
                 let customerServiceInfo = []
                 for (let i = 0, len = companyStaffListVos.length; i < len; i++) {
-                    customerServiceInfo.push([{
-                        title: staffTagIdList[companyStaffListVos[i]['staffTagId']],
-                        value: companyStaffListVos[i]['userVo']['userName'] + '(' + companyStaffListVos[i]['userVo']['departmentName'] + ')'
-                    }])
+                    if (companyStaffListVos[i]['userVo'].length > 0) {
+                        customerServiceInfo.push([{
+                            title: staffTagIdList[companyStaffListVos[i]['staffTagId']],
+                            value: companyStaffListVos[i]['userVo']['userName'] + '(' + companyStaffListVos[i]['userVo']['departmentName'] + ')'
+                        }])
+                    }
                 }
                 this.customerServiceInfo = customerServiceInfo
             },
