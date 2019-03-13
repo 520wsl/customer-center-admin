@@ -418,7 +418,7 @@
                 let companyStaffListVos = this.info.companyStaffListVos
                 let customerServiceInfo = []
                 for (let i = 0, len = companyStaffListVos.length; i < len; i++) {
-                    if (companyStaffListVos[i]['userVo'].length > 0) {
+                    if (companyStaffListVos[i]['userVo']) {
                         customerServiceInfo.push([{
                             title: staffTagIdList[companyStaffListVos[i]['staffTagId']],
                             value: companyStaffListVos[i]['userVo']['userName'] + '(' + companyStaffListVos[i]['userVo']['departmentName'] + ')'
