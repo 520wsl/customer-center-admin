@@ -561,46 +561,46 @@
                 };
                 let isShow = true;
                 let isPading = true;
-                setTimeout(() => {
-                    if (isShow) {
-                        this.delItemTalkNewsDataAction(recordId)
-                        this.$Modal.error({
-                            title: "环境检测：",
-                            content:
-                                "拨号软件：<br>1、请检查呼叫软件是否打开正常! <br> 2、请检查设备是否安装正常！<br>3、隐私设置有误，请联系管理员！"
-                        });
-                    }
-                }, 2000);
+                // setTimeout(() => {
+                //     if (isShow) {
+                //         this.delItemTalkNewsDataAction(recordId)
+                //         this.$Modal.error({
+                //             title: "环境检测：",
+                //             content:
+                //                 "拨号软件：<br>1、请检查呼叫软件是否打开正常! <br> 2、请检查设备是否安装正常！<br>3、隐私设置有误，请联系管理员！"
+                //         });
+                //     }
+                // }, 2000);
 
                 try {
 
-                    let resual = await AccountStatus();
-                    console.log('环境检测', resual)
-                    if (resual.status === 1) {
-                        let status = resual.Info.status.split('|')
-                        if (status[4] !== "1") {
-                            return;
-                        }
-                        isShow = false;
+                    // let resual = await AccountStatus();
+                    // console.log('环境检测', resual)
+                    // if (resual.status === 1) {
+                    //     let status = resual.Info.status.split('|')
+                    //     if (status[4] !== "1") {
+                    //         return;
+                    //     }
+                    //     isShow = false;
 
-                        setTimeout(() => {
-                            if (isPading) {
-                                this.delItemTalkNewsDataAction(recordId)
-                                this.$Modal.error({
-                                    title: "拨号异常：",
-                                    content:
-                                        "拨号软件：<br>1、请检查呼叫软件是否打开正常! <br> 2、请检查设备是否安装正常！<br>"
-                                });
-                            }
-                        }, 2000);
-
-                        let res = await callPhoneAction({...params});
-                        console.log("拨号：", res);
-                        if (res.status === 1) {
-                            this.editRemarkModal(recordId);
-                            isPading = false;
+                    setTimeout(() => {
+                        if (isPading) {
+                            this.delItemTalkNewsDataAction(recordId)
+                            this.$Modal.error({
+                                title: "拨号异常：",
+                                content:
+                                    "拨号软件：<br>1、请检查呼叫软件是否打开正常! <br> 2、请检查设备是否安装正常！<br>"
+                            });
                         }
+                    }, 2000);
+
+                    let res = await callPhoneAction({...params});
+                    console.log("拨号：", res);
+                    if (res.status === 1) {
+                        this.editRemarkModal(recordId);
+                        isPading = false;
                     }
+                    // }
                 } catch (error) {
                     this.$Modal.error({
                         title: "拨号异常：",
