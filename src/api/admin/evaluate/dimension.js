@@ -1,5 +1,5 @@
 import api from "@/libs/api.request";
-const baseUrl = "/work-order/evaluate";
+const baseUrl = "/work-order-service/evaluate";
 const noWorkOrderBaseUrl = "/evaluate";
 function post(url, params) {
   return api.post(baseUrl + url, params);

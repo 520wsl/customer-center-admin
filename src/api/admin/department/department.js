@@ -1,7 +1,7 @@
 import api from "@/libs/api.request";
 import {getArrMinNumBer} from "@/libs/util";
 
-const baseUrl = "/work-order/staff";
+const baseUrl = "/work-order-service/staff";
 
 function post(url, params) {
     return api.post(baseUrl + url, params);
