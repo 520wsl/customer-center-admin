@@ -1,6 +1,6 @@
 import api from "@/libs/api.request";
 import axios from 'axios'
-const baseUrl = "/work-order/qywechat-proxy";
+const baseUrl = "/work-order-service/qywechat-proxy";
 function post(url, params) {
 	return api.post(baseUrl + url, params);
 }

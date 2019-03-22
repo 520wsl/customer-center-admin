@@ -8,7 +8,7 @@
 
 import api from "@/libs/api.request";
 
-const baseUrl = "/work-order";
+const baseUrl = "/work-order-service";
 
 function post(url, params) {
     return api.post(baseUrl + url, params);
