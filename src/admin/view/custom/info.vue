@@ -321,9 +321,9 @@
                     },
                     {
                         title: "微信昵称",
-                        key: "wechatNickname",
+                        key: "wechatNickName",
                         render: (h, params) => {
-                            if (params.row.wechatNickname) {
+                            if (params.row.wechatNickName) {
                                 return h(
                                     "div",
                                     {
@@ -352,7 +352,7 @@
                                                     "margin-left": "20px"
                                                 }
                                             },
-                                            params.row.wechatNickname
+                                            params.row.wechatNickName
                                         )
                                     ]
                                 );
