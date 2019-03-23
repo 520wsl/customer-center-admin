@@ -402,9 +402,9 @@
                         title: "操作",
                         render: (h, params) => {
                             let bool =
-                                params.row.wechatNickname !== null &&
-                                params.row.wechatNickname !== undefined &&
-                                params.row.wechatNickname !== "";
+                                params.row.wechatNickName !== null &&
+                                params.row.wechatNickName !== undefined &&
+                                params.row.wechatNickName !== "";
                             // console.log(this.info.wechatBindVos);
                             return h(operation, {
                                 props: {

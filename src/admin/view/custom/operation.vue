@@ -18,7 +18,7 @@
                         <tr>
                             <td class="title">微信昵称:</td>
                             <td>
-                                <img v-if="row.wechatAvatar" :src="row.wechatAvatar" class="acatar" alt="404">&emsp;{{row.wechatNickname}}
+                                <img v-if="row.wechatAvatar" :src="row.wechatAvatar" class="acatar" alt="404">&emsp;{{row.wechatNickName}}
                             </td>
                         </tr>
                         <tr>
