@@ -1,12 +1,8 @@
 import api from "@/libs/api.request";
 const baseUrl = "/work-order-service/evaluate";
-const noWorkOrderBaseUrl = "/evaluate";
 function post(url, params) {
   return api.post(baseUrl + url, params);
 }
-function noWorkOrderPost(url, params) {
-    return api.post(noWorkOrderBaseUrl + url, params);
-  }
 function get(url, params) {
   return api.get(baseUrl + url, params);
 }
@@ -36,7 +32,7 @@ export const getWorkEvaluateListData = ({
   pageNum = 1,
   pageSize= 10
 }) => {
-  return noWorkOrderPost("/evaluatework/listBy", {
+  return post("/evaluatework/listBy", {
     workType,
     evaluateName,
     companyName,
