@@ -769,7 +769,7 @@
                     }
                     this.qrData = res.data;
                     // 获取二维码后修改是否发送了二维码
-                    setSendQRcord({id: row.id}).then(res => {
+                    setSendQRcord({companySixiId: row.companySixiId}).then(res => {
                         console.log(res)
                     })
                     this.getInfo();

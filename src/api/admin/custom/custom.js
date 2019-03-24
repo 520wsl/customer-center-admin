@@ -35,7 +35,7 @@ export const getCustomerListDate = ({
         sendCode,
         companyType,
         binding,
-        staffSixiId:customerId
+        staffSixiId: customerId
     });
 };
 // 客户详情
@@ -122,9 +122,10 @@ export const setcompanystaff = ({
 };
 // 是否发送了二维码
 export const setSendQRcord = ({
-                                  id
+                                  companySixiId
                               }) => {
     return post("/wechat/sendqrcord", {
-        id
+        companySixiId
+
     });
 };
