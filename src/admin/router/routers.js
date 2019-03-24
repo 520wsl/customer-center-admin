@@ -718,7 +718,7 @@ export default [
         name:
             "wwOpensManager",
         meta:
-            {
+            {  hideInMenu: true,
                 icon: "ios-stats",
                 title:
                     "旺旺多开"
