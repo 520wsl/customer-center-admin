@@ -240,7 +240,7 @@
                         align: "center",
                         render: (h, params) => {
                             const user = params.row.userVo || {};
-                            const name = user.userName || "";
+                            const name = user.extattr || user.userName || "";
                             const departmentName = user.departmentName
                                 ? "(" + user.departmentName + ")"
                                 : "";
@@ -265,7 +265,9 @@
                                     }
                                     continue
                                 }
-                                tag.push(evaluateContent[i]['value'])
+                                if (evaluateContent[i]['value'].length > 0) {
+                                    tag.push(evaluateContent[i]['value'])
+                                }
                             }
                             for (let k = 0, len3 = tag.length; k < len3; k++) {
                                 btnGroup.push(
