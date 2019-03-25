@@ -61,7 +61,9 @@ module.exports = {
             // 	}
             // },
             "/api": {
-                target: "http://test.base.internal.sixi.com",
+                // target: "http://test.base.internal.sixi.com",
+                // target: "http://test.base.internal.sixi.com",
+                target: "http://test.workapp.sixi.com/api/",
                 changeOrigin: true,
                 pathRewrite: {
                     "^/api": ""
