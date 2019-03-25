@@ -178,12 +178,12 @@
                         align: "center",
                         render: (h, params) => {
                             let btnGroup = [];
-
+                            let name = params.row.extattr || params.row.userName || ''
                             btnGroup.push(
                                 h(
                                     "span",
                                     {},
-                                    params.row.userName +
+                                    name +
                                     " ( " +
                                     params.row.departmentName +
                                     " ) "
