@@ -199,6 +199,10 @@
                             if (params.row.companyName) {
                                 customerName = params.row.companyName.slice(0, 2) + "***" + params.row.companyName.slice(5);
                             }
+                            let lastIndex = customerName.lastIndexOf('（');
+                            if(lastIndex != -1){
+                                customerName = customerName.slice(0,lastIndex);
+                            }
                             return h("span", {}, customerName);
                         }
                     },
