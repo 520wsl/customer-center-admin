@@ -138,10 +138,10 @@
                 });
             },
             async editWorkOrderTitleAction() {
-                if (this.info.title.length <= 3) {
+                if (this.info.title.length <= 3 || this.info.title.length >= 100) {
                     this.$Modal.error({
                         title: "修改工单主题",
-                        content: "工单主题不能少于四个字符"
+                        content: "工单主题限制在3-100个字符，请按要求填写。"
                     });
                     return;
                 }
